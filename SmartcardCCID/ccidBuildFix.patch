@@ -1,0 +1,109 @@
+commit 21132b542801d4408f61d1c3e0df6027987611ff
+Author: Thomas Harning Jr
+Date:   Tue Jul 29 11:17:48 2008 -0400
+
+    Fixes to make libccid build in this environment.  Majority of MaxOSX/configure moved into makefile.
+---
+ ccid/Makefile                 |   12 +++++++--
+ ccid/files/osxConfigure.patch |   52 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 61 insertions(+), 3 deletions(-)
+
+diff --git ccid/Makefile ccid/Makefile
+index 671ef48..e35889d 100644
+--- ccid/Makefile
++++ ccid/Makefile
+@@ -2,7 +2,12 @@ Project               = ccid
+ UserType              = Administrator
+ ToolType              = Commands
+ GnuAfterInstall       = install-plist post-install
+-Extra_Configure_Flags = 
++Extra_Configure_Flags = --enable-usbdropdir=$(DSTROOT)/usr/libexec/SmartCardServices/drivers \
++	PCSC_CFLAGS="-I$(SRCROOT)/ccid/MacOSX -DRESPONSECODE_DEFINED_IN_WINTYPES_H" \
++	PCSC_LIBS="-framework PCSC" \
++	LIBUSB_CFLAGS="-I$(DSTROOT)/usr/include" \
++	LIBUSB_LIBS="-L$(DSTROOT)/usr/lib -lusb -framework IOKit -framework CoreFoundation"
++
+ Extra_Environment     = 
+ 
+ include $(MAKEFILEPATH)/CoreOS/ReleaseControl/GNUSource.make
+@@ -17,7 +22,7 @@ AEP_Version    = 1.3.8
+ AEP_ProjVers   = $(AEP_Project)-$(AEP_Version)
+ AEP_Filename   = $(AEP_ProjVers).tar.bz2
+ AEP_ExtractDir = $(AEP_ProjVers)
+-AEP_Patches    = 
++AEP_Patches    = osxConfigure.patch
+ 
+ # Extract the source.
+ install_source::
+@@ -27,6 +32,7 @@ install_source::
+ 	for patchfile in $(AEP_Patches); do \
+ 		(cd $(SRCROOT)/$(Project) && patch -p0 < $(SRCROOT)/files/$$patchfile) || exit 1; \
+ 	done
++	(cd $(SRCROOT)/$(Project) && MacOSX/configure --no-configure --disable-opensc)
+ 
+ OSV = $(DSTROOT)/usr/local/OpenSourceVersions
+ OSL = $(DSTROOT)/usr/local/OpenSourceLicenses
+@@ -35,4 +41,4 @@ install-plist:
+ 	$(MKDIR) $(OSV)
+ 	$(INSTALL_FILE) $(SRCROOT)/$(Project).plist $(OSV)/$(Project).plist
+ 	$(MKDIR) $(OSL)
+-	$(INSTALL_FILE) $(Sources)/LICENSE $(OSL)/$(Project).txt
++	$(INSTALL_FILE) $(Sources)/COPYING $(OSL)/$(Project).txt
+diff --git ccid/files/osxConfigure.patch ccid/files/osxConfigure.patch
+new file mode 100644
+index 0000000..e25c29b
+--- /dev/null
++++ ccid/files/osxConfigure.patch
+@@ -0,0 +1,52 @@
++diff --git MacOSX/configure MacOSX/configure
++index 8b42e38..b3fc826 100755
++--- MacOSX/configure
+++++ MacOSX/configure
++@@ -39,6 +39,9 @@ fi
++ 
++ ./MacOSX/convert_reader_h.pl MacOSX/reader.h.in > MacOSX/reader.h
++ 
+++if [[ "$*" =~ "--no-configure" ]]; then
+++	exit 0
+++fi
++ # we define PKG_CONFIG so that pkg-config is not used and PCSC_CFLAGS
++ # and PCSC_LIBS are used instead
++ PKG_CONFIG="foobar"
++@@ -47,9 +50,16 @@ PKG_CONFIG="foobar"
++ PCSC_CFLAGS="-I$(pwd)/MacOSX"
++ PCSC_LIBS="-framework PCSC"
++ 
++-# use libusb from OpenSC (universal binary)
++-LIBUSB_CFLAGS="-I/Library/OpenSC/include"
++-LIBUSB_LIBS="-L/Library/OpenSC/lib -lusb"
+++# If --disable-opensc given, then do not alter the LIBUSB environment
+++if [[ ! ("$*" =~ "--disable-opensc") ]]; then
+++	# use libusb from OpenSC (universal binary)
+++	LIBUSB_CFLAGS="-I/Library/OpenSC/include"
+++	LIBUSB_LIBS="-L/Library/OpenSC/lib -lusb"
+++
+++	CONFIGURE_ARGS="$CONFIGURE_ARGS \
+++		LIBUSB_CFLAGS=\"$LIBUSB_CFLAGS\" \
+++		LIBUSB_LIBS=\"$LIBUSB_LIBS\""
+++fi
++ 
++ # RESPONSECODE is already defined by PCSC/wintypes.h
++ # define needed here to compile examples/scardcontrol.c since config.h is
++@@ -59,7 +69,7 @@ CFLAGS="$CFLAGS -DRESPONSECODE_DEFINED_IN_WINTYPES_H"
++ # Build a Universal Binary
++ CFLAGS="$CFLAGS -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc"
++ LDFLAGS="-arch i386 -arch ppc"
++-CONFIGURE_ARGS="--disable-dependency-tracking"
+++CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-dependency-tracking"
++ 
++ # do not use pcscd debug feature
++ CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-pcsclite"
++@@ -70,8 +80,6 @@ set -x
++ 	CFLAGS="$CFLAGS" \
++ 	PCSC_CFLAGS="$PCSC_CFLAGS" \
++ 	PCSC_LIBS="$PCSC_LIBS" \
++-	LIBUSB_CFLAGS="$LIBUSB_CFLAGS" \
++-	LIBUSB_LIBS="$LIBUSB_LIBS" \
++ 	LDFLAGS="$LDFLAGS" \
++ 	--enable-usbdropdir=/usr/libexec/SmartCardServices/drivers \
++ 	$CONFIGURE_ARGS \

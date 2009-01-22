@@ -1,0 +1,210 @@
+// !$*UTF8*$!
+{
+	08FB7793FE84155DC02AAC07 /* Project object */ = {
+		activeArchitecture = ppc;
+		activeBuildConfigurationName = Development;
+		activeExecutable = 525A2E2A0E5358AC007054EF /* BELPIC */;
+		activeTarget = 52B2601F0BC5A864007E00F1 /* world */;
+		codeSenseManager = 525A2E390E5358CB007054EF /* Code sense */;
+		executables = (
+			525A2E2A0E5358AC007054EF /* BELPIC */,
+			525A2E2B0E5358AC007054EF /* CAC */,
+			525A2E2C0E5358AC007054EF /* MuscleCard */,
+			525A2E2D0E5358AC007054EF /* PIV */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					436,
+					20,
+					48.16259765625,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					396,
+					60,
+					20,
+					48.16259765625,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 240343212;
+			PBXWorkspaceStateSaveDate = 240343212;
+		};
+		sourceControlManager = 525A2E380E5358CB007054EF /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	4C134AA206DBF81800FA17D9 /* Schema.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {822, 6496}}";
+			sepNavSelRange = "{6987, 25}";
+			sepNavVisRange = "{6343, 1388}";
+		};
+	};
+	525A2E2A0E5358AC007054EF /* BELPIC */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = BELPIC;
+		sourceDirectories = (
+		);
+	};
+	525A2E2B0E5358AC007054EF /* CAC */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = CAC;
+		sourceDirectories = (
+		);
+	};
+	525A2E2C0E5358AC007054EF /* MuscleCard */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = MuscleCard;
+		sourceDirectories = (
+		);
+	};
+	525A2E2D0E5358AC007054EF /* PIV */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = PIV;
+		sourceDirectories = (
+		);
+	};
+	525A2E380E5358CB007054EF /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+	};
+	525A2E390E5358CB007054EF /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	52B2601F0BC5A864007E00F1 /* world */ = {
+		activeExec = 0;
+	};
+	52B2602D0BC5A864007E00F1 /* libtokend */ = {
+		activeExec = 0;
+	};
+	52B2604B0BC5A864007E00F1 /* tokend */ = {
+		activeExec = 0;
+	};
+	52B260640BC5A864007E00F1 /* BELPIC */ = {
+		activeExec = 0;
+		executables = (
+			525A2E2A0E5358AC007054EF /* BELPIC */,
+		);
+	};
+	52B2607D0BC5A864007E00F1 /* CAC */ = {
+		activeExec = 0;
+		executables = (
+			525A2E2B0E5358AC007054EF /* CAC */,
+		);
+	};
+	52B260980BC5A864007E00F1 /* MuscleCard */ = {
+		activeExec = 0;
+		executables = (
+			525A2E2C0E5358AC007054EF /* MuscleCard */,
+		);
+	};
+	52B260BA0BC5A864007E00F1 /* PIV */ = {
+		activeExec = 0;
+		executables = (
+			525A2E2D0E5358AC007054EF /* PIV */,
+		);
+	};
+}
