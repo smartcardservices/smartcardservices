@@ -16,16 +16,16 @@
  */
 
 /******************************************************************
- 
+
         MUSCLE SmartCard Development ( http://www.linuxnet.com )
             Title  : atrhandler.c
             Author : David Corcoran
             Date   : 7/27/99
             License: Copyright (C) 1999 David Corcoran
-                     <corcoran@linuxnet.com> 
+                     <corcoran@linuxnet.com>
             Purpose: This keeps track of smartcard protocols,
                      timing issues, and atr handling.
- 
+
 ********************************************************************/
 
 #include <syslog.h>
@@ -37,10 +37,10 @@
 #include "atrhandler.h"
 
 /*
- * Uncomment the following for ATR debugging 
+ * Uncomment the following for ATR debugging
  */
 /*
- * #define ATR_DEBUG 1 
+ * #define ATR_DEBUG 1
  */
 
 short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
@@ -53,7 +53,7 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 	short TAi, TBi, TCi, TDi;	/* Interface characters */
 
 	/*
-	 * Zero out everything 
+	 * Zero out everything
 	 */
 	p = K = TCK = Y1i = T = TAi = TBi = TCi = TDi = 0;
 
@@ -63,14 +63,14 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 	}
 
 	/*
-	 * Zero out the bitmasks 
+	 * Zero out the bitmasks
 	 */
 
 	psExtension->CardCapabilities.AvailableProtocols = 0x00;
 	psExtension->CardCapabilities.CurrentProtocol = 0x00;
 
 	/*
-	 * Decode the TS byte 
+	 * Decode the TS byte
 	 */
 
 	if (pucAtr[0] == 0x3F)
@@ -87,11 +87,11 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 	}
 
 	/*
-	 * Here comes the platform dependant stuff 
+	 * Here comes the platform dependant stuff
 	 */
 
 	/*
-	 * Decode the T0 byte 
+	 * Decode the T0 byte
 	 */
 	Y1i = pucAtr[1] >> 4;	/* Get the MSN in Y1 */
 	K = pucAtr[1] & 0x0F;	/* Get the LSN in K */
@@ -104,7 +104,7 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 #endif
 
 	/*
-	 * Examine Y1 
+	 * Examine Y1
 	 */
 
 	do
@@ -121,7 +121,7 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 #endif
 
 		/*
-		 * Examine TDi to determine protocol and more 
+		 * Examine TDi to determine protocol and more
 		 */
 		if (TDi >= 0)
 		{
@@ -129,7 +129,7 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 			T = TDi & 0x0F;	/* Get the LSN in K */
 
 			/*
-			 * Set the current protocol TD1 
+			 * Set the current protocol TD1
 			 */
 			if (psExtension->CardCapabilities.CurrentProtocol == 0x00)
 			{
@@ -177,7 +177,7 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 				psExtension->CardCapabilities.AvailableProtocols |= T;
 				/*
 				 * Do nothing for now since other protocols are not
-				 * supported at this time 
+				 * supported at this time
 				 */
 			}
 
@@ -196,7 +196,7 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 	while (Y1i != 0);
 
 	/*
-	 * If TDx is not set then the current must be T0 
+	 * If TDx is not set then the current must be T0
 	 */
 	if (psExtension->CardCapabilities.CurrentProtocol == 0x00)
 	{
@@ -206,7 +206,7 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 	}
 
 	/*
-	 * Take care of the historical characters 
+	 * Take care of the historical characters
 	 */
 
 	psExtension->ATR.HistoryLength = K;
@@ -216,7 +216,7 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 
 	/*
 	 * Check to see if TCK character is included It will be included if
-	 * more than T=0 is supported 
+	 * more than T=0 is supported
 	 */
 
 	if (psExtension->CardCapabilities.AvailableProtocols &
