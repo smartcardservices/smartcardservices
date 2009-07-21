@@ -29,6 +29,7 @@
 #ifndef _TOKEND_ADORNMENT_H_
 #define _TOKEND_ADORNMENT_H_
 
+#include <CoreServices/../Frameworks/CarbonCore.framework/Headers/MacTypes.h>
 #include <security_utilities/adornments.h>
 #include <security_utilities/refcount.h>
 #include <Security/SecCertificate.h>

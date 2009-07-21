@@ -29,6 +29,7 @@
 #ifndef _TOKEND_RECORD_H_
 #define _TOKEND_RECORD_H_
 
+#include <CoreServices/../Frameworks/CarbonCore.framework/Headers/MacTypes.h>
 #include "AttributeCoder.h"
 #include "MetaRecord.h"
 #include "Attribute.h"

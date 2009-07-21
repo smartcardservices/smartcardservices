@@ -23,6 +23,8 @@
 
 #ifndef BYTE_STRING
 #define BYTE_STRING
+
+#include <CoreServices/../Frameworks/CarbonCore.framework/Headers/MacTypes.h>
 #include <vector>
 
 /** Utility definition and additional operators to make working with

@@ -29,6 +29,7 @@
 #ifndef _TOKEND_SELECTIONPREDICATE_H_
 #define _TOKEND_SELECTIONPREDICATE_H_
 
+#include <CoreServices/../Frameworks/CarbonCore.framework/Headers/MacTypes.h>
 #include <security_cdsa_utilities/cssmdata.h>
 
 namespace Tokend

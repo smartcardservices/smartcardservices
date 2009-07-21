@@ -29,6 +29,7 @@
 #ifndef _TOKEND_PKCS11OBJECT_H_
 #define _TOKEND_PKCS11OBJECT_H_
 
+#include <CoreServices/../Frameworks/CarbonCore.framework/Headers/MacTypes.h>
 #include <stdint.h>
 #include <map>
 #include <security_utilities/debugging.h>
