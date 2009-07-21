@@ -1,0 +1,16 @@
+// !$*UTF8*$!
+{
+        build = SmartcardCCID;
+        inherits = 9J61;
+        projects = {
+		SmartcardCCID = {
+			dependencies = {
+				build = (
+					xnu,
+				);
+			};
+			version = 1;
+		};
+	};
+}
+
