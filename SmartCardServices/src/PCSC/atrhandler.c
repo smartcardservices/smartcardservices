@@ -51,7 +51,7 @@
  * Uncomment the following for ATR debugging
  * or use ./configure --enable-debugatr
  */
-#define ATR_DEBUG
+/* #define ATR_DEBUG */
 
 /**
  * @brief parse an ATR
