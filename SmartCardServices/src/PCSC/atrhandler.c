@@ -44,13 +44,14 @@
 #include "config.h"
 #include "wintypes.h"
 #include "pcsclite.h"
+#include "debuglog.h"
 #include "atrhandler.h"
 
 /**
  * Uncomment the following for ATR debugging
  * or use ./configure --enable-debugatr
  */
-/* #define ATR_DEBUG */
+#define ATR_DEBUG
 
 /**
  * @brief parse an ATR
@@ -66,12 +67,17 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 	USHORT p;
 	UCHAR K, TCK;				/* MSN of T0/Check Sum */
 	UCHAR Y1i, T;				/* MSN/LSN of TDi */
-	short TAi, TBi, TCi, TDi;	/* Interface characters */
+	int i = 1;					/* value of the index in TAi, TBi, etc. */
 
 	/*
 	 * Zero out everything
 	 */
-	p = K = TCK = Y1i = T = TAi = TBi = TCi = TDi = 0;
+	p = K = TCK = Y1i = T = 0;
+
+#ifdef ATR_DEBUG
+	if (dwLength > 0)
+		LogXxd(PCSC_LOG_DEBUG, "ATR: ", pucAtr, dwLength);
+#endif
 
 	if (dwLength < 2)
 		return 0;	/** @retval 0 Atr must have TS and T0 */
@@ -79,8 +85,8 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 	/*
 	 * Zero out the bitmasks
 	 */
-	psExtension->CardCapabilities.AvailableProtocols = 0x00;
-	psExtension->CardCapabilities.CurrentProtocol = 0x00;
+	psExtension->CardCapabilities.AvailableProtocols = SCARD_PROTOCOL_UNDEFINED;
+	psExtension->CardCapabilities.CurrentProtocol = SCARD_PROTOCOL_UNDEFINED;
 
 	/*
 	 * Decode the TS byte
@@ -113,7 +119,7 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 	p = 2;
 
 #ifdef ATR_DEBUG
-	debug_msg("Conv: %02X, Y1: %02X, K: %02X",
+	Log4(PCSC_LOG_DEBUG, "Conv: %02X, Y1: %02X, K: %02X",
 		psExtension->CardCapabilities.Convention, Y1i, K);
 #endif
 
@@ -122,6 +128,7 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 	 */
 	do
 	{
+		short TAi, TBi, TCi, TDi;	/* Interface characters */
 
 		TAi = (Y1i & 0x01) ? pucAtr[p++] : -1;
 		TBi = (Y1i & 0x02) ? pucAtr[p++] : -1;
@@ -129,8 +136,9 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 		TDi = (Y1i & 0x08) ? pucAtr[p++] : -1;
 
 #ifdef ATR_DEBUG
-		debug_msg("T's %02X %02X %02X %02X", TAi, TBi, TCi, TDi);
-		debug_msg("P %02X", p);
+		Log9(PCSC_LOG_DEBUG,
+			"TA%d: %02X, TB%d: %02X, TC%d: %02X, TD%d: %02X",
+			i, TAi, i, TBi, i, TCi, i, TDi);
 #endif
 
 		/*
@@ -142,9 +150,9 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 			T = TDi & 0x0F;	/* Get the LSN in K */
 
 			/*
-			 * Set the current protocol TD1
+			 * Set the current protocol TD1 (first TD only)
 			 */
-			if (psExtension->CardCapabilities.CurrentProtocol == 0x00)
+			if (psExtension->CardCapabilities.CurrentProtocol == SCARD_PROTOCOL_UNDEFINED)
 			{
 				switch (T)
 				{
@@ -162,7 +170,7 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 			}
 
 #ifdef ATR_DEBUG
-			debug_msg("T=%d Protocol Found", T);
+			Log2(PCSC_LOG_DEBUG, "T=%d Protocol Found", T);
 #endif
 			if (0 == T)
 			{
@@ -176,14 +184,44 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 						SCARD_PROTOCOL_T1;
 				}
 				else
-				{
-					psExtension->CardCapabilities.AvailableProtocols |= T;
-					/*
-					 * Do nothing for now since other protocols are not
-					 * supported at this time
-					 */
-				}
+					if (15 == T)
+					{
+						psExtension->CardCapabilities.AvailableProtocols |=
+							SCARD_PROTOCOL_T15;
+					}
+					else
+					{
+						/*
+						 * Do nothing for now since other protocols are not
+						 * supported at this time
+						 */
+					}
 
+			/* test presence of TA2 */
+			if ((2 == i) && (TAi >= 0))
+			{
+				T = TAi & 0x0F;
+#ifdef ATR_DEBUG
+				Log2(PCSC_LOG_DEBUG, "Specific mode: T=%d", T);
+#endif
+				switch (T)
+				{
+					case 0:
+						psExtension->CardCapabilities.CurrentProtocol =
+							psExtension->CardCapabilities.AvailableProtocols =
+							SCARD_PROTOCOL_T0;
+						break;
+
+					case 1:
+						psExtension->CardCapabilities.CurrentProtocol =
+							psExtension->CardCapabilities.AvailableProtocols =
+							SCARD_PROTOCOL_T1;
+						break;
+
+					default:
+						return 0; /** @retval 0 Unable do decode T protocol */
+				}
+			}
 		} else
 			Y1i = 0;
 
@@ -193,13 +231,15 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 			return 0;	/** @retval 0 Maximum attribute size */
 		}
 
+		/* next interface characters index */
+		i++;
 	}
 	while (Y1i != 0);
 
 	/*
 	 * If TDx is not set then the current must be T0
 	 */
-	if (psExtension->CardCapabilities.CurrentProtocol == 0x00)
+	if (psExtension->CardCapabilities.CurrentProtocol == SCARD_PROTOCOL_UNDEFINED)
 	{
 		psExtension->CardCapabilities.CurrentProtocol = SCARD_PROTOCOL_T0;
 		psExtension->CardCapabilities.AvailableProtocols |= SCARD_PROTOCOL_T0;
@@ -222,6 +262,12 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 
 	memcpy(psExtension->ATR.Value, pucAtr, p);
 	psExtension->ATR.Length = p;	/* modified from p-1 */
+
+#ifdef ATR_DEBUG
+	Log3(PCSC_LOG_DEBUG, "CurrentProtocol: %d, AvailableProtocols: %d",
+		psExtension->CardCapabilities.CurrentProtocol,
+		psExtension->CardCapabilities.AvailableProtocols);
+#endif
 
 	return 1; /** @retval 1 Success */
 }
