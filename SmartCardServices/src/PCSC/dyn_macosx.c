@@ -40,7 +40,7 @@
 #include "debuglog.h"
 
 /*
- * / Load a module (if needed) 
+ * / Load a module (if needed)
  */
 int DYN_LoadLibrary(void **pvLHandle, char *pcLibrary)
 {
@@ -52,44 +52,29 @@ int DYN_LoadLibrary(void **pvLHandle, char *pcLibrary)
 	*pvLHandle = 0;
 
 	/*
-	 * @@@ kCFStringEncodingMacRoman might be wrong on non US systems. 
+	 * @@@ kCFStringEncodingMacRoman might be wrong on non US systems.
 	 */
 
 	bundlePath = CFStringCreateWithCString(NULL, pcLibrary,
 		kCFStringEncodingMacRoman);
 	if (bundlePath == NULL)
-	{
 		return SCARD_E_NO_MEMORY;
-
-	} else
-	{
-	}
 
 	bundleURL = CFURLCreateWithFileSystemPath(NULL, bundlePath,
 		kCFURLPOSIXPathStyle, TRUE);
 	CFRelease(bundlePath);
 	if (bundleURL == NULL)
-	{
 		return SCARD_E_NO_MEMORY;
-	} else
-	{
-	}
 
 	bundle = CFBundleCreate(NULL, bundleURL);
 	CFRelease(bundleURL);
 	if (bundle == NULL)
-	{
 		return SCARD_F_UNKNOWN_ERROR;
-	} else
-	{
-	}
 
 	if (!CFBundleLoadExecutable(bundle))
 	{
 		CFRelease(bundle);
 		return SCARD_F_UNKNOWN_ERROR;
-	} else
-	{
 	}
 
 	*pvLHandle = (void *) bundle;
