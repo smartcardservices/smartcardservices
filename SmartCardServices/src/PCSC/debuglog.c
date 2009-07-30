@@ -43,8 +43,7 @@
  */
 
 #include "config.h"
-
-#ifndef WIN32
+#ifdef HAVE_SYSLOG_H
 #include <syslog.h>
 #endif
 #include <unistd.h>
@@ -87,18 +86,9 @@ void log_msg(const int priority, const char *fmt, ...)
 		return;
 
 	va_start(argptr, fmt);
-#ifndef WIN32
 	vsnprintf(DebugBuffer, DEBUG_BUF_SIZE, fmt, argptr);
-#else
-#if HAVE_VSNPRINTF
-	vsnprintf(DebugBuffer, DEBUG_BUF_SIZE, fmt, argptr);
-#else
-	vsprintf(DebugBuffer, fmt, argptr);
-#endif
-#endif
 	va_end(argptr);
 
-#ifndef WIN32
 	if (DEBUGLOG_SYSLOG_DEBUG == LogMsgType)
 		syslog(LOG_INFO, "%s", DebugBuffer);
 	else
@@ -131,9 +121,6 @@ void log_msg(const int priority, const char *fmt, ...)
 		else
 			fprintf(stderr, "%s\n", DebugBuffer);
 	}
-#else
-	fprintf(stderr, "%s\n", DebugBuffer);
-#endif
 } /* log_msg */
 
 void log_xxd(const int priority, const char *msg, const unsigned char *buffer,
@@ -164,11 +151,9 @@ void log_xxd(const int priority, const char *msg, const unsigned char *buffer,
 	if ((c >= debug_buf_end) && (i < len))
 		c[-3] = c[-2] = c[-1] = '.';
 
-#ifndef WIN32
 	if (DEBUGLOG_SYSLOG_DEBUG == LogMsgType)
 		syslog(LOG_INFO, "%s", DebugBuffer);
 	else
-#endif
 		fprintf(stderr, "%s\n", DebugBuffer);
 } /* log_xxd */
 
@@ -194,8 +179,6 @@ void DebugLogSetLogType(const int dbgtype)
 			LogMsgType = DEBUGLOG_STDERR_DEBUG;
 	}
 
-	/* no color under Windows */
-#ifndef WIN32
 	/* log to stderr and stderr is a tty? */
 	if (DEBUGLOG_STDERR_DEBUG == LogMsgType && isatty(fileno(stderr)))
 	{
@@ -219,7 +202,6 @@ void DebugLogSetLogType(const int dbgtype)
 			}
 		}
 	}
-#endif
 }
 
 void DebugLogSetLevel(const int level)
@@ -288,6 +270,7 @@ INTERNAL void DebugLogCategory(const int category, const unsigned char *buffer,
  * defined only for pcscd
  */
 #ifdef PCSCD
+void debug_msg(const char *fmt, ...);
 void debug_msg(const char *fmt, ...)
 {
 	char DebugBuffer[DEBUG_BUF_SIZE];
@@ -298,25 +281,16 @@ void debug_msg(const char *fmt, ...)
 		return;
 
 	va_start(argptr, fmt);
-#ifndef WIN32
 	vsnprintf(DebugBuffer, DEBUG_BUF_SIZE, fmt, argptr);
-#else
-#if HAVE_VSNPRINTF
-	vsnprintf(DebugBuffer, DEBUG_BUF_SIZE, fmt, argptr);
-#else
-	vsprintf(DebugBuffer, fmt, argptr);
-#endif
-#endif
 	va_end(argptr);
 
-#ifndef WIN32
 	if (DEBUGLOG_SYSLOG_DEBUG == LogMsgType)
 		syslog(LOG_INFO, "%s", DebugBuffer);
 	else
-#endif
 		fprintf(stderr, "%s\n", DebugBuffer);
 } /* debug_msg */
 
+void debug_xxd(const char *msg, const unsigned char *buffer, const int len);
 void debug_xxd(const char *msg, const unsigned char *buffer, const int len)
 {
 	log_xxd(PCSC_LOG_ERROR, msg, buffer, len);
