@@ -148,8 +148,7 @@ int evaluatetoken(char *pcToken)
 
 void tok_error (char *token_error)
 {
-	debug_msg("%s:%d tok_error: invalid value in reader.conf",
-			__FILE__, __LINE__);
+	Log2(PCSC_LOG_ERROR, "tok_error: invalid value in " PCSCLITE_READER_CONFIG ": %s", token_error);
 	badError = 1;
 }
 
