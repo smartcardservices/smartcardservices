@@ -25,8 +25,8 @@
 
 #define DEBUG_BUF_SIZE 2048
 
-/* default level is a bit verbose to be backward compatible */
-static char LogLevel = PCSC_LOG_ERROR;
+/** default level is quiet to avoid polluting fd 2 (possibly NOT stderr) */
+static char LogLevel = PCSC_LOG_CRITICAL+1;
 
 static signed char LogDoColor = 0;	/**< no color by default */
 
