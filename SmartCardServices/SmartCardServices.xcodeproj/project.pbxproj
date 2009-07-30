@@ -49,8 +49,8 @@
 		52C3C1480BA5D46900436862 /* readerstate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5236DD1C0B9DDBD7007CEF56 /* readerstate.cpp */; };
 		52C3C14D0BA5D54100436862 /* readerstate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5236DD1C0B9DDBD7007CEF56 /* readerstate.cpp */; };
 		52C85D900B9FA79F002DA856 /* security_utilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52D58C080A87FEA000DC3F19 /* security_utilities.framework */; };
-		52D00D1C0A9252350093277A /* reader.h in Headers */ = {isa = PBXBuildFile; fileRef = 52D00D1A0A9252350093277A /* reader.h */; };
-		52D00D1D0A9252350093277A /* reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52D00D1B0A9252350093277A /* reader.cpp */; };
+		52D00D1C0A9252350093277A /* pcscd_reader.cpp in Headers */ = {isa = PBXBuildFile; fileRef = 52D00D1A0A9252350093277A /* pcscd_reader.cpp */; };
+		52D00D1D0A9252350093277A /* pcscd_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52D00D1B0A9252350093277A /* pcscd_reader.cpp */; };
 		52D2492D0BA07E1100F9827A /* winscard_msg_srv.c in Sources */ = {isa = PBXBuildFile; fileRef = 52D2492C0BA07E1100F9827A /* winscard_msg_srv.c */; };
 		52D58C090A87FEA000DC3F19 /* security_utilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52D58C080A87FEA000DC3F19 /* security_utilities.framework */; };
 		52D58C560A8803A800DC3F19 /* thread_macosx.c in Sources */ = {isa = PBXBuildFile; fileRef = F52A94A60254242101B94B21 /* thread_macosx.c */; };
@@ -501,8 +501,8 @@
 		528629400A87EA8E004FE8DC /* PCSCDriverBundle.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = PCSCDriverBundle.h; path = src/PCSC/PCSCDriverBundle.h; sourceTree = "<group>"; };
 		528629410A87EA8E004FE8DC /* PCSCDriverBundles.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = PCSCDriverBundles.cpp; path = src/PCSC/PCSCDriverBundles.cpp; sourceTree = "<group>"; };
 		528629420A87EA8E004FE8DC /* PCSCDriverBundles.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = PCSCDriverBundles.h; path = src/PCSC/PCSCDriverBundles.h; sourceTree = "<group>"; };
-		52D00D1A0A9252350093277A /* reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = reader.h; path = src/PCSC/reader.h; sourceTree = "<group>"; };
-		52D00D1B0A9252350093277A /* reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = reader.cpp; path = src/PCSC/reader.cpp; sourceTree = "<group>"; };
+		52D00D1A0A9252350093277A /* pcscd_reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pcscd_reader.cpp; path = src/PCSC/pcscd_reader.cpp; sourceTree = "<group>"; };
+		52D00D1B0A9252350093277A /* pcscd_reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pcscd_reader.cpp; path = src/PCSC/pcscd_reader.cpp; sourceTree = "<group>"; };
 		52D2492C0BA07E1100F9827A /* winscard_msg_srv.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = winscard_msg_srv.c; path = src/PCSC/winscard_msg_srv.c; sourceTree = "<group>"; };
 		52D58C080A87FEA000DC3F19 /* security_utilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = security_utilities.framework; path = /usr/local/SecurityPieces/Frameworks/security_utilities.framework; sourceTree = "<absolute>"; };
 		52DBCAAE0BB851C8007D06A5 /* PCSC.exp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.exports; name = PCSC.exp; path = src/PCSC/PCSC.exp; sourceTree = "<group>"; };
@@ -759,8 +759,8 @@
 				528629420A87EA8E004FE8DC /* PCSCDriverBundles.h */,
 				F52A94A10254242101B94B21 /* readerfactory.c */,
 				F52A94A20254242101B94B21 /* readerfactory.h */,
-				52D00D1A0A9252350093277A /* reader.h */,
-				52D00D1B0A9252350093277A /* reader.cpp */,
+				52D00D1A0A9252350093277A /* pcscd_reader.cpp */,
+				52D00D1B0A9252350093277A /* pcscd_reader.cpp */,
 			);
 			name = pcscd;
 			sourceTree = "<group>";
@@ -989,7 +989,7 @@
 				5286294B0A87EA8E004FE8DC /* PCSCDevice.h in Headers */,
 				5286294D0A87EA8E004FE8DC /* PCSCDriverBundle.h in Headers */,
 				5286294F0A87EA8E004FE8DC /* PCSCDriverBundles.h in Headers */,
-				52D00D1C0A9252350093277A /* reader.h in Headers */,
+				52D00D1C0A9252350093277A /* pcscd_reader.cpp in Headers */,
 				527CF60F0AA5192B007589FF /* pcscdmonitor.h in Headers */,
 				527CF6110AA5192B007589FF /* pcscdserver.h in Headers */,
 				5236DD1F0B9DDBD7007CEF56 /* readerstate.h in Headers */,
@@ -1189,7 +1189,7 @@
 				5286294A0A87EA8E004FE8DC /* PCSCDevice.cpp in Sources */,
 				5286294C0A87EA8E004FE8DC /* PCSCDriverBundle.cpp in Sources */,
 				5286294E0A87EA8E004FE8DC /* PCSCDriverBundles.cpp in Sources */,
-				52D00D1D0A9252350093277A /* reader.cpp in Sources */,
+				52D00D1D0A9252350093277A /* pcscd_reader.cpp in Sources */,
 				527CF60E0AA5192B007589FF /* pcscdmonitor.cpp in Sources */,
 				527CF6100AA5192B007589FF /* pcscdserver.cpp in Sources */,
 				52D2492D0BA07E1100F9827A /* winscard_msg_srv.c in Sources */,
