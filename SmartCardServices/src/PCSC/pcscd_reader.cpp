@@ -26,7 +26,7 @@
  *  SmartCardServices
 */
 
-#include "reader.h"
+#include "pcscd_reader.h"
 #include "eventhandler.h"
 #include "pcsclite.h"
 #include <security_utilities/debugging.h>
