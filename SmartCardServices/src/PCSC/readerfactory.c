@@ -64,6 +64,7 @@ $Id: readerfactory.c,v 1.3 2004/10/14 20:33:35 mb Exp $
 #include "eventhandler.h"
 #include "ifdwrapper.h"
 #include "readerState.h"
+#include "configfile.h"
 
 #include <security_utilities/debugging.h>
 
