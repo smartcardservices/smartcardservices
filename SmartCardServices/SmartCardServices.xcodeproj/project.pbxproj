@@ -30,6 +30,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		1FBFA8BE1021A563001ACCE5 /* error.c in Sources */ = {isa = PBXBuildFile; fileRef = 1FBFA8BD1021A563001ACCE5 /* error.c */; };
 		2CBB606506CA69F9006AA7C8 /* GSCISPlugin.c in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB606306CA69F9006AA7C8 /* GSCISPlugin.c */; };
 		2CBB606606CA69F9006AA7C8 /* GSCISPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 2CBB606406CA69F9006AA7C8 /* GSCISPlugin.h */; };
 		2CC9AB8406CC02F30048A811 /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5448E630379F08001B94948 /* PCSC.framework */; };
@@ -480,6 +481,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1FBFA8BD1021A563001ACCE5 /* error.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = error.c; path = src/PCSC/error.c; sourceTree = "<group>"; };
 		2CBB605B06CA6944006AA7C8 /* GSCISPlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GSCISPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CBB606306CA69F9006AA7C8 /* GSCISPlugin.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = GSCISPlugin.c; path = src/GSCISPlugin/GSCISPlugin.c; sourceTree = SOURCE_ROOT; };
 		2CBB606406CA69F9006AA7C8 /* GSCISPlugin.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = GSCISPlugin.h; path = src/GSCISPlugin/GSCISPlugin.h; sourceTree = SOURCE_ROOT; };
@@ -818,6 +820,7 @@
 		F537A7B50379EB8B01B94948 /* PCSC */ = {
 			isa = PBXGroup;
 			children = (
+				1FBFA8BD1021A563001ACCE5 /* error.c */,
 				527CF6240AA51B07007589FF /* tools */,
 				527CF6070AA51881007589FF /* framework */,
 				527CF6040AA51879007589FF /* pcscd */,
@@ -1217,6 +1220,7 @@
 				F52A94E3025424AC01B94B21 /* debuglog.c in Sources */,
 				F52A94E4025424AC01B94B21 /* winscard_clnt.c in Sources */,
 				52DBCAAF0BB851C8007D06A5 /* PCSC.exp in Sources */,
+				1FBFA8BE1021A563001ACCE5 /* error.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1398,7 +1402,6 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Frameworks";
-				OPTIMIZATION_CFLAGS = "-O0";
 				OPT_CFLAGS = "-DNDEBUG -Os $(OPT_INLINEFLAGS)";
 				OPT_CPPFLAGS = "$(OPT_CFLAGS)";
 				OPT_INLINEFLAGS = "-finline-functions";
@@ -1602,7 +1605,6 @@
 					/System/Library/Frameworks/IOKit.framework/Headers,
 				);
 				INSTALL_PATH = /usr/sbin;
-				OPTIMIZATION_CFLAGS = "-O0";
 				OPT_CPPXFLAGS = "$(OPT_CXFLAGS)";
 				OPT_CXFLAGS = "-DNDEBUG -Os $(OPT_INLINEXFLAGS)";
 				OPT_INLINEXFLAGS = "-finline-functions";
@@ -1805,7 +1807,6 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/bin;
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -1906,7 +1907,6 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/bin;
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -2006,7 +2006,6 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/libexec/SmartCardServices/pkcs11;
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-lcrypto";
 				OTHER_REZFLAGS = "";
@@ -2103,7 +2102,6 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/libexec/SmartCardServices/services;
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "-DMSC_TARGET_OSX=1";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -2199,7 +2197,6 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/libexec/SmartCardServices/services;
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "-DMSC_TARGET_OSX=1";
 				PRODUCT_NAME = GSCISPlugin;
 				WARNING_CFLAGS = (
@@ -2278,7 +2275,6 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/libexec/SmartCardServices/services;
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "-DMSC_TARGET_OSX=1";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -2375,7 +2371,6 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/libexec/SmartCardServices/services;
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "-DMSC_TARGET_OSX=1";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -2470,7 +2465,6 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				OPTIMIZATION_CFLAGS = "-O0";
 				PRODUCT_NAME = InstallPhase;
 				ZERO_LINK = YES;
 			};
@@ -2516,7 +2510,6 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
