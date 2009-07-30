@@ -1879,7 +1879,7 @@ void tok_error (char *token_error)
 	badError = 1;
 }
 
-int DBUpdateReaders (char *readerconf)
+int DBUpdateReaders (const char *readerconf)
 {
 	FILE *configFile = NULL;
 
