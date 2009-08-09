@@ -4,6 +4,7 @@
         inherits = 9J61;
         projects = {
 		SmartcardCCID = {
+			branch = "/trunk/SmartcardCCID";
 			dependencies = {
 				build = (
 					CF,
@@ -52,6 +53,9 @@
 					xnu,
 				);
 			};
+			source_sites = (
+				     "http://svn.macosforge.org/repository/smartcardservices/",
+			);
 			version = 1;
 		};
 	};
