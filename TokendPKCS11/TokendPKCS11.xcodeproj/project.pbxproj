@@ -1,0 +1,391 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		46DC03860EB9FED6001E43CF /* pkcs11.h in Headers */ = {isa = PBXBuildFile; fileRef = 46DC035D0EB9FED6001E43CF /* pkcs11.h */; };
+		46DC03890EB9FED6001E43CF /* CFUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC03610EB9FED6001E43CF /* CFUtilities.cpp */; };
+		46DC038B0EB9FED6001E43CF /* p11-global.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC03630EB9FED6001E43CF /* p11-global.cpp */; };
+		46DC038C0EB9FED6001E43CF /* p11-keyops.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC03640EB9FED6001E43CF /* p11-keyops.cpp */; };
+		46DC038D0EB9FED6001E43CF /* p11-object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC03650EB9FED6001E43CF /* p11-object.cpp */; };
+		46DC038E0EB9FED6001E43CF /* p11-othercrypt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC03660EB9FED6001E43CF /* p11-othercrypt.cpp */; };
+		46DC038F0EB9FED6001E43CF /* p11-personalization.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC03670EB9FED6001E43CF /* p11-personalization.cpp */; };
+		46DC03900EB9FED6001E43CF /* p11-pubkey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC03680EB9FED6001E43CF /* p11-pubkey.cpp */; };
+		46DC03910EB9FED6001E43CF /* p11-session.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC03690EB9FED6001E43CF /* p11-session.cpp */; };
+		46DC03920EB9FED6001E43CF /* p11-slot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC036A0EB9FED6001E43CF /* p11-slot.cpp */; };
+		46DC03930EB9FED6001E43CF /* p11-unsupported.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC036B0EB9FED6001E43CF /* p11-unsupported.cpp */; };
+		46DC03940EB9FED6001E43CF /* P11Attribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC036C0EB9FED6001E43CF /* P11Attribute.cpp */; };
+		46DC03950EB9FED6001E43CF /* P11CryptoState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC036D0EB9FED6001E43CF /* P11CryptoState.cpp */; };
+		46DC03960EB9FED6001E43CF /* P11Identity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC036E0EB9FED6001E43CF /* P11Identity.cpp */; };
+		46DC03970EB9FED6001E43CF /* P11Mutexes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC036F0EB9FED6001E43CF /* P11Mutexes.cpp */; };
+		46DC03980EB9FED6001E43CF /* P11Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC03700EB9FED6001E43CF /* P11Object.cpp */; };
+		46DC03990EB9FED6001E43CF /* P11Session.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC03710EB9FED6001E43CF /* P11Session.cpp */; };
+		46DC039A0EB9FED6001E43CF /* P11Slot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC03720EB9FED6001E43CF /* P11Slot.cpp */; };
+		46DC039B0EB9FED6001E43CF /* P11Slots.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC03730EB9FED6001E43CF /* P11Slots.cpp */; };
+		46DC039C0EB9FED6001E43CF /* P11State.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC03740EB9FED6001E43CF /* P11State.cpp */; };
+		46DC039D0EB9FED6001E43CF /* TLV.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC03750EB9FED6001E43CF /* TLV.cpp */; };
+		46DC039F0EB9FED6001E43CF /* Utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46DC03770EB9FED6001E43CF /* Utilities.cpp */; };
+		46DC03A50EB9FEF1001E43CF /* security_utilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46DC03A40EB9FEF1001E43CF /* security_utilities.framework */; };
+		46DC03E40EBA0293001E43CF /* config-objects.h in Headers */ = {isa = PBXBuildFile; fileRef = 46DC03E30EBA0293001E43CF /* config-objects.h */; };
+		52DEA5870EC2660E003D3FBA /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52DEA5860EC2660E003D3FBA /* Security.framework */; };
+		52EDC4660EC2240C00504944 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52EDC4650EC2240C00504944 /* CoreFoundation.framework */; };
+		52EDC4DC0EC25DF800504944 /* TokendPKCS11_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 52EDC4DB0EC25DF800504944 /* TokendPKCS11_Prefix.pch */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		46DC034F0EB9FED6001E43CF /* byte_string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = byte_string.h; sourceTree = "<group>"; };
+		46DC03500EB9FED6001E43CF /* CFUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFUtilities.h; sourceTree = "<group>"; };
+		46DC03510EB9FED6001E43CF /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		46DC03520EB9FED6001E43CF /* HandleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HandleManager.h; sourceTree = "<group>"; };
+		46DC03530EB9FED6001E43CF /* IteratorUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IteratorUtilities.h; sourceTree = "<group>"; };
+		46DC03540EB9FED6001E43CF /* P11Attribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = P11Attribute.h; sourceTree = "<group>"; };
+		46DC03550EB9FED6001E43CF /* P11CryptoState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = P11CryptoState.h; sourceTree = "<group>"; };
+		46DC03560EB9FED6001E43CF /* P11Identity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = P11Identity.h; sourceTree = "<group>"; };
+		46DC03570EB9FED6001E43CF /* P11Mutexes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = P11Mutexes.h; sourceTree = "<group>"; };
+		46DC03580EB9FED6001E43CF /* P11Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = P11Object.h; sourceTree = "<group>"; };
+		46DC03590EB9FED6001E43CF /* P11Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = P11Session.h; sourceTree = "<group>"; };
+		46DC035A0EB9FED6001E43CF /* P11Slot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = P11Slot.h; sourceTree = "<group>"; };
+		46DC035B0EB9FED6001E43CF /* P11Slots.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = P11Slots.h; sourceTree = "<group>"; };
+		46DC035C0EB9FED6001E43CF /* P11State.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = P11State.h; sourceTree = "<group>"; };
+		46DC035D0EB9FED6001E43CF /* pkcs11.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pkcs11.h; sourceTree = "<group>"; };
+		46DC035E0EB9FED6001E43CF /* TLV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TLV.h; sourceTree = "<group>"; };
+		46DC035F0EB9FED6001E43CF /* Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = "<group>"; };
+		46DC03610EB9FED6001E43CF /* CFUtilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CFUtilities.cpp; sourceTree = "<group>"; };
+		46DC03620EB9FED6001E43CF /* HandleManager.inc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = HandleManager.inc; sourceTree = "<group>"; };
+		46DC03630EB9FED6001E43CF /* p11-global.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "p11-global.cpp"; sourceTree = "<group>"; };
+		46DC03640EB9FED6001E43CF /* p11-keyops.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "p11-keyops.cpp"; sourceTree = "<group>"; };
+		46DC03650EB9FED6001E43CF /* p11-object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "p11-object.cpp"; sourceTree = "<group>"; };
+		46DC03660EB9FED6001E43CF /* p11-othercrypt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "p11-othercrypt.cpp"; sourceTree = "<group>"; };
+		46DC03670EB9FED6001E43CF /* p11-personalization.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "p11-personalization.cpp"; sourceTree = "<group>"; };
+		46DC03680EB9FED6001E43CF /* p11-pubkey.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "p11-pubkey.cpp"; sourceTree = "<group>"; };
+		46DC03690EB9FED6001E43CF /* p11-session.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "p11-session.cpp"; sourceTree = "<group>"; };
+		46DC036A0EB9FED6001E43CF /* p11-slot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "p11-slot.cpp"; sourceTree = "<group>"; };
+		46DC036B0EB9FED6001E43CF /* p11-unsupported.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "p11-unsupported.cpp"; sourceTree = "<group>"; };
+		46DC036C0EB9FED6001E43CF /* P11Attribute.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = P11Attribute.cpp; sourceTree = "<group>"; };
+		46DC036D0EB9FED6001E43CF /* P11CryptoState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = P11CryptoState.cpp; sourceTree = "<group>"; };
+		46DC036E0EB9FED6001E43CF /* P11Identity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = P11Identity.cpp; sourceTree = "<group>"; };
+		46DC036F0EB9FED6001E43CF /* P11Mutexes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = P11Mutexes.cpp; sourceTree = "<group>"; };
+		46DC03700EB9FED6001E43CF /* P11Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = P11Object.cpp; sourceTree = "<group>"; };
+		46DC03710EB9FED6001E43CF /* P11Session.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = P11Session.cpp; sourceTree = "<group>"; };
+		46DC03720EB9FED6001E43CF /* P11Slot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = P11Slot.cpp; sourceTree = "<group>"; };
+		46DC03730EB9FED6001E43CF /* P11Slots.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = P11Slots.cpp; sourceTree = "<group>"; };
+		46DC03740EB9FED6001E43CF /* P11State.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = P11State.cpp; sourceTree = "<group>"; };
+		46DC03750EB9FED6001E43CF /* TLV.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TLV.cpp; sourceTree = "<group>"; };
+		46DC03760EB9FED6001E43CF /* TLV.inc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = TLV.inc; sourceTree = "<group>"; };
+		46DC03770EB9FED6001E43CF /* Utilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utilities.cpp; sourceTree = "<group>"; };
+		46DC03A40EB9FEF1001E43CF /* security_utilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = security_utilities.framework; path = /usr/local/SecurityPieces/Frameworks/security_utilities.framework; sourceTree = "<absolute>"; };
+		46DC03E30EBA0293001E43CF /* config-objects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "config-objects.h"; sourceTree = "<group>"; };
+		52DEA5860EC2660E003D3FBA /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
+		52DEA6020EC37001003D3FBA /* TokendPKCS11.exp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.exports; path = TokendPKCS11.exp; sourceTree = "<group>"; };
+		52EDC4650EC2240C00504944 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
+		52EDC4D70EC25DA800504944 /* TokendPKCS11Proj.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = TokendPKCS11Proj.xcconfig; sourceTree = "<group>"; };
+		52EDC4D80EC25DA800504944 /* TokendPKCS11Target.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = TokendPKCS11Target.xcconfig; sourceTree = "<group>"; };
+		52EDC4DB0EC25DF800504944 /* TokendPKCS11_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TokendPKCS11_Prefix.pch; sourceTree = "<group>"; };
+		D2AAC09D05546B4700DB518D /* tokendPKCS11.so */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = tokendPKCS11.so; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D2AAC09B05546B4700DB518D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				46DC03A50EB9FEF1001E43CF /* security_utilities.framework in Frameworks */,
+				52EDC4660EC2240C00504944 /* CoreFoundation.framework in Frameworks */,
+				52DEA5870EC2660E003D3FBA /* Security.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		034768DDFF38A45A11DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2AAC09D05546B4700DB518D /* tokendPKCS11.so */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0867D691FE84028FC02AAC07 /* tokend-pkcs11 */ = {
+			isa = PBXGroup;
+			children = (
+				52DEA6020EC37001003D3FBA /* TokendPKCS11.exp */,
+				5073E0CA09E734BC00EC74B6 /* Configuration Files */,
+				08FB77ACFE841707C02AAC07 /* Source */,
+				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
+				034768DDFF38A45A11DB9C8B /* Products */,
+			);
+			name = "tokend-pkcs11";
+			sourceTree = "<group>";
+		};
+		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				52DEA5860EC2660E003D3FBA /* Security.framework */,
+				52EDC4650EC2240C00504944 /* CoreFoundation.framework */,
+				46DC03A40EB9FEF1001E43CF /* security_utilities.framework */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		08FB77ACFE841707C02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				52EDC4DB0EC25DF800504944 /* TokendPKCS11_Prefix.pch */,
+				46DC034E0EB9FED6001E43CF /* include */,
+				46DC03600EB9FED6001E43CF /* src */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		46DC034E0EB9FED6001E43CF /* include */ = {
+			isa = PBXGroup;
+			children = (
+				46DC034F0EB9FED6001E43CF /* byte_string.h */,
+				46DC03500EB9FED6001E43CF /* CFUtilities.h */,
+				46DC03510EB9FED6001E43CF /* config.h */,
+				46DC03E30EBA0293001E43CF /* config-objects.h */,
+				46DC03520EB9FED6001E43CF /* HandleManager.h */,
+				46DC03530EB9FED6001E43CF /* IteratorUtilities.h */,
+				46DC03540EB9FED6001E43CF /* P11Attribute.h */,
+				46DC03550EB9FED6001E43CF /* P11CryptoState.h */,
+				46DC03560EB9FED6001E43CF /* P11Identity.h */,
+				46DC03570EB9FED6001E43CF /* P11Mutexes.h */,
+				46DC03580EB9FED6001E43CF /* P11Object.h */,
+				46DC03590EB9FED6001E43CF /* P11Session.h */,
+				46DC035A0EB9FED6001E43CF /* P11Slot.h */,
+				46DC035B0EB9FED6001E43CF /* P11Slots.h */,
+				46DC035C0EB9FED6001E43CF /* P11State.h */,
+				46DC035D0EB9FED6001E43CF /* pkcs11.h */,
+				46DC035E0EB9FED6001E43CF /* TLV.h */,
+				46DC035F0EB9FED6001E43CF /* Utilities.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		46DC03600EB9FED6001E43CF /* src */ = {
+			isa = PBXGroup;
+			children = (
+				46DC03610EB9FED6001E43CF /* CFUtilities.cpp */,
+				46DC03620EB9FED6001E43CF /* HandleManager.inc */,
+				46DC03630EB9FED6001E43CF /* p11-global.cpp */,
+				46DC03640EB9FED6001E43CF /* p11-keyops.cpp */,
+				46DC03650EB9FED6001E43CF /* p11-object.cpp */,
+				46DC03660EB9FED6001E43CF /* p11-othercrypt.cpp */,
+				46DC03670EB9FED6001E43CF /* p11-personalization.cpp */,
+				46DC03680EB9FED6001E43CF /* p11-pubkey.cpp */,
+				46DC03690EB9FED6001E43CF /* p11-session.cpp */,
+				46DC036A0EB9FED6001E43CF /* p11-slot.cpp */,
+				46DC036B0EB9FED6001E43CF /* p11-unsupported.cpp */,
+				46DC036C0EB9FED6001E43CF /* P11Attribute.cpp */,
+				46DC036D0EB9FED6001E43CF /* P11CryptoState.cpp */,
+				46DC036E0EB9FED6001E43CF /* P11Identity.cpp */,
+				46DC036F0EB9FED6001E43CF /* P11Mutexes.cpp */,
+				46DC03700EB9FED6001E43CF /* P11Object.cpp */,
+				46DC03710EB9FED6001E43CF /* P11Session.cpp */,
+				46DC03720EB9FED6001E43CF /* P11Slot.cpp */,
+				46DC03730EB9FED6001E43CF /* P11Slots.cpp */,
+				46DC03740EB9FED6001E43CF /* P11State.cpp */,
+				46DC03750EB9FED6001E43CF /* TLV.cpp */,
+				46DC03760EB9FED6001E43CF /* TLV.inc */,
+				46DC03770EB9FED6001E43CF /* Utilities.cpp */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		5073E0CA09E734BC00EC74B6 /* Configuration Files */ = {
+			isa = PBXGroup;
+			children = (
+				52EDC4D70EC25DA800504944 /* TokendPKCS11Proj.xcconfig */,
+				52EDC4D80EC25DA800504944 /* TokendPKCS11Target.xcconfig */,
+			);
+			name = "Configuration Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		D2AAC09905546B4700DB518D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				46DC03860EB9FED6001E43CF /* pkcs11.h in Headers */,
+				46DC03E40EBA0293001E43CF /* config-objects.h in Headers */,
+				52EDC4DC0EC25DF800504944 /* TokendPKCS11_Prefix.pch in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		D2AAC09C05546B4700DB518D /* tokendPKCS11 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB916008733D950010E9CD /* Build configuration list for PBXNativeTarget "tokendPKCS11" */;
+			buildPhases = (
+				D2AAC09905546B4700DB518D /* Headers */,
+				D2AAC09B05546B4700DB518D /* Frameworks */,
+				D2AAC09A05546B4700DB518D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = tokendPKCS11;
+			productName = "libtokend-pkcs11";
+			productReference = D2AAC09D05546B4700DB518D /* tokendPKCS11.so */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB916408733D950010E9CD /* Build configuration list for PBXProject "TokendPKCS11" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 0867D691FE84028FC02AAC07 /* tokend-pkcs11 */;
+			productRefGroup = 034768DDFF38A45A11DB9C8B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D2AAC09C05546B4700DB518D /* tokendPKCS11 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D2AAC09A05546B4700DB518D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				46DC03890EB9FED6001E43CF /* CFUtilities.cpp in Sources */,
+				46DC038B0EB9FED6001E43CF /* p11-global.cpp in Sources */,
+				46DC038C0EB9FED6001E43CF /* p11-keyops.cpp in Sources */,
+				46DC038D0EB9FED6001E43CF /* p11-object.cpp in Sources */,
+				46DC038E0EB9FED6001E43CF /* p11-othercrypt.cpp in Sources */,
+				46DC038F0EB9FED6001E43CF /* p11-personalization.cpp in Sources */,
+				46DC03900EB9FED6001E43CF /* p11-pubkey.cpp in Sources */,
+				46DC03910EB9FED6001E43CF /* p11-session.cpp in Sources */,
+				46DC03920EB9FED6001E43CF /* p11-slot.cpp in Sources */,
+				46DC03930EB9FED6001E43CF /* p11-unsupported.cpp in Sources */,
+				46DC03940EB9FED6001E43CF /* P11Attribute.cpp in Sources */,
+				46DC03950EB9FED6001E43CF /* P11CryptoState.cpp in Sources */,
+				46DC03960EB9FED6001E43CF /* P11Identity.cpp in Sources */,
+				46DC03970EB9FED6001E43CF /* P11Mutexes.cpp in Sources */,
+				46DC03980EB9FED6001E43CF /* P11Object.cpp in Sources */,
+				46DC03990EB9FED6001E43CF /* P11Session.cpp in Sources */,
+				46DC039A0EB9FED6001E43CF /* P11Slot.cpp in Sources */,
+				46DC039B0EB9FED6001E43CF /* P11Slots.cpp in Sources */,
+				46DC039C0EB9FED6001E43CF /* P11State.cpp in Sources */,
+				46DC039D0EB9FED6001E43CF /* TLV.cpp in Sources */,
+				46DC039F0EB9FED6001E43CF /* Utilities.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB916108733D950010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				EXECUTABLE_EXTENSION = so;
+				EXPORTED_SYMBOLS_FILE = TokendPKCS11.exp;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/SecurityPieces/Frameworks,
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = TokendPKCS11_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"_GLIBCXX_DEBUG=1",
+					"_GLIBCXX_DEBUG_PEDANTIC=1",
+				);
+				INSTALL_PATH = /usr/libexec/SmartCardServices/pkcs11;
+				USER_HEADER_SEARCH_PATHS = src;
+			};
+			name = Debug;
+		};
+		1DEB916208733D950010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_EXTENSION = so;
+				EXPORTED_SYMBOLS_FILE = TokendPKCS11.exp;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/SecurityPieces/Frameworks,
+				);
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = TokendPKCS11_Prefix.pch;
+				INSTALL_PATH = /usr/libexec/SmartCardServices/pkcs11;
+				STRIP_INSTALLED_PRODUCT = YES;
+				STRIP_STYLE = "non-global";
+				USER_HEADER_SEARCH_PATHS = src;
+			};
+			name = Release;
+		};
+		1DEB916508733D950010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				PRODUCT_NAME = tokendPKCS11;
+				SDKROOT = "";
+			};
+			name = Debug;
+		};
+		1DEB916608733D950010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				PRODUCT_NAME = tokendPKCS11;
+				SDKROOT = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB916008733D950010E9CD /* Build configuration list for PBXNativeTarget "tokendPKCS11" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB916108733D950010E9CD /* Debug */,
+				1DEB916208733D950010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB916408733D950010E9CD /* Build configuration list for PBXProject "TokendPKCS11" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB916508733D950010E9CD /* Debug */,
+				1DEB916608733D950010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}

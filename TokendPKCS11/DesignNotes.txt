@@ -1,0 +1,12 @@
+Slots: there is a minimum number of slots that the PKCS#11 will start out w/
+	These will be empty w/ removable media
+
+	If more than the minimum # of slots exist, then the list will grow to accomodate
+	When any slot is 'removed' then it is removed only at the following condition:
+		Refresh requested (list slots) AND the # of slots is greater than the max idle
+
+	On refresh, if the slot is to be removed, but is in use, it is kept around until the next refresh
+
+Slot IDs increment from 0 -> max - 1
+
+If a slot is removed and there are active slots above it numerically, then it 'will' be present.
