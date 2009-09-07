@@ -1,0 +1,1556 @@
+Tlibtokend
+v7
+r0
+t273806646.731780
+cCheck dependencies
+cCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/Adornment.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Adornment.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+cCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/Attribute.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Attribute.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+cCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/AttributeCoder.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/AttributeCoder.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+cCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/Cursor.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+cCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/DbValue.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/DbValue.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+cCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/KeyHandle.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+cCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/MetaAttribute.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaAttribute.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+cCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/MetaRecord.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+cCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/Record.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+cCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/RecordHandle.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+cCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/Relation.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+cCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/SCardError.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SCardError.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+cCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/Schema.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+cCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/SelectionPredicate.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SelectionPredicate.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+cCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/Token.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+cCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/TokenContext.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/TokenContext.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+cCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/tokend_vers.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/tokend_vers.c" debug i386 c com.apple.compilers.gcc.4_2
+cPhaseScriptExecution "Run Script" "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Script-52B260430BC5A864007E00F1.sh"
+
+N/Developer/SDKs/MacOSX10.6.sdk
+c000000004A769DAB00000000000000EE
+t1249287595
+s238
+
+N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFBase.h
+c000000004A5D68370000000000003A75
+t1247635511
+s14965
+
+N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFBundle.h
+c000000004A5D68370000000000003E6A
+t1247635511
+s15978
+
+N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CFDate.h
+c000000004A5D68370000000000000A15
+t1247635511
+s2581
+
+N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/CoreFoundation.framework/Headers/CoreFoundation.h
+c000000004A5D68380000000000000AF4
+t1247635512
+s2804
+
+N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/PCSC.framework/Headers/winscard.h
+c000000004A4412BA0000000000001093
+t1245975226
+s4243
+
+N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/Security.framework/Headers/CodeSigning.h
+c000000004A4D51FA0000000000000556
+t1246581242
+s1366
+
+N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/Security.framework/Headers/SecCertificate.h
+c000000004A4D51FB0000000000003609
+t1246581243
+s13833
+
+N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/Security.framework/Headers/SecKey.h
+c000000004A4D51FB0000000000003AC2
+t1246581243
+s15042
+
+N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/Security.framework/Headers/SecKeychainItem.h
+c000000004A4D51FB0000000000005C5A
+t1246581243
+s23642
+
+N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/Security.framework/Headers/cssm.h
+c000000004A4D51FA00000000000004F0
+t1246581242
+s1264
+
+N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/Security.framework/Headers/cssmapple.h
+c000000004A4D51FA000000000000B585
+t1246581242
+s46469
+
+N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/Security.framework/Headers/cssmerr.h
+c000000004A4D51FB000000000000996E
+t1246581243
+s39278
+
+N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/Security.framework/Headers/cssmtype.h
+c000000004A4D51FB0000000000011E34
+t1246581243
+s73268
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/assert.h
+c000000004A5C14A60000000000000DCB
+t1247548582
+s3531
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/ctype.h
+c000000004A5C14A60000000000002C18
+t1247548582
+s11288
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/errno.h
+c000000004A5C14A600000000000003EB
+t1247548582
+s1003
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/fcntl.h
+c000000004A5C14A600000000000003EA
+t1247548582
+s1002
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/libkern/OSAtomic.h
+c000000004A5C14A60000000000002519
+t1247548582
+s9497
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/libkern/OSByteOrder.h
+c000000004A73D64D000000000000298B
+t1249105485
+s10635
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/machine/endian.h
+c000000004A73D64900000000000006C3
+t1249105481
+s1731
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/math.h
+c000000004A5C14A000000000000004F1
+t1247548576
+s1265
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/pthread.h
+c000000004A5C14A700000000000038F0
+t1247548583
+s14576
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/semaphore.h
+c000000004A5C14A6000000000000046F
+t1247548582
+s1135
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/signal.h
+c000000004A5C14A700000000000014F0
+t1247548583
+s5360
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/stdio.h
+c000000004A5C14A70000000000004174
+t1247548583
+s16756
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/stdlib.h
+c000000004A5C14A70000000000002DF5
+t1247548583
+s11765
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/string.h
+c000000004A5C14A70000000000001731
+t1247548583
+s5937
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/sys/ioctl.h
+c000000004A73D651000000000000116C
+t1249105489
+s4460
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/sys/mman.h
+c000000004A73D6530000000000002098
+t1249105491
+s8344
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/sys/stat.h
+c000000004A73D6550000000000004A1D
+t1249105493
+s18973
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/sys/time.h
+c000000004A73D6550000000000001E17
+t1249105493
+s7703
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/sys/types.h
+c000000004A73D6550000000000002905
+t1249105493
+s10501
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/sys/uio.h
+c000000004A73D6550000000000001126
+t1249105493
+s4390
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/unistd.h
+c000000004A5C14A7000000000000563E
+t1247548583
+s22078
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/lib/gcc/i686-apple-darwin10/4.2.1/include/limits.h
+c000000004A11EB240000000000000C7E
+t1242688292
+s3198
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/lib/gcc/i686-apple-darwin10/4.2.1/include/stdint.h
+c000000004A11EB24000000000000190C
+t1242688292
+s6412
+
+N/Developer/usr/include/gcc/darwin/4.2/stdint.h
+c000000004A11A512000000000000190C
+t1242670354
+s6412
+
+N/Developer/usr/lib/gcc/i686-apple-darwin10/4.2.1/include/limits.h
+c000000004A1198340000000000000C7E
+t1242667060
+s3198
+i"syslimits.h"
+
+N/Developer/usr/lib/gcc/i686-apple-darwin10/4.2.1/include/syslimits.h
+c000000004A1195E90000000000000155
+t1242666473
+s341
+
+N/System/Library/Frameworks/CoreFoundation.framework/Headers/CFBase.h
+c000000004A5D68370000000000003A75
+t1247635511
+s14965
+
+N/System/Library/Frameworks/CoreFoundation.framework/Headers/CFBundle.h
+c000000004A5D68370000000000003E6A
+t1247635511
+s15978
+
+N/System/Library/Frameworks/CoreFoundation.framework/Headers/CFDate.h
+c000000004A5D68370000000000000A15
+t1247635511
+s2581
+
+N/System/Library/Frameworks/CoreFoundation.framework/Headers/CoreFoundation.h
+c000000004A5D68380000000000000AF4
+t1247635512
+s2804
+
+N/System/Library/Frameworks/PCSC.framework/Headers/winscard.h
+c000000004A4412BA0000000000001093
+t1245975226
+s4243
+
+N/System/Library/Frameworks/Security.framework/Headers/CodeSigning.h
+c000000004A4D51FA0000000000000556
+t1246581242
+s1366
+
+N/System/Library/Frameworks/Security.framework/Headers/SecCertificate.h
+c000000004A4D51FB0000000000003609
+t1246581243
+s13833
+
+N/System/Library/Frameworks/Security.framework/Headers/SecKey.h
+c000000004A4D51FB0000000000003AC2
+t1246581243
+s15042
+
+N/System/Library/Frameworks/Security.framework/Headers/SecKeychainItem.h
+c000000004A4D51FB0000000000005C5A
+t1246581243
+s23642
+
+N/System/Library/Frameworks/Security.framework/Headers/cssm.h
+c000000004A4D51FA00000000000004F0
+t1246581242
+s1264
+
+N/System/Library/Frameworks/Security.framework/Headers/cssmapple.h
+c000000004A4D51FA000000000000B585
+t1246581242
+s46469
+
+N/System/Library/Frameworks/Security.framework/Headers/cssmerr.h
+c000000004A4D51FB000000000000996E
+t1246581243
+s39278
+
+N/System/Library/Frameworks/Security.framework/Headers/cssmtype.h
+c000000004A4D51FB0000000000011E34
+t1246581243
+s73268
+
+N/System/Library/PrivateFrameworks/SecurityTokend.framework/Headers/SecTokend.h
+c000000004A4413D40000000000002605
+t1245975508
+s9733
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Adornment.cpp
+c0000000049DA447200000000000009BB
+t1239041138
+s2491
+i"Adornment.h"
+i"MetaAttribute.h"
+i"MetaRecord.h"
+i"Record.h"
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Adornment.h
+c0000000049DA447200000000000007D6
+t1239041138
+s2006
+i<security_utilities/adornments.h>
+i<security_utilities/refcount.h>
+i<Security/SecCertificate.h>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Attribute.cpp
+c0000000049DA44720000000000000D04
+t1239041138
+s3332
+i"Attribute.h"
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Attribute.h
+c0000000049DA44720000000000000841
+t1239041138
+s2113
+i<Security/cssmtype.h>
+i<security_cdsa_utilities/cssmdb.h>
+i<string>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/AttributeCoder.cpp
+c0000000049DA44720000000000002377
+t1239041138
+s9079
+i"AttributeCoder.h"
+i"Attribute.h"
+i"Adornment.h"
+i"MetaAttribute.h"
+i"MetaRecord.h"
+i"Record.h"
+i<security_cdsa_utilities/cssmerrors.h>
+i<security_cdsa_utilities/cssmkey.h>
+i<Security/cssmerr.h>
+i<Security/SecKey.h>
+i<Security/SecCertificate.h>
+i<Security/SecKeychainItem.h>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/AttributeCoder.h
+c0000000049DA447200000000000014C2
+t1239041138
+s5314
+i<security_utilities/utilities.h>
+i<Security/cssmtype.h>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp
+c0000000049DA4472000000000000114A
+t1239041138
+s4426
+i"Cursor.h"
+i"MetaRecord.h"
+i"Record.h"
+i"RecordHandle.h"
+i"Relation.h"
+i"Token.h"
+i"SelectionPredicate.h"
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.h
+c0000000049DA447200000000000009CC
+t1239041138
+s2508
+i"Relation.h"
+i"Schema.h"
+i<security_cdsa_utilities/handleobject.h>
+i<vector>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/DbValue.cpp
+c0000000049DA4472000000000000278F
+t1239041138
+s10127
+i"DbValue.h"
+i<ctype.h>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/DbValue.h
+c0000000049DA447200000000000013A5
+t1239041138
+s5029
+i<security_cdsa_utilities/cssmdata.h>
+i<security_cdsa_utilities/cssmdb.h>
+i<Security/cssmerr.h>
+i<map>
+i<vector>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.cpp
+c0000000049DA44720000000000001343
+t1239041138
+s4931
+i"KeyHandle.h"
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.h
+c0000000049DA44720000000000000DD3
+t1239041138
+s3539
+i"RecordHandle.h"
+i<security_cdsa_utilities/handleobject.h>
+i<security_cdsa_utilities/context.h>
+i<security_cdsa_utilities/cssmaclpod.h>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaAttribute.cpp
+c0000000049DA44720000000000000FC5
+t1239041138
+s4037
+i"MetaAttribute.h"
+i"MetaRecord.h"
+i"Record.h"
+i"DbValue.h"
+i"DbValue.h"
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaAttribute.h
+c0000000049DA44720000000000000EC4
+t1239041138
+s3780
+i<Security/cssmtype.h>
+i<security_utilities/utilities.h>
+i"Attribute.h"
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp
+c0000000049DA44720000000000001D90
+t1239041138
+s7568
+i"MetaRecord.h"
+i"Attribute.h"
+i"KeyHandle.h"
+i"MetaAttribute.h"
+i"Record.h"
+i<security_utilities/trackingallocator.h>
+i<security_cdsa_utilities/cssmbridge.h>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h
+c0000000049DA44720000000000001045
+t1239041138
+s4165
+i<security_cdsa_utilities/cssmdata.h>
+i<map>
+i<string>
+i<vector>
+i<SecurityTokend/SecTokend.h>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.cpp
+c0000000049DA44720000000000000DAC
+t1239041138
+s3500
+i"Record.h"
+i<security_cdsa_client/aclclient.h>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h
+c0000000049DA447200000000000009BD
+t1239041138
+s2493
+i"AttributeCoder.h"
+i"MetaRecord.h"
+i"Attribute.h"
+i<security_utilities/refcount.h>
+i<security_utilities/adornments.h>
+i<security_cdsa_utilities/cssmaclpod.h>
+i<security_cdsa_utilities/cssmcred.h>
+i<SecurityTokend/SecTokend.h>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp
+c0000000049DA44720000000000000781
+t1239041138
+s1921
+i"RecordHandle.h"
+i"MetaRecord.h"
+i"Record.h"
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h
+c0000000049DA44720000000000000819
+t1239041138
+s2073
+i<security_cdsa_utilities/handleobject.h>
+i<security_utilities/refcount.h>
+i<security_cdsa_utilities/cssmaclpod.h>
+i<security_cdsa_utilities/cssmcred.h>
+i<SecurityTokend/SecTokend.h>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.cpp
+c0000000049DA447200000000000007C8
+t1239041138
+s1992
+i"Relation.h"
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h
+c0000000049DA4472000000000000068D
+t1239041138
+s1677
+i"Record.h"
+i<vector>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SCardError.cpp
+c0000000049DA44720000000000003914
+t1239041138
+s14612
+i"SCardError.h"
+i<Security/cssmerr.h>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SCardError.h
+c0000000049DA44720000000000001EF3
+t1239041138
+s7923
+i<security_utilities/debugging.h>
+i<security_utilities/errors.h>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.cpp
+c0000000049DA44720000000000004FA8
+t1239041138
+s20392
+i"Schema.h"
+i"Attribute.h"
+i"MetaRecord.h"
+i"MetaAttribute.h"
+i<Security/SecKey.h>
+i<Security/SecCertificate.h>
+i<Security/SecKeychainItem.h>
+i<Security/cssmapple.h>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.h
+c0000000049DA44720000000000000EAF
+t1239041138
+s3759
+i<security_cdsa_utilities/cssmdata.h>
+i<security_cdsa_utilities/cssmdb.h>
+i<map>
+i"MetaRecord.h"
+i"Relation.h"
+i"AttributeCoder.h"
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SelectionPredicate.cpp
+c0000000049DA44720000000000000860
+t1239041138
+s2144
+i"SelectionPredicate.h"
+i"MetaAttribute.h"
+i"MetaRecord.h"
+i"DbValue.h"
+i<Security/cssmerr.h>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SelectionPredicate.h
+c0000000049DA447200000000000006D5
+t1239041138
+s1749
+i<security_cdsa_utilities/cssmdata.h>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp
+c0000000049DA4472000000000000768E
+t1239041138
+s30350
+i"Token.h"
+i"Cursor.h"
+i"KeyHandle.h"
+i"RecordHandle.h"
+i"Schema.h"
+i<memory>
+i<security_cdsa_utilities/cssmaclpod.h>
+i<security_utilities/unix++.h>
+i<security_utilities/logging.h>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h
+c0000000049DA44720000000000002A09
+t1239041138
+s10761
+i<SecurityTokend/SecTokend.h>
+i<security_utilities/osxcode.h>
+i<security_cdsa_utilities/context.h>
+i<security_cdsa_utilities/cssmpods.h>
+i<security_cdsa_utilities/cssmbridge.h>
+i<security_cdsa_utilities/cssmdb.h>
+i<security_cdsa_utilities/cssmaclpod.h>
+i<security_cdsa_utilities/cssmcred.h>
+i<security_utilities/debugging.h>
+i<security_utilities/pcsc++.h>
+i<string>
+i"TokenContext.h"
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/TokenContext.cpp
+c0000000049DA44720000000000000484
+t1239041138
+s1156
+i"TokenContext.h"
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/TokenContext.h
+c0000000049DA4472000000000000053F
+t1239041138
+s1343
+i<security_utilities/utilities.h>
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/tokend_vers.c
+c000000004AA1BD8D00000000000000BF
+t1252113805
+s191
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/Adornment.o
+t2
+s0
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/Attribute.o
+t1252113806
+s44584
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/AttributeCoder.o
+t2
+s0
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/Cursor.o
+t2
+s0
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/DbValue.o
+t1252113808
+s88992
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/KeyHandle.o
+t2
+s0
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/MetaAttribute.o
+t2
+s0
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/MetaRecord.o
+t2
+s0
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/Record.o
+t2
+s0
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/RecordHandle.o
+t2
+s0
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/Relation.o
+t2
+s0
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/SCardError.o
+t1252113810
+s31992
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/Schema.o
+t2
+s0
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/SelectionPredicate.o
+t2
+s0
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/Token.o
+t2
+s0
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/TokenContext.o
+t1252113811
+s17100
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/tokend.LinkFileList
+c000000004AA1BD8D00000000000007AF
+t1252113805
+s1967
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/tokend_vers.o
+t1252113811
+s2060
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Script-52B260430BC5A864007E00F1.sh
+c000000004AA1BD8D00000000000001C9
+t1252113805
+s457
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/libtokend_debug.a
+t2
+s0
+
+N/usr/include/assert.h
+c000000004A5C14A60000000000000DCB
+t1247548582
+s3531
+
+N/usr/include/ctype.h
+c000000004A5C14A60000000000002C18
+t1247548582
+s11288
+
+N/usr/include/errno.h
+c000000004A5C14A600000000000003EB
+t1247548582
+s1003
+
+N/usr/include/fcntl.h
+c000000004A5C14A600000000000003EA
+t1247548582
+s1002
+
+N/usr/include/libkern/OSAtomic.h
+c000000004A5C14A60000000000002519
+t1247548582
+s9497
+
+N/usr/include/libkern/OSByteOrder.h
+c000000004A73D64D000000000000298B
+t1249105485
+s10635
+
+N/usr/include/machine/endian.h
+c000000004A73D64900000000000006C3
+t1249105481
+s1731
+
+N/usr/include/math.h
+c000000004A5C14A000000000000004F1
+t1247548576
+s1265
+
+N/usr/include/pthread.h
+c000000004A5C14A700000000000038F0
+t1247548583
+s14576
+
+N/usr/include/semaphore.h
+c000000004A5C14A6000000000000046F
+t1247548582
+s1135
+
+N/usr/include/signal.h
+c000000004A5C14A700000000000014F0
+t1247548583
+s5360
+
+N/usr/include/stdio.h
+c000000004A5C14A70000000000004174
+t1247548583
+s16756
+
+N/usr/include/stdlib.h
+c000000004A5C14A70000000000002DF5
+t1247548583
+s11765
+
+N/usr/include/string.h
+c000000004A5C14A70000000000001731
+t1247548583
+s5937
+
+N/usr/include/sys/ioctl.h
+c000000004A73D651000000000000116C
+t1249105489
+s4460
+
+N/usr/include/sys/mman.h
+c000000004A73D6530000000000002098
+t1249105491
+s8344
+
+N/usr/include/sys/stat.h
+c000000004A73D6550000000000004A1D
+t1249105493
+s18973
+
+N/usr/include/sys/time.h
+c000000004A73D6550000000000001E17
+t1249105493
+s7703
+
+N/usr/include/sys/types.h
+c000000004A73D6550000000000002905
+t1249105493
+s10501
+
+N/usr/include/sys/uio.h
+c000000004A73D6550000000000001126
+t1249105493
+s4390
+
+N/usr/include/unistd.h
+c000000004A5C14A7000000000000563E
+t1247548583
+s22078
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_client.framework/Headers/aclclient.h
+c000000004A441065000000000000196C
+t1245974629
+s6508
+i<security_cdsa_utilities/cssmaclpod.h>
+i<security_cdsa_utilities/cssmacl.h>
+i<security_cdsa_utilities/cssmcred.h>
+i<security_utilities/refcount.h>
+i<security_utilities/globalizer.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_utilities.framework/Headers/aclsubject.h
+c000000004A4410670000000000001FA4
+t1245974631
+s8100
+i<security_cdsa_utilities/cssmaclpod.h>
+i<security_cdsa_utilities/cssmcred.h>
+i<security_utilities/refcount.h>
+i<security_utilities/globalizer.h>
+i<security_utilities/memutils.h>
+i<security_utilities/adornments.h>
+i<map>
+i<set>
+i<string>
+i<limits.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_utilities.framework/Headers/context.h
+c000000004A4410680000000000003412
+t1245974632
+s13330
+i<security_utilities/utilities.h>
+i<security_utilities/debugging.h>
+i<security_cdsa_utilities/cssmalloc.h>
+i<security_cdsa_utilities/cssmwalkers.h>
+i<security_cdsa_utilities/cssmacl.h>
+i<security_cdsa_utilities/cssmdates.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_utilities.framework/Headers/cssmacl.h
+c000000004A44106800000000000008E8
+t1245974632
+s2280
+i<security_cdsa_utilities/objectacl.h>
+i<security_cdsa_utilities/aclsubject.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_utilities.framework/Headers/cssmaclpod.h
+c000000004A4410680000000000002CF7
+t1245974632
+s11511
+i<security_utilities/utilities.h>
+i<security_cdsa_utilities/cssmlist.h>
+i<security_cdsa_utilities/cssmalloc.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_utilities.framework/Headers/cssmalloc.h
+c000000004A441068000000000000127E
+t1245974632
+s4734
+i<security_utilities/alloc.h>
+i<Security/cssm.h>
+i<cstring>
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_utilities.framework/Headers/cssmbridge.h
+c000000004A4410680000000000000A5D
+t1245974632
+s2653
+i<security_utilities/utilities.h>
+i<security_cdsa_utilities/cssmerrors.h>
+i<Security/cssm.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_utilities.framework/Headers/cssmcred.h
+c000000004A4410680000000000001860
+t1245974632
+s6240
+i<security_utilities/utilities.h>
+i<security_cdsa_utilities/cssmlist.h>
+i<security_cdsa_utilities/cssmalloc.h>
+i<list>
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_utilities.framework/Headers/cssmdata.h
+c000000004A4410680000000000004AEC
+t1245974632
+s19180
+i<security_utilities/alloc.h>
+i<security_utilities/refcount.h>
+i<security_cdsa_utilities/cssmerrors.h>
+i<Security/cssmerr.h>
+i<CoreFoundation/CoreFoundation.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_utilities.framework/Headers/cssmdates.h
+c000000004A441068000000000000107C
+t1245974632
+s4220
+i<security_utilities/utilities.h>
+i<security_cdsa_utilities/cssmdata.h>
+i<CoreFoundation/CFDate.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_utilities.framework/Headers/cssmdb.h
+c000000004A4410680000000000006FFB
+t1245974632
+s28667
+i<security_cdsa_utilities/cssmdata.h>
+i<security_cdsa_utilities/cssmpods.h>
+i<security_cdsa_utilities/cssmalloc.h>
+i<security_cdsa_utilities/walkers.h>
+i<security_cdsa_utilities/cssmdbname.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_utilities.framework/Headers/cssmdbname.h
+c000000004A4410680000000000000FF2
+t1245974632
+s4082
+i<security_utilities/utilities.h>
+i<security_cdsa_utilities/walkers.h>
+i<Security/cssmtype.h>
+i<string>
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_utilities.framework/Headers/cssmerrors.h
+c000000004A44106800000000000007FB
+t1245974632
+s2043
+i<security_utilities/errors.h>
+i<Security/cssmtype.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_utilities.framework/Headers/cssmkey.h
+c000000004A44106800000000000015ED
+t1245974632
+s5613
+i<security_utilities/utilities.h>
+i<security_cdsa_utilities/cssmpods.h>
+i<security_cdsa_utilities/cssmerrors.h>
+i<Security/cssm.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_utilities.framework/Headers/cssmlist.h
+c000000004A4410680000000000002084
+t1245974632
+s8324
+i<security_utilities/utilities.h>
+i<security_cdsa_utilities/cssmalloc.h>
+i<security_cdsa_utilities/cssmwalkers.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_utilities.framework/Headers/cssmpods.h
+c000000004A4410680000000000001C09
+t1245974632
+s7177
+i<security_utilities/utilities.h>
+i<security_cdsa_utilities/cssmdata.h>
+i<string>
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_utilities.framework/Headers/cssmwalkers.h
+c000000004A44106800000000000016B1
+t1245974632
+s5809
+i<security_cdsa_utilities/walkers.h>
+i<security_cdsa_utilities/cssmdata.h>
+i<security_cdsa_utilities/cssmpods.h>
+i<security_cdsa_utilities/cssmkey.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_utilities.framework/Headers/handleobject.h
+c000000004A4410680000000000000597
+t1245974632
+s1431
+i<Security/cssm.h>
+i<security_cdsa_utilities/handletemplates.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_utilities.framework/Headers/handletemplates.h
+c000000004A44106800000000000023D5
+t1245974632
+s9173
+i<security_utilities/refcount.h>
+i<security_utilities/threading.h>
+i<security_utilities/globalizer.h>
+i<security_cdsa_utilities/cssmerrors.h>
+i<ext/hash_map>
+i<hash_map>
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_utilities.framework/Headers/objectacl.h
+c000000004A4410670000000000002448
+t1245974631
+s9288
+i<security_cdsa_utilities/aclsubject.h>
+i<security_utilities/globalizer.h>
+i<map>
+i<set>
+i<limits.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_cdsa_utilities.framework/Headers/walkers.h
+c000000004A4410680000000000002950
+t1245974632
+s10576
+i<security_utilities/alloc.h>
+i<security_utilities/memstreams.h>
+i<security_cdsa_utilities/cssmdata.h>
+i<security_utilities/debugging.h>
+i<set>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/adornments.h
+c000000004A44106600000000000017AE
+t1245974630
+s6062
+i<security_utilities/utilities.h>
+i<security_utilities/threading.h>
+i<map>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/alloc.h
+c000000004A4410660000000000001E7C
+t1245974630
+s7804
+i<security_utilities/utilities.h>
+i<cstring>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/cfutilities.h
+c000000004A441067000000000000415A
+t1245974631
+s16730
+i<security_utilities/utilities.h>
+i<security_utilities/globalizer.h>
+i<CoreFoundation/CoreFoundation.h>
+i<algorithm>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/debugging.h
+c000000004A44106700000000000010F3
+t1245974631
+s4339
+i<security_utilities/utilities_dtrace.h>
+i<security_utilities/utilities.h>
+i<cstdarg>
+i<typeinfo>
+i<stdio.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/endian.h
+c000000004A44106700000000000014C1
+t1245974631
+s5313
+i<machine/endian.h>
+i<libkern/OSByteOrder.h>
+i<security_utilities/utilities.h>
+i<security_utilities/memutils.h>
+i<security_utilities/debugging.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/errors.h
+c000000004A4410670000000000000D2E
+t1245974631
+s3374
+i<security_utilities/utilities.h>
+i<exception>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/globalizer.h
+c000000004A4410670000000000001549
+t1245974631
+s5449
+i<security_utilities/threading.h>
+i<memory>
+i<set>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/logging.h
+c000000004A4410670000000000000754
+t1245974631
+s1876
+i<security_utilities/utilities.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/memstreams.h
+c000000004A4410670000000000001330
+t1245974631
+s4912
+i<stdint.h>
+i<security_utilities/memutils.h>
+i<security_utilities/endian.h>
+i<security_utilities/errors.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/memutils.h
+c000000004A4410670000000000000EC4
+t1245974631
+s3780
+i<security_utilities/utilities.h>
+i<sys/types.h>
+i<stdlib.h>
+i<algorithm>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/osxcode.h
+c000000004A4410660000000000000EC8
+t1245974630
+s3784
+i<security_utilities/refcount.h>
+i<security_utilities/cfutilities.h>
+i<Security/CodeSigning.h>
+i<limits.h>
+i<string>
+i<vector>
+i<CoreFoundation/CFBundle.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/pcsc++.h
+c000000004A441067000000000000147D
+t1245974631
+s5245
+i<security_utilities/utilities.h>
+i<security_utilities/errors.h>
+i<security_utilities/transactions.h>
+i<security_utilities/debugging.h>
+i<PCSC/winscard.h>
+i<vector>
+i<string>
+i<cstdio>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/refcount.h
+c000000004A4410670000000000001218
+t1245974631
+s4632
+i<security_utilities/threading.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/threading.h
+c000000004A4410670000000000002A54
+t1245974631
+s10836
+i<security_utilities/utilities.h>
+i<security_utilities/errors.h>
+i<security_utilities/debugging.h>
+i<pthread.h>
+i<security_utilities/threading_internal.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/threading_internal.h
+c000000004A44106700000000000010A3
+t1245974631
+s4259
+i<security_utilities/utilities.h>
+i<libkern/OSAtomic.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/timeflow.h
+c000000004A44106700000000000015AA
+t1245974631
+s5546
+i<sys/time.h>
+i<limits.h>
+i<math.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/trackingallocator.h
+c000000004A4410670000000000000776
+t1245974631
+s1910
+i<security_utilities/alloc.h>
+i<set>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/transactions.h
+c000000004A4410670000000000000AB3
+t1245974631
+s2739
+i<security_utilities/utilities.h>
+i<security_utilities/debugging.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/unix++.h
+c000000004A44106700000000000028DD
+t1245974631
+s10461
+i<security_utilities/utilities.h>
+i<security_utilities/errors.h>
+i<security_utilities/timeflow.h>
+i<sys/types.h>
+i<sys/ioctl.h>
+i<sys/uio.h>
+i<sys/stat.h>
+i<sys/mman.h>
+i<signal.h>
+i<fcntl.h>
+i<semaphore.h>
+i<cstdio>
+i<cstdarg>
+i<map>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/utilities.h
+c000000004A4410670000000000001E5D
+t1245974631
+s7773
+i<security_utilities/utility_config.h>
+i<exception>
+i<new>
+i<string>
+i<errno.h>
+i<string.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/utilities_dtrace.h
+c000000004A44106600000000000048E6
+t1245974630
+s18662
+i<unistd.h>
+
+N/usr/local/SecurityPieces/Frameworks/security_utilities.framework/Headers/utility_config.h
+c000000004A4410670000000000000B7F
+t1245974631
+s2943
+i<CoreFoundation/CFBase.h>
+i<assert.h>
+i<unistd.h>
+
+CCheck dependencies
+r0
+lSLF07#2@18"Check dependencies273806642#273806642#0(0"0(0#1#0"4300882208#0"0#
+
+CCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/Adornment.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Adornment.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+s273806642.087969
+e273806642.685790
+r0
+xCompileC
+xbuild/Tokend.build/libtokend.build/Objects-debug/i386/Adornment.o
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Adornment.cpp
+xdebug
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Adornment.cpp:31:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directory
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Adornment.cpp:31:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declared
+lSLF07#2@77"Compile /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Adornment.cpp273806642#273806642#0(453"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Adornment.cpp:31:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directoryIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Adornment.cpp:31:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declared2(4@53"SecurityTokend/SecTokend.h: No such file or directory273806642#96#137#2(7@91"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Adornment.cpp273806642#18446744073709551615#0#0(6@69"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Adornment.cpp260733938#31#0#31#0#0"0(13@125"SecurityTokend/SecTokend.h: No such file or directory in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h273806642#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#36#0#36#0#0"0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#36#0#36#0#28"*: No such file or directory0(4@42"'TOKEND_RETURN_DATA' has not been declared273806642#329#124#2(7@91"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Adornment.cpp273806642#18446744073709551615#0#0(6@69"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Adornment.cpp260733938#31#0#31#0#0"0(13@114"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h273806642#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#0"0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#25"'*' has not been declared0(0#0#69"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Adornment.cpp4300882208#1113"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -DLIMITED_SIGNING -isysroot /Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -gdwarf-2 "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/tokend.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas "-F/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build" -F/usr/local/SecurityPieces/Frameworks -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/PrivateFrameworks "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/include" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/i386" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources" -O0 -fno-inline -c "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Adornment.cpp" -o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/Adornment.o"1#
+
+CCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/Attribute.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Attribute.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+s273806605.750995
+e273806606.852143
+r1
+xCompileC
+xbuild/Tokend.build/libtokend.build/Objects-debug/i386/Attribute.o
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Attribute.cpp
+xdebug
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@77"Compile /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Attribute.cpp273806605#273806606#0(0"0(0#0#69"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Attribute.cpp4300882208#1113"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -DLIMITED_SIGNING -isysroot /Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -gdwarf-2 "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/tokend.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas "-F/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build" -F/usr/local/SecurityPieces/Frameworks -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/PrivateFrameworks "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/include" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/i386" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources" -O0 -fno-inline -c "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Attribute.cpp" -o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/Attribute.o"0#
+
+CCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/AttributeCoder.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/AttributeCoder.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+s273806642.088953
+e273806642.684082
+r0
+xCompileC
+xbuild/Tokend.build/libtokend.build/Objects-debug/i386/AttributeCoder.o
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/AttributeCoder.cpp
+xdebug
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/AttributeCoder.cpp:34:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directory
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/AttributeCoder.cpp:34:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declared
+lSLF07#2@82"Compile /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/AttributeCoder.cpp273806642#273806642#0(463"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/AttributeCoder.cpp:34:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directoryIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/AttributeCoder.cpp:34:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declared2(4@53"SecurityTokend/SecTokend.h: No such file or directory273806642#101#137#2(7@96"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/AttributeCoder.cpp273806642#18446744073709551615#0#0(6@74"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/AttributeCoder.cpp260733938#34#0#34#0#0"0(13@125"SecurityTokend/SecTokend.h: No such file or directory in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h273806642#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#36#0#36#0#0"0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#36#0#36#0#28"*: No such file or directory0(4@42"'TOKEND_RETURN_DATA' has not been declared273806642#339#124#2(7@96"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/AttributeCoder.cpp273806642#18446744073709551615#0#0(6@74"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/AttributeCoder.cpp260733938#34#0#34#0#0"0(13@114"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h273806642#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#0"0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#25"'*' has not been declared0(0#0#74"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/AttributeCoder.cpp4300882208#1123"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -DLIMITED_SIGNING -isysroot /Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -gdwarf-2 "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/tokend.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas "-F/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build" -F/usr/local/SecurityPieces/Frameworks -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/PrivateFrameworks "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/include" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/i386" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources" -O0 -fno-inline -c "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/AttributeCoder.cpp" -o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/AttributeCoder.o"1#
+
+CCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/Cursor.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+s273806642.684169
+e273806643.637782
+r0
+xCompileC
+xbuild/Tokend.build/libtokend.build/Objects-debug/i386/Cursor.o
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp
+xdebug
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h:33,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h:32,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.h:32,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp:29:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directory
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h:33,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h:32,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.h:32,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp:29:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declared
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp:33:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h:52: error: 'TOKEND_RETURN_DATA' has not been declared
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp:35:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:57: error: expected class-name before '{' token
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:68: error: ISO C++ forbids declaration of 'SecTokendCallbacks' with no type
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:68: error: 'SecTokendCallbacks' declared as a 'virtual' field
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:68: error: expected ';' before '*' token
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:69: error: ISO C++ forbids declaration of 'SecTokendSupport' with no type
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:69: error: 'SecTokendSupport' declared as a 'virtual' field
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:69: error: expected ';' before '*' token
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:72: error: 'SecTokendProbeFlags' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:73: error: 'TOKEND_MAX_UID' was not declared in this scope
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:75: error: 'SecTokendEstablishFlags' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:114: error: 'SecTokendProbeFlags' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:115: error: 'TOKEND_MAX_UID' was not declared in this scope
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:117: error: 'SecTokendEstablishFlags' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:123: error: 'TOKEND_RETURN_DATA' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:125: error: 'TOKEND_RETURN_DATA' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:127: error: 'TOKEND_RETURN_DATA' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:138: error: 'TOKEND_RETURN_DATA' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:239: error: 'SecTokendCallbacks' does not name a type
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:258: error: 'SecTokendProbeFlags' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:259: error: 'TOKEND_MAX_UID' was not declared in this scope
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:261: error: 'SecTokendEstablishFlags' has not been declared
+lSLF07#2@74"Compile /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806642#273806643#0(3853"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h:33,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h:32,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.h:32,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp:29:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directoryIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h:33,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h:32,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.h:32,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp:29:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declaredIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp:33:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h:52: error: 'TOKEND_RETURN_DATA' has not been declaredIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp:35:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:57: error: expected class-name before '{' token/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:68: error: ISO C++ forbids declaration of 'SecTokendCallbacks' with no type/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:68: error: 'SecTokendCallbacks' declared as a 'virtual' field/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:68: error: expected ';' before '*' token/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:69: error: ISO C++ forbids declaration of 'SecTokendSupport' with no type/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:69: error: 'SecTokendSupport' declared as a 'virtual' field/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:69: error: expected ';' before '*' token/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:72: error: 'SecTokendProbeFlags' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:73: error: 'TOKEND_MAX_UID' was not declared in this scope/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:75: error: 'SecTokendEstablishFlags' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:114: error: 'SecTokendProbeFlags' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:115: error: 'TOKEND_MAX_UID' was not declared in this scope/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:117: error: 'SecTokendEstablishFlags' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:123: error: 'TOKEND_RETURN_DATA' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:125: error: 'TOKEND_RETURN_DATA' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:127: error: 'TOKEND_RETURN_DATA' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:138: error: 'TOKEND_RETURN_DATA' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:239: error: 'SecTokendCallbacks' does not name a type/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:258: error: 'SecTokendProbeFlags' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:259: error: 'TOKEND_MAX_UID' was not declared in this scope/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:261: error: 'SecTokendEstablishFlags' has not been declared24(4@53"SecurityTokend/SecTokend.h: No such file or directory273806642#368#137#5(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806642#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#29#0#29#0#0"0(7@86"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.h273806642#18446744073709551615#0#0(6@64"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.h260733938#32#0#32#0#0"0(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h273806642#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h260733938#32#0#32#0#0"0(7@86"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h273806642#18446744073709551615#0#0(6@64"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h260733938#33#0#33#0#0"0(13@125"SecurityTokend/SecTokend.h: No such file or directory in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h273806642#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#36#0#36#0#0"0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#36#0#36#0#28"*: No such file or directory0(4@42"'TOKEND_RETURN_DATA' has not been declared273806643#873#124#5(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#29#0#29#0#0"0(7@86"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.h273806643#18446744073709551615#0#0(6@64"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.h260733938#32#0#32#0#0"0(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h260733938#32#0#32#0#0"0(7@86"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h273806643#18446744073709551615#0#0(6@64"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h260733938#33#0#33#0#0"0(13@114"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h273806643#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#0"0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#25"'*' has not been declared0(4@42"'TOKEND_RETURN_DATA' has not been declared273806643#1090#125#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#33#0#33#0#0"0(13@116"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h273806643#18446744073709551615#0#0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h260733938#52#0#52#0#0"0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h260733938#52#0#52#0#25"'*' has not been declared0(4@36"Expected class-name before '{' token273806643#1308#112#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@103"Expected class-name before '{' token in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#57#0#57#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#57#0#57#0#19"expected * before *0(4@64"ISO C++ forbids declaration of 'SecTokendCallbacks' with no type273806643#1420#140#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@131"ISO C++ forbids declaration of 'SecTokendCallbacks' with no type in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#68#0#68#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#68#0#68#0#47"ISO C++ forbids declaration of '*' with no type0(4@50"'SecTokendCallbacks' declared as a 'virtual' field273806643#1560#126#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@117"'SecTokendCallbacks' declared as a 'virtual' field in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#68#0#68#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#68#0#68#0#0"0(4@29"Expected ';' before '*' token273806643#1686#105#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@96"Expected ';' before '*' token in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#68#0#68#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#68#0#68#0#19"expected * before *0(4@62"ISO C++ forbids declaration of 'SecTokendSupport' with no type273806643#1791#138#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@129"ISO C++ forbids declaration of 'SecTokendSupport' with no type in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#69#0#69#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#69#0#69#0#47"ISO C++ forbids declaration of '*' with no type0(4@48"'SecTokendSupport' declared as a 'virtual' field273806643#1929#124#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@115"'SecTokendSupport' declared as a 'virtual' field in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#69#0#69#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#69#0#69#0#0"0(4@29"Expected ';' before '*' token273806643#2053#105#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@96"Expected ';' before '*' token in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#69#0#69#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#69#0#69#0#19"expected * before *0(4@43"'SecTokendProbeFlags' has not been declared273806643#2158#119#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@110"'SecTokendProbeFlags' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#72#0#72#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#72#0#72#0#25"'*' has not been declared0(4@47"'TOKEND_MAX_UID' was not declared in this scope273806643#2277#123#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@114"'TOKEND_MAX_UID' was not declared in this scope in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#73#0#73#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#73#0#73#0#34"'*' was not declared in this scope0(4@47"'SecTokendEstablishFlags' has not been declared273806643#2400#123#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@114"'SecTokendEstablishFlags' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#75#0#75#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#75#0#75#0#25"'*' has not been declared0(4@43"'SecTokendProbeFlags' has not been declared273806643#2523#120#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@110"'SecTokendProbeFlags' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#114#0#114#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#114#0#114#0#25"'*' has not been declared0(4@47"'TOKEND_MAX_UID' was not declared in this scope273806643#2643#124#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@114"'TOKEND_MAX_UID' was not declared in this scope in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#115#0#115#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#115#0#115#0#34"'*' was not declared in this scope0(4@47"'SecTokendEstablishFlags' has not been declared273806643#2767#124#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@114"'SecTokendEstablishFlags' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#117#0#117#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#117#0#117#0#25"'*' has not been declared0(4@42"'TOKEND_RETURN_DATA' has not been declared273806643#2891#119#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@109"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#123#0#123#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#123#0#123#0#25"'*' has not been declared0(4@42"'TOKEND_RETURN_DATA' has not been declared273806643#3010#119#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@109"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#125#0#125#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#125#0#125#0#25"'*' has not been declared0(4@42"'TOKEND_RETURN_DATA' has not been declared273806643#3129#119#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@109"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#127#0#127#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#127#0#127#0#25"'*' has not been declared0(4@42"'TOKEND_RETURN_DATA' has not been declared273806643#3248#119#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@109"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#138#0#138#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#138#0#138#0#25"'*' has not been declared0(4@41"'SecTokendCallbacks' does not name a type273806643#3367#118#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@108"'SecTokendCallbacks' does not name a type in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#239#0#239#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#239#0#239#0#24"'*' does not name a type0(4@43"'SecTokendProbeFlags' has not been declared273806643#3485#120#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@110"'SecTokendProbeFlags' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#258#0#258#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#258#0#258#0#25"'*' has not been declared0(4@47"'TOKEND_MAX_UID' was not declared in this scope273806643#3605#124#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@114"'TOKEND_MAX_UID' was not declared in this scope in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#259#0#259#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#259#0#259#0#34"'*' was not declared in this scope0(4@47"'SecTokendEstablishFlags' has not been declared273806643#3729#124#2(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp273806643#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp260733938#35#0#35#0#0"0(13@114"'SecTokendEstablishFlags' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806643#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#261#0#261#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#261#0#261#0#25"'*' has not been declared0(0#0#66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp4300882208#1107"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -DLIMITED_SIGNING -isysroot /Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -gdwarf-2 "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/tokend.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas "-F/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build" -F/usr/local/SecurityPieces/Frameworks -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/PrivateFrameworks "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/include" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/i386" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources" -O0 -fno-inline -c "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.cpp" -o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/Cursor.o"1#
+
+CCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/DbValue.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/DbValue.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+s273806607.533177
+e273806608.147346
+r1
+xCompileC
+xbuild/Tokend.build/libtokend.build/Objects-debug/i386/DbValue.o
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/DbValue.cpp
+xdebug
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@75"Compile /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/DbValue.cpp273806607#273806608#0(0"0(0#0#67"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/DbValue.cpp4300882208#1109"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -DLIMITED_SIGNING -isysroot /Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -gdwarf-2 "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/tokend.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas "-F/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build" -F/usr/local/SecurityPieces/Frameworks -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/PrivateFrameworks "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/include" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/i386" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources" -O0 -fno-inline -c "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/DbValue.cpp" -o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/DbValue.o"0#
+
+CCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/KeyHandle.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+s273806642.685925
+e273806643.425705
+r0
+xCompileC
+xbuild/Tokend.build/libtokend.build/Objects-debug/i386/KeyHandle.o
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.cpp
+xdebug
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.h:32,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.cpp:29:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directory
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.h:32,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.cpp:29:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h:52: error: 'TOKEND_RETURN_DATA' has not been declared
+lSLF07#2@77"Compile /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.cpp273806642#273806643#0(644"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.h:32,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.cpp:29:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directoryIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.h:32,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.cpp:29:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h:52: error: 'TOKEND_RETURN_DATA' has not been declared2(4@53"SecurityTokend/SecTokend.h: No such file or directory273806642#190#139#3(7@91"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.cpp273806642#18446744073709551615#0#0(6@69"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.cpp260733938#29#0#29#0#0"0(7@89"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.h273806642#18446744073709551615#0#0(6@67"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.h260733938#32#0#32#0#0"0(13@127"SecurityTokend/SecTokend.h: No such file or directory in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h273806642#18446744073709551615#0#0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h260733938#36#0#36#0#0"0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h260733938#36#0#36#0#28"*: No such file or directory0(4@42"'TOKEND_RETURN_DATA' has not been declared273806643#519#125#3(7@91"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.cpp273806643#18446744073709551615#0#0(6@69"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.cpp260733938#29#0#29#0#0"0(7@89"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.h273806643#18446744073709551615#0#0(6@67"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.h260733938#32#0#32#0#0"0(13@116"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h273806643#18446744073709551615#0#0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h260733938#52#0#52#0#0"0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h260733938#52#0#52#0#25"'*' has not been declared0(0#0#69"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.cpp4300882208#1113"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -DLIMITED_SIGNING -isysroot /Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -gdwarf-2 "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/tokend.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas "-F/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build" -F/usr/local/SecurityPieces/Frameworks -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/PrivateFrameworks "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/include" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/i386" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources" -O0 -fno-inline -c "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.cpp" -o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/KeyHandle.o"1#
+
+CCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/MetaAttribute.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaAttribute.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+s273806643.425784
+e273806644.184385
+r0
+xCompileC
+xbuild/Tokend.build/libtokend.build/Objects-debug/i386/MetaAttribute.o
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaAttribute.cpp
+xdebug
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaAttribute.cpp:30:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directory
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaAttribute.cpp:30:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declared
+lSLF07#2@81"Compile /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaAttribute.cpp273806643#273806644#0(461"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaAttribute.cpp:30:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directoryIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaAttribute.cpp:30:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declared2(4@53"SecurityTokend/SecTokend.h: No such file or directory273806643#100#137#2(7@95"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaAttribute.cpp273806643#18446744073709551615#0#0(6@73"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaAttribute.cpp260733938#30#0#30#0#0"0(13@125"SecurityTokend/SecTokend.h: No such file or directory in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h273806643#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#36#0#36#0#0"0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#36#0#36#0#28"*: No such file or directory0(4@42"'TOKEND_RETURN_DATA' has not been declared273806644#337#124#2(7@95"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaAttribute.cpp273806644#18446744073709551615#0#0(6@73"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaAttribute.cpp260733938#30#0#30#0#0"0(13@114"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h273806644#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#0"0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#25"'*' has not been declared0(0#0#73"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaAttribute.cpp4300882208#1121"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -DLIMITED_SIGNING -isysroot /Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -gdwarf-2 "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/tokend.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas "-F/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build" -F/usr/local/SecurityPieces/Frameworks -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/PrivateFrameworks "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/include" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/i386" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources" -O0 -fno-inline -c "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaAttribute.cpp" -o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/MetaAttribute.o"1#
+
+CCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/MetaRecord.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+s273806643.638028
+e273806644.606853
+r0
+xCompileC
+xbuild/Tokend.build/libtokend.build/Objects-debug/i386/MetaRecord.o
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp
+xdebug
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp:29:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directory
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp:29:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declared
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.h:32,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp:32:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h:52: error: 'TOKEND_RETURN_DATA' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp:211: error: 'TOKEND_RETURN_DATA' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp: In member function 'void Tokend::MetaRecord::get(Tokend::TokenContext*, Tokend::Record&, int&) const':
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp:213: error: request for member 'attributes' in 'data', which is of non-class type 'int'
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp:216: error: request for member 'attributes' in 'data', which is of non-class type 'int'
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp:230: error: request for member 'data' in 'data', which is of non-class type 'int'
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp:238: error: request for member 'data' in 'data', which is of non-class type 'int'
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp:243: error: request for member 'keyhandle' in 'data', which is of non-class type 'int'
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp:246: error: request for member 'keyhandle' in 'data', which is of non-class type 'int'
+lSLF07#2@78"Compile /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp273806643#273806644#0(2012"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp:29:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directoryIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp:29:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declaredIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.h:32,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp:32:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h:52: error: 'TOKEND_RETURN_DATA' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp:211: error: 'TOKEND_RETURN_DATA' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp: In member function 'void Tokend::MetaRecord::get(Tokend::TokenContext*, Tokend::Record&, int&) const':/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp:213: error: request for member 'attributes' in 'data', which is of non-class type 'int'/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp:216: error: request for member 'attributes' in 'data', which is of non-class type 'int'/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp:230: error: request for member 'data' in 'data', which is of non-class type 'int'/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp:238: error: request for member 'data' in 'data', which is of non-class type 'int'/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp:243: error: request for member 'keyhandle' in 'data', which is of non-class type 'int'/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp:246: error: request for member 'keyhandle' in 'data', which is of non-class type 'int'10(4@53"SecurityTokend/SecTokend.h: No such file or directory273806643#97#137#2(7@92"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp273806643#18446744073709551615#0#0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp260733938#29#0#29#0#0"0(13@125"SecurityTokend/SecTokend.h: No such file or directory in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h273806643#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#36#0#36#0#0"0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#36#0#36#0#28"*: No such file or directory0(4@42"'TOKEND_RETURN_DATA' has not been declared273806644#331#124#2(7@92"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp273806644#18446744073709551615#0#0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp260733938#29#0#29#0#0"0(13@114"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h273806644#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#0"0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#25"'*' has not been declared0(4@42"'TOKEND_RETURN_DATA' has not been declared273806644#646#125#3(7@92"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp273806644#18446744073709551615#0#0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp260733938#32#0#32#0#0"0(7@89"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.h273806644#18446744073709551615#0#0(6@67"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.h260733938#32#0#32#0#0"0(13@116"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h273806644#18446744073709551615#0#0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h260733938#52#0#52#0#0"0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h260733938#52#0#52#0#25"'*' has not been declared0(4@42"'TOKEND_RETURN_DATA' has not been declared273806644#771#126#0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp260733938#211#0#211#0#25"'*' has not been declared0(4@75"Request for member 'attributes' in 'data', which is of non-class type 'int'273806644#1072#159#0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp260733938#213#0#213#0#0"0(4@75"Request for member 'attributes' in 'data', which is of non-class type 'int'273806644#1231#159#0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp260733938#216#0#216#0#0"0(4@69"Request for member 'data' in 'data', which is of non-class type 'int'273806644#1390#153#0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp260733938#230#0#230#0#0"0(4@69"Request for member 'data' in 'data', which is of non-class type 'int'273806644#1543#153#0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp260733938#238#0#238#0#0"0(4@74"Request for member 'keyhandle' in 'data', which is of non-class type 'int'273806644#1696#158#0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp260733938#243#0#243#0#0"0(4@74"Request for member 'keyhandle' in 'data', which is of non-class type 'int'273806644#1854#158#0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp260733938#246#0#246#0#0"0(0#0#70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp4300882208#1115"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -DLIMITED_SIGNING -isysroot /Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -gdwarf-2 "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/tokend.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas "-F/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build" -F/usr/local/SecurityPieces/Frameworks -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/PrivateFrameworks "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/include" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/i386" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources" -O0 -fno-inline -c "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.cpp" -o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/MetaRecord.o"1#
+
+CCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/Record.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+s273806644.184467
+e273806644.823744
+r0
+xCompileC
+xbuild/Tokend.build/libtokend.build/Objects-debug/i386/Record.o
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.cpp
+xdebug
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h:33,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.cpp:29:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directory
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h:33,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.cpp:29:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declared
+lSLF07#2@74"Compile /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.cpp273806644#273806644#0(629"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h:33,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.cpp:29:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directoryIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h:33,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.cpp:29:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declared2(4@53"SecurityTokend/SecTokend.h: No such file or directory273806644#184#137#3(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.cpp273806644#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.cpp260733938#29#0#29#0#0"0(7@86"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h273806644#18446744073709551615#0#0(6@64"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h260733938#33#0#33#0#0"0(13@125"SecurityTokend/SecTokend.h: No such file or directory in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h273806644#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#36#0#36#0#0"0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#36#0#36#0#28"*: No such file or directory0(4@42"'TOKEND_RETURN_DATA' has not been declared273806644#505#124#3(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.cpp273806644#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.cpp260733938#29#0#29#0#0"0(7@86"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h273806644#18446744073709551615#0#0(6@64"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h260733938#33#0#33#0#0"0(13@114"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h273806644#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#0"0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#25"'*' has not been declared0(0#0#66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.cpp4300882208#1107"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -DLIMITED_SIGNING -isysroot /Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -gdwarf-2 "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/tokend.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas "-F/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build" -F/usr/local/SecurityPieces/Frameworks -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/PrivateFrameworks "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/include" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/i386" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources" -O0 -fno-inline -c "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.cpp" -o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/Record.o"1#
+
+CCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/RecordHandle.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+s273806644.606934
+e273806645.397240
+r0
+xCompileC
+xbuild/Tokend.build/libtokend.build/Objects-debug/i386/RecordHandle.o
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp
+xdebug
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp:29:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directory
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp:29:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h:52: error: 'TOKEND_RETURN_DATA' has not been declared
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp:31:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp:47: error: 'TOKEND_RETURN_DATA' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp: In member function 'virtual void Tokend::RecordHandle::get(Tokend::TokenContext*, int&)':
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp:50: error: request for member 'record' in 'data', which is of non-class type 'int'
+lSLF07#2@80"Compile /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp273806644#273806645#0(1132"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp:29:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directoryIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp:29:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h:52: error: 'TOKEND_RETURN_DATA' has not been declaredIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp:31:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp:47: error: 'TOKEND_RETURN_DATA' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp: In member function 'virtual void Tokend::RecordHandle::get(Tokend::TokenContext*, int&)':/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp:50: error: request for member 'record' in 'data', which is of non-class type 'int'5(4@53"SecurityTokend/SecTokend.h: No such file or directory273806644#99#139#2(7@94"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp273806644#18446744073709551615#0#0(6@72"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp260733938#29#0#29#0#0"0(13@127"SecurityTokend/SecTokend.h: No such file or directory in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h273806644#18446744073709551615#0#0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h260733938#36#0#36#0#0"0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h260733938#36#0#36#0#28"*: No such file or directory0(4@42"'TOKEND_RETURN_DATA' has not been declared273806645#337#125#2(7@94"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp273806645#18446744073709551615#0#0(6@72"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp260733938#29#0#29#0#0"0(13@116"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h273806645#18446744073709551615#0#0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h260733938#52#0#52#0#0"0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h260733938#52#0#52#0#25"'*' has not been declared0(4@42"'TOKEND_RETURN_DATA' has not been declared273806645#561#124#2(7@94"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp273806645#18446744073709551615#0#0(6@72"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp260733938#31#0#31#0#0"0(13@114"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h273806645#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#0"0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#25"'*' has not been declared0(4@42"'TOKEND_RETURN_DATA' has not been declared273806645#685#127#0(6@72"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp260733938#47#0#47#0#25"'*' has not been declared0(4@71"Request for member 'record' in 'data', which is of non-class type 'int'273806645#976#156#0(6@72"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp260733938#50#0#50#0#0"0(0#0#72"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp4300882208#1119"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -DLIMITED_SIGNING -isysroot /Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -gdwarf-2 "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/tokend.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas "-F/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build" -F/usr/local/SecurityPieces/Frameworks -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/PrivateFrameworks "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/include" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/i386" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources" -O0 -fno-inline -c "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.cpp" -o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/RecordHandle.o"1#
+
+CCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/Relation.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+s273806644.823825
+e273806645.415129
+r0
+xCompileC
+xbuild/Tokend.build/libtokend.build/Objects-debug/i386/Relation.o
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.cpp
+xdebug
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h:33,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h:32,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.cpp:29:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directory
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h:33,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h:32,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.cpp:29:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declared
+lSLF07#2@76"Compile /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.cpp273806644#273806645#0(819"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h:33,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h:32,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.cpp:29:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directoryIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h:33,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h:32,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.cpp:29:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declared2(4@53"SecurityTokend/SecTokend.h: No such file or directory273806644#279#137#4(7@90"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.cpp273806644#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.cpp260733938#29#0#29#0#0"0(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h273806644#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h260733938#32#0#32#0#0"0(7@86"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h273806644#18446744073709551615#0#0(6@64"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h260733938#33#0#33#0#0"0(13@125"SecurityTokend/SecTokend.h: No such file or directory in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h273806644#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#36#0#36#0#0"0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#36#0#36#0#28"*: No such file or directory0(4@42"'TOKEND_RETURN_DATA' has not been declared273806645#695#124#4(7@90"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.cpp273806645#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.cpp260733938#29#0#29#0#0"0(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h273806645#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h260733938#32#0#32#0#0"0(7@86"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h273806645#18446744073709551615#0#0(6@64"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h260733938#33#0#33#0#0"0(13@114"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h273806645#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#0"0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#25"'*' has not been declared0(0#0#68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.cpp4300882208#1111"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -DLIMITED_SIGNING -isysroot /Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -gdwarf-2 "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/tokend.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas "-F/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build" -F/usr/local/SecurityPieces/Frameworks -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/PrivateFrameworks "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/include" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/i386" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources" -O0 -fno-inline -c "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.cpp" -o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/Relation.o"1#
+
+CCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/SCardError.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SCardError.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+s273806610.135542
+e273806610.383004
+r1
+xCompileC
+xbuild/Tokend.build/libtokend.build/Objects-debug/i386/SCardError.o
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SCardError.cpp
+xdebug
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@78"Compile /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SCardError.cpp273806610#273806610#0(0"0(0#0#70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SCardError.cpp4300882208#1115"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -DLIMITED_SIGNING -isysroot /Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -gdwarf-2 "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/tokend.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas "-F/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build" -F/usr/local/SecurityPieces/Frameworks -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/PrivateFrameworks "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/include" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/i386" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources" -O0 -fno-inline -c "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SCardError.cpp" -o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/SCardError.o"0#
+
+CCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/Schema.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+s273806645.397512
+e273806646.049865
+r0
+xCompileC
+xbuild/Tokend.build/libtokend.build/Objects-debug/i386/Schema.o
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.cpp
+xdebug
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.h:36,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.cpp:29:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directory
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.h:36,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.cpp:29:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declared
+lSLF07#2@74"Compile /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.cpp273806645#273806646#0(629"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.h:36,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.cpp:29:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directoryIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.h:36,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.cpp:29:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declared2(4@53"SecurityTokend/SecTokend.h: No such file or directory273806645#184#137#3(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.cpp273806645#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.cpp260733938#29#0#29#0#0"0(7@86"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.h273806645#18446744073709551615#0#0(6@64"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.h260733938#36#0#36#0#0"0(13@125"SecurityTokend/SecTokend.h: No such file or directory in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h273806645#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#36#0#36#0#0"0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#36#0#36#0#28"*: No such file or directory0(4@42"'TOKEND_RETURN_DATA' has not been declared273806645#505#124#3(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.cpp273806645#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.cpp260733938#29#0#29#0#0"0(7@86"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.h273806645#18446744073709551615#0#0(6@64"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.h260733938#36#0#36#0#0"0(13@114"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h273806645#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#0"0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#25"'*' has not been declared0(0#0#66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.cpp4300882208#1107"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -DLIMITED_SIGNING -isysroot /Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -gdwarf-2 "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/tokend.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas "-F/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build" -F/usr/local/SecurityPieces/Frameworks -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/PrivateFrameworks "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/include" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/i386" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources" -O0 -fno-inline -c "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.cpp" -o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/Schema.o"1#
+
+CCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/SelectionPredicate.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SelectionPredicate.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+s273806645.415215
+e273806645.924134
+r0
+xCompileC
+xbuild/Tokend.build/libtokend.build/Objects-debug/i386/SelectionPredicate.o
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SelectionPredicate.cpp
+xdebug
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SelectionPredicate.cpp:31:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directory
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SelectionPredicate.cpp:31:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declared
+lSLF07#2@86"Compile /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SelectionPredicate.cpp273806645#273806645#0(471"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SelectionPredicate.cpp:31:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:36:38: error: SecurityTokend/SecTokend.h: No such file or directoryIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SelectionPredicate.cpp:31:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declared2(4@53"SecurityTokend/SecTokend.h: No such file or directory273806645#105#137#2(7@100"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SelectionPredicate.cpp273806645#18446744073709551615#0#0(6@78"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SelectionPredicate.cpp260733938#31#0#31#0#0"0(13@125"SecurityTokend/SecTokend.h: No such file or directory in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h273806645#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#36#0#36#0#0"0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#36#0#36#0#28"*: No such file or directory0(4@42"'TOKEND_RETURN_DATA' has not been declared273806645#347#124#2(7@100"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SelectionPredicate.cpp273806645#18446744073709551615#0#0(6@78"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SelectionPredicate.cpp260733938#31#0#31#0#0"0(13@114"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h273806645#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#0"0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#25"'*' has not been declared0(0#0#78"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SelectionPredicate.cpp4300882208#1131"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -DLIMITED_SIGNING -isysroot /Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -gdwarf-2 "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/tokend.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas "-F/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build" -F/usr/local/SecurityPieces/Frameworks -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/PrivateFrameworks "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/include" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/i386" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources" -O0 -fno-inline -c "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SelectionPredicate.cpp" -o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/SelectionPredicate.o"1#
+
+CCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/Token.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+s273806645.924219
+e273806646.713130
+r0
+xCompileC
+xbuild/Tokend.build/libtokend.build/Objects-debug/i386/Token.o
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp
+xdebug
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:29:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:32:38: error: SecurityTokend/SecTokend.h: No such file or directory
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:29:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:57: error: expected class-name before '{' token
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:68: error: ISO C++ forbids declaration of 'SecTokendCallbacks' with no type
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:68: error: 'SecTokendCallbacks' declared as a 'virtual' field
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:68: error: expected ';' before '*' token
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:69: error: ISO C++ forbids declaration of 'SecTokendSupport' with no type
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:69: error: 'SecTokendSupport' declared as a 'virtual' field
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:69: error: expected ';' before '*' token
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:72: error: 'SecTokendProbeFlags' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:73: error: 'TOKEND_MAX_UID' was not declared in this scope
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:75: error: 'SecTokendEstablishFlags' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:114: error: 'SecTokendProbeFlags' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:115: error: 'TOKEND_MAX_UID' was not declared in this scope
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:117: error: 'SecTokendEstablishFlags' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:123: error: 'TOKEND_RETURN_DATA' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:125: error: 'TOKEND_RETURN_DATA' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:127: error: 'TOKEND_RETURN_DATA' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:138: error: 'TOKEND_RETURN_DATA' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:239: error: 'SecTokendCallbacks' does not name a type
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:258: error: 'SecTokendProbeFlags' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:259: error: 'TOKEND_MAX_UID' was not declared in this scope
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:261: error: 'SecTokendEstablishFlags' has not been declared
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h:33,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h:32,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.h:32,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:31:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declared
+oIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.h:32,
+o                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:32:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h:52: error: 'TOKEND_RETURN_DATA' has not been declared
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp: In static member function 'static CSSM_RETURN Tokend::Token::_initial()':
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:77: error: 'class Tokend::Token' has no member named 'startupReaderInfo'
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp: At global scope:
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:91: error: 'CSSM_RETURN Tokend::Token::_probe' is not a static member of 'class Tokend::Token'
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:91: error: 'SecTokendProbeFlags' was not declared in this scope
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:91: error: expected primary-expression before '*' token
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:91: error: 'score' was not declared in this scope
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:92: error: expected primary-expression before 'char'
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:92: error: initializer expression list treated as compound expression
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:93: error: expected ',' or ';' before '{' token
+o/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:1128: error: expected `}' at end of input
+lSLF07#2@73"Compile /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806645#273806646#0(5033"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:29:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:32:38: error: SecurityTokend/SecTokend.h: No such file or directoryIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:29:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:57: error: expected class-name before '{' token/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:68: error: ISO C++ forbids declaration of 'SecTokendCallbacks' with no type/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:68: error: 'SecTokendCallbacks' declared as a 'virtual' field/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:68: error: expected ';' before '*' token/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:69: error: ISO C++ forbids declaration of 'SecTokendSupport' with no type/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:69: error: 'SecTokendSupport' declared as a 'virtual' field/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:69: error: expected ';' before '*' token/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:72: error: 'SecTokendProbeFlags' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:73: error: 'TOKEND_MAX_UID' was not declared in this scope/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:75: error: 'SecTokendEstablishFlags' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:114: error: 'SecTokendProbeFlags' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:115: error: 'TOKEND_MAX_UID' was not declared in this scope/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:117: error: 'SecTokendEstablishFlags' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:123: error: 'TOKEND_RETURN_DATA' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:125: error: 'TOKEND_RETURN_DATA' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:127: error: 'TOKEND_RETURN_DATA' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:138: error: 'TOKEND_RETURN_DATA' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:239: error: 'SecTokendCallbacks' does not name a type/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:258: error: 'SecTokendProbeFlags' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:259: error: 'TOKEND_MAX_UID' was not declared in this scope/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h:261: error: 'SecTokendEstablishFlags' has not been declaredIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h:33,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h:32,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.h:32,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:31:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h:104: error: 'TOKEND_RETURN_DATA' has not been declaredIn file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.h:32,                 from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:32:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h:52: error: 'TOKEND_RETURN_DATA' has not been declared/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp: In static member function 'static CSSM_RETURN Tokend::Token::_initial()':/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:77: error: 'class Tokend::Token' has no member named 'startupReaderInfo'/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp: At global scope:/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:91: error: 'CSSM_RETURN Tokend::Token::_probe' is not a static member of 'class Tokend::Token'/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:91: error: 'SecTokendProbeFlags' was not declared in this scope/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:91: error: expected primary-expression before '*' token/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:91: error: 'score' was not declared in this scope/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:92: error: expected primary-expression before 'char'/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:92: error: initializer expression list treated as compound expression/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:93: error: expected ',' or ';' before '{' token/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp:1128: error: expected `}' at end of input34(4@53"SecurityTokend/SecTokend.h: No such file or directory273806645#92#132#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806645#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@120"SecurityTokend/SecTokend.h: No such file or directory in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806645#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#32#0#32#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#32#0#32#0#28"*: No such file or directory0(4@36"Expected class-name before '{' token273806646#316#112#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@103"Expected class-name before '{' token in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#57#0#57#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#57#0#57#0#19"expected * before *0(4@64"ISO C++ forbids declaration of 'SecTokendCallbacks' with no type273806646#428#140#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@131"ISO C++ forbids declaration of 'SecTokendCallbacks' with no type in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#68#0#68#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#68#0#68#0#47"ISO C++ forbids declaration of '*' with no type0(4@50"'SecTokendCallbacks' declared as a 'virtual' field273806646#568#126#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@117"'SecTokendCallbacks' declared as a 'virtual' field in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#68#0#68#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#68#0#68#0#0"0(4@29"Expected ';' before '*' token273806646#694#105#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@96"Expected ';' before '*' token in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#68#0#68#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#68#0#68#0#19"expected * before *0(4@62"ISO C++ forbids declaration of 'SecTokendSupport' with no type273806646#799#138#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@129"ISO C++ forbids declaration of 'SecTokendSupport' with no type in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#69#0#69#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#69#0#69#0#47"ISO C++ forbids declaration of '*' with no type0(4@48"'SecTokendSupport' declared as a 'virtual' field273806646#937#124#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@115"'SecTokendSupport' declared as a 'virtual' field in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#69#0#69#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#69#0#69#0#0"0(4@29"Expected ';' before '*' token273806646#1061#105#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@96"Expected ';' before '*' token in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#69#0#69#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#69#0#69#0#19"expected * before *0(4@43"'SecTokendProbeFlags' has not been declared273806646#1166#119#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@110"'SecTokendProbeFlags' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#72#0#72#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#72#0#72#0#25"'*' has not been declared0(4@47"'TOKEND_MAX_UID' was not declared in this scope273806646#1285#123#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@114"'TOKEND_MAX_UID' was not declared in this scope in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#73#0#73#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#73#0#73#0#34"'*' was not declared in this scope0(4@47"'SecTokendEstablishFlags' has not been declared273806646#1408#123#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@114"'SecTokendEstablishFlags' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#75#0#75#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#75#0#75#0#25"'*' has not been declared0(4@43"'SecTokendProbeFlags' has not been declared273806646#1531#120#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@110"'SecTokendProbeFlags' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#114#0#114#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#114#0#114#0#25"'*' has not been declared0(4@47"'TOKEND_MAX_UID' was not declared in this scope273806646#1651#124#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@114"'TOKEND_MAX_UID' was not declared in this scope in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#115#0#115#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#115#0#115#0#34"'*' was not declared in this scope0(4@47"'SecTokendEstablishFlags' has not been declared273806646#1775#124#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@114"'SecTokendEstablishFlags' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#117#0#117#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#117#0#117#0#25"'*' has not been declared0(4@42"'TOKEND_RETURN_DATA' has not been declared273806646#1899#119#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@109"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#123#0#123#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#123#0#123#0#25"'*' has not been declared0(4@42"'TOKEND_RETURN_DATA' has not been declared273806646#2018#119#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@109"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#125#0#125#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#125#0#125#0#25"'*' has not been declared0(4@42"'TOKEND_RETURN_DATA' has not been declared273806646#2137#119#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@109"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#127#0#127#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#127#0#127#0#25"'*' has not been declared0(4@42"'TOKEND_RETURN_DATA' has not been declared273806646#2256#119#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@109"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#138#0#138#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#138#0#138#0#25"'*' has not been declared0(4@41"'SecTokendCallbacks' does not name a type273806646#2375#118#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@108"'SecTokendCallbacks' does not name a type in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#239#0#239#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#239#0#239#0#24"'*' does not name a type0(4@43"'SecTokendProbeFlags' has not been declared273806646#2493#120#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@110"'SecTokendProbeFlags' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#258#0#258#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#258#0#258#0#25"'*' has not been declared0(4@47"'TOKEND_MAX_UID' was not declared in this scope273806646#2613#124#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@114"'TOKEND_MAX_UID' was not declared in this scope in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#259#0#259#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#259#0#259#0#34"'*' was not declared in this scope0(4@47"'SecTokendEstablishFlags' has not been declared273806646#2737#124#2(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#29#0#29#0#0"0(13@114"'SecTokendEstablishFlags' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h273806646#18446744073709551615#0#0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#261#0#261#0#0"0(6@63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h260733938#261#0#261#0#25"'*' has not been declared0(4@42"'TOKEND_RETURN_DATA' has not been declared273806646#3228#124#5(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#31#0#31#0#0"0(7@86"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.h273806646#18446744073709551615#0#0(6@64"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.h260733938#32#0#32#0#0"0(7@88"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h273806646#18446744073709551615#0#0(6@66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h260733938#32#0#32#0#0"0(7@86"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h273806646#18446744073709551615#0#0(6@64"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h260733938#33#0#33#0#0"0(13@114"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h273806646#18446744073709551615#0#0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#0"0(6@68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h260733938#104#0#104#0#25"'*' has not been declared0(4@42"'TOKEND_RETURN_DATA' has not been declared273806646#3538#125#3(7@87"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp273806646#18446744073709551615#0#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#32#0#32#0#0"0(7@89"In file included from /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.h273806646#18446744073709551615#0#0(6@67"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.h260733938#32#0#32#0#0"0(13@116"'TOKEND_RETURN_DATA' has not been declared in /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h273806646#18446744073709551615#0#0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h260733938#52#0#52#0#0"0(6@70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h260733938#52#0#52#0#25"'*' has not been declared0(4@61"'class Tokend::Token' has no member named 'startupReaderInfo'273806646#3804#139#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#77#0#77#0#27"'*' has no member named '*'0(23@16"At global scope:273806646#3943#84#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#0#0#0#0#0"0(4@83"'CSSM_RETURN Tokend::Token::_probe' is not a static member of 'class Tokend::Token'273806646#4027#161#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#91#0#91#0#0"0(4@52"'SecTokendProbeFlags' was not declared in this scope273806646#4188#130#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#91#0#91#0#34"'*' was not declared in this scope0(4@44"Expected primary-expression before '*' token273806646#4318#122#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#91#0#91#0#19"expected * before *0(4@38"'score' was not declared in this scope273806646#4440#116#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#91#0#91#0#34"'*' was not declared in this scope0(4@41"Expected primary-expression before 'char'273806646#4556#119#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#92#0#92#0#19"expected * before *0(4@58"Initializer expression list treated as compound expression273806646#4675#136#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#92#0#92#0#0"0(4@36"Expected ',' or ';' before '{' token273806646#4811#114#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#93#0#93#0#19"expected * before *0(4@28"Expected `}' at end of input273806646#4925#108#0(6@65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp260733938#1128#0#1128#0#0"0(0#0#65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp4300882208#1105"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -DLIMITED_SIGNING -isysroot /Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -gdwarf-2 "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/tokend.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas "-F/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build" -F/usr/local/SecurityPieces/Frameworks -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/PrivateFrameworks "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/include" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/i386" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources" -O0 -fno-inline -c "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.cpp" -o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/Token.o"1#
+
+CCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/TokenContext.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/TokenContext.cpp" debug i386 c++ com.apple.compilers.gcc.4_2
+s273806610.909160
+e273806611.119502
+r1
+xCompileC
+xbuild/Tokend.build/libtokend.build/Objects-debug/i386/TokenContext.o
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/TokenContext.cpp
+xdebug
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@80"Compile /Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/TokenContext.cpp273806610#273806611#0(0"0(0#0#72"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/TokenContext.cpp4300882208#1119"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -DLIMITED_SIGNING -isysroot /Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -gdwarf-2 "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/tokend.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas "-F/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build" -F/usr/local/SecurityPieces/Frameworks -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/PrivateFrameworks "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/include" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/i386" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources" -O0 -fno-inline -c "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/TokenContext.cpp" -o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/TokenContext.o"0#
+
+CCompileC build/Tokend.build/libtokend.build/Objects-debug/i386/tokend_vers.o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/tokend_vers.c" debug i386 c com.apple.compilers.gcc.4_2
+s273806611.119589
+e273806611.376708
+r1
+xCompileC
+xbuild/Tokend.build/libtokend.build/Objects-debug/i386/tokend_vers.o
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/tokend_vers.c
+xdebug
+xi386
+xc
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@120"Compile /Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/tokend_vers.c273806611#273806611#0(0"0(0#0#112"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/tokend_vers.c4300882208#1156"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -Os -DLIMITED_SIGNING -isysroot /Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6 -gdwarf-2 "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/tokend.hmap" -Wmost -Wno-four-char-constants -Wno-unknown-pragmas "-F/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build" -F/usr/local/SecurityPieces/Frameworks -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/PrivateFrameworks "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/include" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/i386" "-I/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources" -O0 -fno-inline -c "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/DerivedSources/tokend_vers.c" -o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Objects-debug/i386/tokend_vers.o"0#
+
+CLibtool "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/libtokend_debug.a" debug i386
+r0
+
+CPhaseScriptExecution "Run Script" "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Script-52B260430BC5A864007E00F1.sh"
+s273806646.713208
+e273806646.731706
+r0
+xPhaseScriptExecution
+xRun Script
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Script-52B260430BC5A864007E00F1.sh
+ocp: /Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/libtokend_debug.a: No such file or directory
+oln: Source/Tokend-36720/build/tokend.framework/tokend_debug: No such file or directory
+onmedit: can't open file: /Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/tokend_debug (No such file or directory)
+oranlib: can't open file: /Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/tokend_debug (No such file or directory)
+lSLF07#2@36"Run custom shell script 'Run Script'273806646#273806646#0(489"cp: /Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/libtokend_debug.a: No such file or directoryln: Source/Tokend-36720/build/tokend.framework/tokend_debug: No such file or directorynmedit: can't open file: /Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/tokend_debug (No such file or directory)ranlib: can't open file: /Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/tokend_debug (No such file or directory)4(4@103"Cp: /Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/libtokend_debug.a: No such file or directory273806646#0#104#0(1@0"0(4@86"Ln: Source/Tokend-36720/build/tokend.framework/tokend_debug: No such file or directory273806646#104#87#0(1@0"0(13@149"nmedit: can't open file: /Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/tokend_debug (No such file or directory)273806646#191#149#0(1@0"0(13@149"ranlib: can't open file: /Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/tokend_debug (No such file or directory)273806646#340#149#0(1@0"0(0#0#0"4300882208#198"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /bin/sh -c "\"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/Tokend.build/libtokend.build/Script-52B260430BC5A864007E00F1.sh\""1#
+

@@ -1,0 +1,388 @@
+Ttokend
+v7
+r0
+t273806642.082671
+cCheck dependencies
+cSymLink "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/Current" A
+cSymLink "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Resources" Versions/Current/Resources
+cSymLink "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Headers" Versions/Current/Headers
+cProcessInfoPlistFile "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Resources/Info.plist" Info-tokend__Upgraded_.plist
+cCpHeader build/tokend.framework/Versions/A/Headers/Adornment.h Tokend/Adornment.h
+cCpHeader build/tokend.framework/Versions/A/Headers/Attribute.h Tokend/Attribute.h
+cCpHeader build/tokend.framework/Versions/A/Headers/AttributeCoder.h Tokend/AttributeCoder.h
+cCpHeader build/tokend.framework/Versions/A/Headers/Cursor.h Tokend/Cursor.h
+cCpHeader build/tokend.framework/Versions/A/Headers/DbValue.h Tokend/DbValue.h
+cCpHeader build/tokend.framework/Versions/A/Headers/KeyHandle.h Tokend/KeyHandle.h
+cCpHeader build/tokend.framework/Versions/A/Headers/MetaAttribute.h Tokend/MetaAttribute.h
+cCpHeader build/tokend.framework/Versions/A/Headers/MetaRecord.h Tokend/MetaRecord.h
+cCpHeader build/tokend.framework/Versions/A/Headers/Record.h Tokend/Record.h
+cCpHeader build/tokend.framework/Versions/A/Headers/RecordHandle.h Tokend/RecordHandle.h
+cCpHeader build/tokend.framework/Versions/A/Headers/Relation.h Tokend/Relation.h
+cCpHeader build/tokend.framework/Versions/A/Headers/SCardError.h Tokend/SCardError.h
+cCpHeader build/tokend.framework/Versions/A/Headers/Schema.h Tokend/Schema.h
+cCpHeader build/tokend.framework/Versions/A/Headers/SelectionPredicate.h Tokend/SelectionPredicate.h
+cCpHeader build/tokend.framework/Versions/A/Headers/Token.h Tokend/Token.h
+cCpHeader build/tokend.framework/Versions/A/Headers/TokenContext.h Tokend/TokenContext.h
+cTouch "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework"
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Adornment.h
+c0000000049DA447200000000000007D6
+t1239041138
+s2006
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Attribute.h
+c0000000049DA44720000000000000841
+t1239041138
+s2113
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/AttributeCoder.h
+c0000000049DA447200000000000014C2
+t1239041138
+s5314
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.h
+c0000000049DA447200000000000009CC
+t1239041138
+s2508
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/DbValue.h
+c0000000049DA447200000000000013A5
+t1239041138
+s5029
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.h
+c0000000049DA44720000000000000DD3
+t1239041138
+s3539
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaAttribute.h
+c0000000049DA44720000000000000EC4
+t1239041138
+s3780
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h
+c0000000049DA44720000000000001045
+t1239041138
+s4165
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h
+c0000000049DA447200000000000009BD
+t1239041138
+s2493
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h
+c0000000049DA44720000000000000819
+t1239041138
+s2073
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h
+c0000000049DA4472000000000000068D
+t1239041138
+s1677
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SCardError.h
+c0000000049DA44720000000000001EF3
+t1239041138
+s7923
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.h
+c0000000049DA44720000000000000EAF
+t1239041138
+s3759
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SelectionPredicate.h
+c0000000049DA447200000000000006D5
+t1239041138
+s1749
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h
+c0000000049DA44720000000000002A09
+t1239041138
+s10761
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/TokenContext.h
+c0000000049DA4472000000000000053F
+t1239041138
+s1343
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework
+t1252113805
+s170
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Headers
+t3
+s24
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Resources
+t3
+s26
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers/Adornment.h
+t1252113805
+s2006
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers/Attribute.h
+t1252113805
+s2113
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers/AttributeCoder.h
+t1252113805
+s5314
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers/Cursor.h
+t1252113805
+s2508
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers/DbValue.h
+t1252113805
+s5029
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers/KeyHandle.h
+t1252113805
+s3539
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers/MetaAttribute.h
+t1252113805
+s3780
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers/MetaRecord.h
+t1252113805
+s4165
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers/Record.h
+t1252113805
+s2493
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers/RecordHandle.h
+t1252113805
+s2073
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers/Relation.h
+t1252113805
+s1677
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers/SCardError.h
+t1252113805
+s7923
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers/Schema.h
+t1252113805
+s3759
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers/SelectionPredicate.h
+t1252113805
+s1749
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers/Token.h
+t1252113805
+s10761
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers/TokenContext.h
+t1252113805
+s1343
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Resources/Info.plist
+t1252113805
+s181
+
+N/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/Current
+t3
+s1
+
+NInfo-tokend__Upgraded_.plist
+c0000000049DA447200000000000000B5
+t1239041138
+s181
+
+CCheck dependencies
+r0
+lSLF07#2@18"Check dependencies273806642#273806642#0(0"0(0#1#0"4300882208#0"0#
+
+CCpHeader build/tokend.framework/Versions/A/Headers/Adornment.h Tokend/Adornment.h
+s273806605.659227
+e273806605.698564
+r1
+xCpHeader
+xbuild/tokend.framework/Versions/A/Headers/Adornment.h
+xTokend/Adornment.h
+lSLF07#2@23"Copy Tokend/Adornment.h273806605#273806605#0(0"0(0#0#67"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Adornment.h4300882208#390"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -strip-debug-symbols -resolve-src-symlinks "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Adornment.h" "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers"0#
+
+CCpHeader build/tokend.framework/Versions/A/Headers/Attribute.h Tokend/Attribute.h
+s273806605.659756
+e273806605.695407
+r1
+xCpHeader
+xbuild/tokend.framework/Versions/A/Headers/Attribute.h
+xTokend/Attribute.h
+lSLF07#2@23"Copy Tokend/Attribute.h273806605#273806605#0(0"0(0#0#67"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Attribute.h4300882208#390"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -strip-debug-symbols -resolve-src-symlinks "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Attribute.h" "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers"0#
+
+CCpHeader build/tokend.framework/Versions/A/Headers/AttributeCoder.h Tokend/AttributeCoder.h
+s273806605.660161
+e273806605.703168
+r1
+xCpHeader
+xbuild/tokend.framework/Versions/A/Headers/AttributeCoder.h
+xTokend/AttributeCoder.h
+lSLF07#2@28"Copy Tokend/AttributeCoder.h273806605#273806605#0(0"0(0#0#72"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/AttributeCoder.h4300882208#395"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -strip-debug-symbols -resolve-src-symlinks "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/AttributeCoder.h" "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers"0#
+
+CCpHeader build/tokend.framework/Versions/A/Headers/Cursor.h Tokend/Cursor.h
+s273806605.660553
+e273806605.704047
+r1
+xCpHeader
+xbuild/tokend.framework/Versions/A/Headers/Cursor.h
+xTokend/Cursor.h
+lSLF07#2@20"Copy Tokend/Cursor.h273806605#273806605#0(0"0(0#0#64"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.h4300882208#387"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -strip-debug-symbols -resolve-src-symlinks "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Cursor.h" "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers"0#
+
+CCpHeader build/tokend.framework/Versions/A/Headers/DbValue.h Tokend/DbValue.h
+s273806605.660981
+e273806605.695518
+r1
+xCpHeader
+xbuild/tokend.framework/Versions/A/Headers/DbValue.h
+xTokend/DbValue.h
+lSLF07#2@21"Copy Tokend/DbValue.h273806605#273806605#0(0"0(0#0#65"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/DbValue.h4300882208#388"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -strip-debug-symbols -resolve-src-symlinks "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/DbValue.h" "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers"0#
+
+CCpHeader build/tokend.framework/Versions/A/Headers/KeyHandle.h Tokend/KeyHandle.h
+s273806605.662359
+e273806605.690029
+r1
+xCpHeader
+xbuild/tokend.framework/Versions/A/Headers/KeyHandle.h
+xTokend/KeyHandle.h
+lSLF07#2@23"Copy Tokend/KeyHandle.h273806605#273806605#0(0"0(0#0#67"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.h4300882208#390"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -strip-debug-symbols -resolve-src-symlinks "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/KeyHandle.h" "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers"0#
+
+CCpHeader build/tokend.framework/Versions/A/Headers/MetaAttribute.h Tokend/MetaAttribute.h
+s273806605.663282
+e273806605.703317
+r1
+xCpHeader
+xbuild/tokend.framework/Versions/A/Headers/MetaAttribute.h
+xTokend/MetaAttribute.h
+lSLF07#2@27"Copy Tokend/MetaAttribute.h273806605#273806605#0(0"0(0#0#71"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaAttribute.h4300882208#394"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -strip-debug-symbols -resolve-src-symlinks "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaAttribute.h" "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers"0#
+
+CCpHeader build/tokend.framework/Versions/A/Headers/MetaRecord.h Tokend/MetaRecord.h
+s273806605.664286
+e273806605.703409
+r1
+xCpHeader
+xbuild/tokend.framework/Versions/A/Headers/MetaRecord.h
+xTokend/MetaRecord.h
+lSLF07#2@24"Copy Tokend/MetaRecord.h273806605#273806605#0(0"0(0#0#68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h4300882208#391"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -strip-debug-symbols -resolve-src-symlinks "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/MetaRecord.h" "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers"0#
+
+CCpHeader build/tokend.framework/Versions/A/Headers/Record.h Tokend/Record.h
+s273806605.665131
+e273806605.693660
+r1
+xCpHeader
+xbuild/tokend.framework/Versions/A/Headers/Record.h
+xTokend/Record.h
+lSLF07#2@20"Copy Tokend/Record.h273806605#273806605#0(0"0(0#0#64"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h4300882208#387"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -strip-debug-symbols -resolve-src-symlinks "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Record.h" "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers"0#
+
+CCpHeader build/tokend.framework/Versions/A/Headers/RecordHandle.h Tokend/RecordHandle.h
+s273806605.666067
+e273806605.687840
+r1
+xCpHeader
+xbuild/tokend.framework/Versions/A/Headers/RecordHandle.h
+xTokend/RecordHandle.h
+lSLF07#2@26"Copy Tokend/RecordHandle.h273806605#273806605#0(0"0(0#0#70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h4300882208#393"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -strip-debug-symbols -resolve-src-symlinks "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/RecordHandle.h" "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers"0#
+
+CCpHeader build/tokend.framework/Versions/A/Headers/Relation.h Tokend/Relation.h
+s273806605.687930
+e273806605.705739
+r1
+xCpHeader
+xbuild/tokend.framework/Versions/A/Headers/Relation.h
+xTokend/Relation.h
+lSLF07#2@22"Copy Tokend/Relation.h273806605#273806605#0(0"0(0#0#66"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h4300882208#389"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -strip-debug-symbols -resolve-src-symlinks "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Relation.h" "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers"0#
+
+CCpHeader build/tokend.framework/Versions/A/Headers/SCardError.h Tokend/SCardError.h
+s273806605.690267
+e273806605.708383
+r1
+xCpHeader
+xbuild/tokend.framework/Versions/A/Headers/SCardError.h
+xTokend/SCardError.h
+lSLF07#2@24"Copy Tokend/SCardError.h273806605#273806605#0(0"0(0#0#68"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SCardError.h4300882208#391"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -strip-debug-symbols -resolve-src-symlinks "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SCardError.h" "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers"0#
+
+CCpHeader build/tokend.framework/Versions/A/Headers/Schema.h Tokend/Schema.h
+s273806605.693739
+e273806605.714108
+r1
+xCpHeader
+xbuild/tokend.framework/Versions/A/Headers/Schema.h
+xTokend/Schema.h
+lSLF07#2@20"Copy Tokend/Schema.h273806605#273806605#0(0"0(0#0#64"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.h4300882208#387"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -strip-debug-symbols -resolve-src-symlinks "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Schema.h" "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers"0#
+
+CCpHeader build/tokend.framework/Versions/A/Headers/SelectionPredicate.h Tokend/SelectionPredicate.h
+s273806605.695568
+e273806605.707487
+r1
+xCpHeader
+xbuild/tokend.framework/Versions/A/Headers/SelectionPredicate.h
+xTokend/SelectionPredicate.h
+lSLF07#2@32"Copy Tokend/SelectionPredicate.h273806605#273806605#0(0"0(0#0#76"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SelectionPredicate.h4300882208#399"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -strip-debug-symbols -resolve-src-symlinks "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/SelectionPredicate.h" "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers"0#
+
+CCpHeader build/tokend.framework/Versions/A/Headers/Token.h Tokend/Token.h
+s273806605.697007
+e273806605.714258
+r1
+xCpHeader
+xbuild/tokend.framework/Versions/A/Headers/Token.h
+xTokend/Token.h
+lSLF07#2@19"Copy Tokend/Token.h273806605#273806605#0(0"0(0#0#63"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h4300882208#386"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -strip-debug-symbols -resolve-src-symlinks "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/Token.h" "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers"0#
+
+CCpHeader build/tokend.framework/Versions/A/Headers/TokenContext.h Tokend/TokenContext.h
+s273806605.698633
+e273806605.713935
+r1
+xCpHeader
+xbuild/tokend.framework/Versions/A/Headers/TokenContext.h
+xTokend/TokenContext.h
+lSLF07#2@26"Copy Tokend/TokenContext.h273806605#273806605#0(0"0(0#0#70"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/TokenContext.h4300882208#393"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -strip-debug-symbols -resolve-src-symlinks "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Tokend/TokenContext.h" "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Headers"0#
+
+CProcessInfoPlistFile "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Resources/Info.plist" Info-tokend__Upgraded_.plist
+s273806605.656673
+e273806605.659177
+r1
+xProcessInfoPlistFile
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Resources/Info.plist
+xInfo-tokend__Upgraded_.plist
+lSLF07#2@36"Process Info-tokend__Upgraded_.plist273806605#273806605#0(0"0(0#0#77"/Users/geddis/Desktop/10.6 - Source/Tokend-36720/Info-tokend__Upgraded_.plist4300882208#263"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    builtin-infoPlistUtility Info-tokend__Upgraded_.plist -expandbuildsettings -platform macosx -o "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/A/Resources/Info.plist"0#
+
+CSymLink "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Headers" Versions/Current/Headers
+s273806605.653965
+e273806605.656607
+r1
+xSymLink
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Headers
+xVersions/Current/Headers
+lSLF07#2@87"Process /Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Headers273806605#273806605#0(0"0(0#0#0"4300882208#181"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /bin/ln -sf Versions/Current/Headers "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Headers"0#
+
+CSymLink "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Resources" Versions/Current/Resources
+s273806605.591050
+e273806605.653898
+r1
+xSymLink
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Resources
+xVersions/Current/Resources
+lSLF07#2@89"Process /Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Resources273806605#273806605#0(0"0(0#0#0"4300882208#185"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /bin/ln -sf Versions/Current/Resources "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Resources"0#
+
+CSymLink "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/Current" A
+s273806605.566871
+e273806605.653729
+r1
+xSymLink
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/Current
+xA
+lSLF07#2@96"Process /Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/Current273806605#273806605#0(0"0(0#0#0"7236274654156894208#167"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /bin/ln -sf A "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework/Versions/Current"0#
+
+CTouch "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework"
+s273806605.714307
+e273806605.740076
+r1
+xTouch
+x/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework
+lSLF07#2@77"Touch /Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework273806605#273806605#0(0"0(0#0#0"4300882208#154"    cd "/Users/geddis/Desktop/10.6 - Source/Tokend-36720"    /usr/bin/touch -c "/Users/geddis/Desktop/10.6 - Source/Tokend-36720/build/tokend.framework"0#
+

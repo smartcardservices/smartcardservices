@@ -1,0 +1,200 @@
+// !$*UTF8*$!
+{
+	08FB7793FE84155DC02AAC07 /* Project object */ = {
+		activeBuildConfigurationName = Development;
+		activeExecutable = AFDA32D81051F4BF00A6BBF5 /* PIV */;
+		activeSDKPreference = macosx10.6;
+		activeTarget = 52B2601F0BC5A864007E00F1 /* world */;
+		codeSenseManager = AFDA32E81051F4DD00A6BBF5 /* Code sense */;
+		executables = (
+			AFDA32D51051F4BF00A6BBF5 /* BELPIC */,
+			AFDA32D61051F4BF00A6BBF5 /* CAC */,
+			AFDA32D71051F4BF00A6BBF5 /* MuscleCard */,
+			AFDA32D81051F4BF00A6BBF5 /* PIV */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					154,
+					20,
+					48.16259765625,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 273806527;
+			PBXWorkspaceStateSaveDate = 273806527;
+		};
+		sourceControlManager = AFDA32E71051F4DD00A6BBF5 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	52B2601F0BC5A864007E00F1 /* world */ = {
+		activeExec = 0;
+	};
+	52B2602D0BC5A864007E00F1 /* libtokend */ = {
+		activeExec = 0;
+	};
+	52B2604B0BC5A864007E00F1 /* tokend */ = {
+		activeExec = 0;
+	};
+	52B260640BC5A864007E00F1 /* BELPIC */ = {
+		activeExec = 0;
+		executables = (
+			AFDA32D51051F4BF00A6BBF5 /* BELPIC */,
+		);
+	};
+	52B2607D0BC5A864007E00F1 /* CAC */ = {
+		activeExec = 0;
+		executables = (
+			AFDA32D61051F4BF00A6BBF5 /* CAC */,
+		);
+	};
+	52B260980BC5A864007E00F1 /* MuscleCard */ = {
+		activeExec = 0;
+		executables = (
+			AFDA32D71051F4BF00A6BBF5 /* MuscleCard */,
+		);
+	};
+	52B260BA0BC5A864007E00F1 /* PIV */ = {
+		activeExec = 0;
+		executables = (
+			AFDA32D81051F4BF00A6BBF5 /* PIV */,
+		);
+	};
+	AFDA32D51051F4BF00A6BBF5 /* BELPIC */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = BELPIC;
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+	};
+	AFDA32D61051F4BF00A6BBF5 /* CAC */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = CAC;
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+	};
+	AFDA32D71051F4BF00A6BBF5 /* MuscleCard */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = MuscleCard;
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+	};
+	AFDA32D81051F4BF00A6BBF5 /* PIV */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = PIV;
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+	};
+	AFDA32E71051F4DD00A6BBF5 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
+		};
+	};
+	AFDA32E81051F4DD00A6BBF5 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+}
