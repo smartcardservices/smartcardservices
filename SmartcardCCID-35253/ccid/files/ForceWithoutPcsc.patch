@@ -1,0 +1,45 @@
+diff --git src/Makefile.am src/Makefile.am
+index a123374..11097de 100644
+--- src/Makefile.am
++++ src/Makefile.am
+@@ -48,9 +48,7 @@ TOKEN_PARSER = tokenparser.l parser.h \
+ 
+ MAINTAINERCLEANFILES = tokenparser.c
+ 
+-if WITHOUT_PCSC
+ PROVIDED_BY_PCSC = debug.c
+-endif
+ 
+ libccid_la_SOURCES = $(COMMON) $(USB) $(TOKEN_PARSER) $(PROVIDED_BY_PCSC) $(T1)
+ libccid_la_LIBADD = $(LEXLIB) $(COREFOUNDATION) $(IOKIT) \
+diff --git src/Makefile.in src/Makefile.in
+index da1333e..0595463 100644
+--- src/Makefile.in
++++ src/Makefile.in
+@@ -75,7 +75,7 @@ am__objects_1 = libccid_la-ccid.lo libccid_la-commands.lo \
+ 	libccid_la-ifdhandler.lo libccid_la-utils.lo
+ am__objects_2 = libccid_la-ccid_usb.lo
+ am__objects_3 = libccid_la-tokenparser.lo libccid_la-strlcpy.lo
+-@WITHOUT_PCSC_TRUE@am__objects_4 = libccid_la-debug.lo
++am__objects_4 = libccid_la-debug.lo
+ am__objects_5 = libccid_la-atr.lo libccid_la-pps.lo \
+ 	libccid_la-buffer.lo libccid_la-checksum.lo \
+ 	libccid_la-proto-t1.lo
+@@ -100,7 +100,7 @@ am__objects_6 = libccidtwin_la-ccid.lo libccidtwin_la-commands.lo \
+ am__objects_7 = libccidtwin_la-ccid_serial.lo
+ am__objects_8 = libccidtwin_la-tokenparser.lo \
+ 	libccidtwin_la-strlcpy.lo
+-@WITHOUT_PCSC_TRUE@am__objects_9 = libccidtwin_la-debug.lo
++am__objects_9 = libccidtwin_la-debug.lo
+ am__objects_10 = libccidtwin_la-atr.lo libccidtwin_la-pps.lo \
+ 	libccidtwin_la-buffer.lo libccidtwin_la-checksum.lo \
+ 	libccidtwin_la-proto-t1.lo
+@@ -311,7 +311,7 @@ TOKEN_PARSER = tokenparser.l parser.h \
+ 	strlcpycat.h
+ 
+ MAINTAINERCLEANFILES = tokenparser.c
+-@WITHOUT_PCSC_TRUE@PROVIDED_BY_PCSC = debug.c
++PROVIDED_BY_PCSC = debug.c
+ libccid_la_SOURCES = $(COMMON) $(USB) $(TOKEN_PARSER) $(PROVIDED_BY_PCSC) $(T1)
+ libccid_la_LIBADD = $(LEXLIB) $(COREFOUNDATION) $(IOKIT) \
+ 	$(LIBUSB_LIBS) $(PTHREAD_LIBS)
