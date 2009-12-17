@@ -1,0 +1,74 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ(2.59)
+AC_INIT(libgtop11dotnet, 2.1.2, hotline@gemalto.com)
+AM_INIT_AUTOMAKE
+AC_CONFIG_SRCDIR([PKCS11Module2/pkcs11.cpp])
+AC_CHECK_PROG([PKGCONFIG], [pkg-config], [yes])
+
+# Checks for programs.
+AC_PROG_CXX
+AC_PROG_CC
+AC_PROG_LN_S
+AC_PROG_MKDIR_P
+AC_PROG_MAKE_SET
+AC_PROG_CPP
+AC_PROG_LIBTOOL
+
+AC_C_BIGENDIAN
+
+# Select OS specific versions of source files.
+AC_SUBST(DYN_LIB_EXT)
+case "$host" in
+*-*-darwin*)
+	DYN_LIB_EXT="dylib"
+	;;
+*)
+	DYN_LIB_EXT="so"
+esac
+
+# Special check for pthread support
+ACX_PTHREAD(
+[
+	AC_DEFINE(HAVE_PTHREAD, 1,
+		[Define if you have POSIX threads libraries and header files.])
+], [
+	AC_MSG_ERROR([POSIX thread support required])
+])
+
+CC="$PTHREAD_CC"
+
+AC_SUBST(PTHREAD_LIBS)
+AC_SUBST(PTHREAD_CFLAGS)
+
+# check pcsc-lite version
+OLD_LIBS="$LIBS"
+PKG_CHECK_MODULES(PCSC, libpcsclite, [],
+    [ AC_MSG_WARN([install pcsc-lite]) ])
+LIBS="$OLD_LIBS"
+
+OLD_CPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$CPPFLAGS $PCSC_CFLAGS"
+AC_CHECK_HEADER(winscard.h,,
+    [AC_MSG_ERROR([winscard.h not found, install pcsc-lite, or use PCSC_CFLAGS=... ./configure])])
+CPPFLAGS="$OLD_CPPFLAGS"
+
+OLD_LIBS="$LIBS"
+LIBS="$LIBS $PCSC_LIBS"
+AC_MSG_CHECKING([for SCardEstablishContext])
+AC_TRY_LINK_FUNC(SCardEstablishContext, [ AC_MSG_RESULT([yes]) ],
+    [AC_MSG_ERROR([SCardEstablishContext() not found, install pcsc-lite,or use PCSC_LDLIBS=... ./configure])])
+LIBS="$OLD_LIBS"
+
+CPPFLAGS="$CPPFLAGS $PCSC_CFLAGS"
+AC_CHECK_TYPES([LPCTSTR],,,[#include <winscard.h>])
+AC_CHECK_TYPES([LPCSTR],,,[#include <winscard.h>])
+CPPFLAGS="$OLD_CPPFLAGS"
+
+AC_CONFIG_FILES([
+	Makefile
+	PKCS11Module2/Makefile
+	])
+AC_OUTPUT
+
