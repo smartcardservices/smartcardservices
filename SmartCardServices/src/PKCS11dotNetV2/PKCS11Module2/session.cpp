@@ -19,7 +19,11 @@
  */
 
 #include "stdafx.h"
-#include <winscard.h>      // inclusion needed for linux
+#ifdef __APPLE__
+#include <PCSC/winscard.h>
+#else
+#include <winscard.h>
+#endif
 #include "platconfig.h"
 #include "config.h"
 #include "thread.h"

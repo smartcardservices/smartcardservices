@@ -25,7 +25,11 @@
 #endif
 
 #include <string.h>
+#ifdef __APPLE__
+#include <PCSC/winscard.h>
+#else
 #include <winscard.h>
+#endif
 #include <stdexcept>
 #include "MarshallerCfg.h"
 #include "Except.h"

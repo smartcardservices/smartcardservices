@@ -26,17 +26,16 @@
 #define DBG_UNREFERENCED_LOCAL_VARIABLE(a)
 #endif
 
-//#ifdef _MAC_OS_X
-#ifdef __APPLE__
-#include <wintypes.h>
-#include <pcsclite.h>
-#endif
-
 #ifndef WIN32
 #include <strings.h>
 #endif
 #include <string.h>
+#ifdef __APPLE__
+#include <PCSC/winscard.h>
+#include <PCSC/wintypes.h>
+#else
 #include <winscard.h>
+#endif
 #include <stdexcept>
 #include "MarshallerCfg.h"
 #include "Array.h"

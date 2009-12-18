@@ -30,7 +30,11 @@
 #include <string>
 
 #include "stdafx.h"
+#ifdef __APPLE__
+#include <PCSC/winscard.h>
+#else
 #include <winscard.h>
+#endif
 #include "error.h"
 #include "platconfig.h"
 #include "config.h"

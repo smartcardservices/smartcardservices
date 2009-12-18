@@ -30,9 +30,11 @@
     #include <stdlib.h>
     #include <string.h>
 	#ifdef __APPLE__
-    #include <wintypes.h>
-    #endif
+	#include <PCSC/winscard.h>
+	#include <PCSC/wintypes.h>
+    #else
     #include <winscard.h>
+	#endif
     typedef BYTE *PBYTE;
 #ifndef HAVE_LPCTSTR
     typedef const char *LPCTSTR;

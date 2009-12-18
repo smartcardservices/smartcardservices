@@ -3,7 +3,11 @@
 #include "stdafx.h"
 #include "platconfig.h"
 #include "config.h"
+#ifdef __APPLE__
+#include <PCSC/winscard.h>
+#else
 #include <winscard.h>
+#endif
 #include <stdexcept>
 #include "cardmoduleservice.h"
 #include <Except.h>

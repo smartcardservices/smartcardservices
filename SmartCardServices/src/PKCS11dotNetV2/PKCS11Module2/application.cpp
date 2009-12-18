@@ -18,7 +18,11 @@
  *
  */
 
+#ifdef __APPLE__
+#include <PCSC/winscard.h>
+#else
 #include <winscard.h>
+#endif
 #include "cardmoduleservice.h"
 
 #include <string>

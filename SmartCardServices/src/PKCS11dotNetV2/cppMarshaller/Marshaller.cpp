@@ -30,17 +30,17 @@
 #include <vld.h>
 #endif
 
-#ifdef __APPLE__
-#include <pcsclite.h>
-#endif
-
 #ifndef WIN32
 #include <strings.h>
 #endif
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdexcept>
+#ifdef __APPLE__
+#include <PCSC/winscard.h>
+#else
 #include <winscard.h>
+#endif
 #include "MarshallerCfg.h"
 #include "Array.h"
 #ifndef _XCL_
