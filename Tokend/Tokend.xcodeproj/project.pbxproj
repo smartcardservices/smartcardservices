@@ -17,6 +17,7 @@
 				52B260D90BC5A864007E00F1 /* PBXTargetDependency */,
 				52B260DB0BC5A864007E00F1 /* PBXTargetDependency */,
 				52B260DD0BC5A864007E00F1 /* PBXTargetDependency */,
+				1FAF27A910DBC930006C88FB /* PBXTargetDependency */,
 			);
 			name = world;
 			productName = world;
@@ -24,6 +25,28 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		1FAF278210DBC902006C88FB /* Gemalto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FAF276810DBC902006C88FB /* Gemalto.cpp */; };
+		1FAF278310DBC902006C88FB /* GemaltoAttributeCoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FAF276910DBC902006C88FB /* GemaltoAttributeCoder.cpp */; };
+		1FAF278410DBC902006C88FB /* GemaltoError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FAF276B10DBC902006C88FB /* GemaltoError.cpp */; };
+		1FAF278510DBC902006C88FB /* GemaltoKeyHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FAF276D10DBC902006C88FB /* GemaltoKeyHandle.cpp */; };
+		1FAF278610DBC902006C88FB /* GemaltoRecord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FAF276F10DBC902006C88FB /* GemaltoRecord.cpp */; };
+		1FAF278710DBC902006C88FB /* GemaltoSchema.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FAF277110DBC902006C88FB /* GemaltoSchema.cpp */; };
+		1FAF278810DBC902006C88FB /* GemaltoToken.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FAF277310DBC902006C88FB /* GemaltoToken.cpp */; };
+		1FAF278910DBC902006C88FB /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1FAF277510DBC902006C88FB /* Info.plist */; };
+		1FAF278C10DBC902006C88FB /* gemalto_csp_capabilities.mdsinfo in Resources */ = {isa = PBXBuildFile; fileRef = 1FAF277A10DBC902006C88FB /* gemalto_csp_capabilities.mdsinfo */; };
+		1FAF278D10DBC902006C88FB /* gemalto_csp_capabilities_common.mds in Resources */ = {isa = PBXBuildFile; fileRef = 1FAF277B10DBC902006C88FB /* gemalto_csp_capabilities_common.mds */; };
+		1FAF278E10DBC902006C88FB /* gemalto_csp_primary.mdsinfo in Resources */ = {isa = PBXBuildFile; fileRef = 1FAF277C10DBC902006C88FB /* gemalto_csp_primary.mdsinfo */; };
+		1FAF278F10DBC902006C88FB /* gemalto_dl_primary.mdsinfo in Resources */ = {isa = PBXBuildFile; fileRef = 1FAF277D10DBC902006C88FB /* gemalto_dl_primary.mdsinfo */; };
+		1FAF279010DBC902006C88FB /* gemalto_smartcard.mdsinfo in Resources */ = {isa = PBXBuildFile; fileRef = 1FAF277E10DBC902006C88FB /* gemalto_smartcard.mdsinfo */; };
+		1FAF288110DBD04F006C88FB /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FAF288010DBD04F006C88FB /* libcrypto.dylib */; };
+		1FAF289010DBD08F006C88FB /* libtokend.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B2604A0BC5A864007E00F1 /* libtokend.a */; };
+		1FAF28A910DBD0C6006C88FB /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52CA8342067E8175005A1EBA /* PCSC.framework */; };
+		1FAF28D210DBD0E8006C88FB /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8C4D606D6D19400F1BCC8 /* CoreFoundation.framework */; };
+		1FAF296510DBD1A9006C88FB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52CA8343067E8175005A1EBA /* Security.framework */; };
+		1FAF298210DBD1C4006C88FB /* security_cdsa_utilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 523F79ED06D5AC27004256A0 /* security_cdsa_utilities.framework */; };
+		1FAF298310DBD1C4006C88FB /* security_utilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 523F79EE06D5AC27004256A0 /* security_utilities.framework */; };
+		1FAF29B510DBD1FB006C88FB /* SecurityTokend.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA858F10654413F0083DED3 /* SecurityTokend.framework */; };
+		1FAF29D710DBD214006C88FB /* security_cdsa_client.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 523F79EC06D5AC27004256A0 /* security_cdsa_client.framework */; };
 		52A683110EEF1FB200F71D5B /* BELPICAttributeCoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52A6830F0EEF1FB200F71D5B /* BELPICAttributeCoder.cpp */; };
 		52B260320BC5A864007E00F1 /* Adornment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C1B9B6406DBF99F00014414 /* Adornment.cpp */; };
 		52B260330BC5A864007E00F1 /* Attribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C134A9606DBF81800FA17D9 /* Attribute.cpp */; };
@@ -126,6 +149,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		1FAF27A810DBC930006C88FB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1FAF275B10DBC8F4006C88FB;
+			remoteInfo = PKCS11;
+		};
+		1FAF27EC10DBCCED006C88FB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 52B2602D0BC5A864007E00F1;
+			remoteInfo = libtokend;
+		};
 		529252160BC6BEED00816597 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
@@ -192,6 +229,34 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1FAF275C10DBC8F4006C88FB /* PKCS11.tokend */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PKCS11.tokend; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FAF275E10DBC8F4006C88FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
+		1FAF276810DBC902006C88FB /* Gemalto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Gemalto.cpp; sourceTree = "<group>"; };
+		1FAF276910DBC902006C88FB /* GemaltoAttributeCoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GemaltoAttributeCoder.cpp; sourceTree = "<group>"; };
+		1FAF276A10DBC902006C88FB /* GemaltoAttributeCoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GemaltoAttributeCoder.h; sourceTree = "<group>"; };
+		1FAF276B10DBC902006C88FB /* GemaltoError.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GemaltoError.cpp; sourceTree = "<group>"; };
+		1FAF276C10DBC902006C88FB /* GemaltoError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GemaltoError.h; sourceTree = "<group>"; };
+		1FAF276D10DBC902006C88FB /* GemaltoKeyHandle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GemaltoKeyHandle.cpp; sourceTree = "<group>"; };
+		1FAF276E10DBC902006C88FB /* GemaltoKeyHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GemaltoKeyHandle.h; sourceTree = "<group>"; };
+		1FAF276F10DBC902006C88FB /* GemaltoRecord.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GemaltoRecord.cpp; sourceTree = "<group>"; };
+		1FAF277010DBC902006C88FB /* GemaltoRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GemaltoRecord.h; sourceTree = "<group>"; };
+		1FAF277110DBC902006C88FB /* GemaltoSchema.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GemaltoSchema.cpp; sourceTree = "<group>"; };
+		1FAF277210DBC902006C88FB /* GemaltoSchema.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GemaltoSchema.h; sourceTree = "<group>"; };
+		1FAF277310DBC902006C88FB /* GemaltoToken.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GemaltoToken.cpp; sourceTree = "<group>"; };
+		1FAF277410DBC902006C88FB /* GemaltoToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GemaltoToken.h; sourceTree = "<group>"; };
+		1FAF277510DBC902006C88FB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1FAF277610DBC902006C88FB /* cryptoki.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cryptoki.h; sourceTree = "<group>"; };
+		1FAF277710DBC902006C88FB /* gemalto_debug.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = gemalto_debug.sh; sourceTree = "<group>"; };
+		1FAF277810DBC902006C88FB /* install.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = install.sh; sourceTree = "<group>"; };
+		1FAF277A10DBC902006C88FB /* gemalto_csp_capabilities.mdsinfo */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = gemalto_csp_capabilities.mdsinfo; sourceTree = "<group>"; };
+		1FAF277B10DBC902006C88FB /* gemalto_csp_capabilities_common.mds */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = gemalto_csp_capabilities_common.mds; sourceTree = "<group>"; };
+		1FAF277C10DBC902006C88FB /* gemalto_csp_primary.mdsinfo */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = gemalto_csp_primary.mdsinfo; sourceTree = "<group>"; };
+		1FAF277D10DBC902006C88FB /* gemalto_dl_primary.mdsinfo */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = gemalto_dl_primary.mdsinfo; sourceTree = "<group>"; };
+		1FAF277E10DBC902006C88FB /* gemalto_smartcard.mdsinfo */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = gemalto_smartcard.mdsinfo; sourceTree = "<group>"; };
+		1FAF277F10DBC902006C88FB /* pkcs11.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pkcs11.h; sourceTree = "<group>"; };
+		1FAF278010DBC902006C88FB /* pkcs11f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pkcs11f.h; sourceTree = "<group>"; };
+		1FAF278110DBC902006C88FB /* pkcs11t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pkcs11t.h; sourceTree = "<group>"; };
+		1FAF288010DBD04F006C88FB /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = ../../../usr/lib/libcrypto.dylib; sourceTree = SOURCE_ROOT; };
 		4C134A8A06DBF81800FA17D9 /* AttributeCoder.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = AttributeCoder.cpp; sourceTree = "<group>"; };
 		4C134A8B06DBF81800FA17D9 /* AttributeCoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AttributeCoder.h; sourceTree = "<group>"; };
 		4C134A8E06DBF81800FA17D9 /* Relation.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = Relation.cpp; sourceTree = "<group>"; };
@@ -344,6 +409,22 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1FAF275A10DBC8F4006C88FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1FAF29D710DBD214006C88FB /* security_cdsa_client.framework in Frameworks */,
+				1FAF29B510DBD1FB006C88FB /* SecurityTokend.framework in Frameworks */,
+				1FAF298210DBD1C4006C88FB /* security_cdsa_utilities.framework in Frameworks */,
+				1FAF298310DBD1C4006C88FB /* security_utilities.framework in Frameworks */,
+				1FAF296510DBD1A9006C88FB /* Security.framework in Frameworks */,
+				1FAF28D210DBD0E8006C88FB /* CoreFoundation.framework in Frameworks */,
+				1FAF28A910DBD0C6006C88FB /* PCSC.framework in Frameworks */,
+				1FAF289010DBD08F006C88FB /* libtokend.a in Frameworks */,
+				1FAF288110DBD04F006C88FB /* libcrypto.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		52B260740BC5A864007E00F1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -386,6 +467,7 @@
 		08FB7794FE84155DC02AAC07 /* TokendMuscle */ = {
 			isa = PBXGroup;
 			children = (
+				1FAF276710DBC902006C88FB /* PKCS11 */,
 				5280675F0B78E86F00D02C3A /* PIV */,
 				4C86D39F070B4122006A0C7F /* BELPIC */,
 				4C7BA7460703990100E5719F /* CAC */,
@@ -408,8 +490,50 @@
 				52B260960BC5A864007E00F1 /* CAC.tokend */,
 				52B260B80BC5A864007E00F1 /* MuscleCard.tokend */,
 				52B260D40BC5A864007E00F1 /* PIV.tokend */,
+				1FAF275C10DBC8F4006C88FB /* PKCS11.tokend */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		1FAF276710DBC902006C88FB /* PKCS11 */ = {
+			isa = PBXGroup;
+			children = (
+				1FAF275E10DBC8F4006C88FB /* Info.plist */,
+				1FAF276810DBC902006C88FB /* Gemalto.cpp */,
+				1FAF276910DBC902006C88FB /* GemaltoAttributeCoder.cpp */,
+				1FAF276A10DBC902006C88FB /* GemaltoAttributeCoder.h */,
+				1FAF276B10DBC902006C88FB /* GemaltoError.cpp */,
+				1FAF276C10DBC902006C88FB /* GemaltoError.h */,
+				1FAF276D10DBC902006C88FB /* GemaltoKeyHandle.cpp */,
+				1FAF276E10DBC902006C88FB /* GemaltoKeyHandle.h */,
+				1FAF276F10DBC902006C88FB /* GemaltoRecord.cpp */,
+				1FAF277010DBC902006C88FB /* GemaltoRecord.h */,
+				1FAF277110DBC902006C88FB /* GemaltoSchema.cpp */,
+				1FAF277210DBC902006C88FB /* GemaltoSchema.h */,
+				1FAF277310DBC902006C88FB /* GemaltoToken.cpp */,
+				1FAF277410DBC902006C88FB /* GemaltoToken.h */,
+				1FAF277510DBC902006C88FB /* Info.plist */,
+				1FAF277610DBC902006C88FB /* cryptoki.h */,
+				1FAF277710DBC902006C88FB /* gemalto_debug.sh */,
+				1FAF277810DBC902006C88FB /* install.sh */,
+				1FAF277910DBC902006C88FB /* mds */,
+				1FAF277F10DBC902006C88FB /* pkcs11.h */,
+				1FAF278010DBC902006C88FB /* pkcs11f.h */,
+				1FAF278110DBC902006C88FB /* pkcs11t.h */,
+			);
+			path = PKCS11;
+			sourceTree = "<group>";
+		};
+		1FAF277910DBC902006C88FB /* mds */ = {
+			isa = PBXGroup;
+			children = (
+				1FAF277A10DBC902006C88FB /* gemalto_csp_capabilities.mdsinfo */,
+				1FAF277B10DBC902006C88FB /* gemalto_csp_capabilities_common.mds */,
+				1FAF277C10DBC902006C88FB /* gemalto_csp_primary.mdsinfo */,
+				1FAF277D10DBC902006C88FB /* gemalto_dl_primary.mdsinfo */,
+				1FAF277E10DBC902006C88FB /* gemalto_smartcard.mdsinfo */,
+			);
+			path = mds;
 			sourceTree = "<group>";
 		};
 		4C134A8706DBF81800FA17D9 /* Tokend */ = {
@@ -502,6 +626,7 @@
 		4C415098073061D6004C9490 /* External Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				1FAF288010DBD04F006C88FB /* libcrypto.dylib */,
 				4CBF5CBE0704E76200EEADC2 /* libz.dylib */,
 			);
 			name = "External Libraries";
@@ -676,6 +801,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		1FAF275B10DBC8F4006C88FB /* PKCS11 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1FAF276110DBC8F5006C88FB /* Build configuration list for PBXNativeTarget "PKCS11" */;
+			buildPhases = (
+				1FAF275810DBC8F4006C88FB /* Resources */,
+				1FAF275910DBC8F4006C88FB /* Sources */,
+				1FAF275A10DBC8F4006C88FB /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1FAF27ED10DBCCED006C88FB /* PBXTargetDependency */,
+			);
+			name = PKCS11;
+			productName = PKCS11;
+			productReference = 1FAF275C10DBC8F4006C88FB /* PKCS11.tokend */;
+			productType = "com.apple.product-type.application";
+		};
 		52B2602D0BC5A864007E00F1 /* libtokend */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 52B260450BC5A864007E00F1 /* Build configuration list for PBXNativeTarget "libtokend" */;
@@ -800,11 +943,25 @@
 				52B2607D0BC5A864007E00F1 /* CAC */,
 				52B260980BC5A864007E00F1 /* MuscleCard */,
 				52B260BA0BC5A864007E00F1 /* PIV */,
+				1FAF275B10DBC8F4006C88FB /* PKCS11 */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		1FAF275810DBC8F4006C88FB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1FAF278910DBC902006C88FB /* Info.plist in Resources */,
+				1FAF278C10DBC902006C88FB /* gemalto_csp_capabilities.mdsinfo in Resources */,
+				1FAF278D10DBC902006C88FB /* gemalto_csp_capabilities_common.mds in Resources */,
+				1FAF278E10DBC902006C88FB /* gemalto_csp_primary.mdsinfo in Resources */,
+				1FAF278F10DBC902006C88FB /* gemalto_dl_primary.mdsinfo in Resources */,
+				1FAF279010DBC902006C88FB /* gemalto_smartcard.mdsinfo in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		52B260670BC5A864007E00F1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -887,6 +1044,20 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		1FAF275910DBC8F4006C88FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1FAF278210DBC902006C88FB /* Gemalto.cpp in Sources */,
+				1FAF278310DBC902006C88FB /* GemaltoAttributeCoder.cpp in Sources */,
+				1FAF278410DBC902006C88FB /* GemaltoError.cpp in Sources */,
+				1FAF278510DBC902006C88FB /* GemaltoKeyHandle.cpp in Sources */,
+				1FAF278610DBC902006C88FB /* GemaltoRecord.cpp in Sources */,
+				1FAF278710DBC902006C88FB /* GemaltoSchema.cpp in Sources */,
+				1FAF278810DBC902006C88FB /* GemaltoToken.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		52B260310BC5A864007E00F1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -980,6 +1151,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		1FAF27A910DBC930006C88FB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1FAF275B10DBC8F4006C88FB /* PKCS11 */;
+			targetProxy = 1FAF27A810DBC930006C88FB /* PBXContainerItemProxy */;
+		};
+		1FAF27ED10DBCCED006C88FB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 52B2602D0BC5A864007E00F1 /* libtokend */;
+			targetProxy = 1FAF27EC10DBCCED006C88FB /* PBXContainerItemProxy */;
+		};
 		529252170BC6BEED00816597 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 52B2602D0BC5A864007E00F1 /* libtokend */;
@@ -1028,6 +1209,80 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		1FAF275F10DBC8F4006C88FB /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					/usr/local/SecurityPieces/Frameworks,
+					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "$(PREFIX_HEADER)";
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = PKCS11/Info.plist;
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Security/tokend";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../usr/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../../../usr/lib\"";
+				OTHER_LDFLAGS = "";
+				PREBINDING = YES;
+				PRODUCT_NAME = PKCS11;
+				WRAPPER_EXTENSION = tokend;
+			};
+			name = Development;
+		};
+		1FAF276010DBC8F4006C88FB /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					/usr/local/SecurityPieces/Frameworks,
+					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+				);
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "$(PREFIX_HEADER)";
+				INFOPLIST_FILE = PKCS11/Info.plist;
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Security/tokend";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../usr/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../../../usr/lib\"";
+				OTHER_LDFLAGS = "";
+				PREBINDING = YES;
+				PRODUCT_NAME = PKCS11;
+				WRAPPER_EXTENSION = tokend;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
 		52B260290BC5A864007E00F1 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1646,6 +1901,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1FAF276110DBC8F5006C88FB /* Build configuration list for PBXNativeTarget "PKCS11" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1FAF275F10DBC8F4006C88FB /* Development */,
+				1FAF276010DBC8F4006C88FB /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Deployment;
+		};
 		52B260280BC5A864007E00F1 /* Build configuration list for PBXAggregateTarget "world" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
