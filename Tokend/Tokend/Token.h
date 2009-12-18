@@ -29,7 +29,6 @@
 #ifndef _TOKEND_TOKEN_H_
 #define _TOKEND_TOKEN_H_
 
-#include <CoreServices/../Frameworks/CarbonCore.framework/Headers/MacTypes.h>
 #include <SecurityTokend/SecTokend.h>
 #include <security_utilities/osxcode.h>
 #include <security_cdsa_utilities/context.h>

@@ -29,8 +29,6 @@
 #ifndef _PIVDEFINES_H_
 #define _PIVDEFINES_H_
 
-#include <CoreServices/../Frameworks/CarbonCore.framework/Headers/MacTypes.h>
-
 /*
 	For the PIV tokend, refer to NIST Specical Publication 800-73-1, "Interfaces
 	for Personal Identity Verification". The define for CLA_STANDARD comes from 2.3.3.1.1. [SP800731]

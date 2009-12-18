@@ -29,7 +29,6 @@
 #ifndef _TOKEND_ATTRIBUTECODER_H_
 #define _TOKEND_ATTRIBUTECODER_H_
 
-#include <CoreServices/../Frameworks/CarbonCore.framework/Headers/MacTypes.h>
 #include <security_utilities/utilities.h>
 #include <Security/cssmtype.h>
 

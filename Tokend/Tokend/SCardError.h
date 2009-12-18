@@ -29,7 +29,6 @@
 #ifndef _TOKEND_SCARDERROR_H_
 #define _TOKEND_SCARDERROR_H_
 
-#include <CoreServices/../Frameworks/CarbonCore.framework/Headers/MacTypes.h>
 #include <security_utilities/debugging.h>
 #include <security_utilities/errors.h>
 
@@ -262,7 +261,9 @@ public:
     static void throwMe(uint16_t sw) __attribute__((noreturn));
     
 protected:
+#if MAX_OS_X_VERSION_MIN_REQUIRED <= MAX_OS_X_VERSION_10_5
     IFDEBUG(void debugDiagnose(const void *id) const;)
+#endif
     IFDEBUG(static const char *errorstr(uint16_t sw);)
 };
 

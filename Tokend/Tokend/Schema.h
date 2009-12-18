@@ -29,7 +29,6 @@
 #ifndef _TOKEND_SCHEMA_H_
 #define _TOKEND_SCHEMA_H_
 
-#include <CoreServices/../Frameworks/CarbonCore.framework/Headers/MacTypes.h>
 #include <security_cdsa_utilities/cssmdata.h>
 #include <security_cdsa_utilities/cssmdb.h>
 #include <map>

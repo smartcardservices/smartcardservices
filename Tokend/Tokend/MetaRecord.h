@@ -29,7 +29,6 @@
 #ifndef _TOKEND_METARECORD_H_
 #define _TOKEND_METARECORD_H_
 
-#include <CoreServices/../Frameworks/CarbonCore.framework/Headers/MacTypes.h>
 #include <security_cdsa_utilities/cssmdata.h>
 #include <map>
 #include <string>
@@ -86,8 +85,8 @@ public:
 
 	const MetaAttribute &metaAttribute(
 		const CSSM_DB_ATTRIBUTE_INFO &inAttributeInfo) const;
-	const MetaAttribute &MetaRecord::metaAttribute(uint32 name) const;
-	const MetaAttribute &MetaRecord::metaAttribute(
+	const MetaAttribute &metaAttribute(uint32 name) const;
+	const MetaAttribute &metaAttribute(
 		const std::string &name) const;
 	const MetaAttribute &metaAttributeForData() const;
 
