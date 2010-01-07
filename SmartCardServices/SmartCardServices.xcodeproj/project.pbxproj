@@ -28,6 +28,7 @@
 		1F0A56E410F5EBE7005641B9 /* pcscd_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A56E210F5EBE7005641B9 /* pcscd_reader.cpp */; };
 		1F0A56E510F5EBE7005641B9 /* pcscd_reader.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F0A56E310F5EBE7005641B9 /* pcscd_reader.h */; };
 		1F0A572610F5EDE3005641B9 /* error.c in Sources */ = {isa = PBXBuildFile; fileRef = 1F0A56F710F5EC4E005641B9 /* error.c */; };
+		1F0A576510F61896005641B9 /* reader.h in Headers */ = {isa = PBXBuildFile; fileRef = 52D00D1A0A9252350093277A /* reader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5234B67F0E78286000F02D95 /* atrhandler.h in Headers */ = {isa = PBXBuildFile; fileRef = F52A948F0254242101B94B21 /* atrhandler.h */; };
 		5234B6800E78286000F02D95 /* configfile.h in Headers */ = {isa = PBXBuildFile; fileRef = F52A94910254242101B94B21 /* configfile.h */; };
 		5234B6810E78286000F02D95 /* debuglog.h in Headers */ = {isa = PBXBuildFile; fileRef = F52A94930254242101B94B21 /* debuglog.h */; };
@@ -446,6 +447,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F0A576510F61896005641B9 /* reader.h in Headers */,
 				5234B6BF0E78286000F02D95 /* thread_generic.h in Headers */,
 				5234B6C00E78286000F02D95 /* pcsclite.h in Headers */,
 				5234B6C10E78286000F02D95 /* mscdefines.h in Headers */,
