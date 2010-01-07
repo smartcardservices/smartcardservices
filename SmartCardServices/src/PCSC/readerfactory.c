@@ -251,7 +251,6 @@ LONG RFAddReader(LPSTR lpcReader, DWORD dwPort, LPSTR lpcLibrary, LPSTR lpcDevic
 		rv = EHSpawnEventHandler(ctxSlot);
 		if (rv != SCARD_S_SUCCESS)
 			return rv;
-		EHSpawnEventHandler(ctxSlot);
 	}
 
 xit:
