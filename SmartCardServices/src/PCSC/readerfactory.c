@@ -1128,7 +1128,8 @@ void RFAwakeAllReaders(void)
 			for (jx=0; jx < i; jx++)
 			{
 				if (((sReadersContexts[jx])->vHandle == (sReadersContexts[i])->vHandle)&&
-					((sReadersContexts[jx])->dwPort  == (sReadersContexts[i])->dwPort))
+					((sReadersContexts[jx])->dwPort  == (sReadersContexts[i])->dwPort)&&
+					((sReadersContexts[jx])->dwSlot  == (sReadersContexts[i])->dwSlot))
 				{
 					alreadyInitializedFlag = 1;
 				}
