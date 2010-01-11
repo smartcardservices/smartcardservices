@@ -196,6 +196,8 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 						 * supported at this time
 						 */
 					}
+		} else
+			Y1i = 0;
 
 			/* test presence of TA2 */
 			if ((2 == i) && (TAi >= 0))
@@ -222,8 +224,6 @@ short ATRDecodeAtr(PSMARTCARD_EXTENSION psExtension,
 						return 0; /** @retval 0 Unable do decode T protocol */
 				}
 			}
-		} else
-			Y1i = 0;
 
 		if (p > MAX_ATR_SIZE)
 		{
