@@ -1548,7 +1548,7 @@ static int ReaderCheckArchitecture(LPCSTR lpcLibrary)
 		Log3(PCSC_LOG_CRITICAL, "Can't signal pcscd (pid=%d): %s",
 			 pid, strerror(errno));
 	}
-	void *value_ptr;
+	void *value_ptr = NULL;
 	pthread_exit(value_ptr);
 	return SCARD_E_SERVICE_STOPPED;
 #else
