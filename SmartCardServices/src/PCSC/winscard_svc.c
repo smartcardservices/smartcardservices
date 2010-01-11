@@ -342,8 +342,12 @@ LONG MSGFunctionDemarshall(psharedSegmentMsg msgStruct, DWORD dwContextIndex, ui
 	case SCARD_ESTABLISH_CONTEXT:
 		esStr = ((establish_struct *) msgStruct->data);
 		ntohlEstablishStruct(esStr);
-		esStr->rv = SCardEstablishContext(esStr->dwScope, 0, 0,
-			(int32_t *)&esStr->phContext);
+		{
+			SCARDCONTEXT hContext;
+			hContext = esStr->phContext;
+			esStr->rv = SCardEstablishContext(esStr->dwScope, 0, 0, &hContext);
+			esStr->phContext = hContext;
+		}
 
 		if (esStr->rv == SCARD_S_SUCCESS)
 			esStr->rv =
