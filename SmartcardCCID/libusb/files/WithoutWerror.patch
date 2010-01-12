@@ -1,0 +1,11 @@
+--- Makefile.am.orig	2008-07-23 20:41:33.000000000 +0200
++++ Makefile.am	2010-01-12 15:15:03.000000000 +0100
+@@ -6,7 +6,7 @@
+ 
+ SUBDIRS = . tests doc
+ 
+-AM_CFLAGS = -Werror
++AM_CFLAGS =
+ 
+ configincludedir = $(pkglibdir)/include
+ 

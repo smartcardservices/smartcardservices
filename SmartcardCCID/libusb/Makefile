@@ -14,7 +14,7 @@ AEP_Version    = 0.1.13b
 AEP_ProjVers   = $(AEP_Project)-$(AEP_Version)
 AEP_Filename   = $(AEP_ProjVers).tar.gz
 AEP_ExtractDir = $(AEP_ProjVers)
-AEP_Patches    = FixConfigureAddCPP.patch skipConfigure.patch  #configure.diff gcc42.diff
+AEP_Patches    = FixConfigureAddCPP.patch skipConfigure.patch WithoutWerror.patch #configure.diff gcc42.diff
 #svn co -r658 https://libusb.svn.sourceforge.net/svnroot/libusb/trunk
 
 # Extract the source.
