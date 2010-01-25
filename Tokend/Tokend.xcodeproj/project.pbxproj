@@ -245,8 +245,6 @@
 		1FAF277410DBC902006C88FB /* GemaltoToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GemaltoToken.h; sourceTree = "<group>"; };
 		1FAF277510DBC902006C88FB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1FAF277610DBC902006C88FB /* cryptoki.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cryptoki.h; sourceTree = "<group>"; };
-		1FAF277710DBC902006C88FB /* gemalto_debug.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = gemalto_debug.sh; sourceTree = "<group>"; };
-		1FAF277810DBC902006C88FB /* install.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = install.sh; sourceTree = "<group>"; };
 		1FAF277A10DBC902006C88FB /* gemalto_csp_capabilities.mdsinfo */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = gemalto_csp_capabilities.mdsinfo; sourceTree = "<group>"; };
 		1FAF277B10DBC902006C88FB /* gemalto_csp_capabilities_common.mds */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = gemalto_csp_capabilities_common.mds; sourceTree = "<group>"; };
 		1FAF277C10DBC902006C88FB /* gemalto_csp_primary.mdsinfo */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = gemalto_csp_primary.mdsinfo; sourceTree = "<group>"; };
@@ -512,8 +510,6 @@
 				1FAF277410DBC902006C88FB /* GemaltoToken.h */,
 				1FAF277510DBC902006C88FB /* Info.plist */,
 				1FAF277610DBC902006C88FB /* cryptoki.h */,
-				1FAF277710DBC902006C88FB /* gemalto_debug.sh */,
-				1FAF277810DBC902006C88FB /* install.sh */,
 				1FAF277910DBC902006C88FB /* mds */,
 				1FAF277F10DBC902006C88FB /* pkcs11.h */,
 				1FAF278010DBC902006C88FB /* pkcs11f.h */,
