@@ -32,7 +32,6 @@
 		1FAF278610DBC902006C88FB /* GemaltoRecord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FAF276F10DBC902006C88FB /* GemaltoRecord.cpp */; };
 		1FAF278710DBC902006C88FB /* GemaltoSchema.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FAF277110DBC902006C88FB /* GemaltoSchema.cpp */; };
 		1FAF278810DBC902006C88FB /* GemaltoToken.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FAF277310DBC902006C88FB /* GemaltoToken.cpp */; };
-		1FAF278910DBC902006C88FB /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1FAF277510DBC902006C88FB /* Info.plist */; };
 		1FAF278C10DBC902006C88FB /* gemalto_csp_capabilities.mdsinfo in Resources */ = {isa = PBXBuildFile; fileRef = 1FAF277A10DBC902006C88FB /* gemalto_csp_capabilities.mdsinfo */; };
 		1FAF278D10DBC902006C88FB /* gemalto_csp_capabilities_common.mds in Resources */ = {isa = PBXBuildFile; fileRef = 1FAF277B10DBC902006C88FB /* gemalto_csp_capabilities_common.mds */; };
 		1FAF278E10DBC902006C88FB /* gemalto_csp_primary.mdsinfo in Resources */ = {isa = PBXBuildFile; fileRef = 1FAF277C10DBC902006C88FB /* gemalto_csp_primary.mdsinfo */; };
@@ -947,7 +946,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1FAF278910DBC902006C88FB /* Info.plist in Resources */,
 				1FAF278C10DBC902006C88FB /* gemalto_csp_capabilities.mdsinfo in Resources */,
 				1FAF278D10DBC902006C88FB /* gemalto_csp_capabilities_common.mds in Resources */,
 				1FAF278E10DBC902006C88FB /* gemalto_csp_primary.mdsinfo in Resources */,
