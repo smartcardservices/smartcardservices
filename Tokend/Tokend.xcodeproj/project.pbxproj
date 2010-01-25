@@ -230,7 +230,6 @@
 
 /* Begin PBXFileReference section */
 		1FAF275C10DBC8F4006C88FB /* PKCS11.tokend */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PKCS11.tokend; sourceTree = BUILT_PRODUCTS_DIR; };
-		1FAF275E10DBC8F4006C88FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		1FAF276810DBC902006C88FB /* Gemalto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Gemalto.cpp; sourceTree = "<group>"; };
 		1FAF276910DBC902006C88FB /* GemaltoAttributeCoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GemaltoAttributeCoder.cpp; sourceTree = "<group>"; };
 		1FAF276A10DBC902006C88FB /* GemaltoAttributeCoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GemaltoAttributeCoder.h; sourceTree = "<group>"; };
@@ -498,7 +497,6 @@
 		1FAF276710DBC902006C88FB /* PKCS11 */ = {
 			isa = PBXGroup;
 			children = (
-				1FAF275E10DBC8F4006C88FB /* Info.plist */,
 				1FAF276810DBC902006C88FB /* Gemalto.cpp */,
 				1FAF276910DBC902006C88FB /* GemaltoAttributeCoder.cpp */,
 				1FAF276A10DBC902006C88FB /* GemaltoAttributeCoder.h */,
