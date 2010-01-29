@@ -45,6 +45,7 @@
 #include <sstream>
 #include <iostream>
 #include <iomanip>
+#include <dirent.h>
 
 extern "C" const char *cssmErrorString(OSStatus status);
 
@@ -56,6 +57,9 @@ CK_FUNCTION_LIST_PTR GemaltoToken::s_CK_pFunctionList = NULL;
 
 #define GEMALTO_MAX_SLOT_COUNT	16
 
+/* search PKCS#11 libs here.
+ * See http://wiki.cacert.org/wiki/Pkcs11TaskForce */
+#define PKCS11LIB_PATH "/usr/lib/pkcs11/"
 
 
 GemaltoToken::GemaltoToken() :
@@ -70,64 +74,6 @@ GemaltoToken::GemaltoToken() :
 	// Initialize libcrypto
 	::ERR_load_crypto_strings();
 	::X509V3_add_standard_extensions();
-
-	// Load Classic ATR
-	FILE* f = fopen("/etc/ClassicClient/atr.cnf", "r");
-	if (f != NULL)
-	{
-		int state=0;
-		char card[1024];
-		char atr[1024];
-		char mask[1024];
-		do {
-			char line[1024];
-			if (fgets(line, sizeof(line), f) == NULL) {
-				fclose(f);
-				break;
-			}
-			if ((state & 0x1) == 0 && strncasecmp(line, "card:", 5) == 0) {
-				char* p = trim_line(line+5);
-				strcpy(card, p);
-				state |= 0x1;
-			} else if ((state & 0x2) == 0 && strncasecmp(line, "atr:", 4) == 0) {
-				char* p = trim_line(line+4);
-				strcpy(atr, p);
-				state |= 0x2;
-			} else if ((state & 0x4) == 0 && strncasecmp(line, "atrmask:", 8) == 0) {
-				char* p = trim_line(line+8);
-				strcpy(mask, p);
-				state |= 0x4;
-			} else {
-				char* p = trim_line(line);
-				if (strlen(p) == 0)
-					state = 0;
-			}
-			if (state == 0x7)
-			{
-				state = 0;
-
-				size_t cardLength = strlen(card)+1;
-				size_t atrLength = (strlen(atr)+1) / 2;
-				size_t maskLength = (strlen(mask)+1) / 2;
-				if (atrLength == maskLength) {
-					size_t cardAtrLength = sizeof(CardAtr) + cardLength + 2 * atrLength;
-					CardAtr* cardAtr = (CardAtr*) std::malloc(cardAtrLength);
-					if (cardAtr)
-					{
-					cardAtr->name = (char*)cardAtr + sizeof(CardAtr);
-					strcpy(cardAtr->name, card);
-					cardAtr->length = atrLength;
-					cardAtr->atr = (unsigned char*)cardAtr + sizeof(CardAtr) + cardLength;
-					convert_hex(cardAtr->atr, atr);
-					cardAtr->mask = (unsigned char*)cardAtr + sizeof(CardAtr) + cardLength + atrLength;
-					convert_hex(cardAtr->mask, mask);
-
-					atrs.push_back(cardAtr);
-					}
-				}
-			}
-		} while (1);
-	}//(f != NULL)
 
 	log( "GemaltoToken::GemaltoToken <END>\n" );
 }
@@ -346,63 +292,81 @@ uint32 GemaltoToken::probe(SecTokendProbeFlags flags, char tokenUid[TOKEND_MAX_U
 			GemaltoToken::toStringHex( readerState.rgbAtr, readerState.cbAtr, s );
 			log( "GemaltoToken::probe - ATR <%s>\n", s.c_str( ) );
 
-			if (!s_CK_pFunctionList)
-			{
-				const char* dlPath = "/usr/lib/pkcs11/libgtop11dotnet.dylib";
+			DIR *dirp = opendir(PKCS11LIB_PATH);
+			if (NULL == dirp)
+				CKError::throwMe(CKR_GENERAL_ERROR);
 
-				for (CardAtrVector::const_iterator it = atrs.begin(); it != atrs.end(); ++it)
+			bool found = false;
+			struct dirent *dir_entry;
+			while (!found && (dir_entry = readdir(dirp)) != NULL)
+			{
+				std::string lib_name = PKCS11LIB_PATH;
+				const char* dlPath;
+				CK_FUNCTION_LIST_PTR p;
+				CK_RV rv;
+				
+				/* skip . and .. entries */
+				if ((strcmp(dir_entry->d_name, ".") == 0) || (strcmp(dir_entry->d_name, "..") == 0))
+					continue;
+				
+				lib_name.append(dir_entry->d_name);
+				dlPath = lib_name.c_str();
+				log( "GemaltoToken::probe - Using %s PKCS#11 library\n", dlPath );
+				
+				mDLHandle = dlopen(dlPath, RTLD_LAZY | RTLD_GLOBAL);
+				if (NULL == mDLHandle)
 				{
-					const CardAtr* cardAtr = (*it);
-					unsigned int i;
-					for (i=0; i<cardAtr->length; i++) {
-						if (cardAtr->mask[i] == 0)
-							continue;
-						if (i >= readerState.cbAtr)
-							break;
-						if ((readerState.rgbAtr[i] & cardAtr->mask[i]) != (cardAtr->atr[i] & cardAtr->mask[i]))
-							break;
-					}
-					if (i == cardAtr->length)
+					log( "GemaltoToken::probe - ## ERROR ## Cannot load the PKCS#11 library\n" );
+					continue;
+				}
+				
+				CK_C_GetFunctionList C_GetFunctionList_PTR = (CK_C_GetFunctionList) dlsym(mDLHandle, "C_GetFunctionList");
+				if (NULL == C_GetFunctionList_PTR)
+				{
+					log( "GemaltoToken::probe - ## ERROR ## Cannot load the PKCS#11 function list\n", dlerror() );
+					continue;
+				}
+				
+				/* ---- Cryptoki library standard initialization ---- */
+				rv = (*C_GetFunctionList_PTR)(&s_CK_pFunctionList);
+				if (rv != CKR_OK)
+				{
+					log("GemaltoToken::probe - C_GetFunctionList() failed: %d\n", rv);
+					continue;
+				}
+				
+				rv = CK_D_(C_Initialize)(NULL_PTR);
+				if (rv != CKR_OK)
+				{
+					log("GemaltoToken::probe - C_Initialize() failed: %d\n", rv);
+					continue;
+				}
+
+				CK_ULONG ulSlotCount = GEMALTO_MAX_SLOT_COUNT;
+				CK_SLOT_ID pSlotID[GEMALTO_MAX_SLOT_COUNT];
+				CKError::check(CK_D_(C_GetSlotList)(CK_TRUE, pSlotID, &ulSlotCount));
+				for (CK_ULONG i=0; i<ulSlotCount; i++)
+				{
+					CK_SLOT_INFO slotInfo;
+					CKError::check(CK_D_(C_GetSlotInfo)(pSlotID[i], &slotInfo));
+					
+					/* check that the PKCS#11 slot is using the reader selected by the tokend */
+					if (strncmp((char*) slotInfo.slotDescription, readerState.szReader, strlen(readerState.szReader)) == 0)
 					{
-						// Found Classic Client smartcard
-						dlPath = "/usr/lib/pkcs11/libgclib.dylib";
+						found = true;
+						mCKSlotId = pSlotID[i];
 						break;
 					}
 				}
 
-				log( "GemaltoToken::probe - Using %s PKCS#11 library\n", dlPath );
-				mDLHandle = dlopen(dlPath, RTLD_LAZY | RTLD_GLOBAL);
-				if (!mDLHandle)
+				/* Not the correct PKCS#11 lib. Close it and try the next one */
+				if (!found)
 				{
-					log( "GemaltoToken::probe - ## ERROR ## Cannot load the PKCS#11 library\n" );
-					CKError::throwMe(CKR_GENERAL_ERROR);
-				}
-
-				CK_C_GetFunctionList C_GetFunctionList_PTR = (CK_C_GetFunctionList) dlsym(mDLHandle, "C_GetFunctionList");
-				if (!C_GetFunctionList_PTR)
-				{
-					log( "GemaltoToken::probe - ## ERROR ## Cannot load the PKCS#11 function list\n" );
-					CKError::throwMe(CKR_GENERAL_ERROR);
-				}
-
-				CKError::check((*C_GetFunctionList_PTR)(&s_CK_pFunctionList));
-
-				CKError::check(CK_D_(C_Initialize)(NULL_PTR));
-			}
-
-			CK_ULONG ulSlotCount = GEMALTO_MAX_SLOT_COUNT;
-			CK_SLOT_ID pSlotID[GEMALTO_MAX_SLOT_COUNT];
-			CKError::check(CK_D_(C_GetSlotList)(CK_TRUE, pSlotID, &ulSlotCount));
-			bool found = false;
-			for (CK_ULONG i=0; i<ulSlotCount; i++) {
-				CK_SLOT_INFO slotInfo;
-				CKError::check(CK_D_(C_GetSlotInfo)(pSlotID[i], &slotInfo));
-				if (strncmp((char*) slotInfo.slotDescription, readerState.szReader, strlen(readerState.szReader)) == 0) {
-					found = true;
-					mCKSlotId = pSlotID[i];
-					break;
+					CKError::check(CK_D_(C_Finalize)(NULL_PTR));
+					dlclose(mDLHandle);
 				}
 			}
+			(void)closedir(dirp);
 
 			if (found)
 			{
@@ -418,9 +382,7 @@ uint32 GemaltoToken::probe(SecTokendProbeFlags flags, char tokenUid[TOKEND_MAX_U
 				score = 999;
 
 				// Setup the tokendUID
-				//snprintf(tokenUid, TOKEND_MAX_UID, "Gemalto smartcard #%.*s (%.*s)", (int) sizeof(mCKTokenInfo.serialNumber), mCKTokenInfo.serialNumber,  (int) sizeof(mCKTokenInfo.label), mCKTokenInfo.label );
-				char label[ 33 ];
-				memset( label, 0, sizeof( label ) );
+				char label[ sizeof(mCKTokenInfo.label) ];
 				memcpy( label, mCKTokenInfo.label,  sizeof(mCKTokenInfo.label) );
 				char* trimLabel = trim_line( label );
 				snprintf(tokenUid, TOKEND_MAX_UID, "Gemalto smartcard %s (%.*s)", trimLabel, (int) sizeof(mCKTokenInfo.serialNumber), mCKTokenInfo.serialNumber );

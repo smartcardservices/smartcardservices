@@ -88,9 +88,6 @@ typedef struct card_atr
 	unsigned char* mask;
 } CardAtr;
 
-	typedef std::vector<CardAtr* > CardAtrVector;
-	CardAtrVector atrs;
-
 	char* trim_line(char* line);
 	uint32 _pinFromAclTag(const char *tag, const char *suffix = NULL);
 	void _aclClear(AutoAclEntryInfoList& acl);
