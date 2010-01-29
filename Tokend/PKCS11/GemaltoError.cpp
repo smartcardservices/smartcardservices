@@ -169,7 +169,7 @@ static struct pkcs11_error_name {
 { NULL, 0 }
 };
 
-static const char* pkcs11_error(CK_RV rv)
+const char* pkcs11_error(CK_RV rv)
 {
 	int i;
 	for (i=0; s_pkcs11_errors[i].name!=NULL; i++) {

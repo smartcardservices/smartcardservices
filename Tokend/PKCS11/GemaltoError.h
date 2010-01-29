@@ -33,6 +33,7 @@
 #include <security_utilities/errors.h>
 #include "cryptoki.h"
 
+const char* pkcs11_error(CK_RV rv);
 
 class CKError : public Security::CommonError
 {
