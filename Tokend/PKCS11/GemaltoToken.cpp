@@ -390,7 +390,8 @@ uint32 GemaltoToken::probe(SecTokendProbeFlags flags, char tokenUid[TOKEND_MAX_U
 						score = 500;
 						
 						// Setup the tokendUID
-						char label[ sizeof(mCKTokenInfo.label) ];
+						char label[ sizeof(mCKTokenInfo.label)+1 ];
+						label[sizeof(mCKTokenInfo.label)] = '\0';
 						memcpy( label, mCKTokenInfo.label,  sizeof(mCKTokenInfo.label) );
 						char* trimLabel = trim_line( label );
 						snprintf(tokenUid, TOKEND_MAX_UID, "Gemalto smartcard %s (%.*s)", trimLabel, (int) sizeof(mCKTokenInfo.serialNumber), mCKTokenInfo.serialNumber );
