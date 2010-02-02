@@ -665,12 +665,17 @@ void GemaltoPrivateKeyRecord::getAcl(const char *tag, uint32 &count, AclEntryInf
 			mAclEntries.allocator()),
 			AclAuthorizationSet(CSSM_ACL_AUTHORIZATION_DB_READ, 0));
 
+		char tmptag[20];
+		const uint32 slot = 1;	// hardwired for now, but...
+		snprintf(tmptag, sizeof(tmptag), "PIN%d", slot);
+
+		// Using this key to sign or decrypt will require PIN1
 		mAclEntries.add(CssmClient::AclFactory::PinSubject(
 			mAclEntries.allocator(), 1),
 			AclAuthorizationSet(
 				CSSM_ACL_AUTHORIZATION_DECRYPT,
 				CSSM_ACL_AUTHORIZATION_SIGN,
-				0));
+				0), tmptag);
 	}
 	count = mAclEntries.size();
 	acls = mAclEntries.entries();
