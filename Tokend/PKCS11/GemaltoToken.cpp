@@ -410,7 +410,10 @@ uint32 GemaltoToken::probe(SecTokendProbeFlags flags, char tokenUid[TOKEND_MAX_U
 					rv = CK_D_(C_Finalize)(NULL_PTR);
 					if (rv != CKR_OK)
 						PKCS11_FAILED("C_Finalize", rv);
+					s_CK_pFunctionList = NULL;
+
 					dlclose(mDLHandle);
+					mDLHandle = NULL;
 				}
 			}
 			(void)closedir(dirp);
