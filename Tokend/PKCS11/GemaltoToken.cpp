@@ -274,6 +274,7 @@ void GemaltoToken::unverifyPIN(int pinNum)
 }
 
 
+#define PKCS11_FAILED(fct, rv) log("GemaltoToken::probe - " fct "() failed: %s\n", pkcs11_error(rv));
 uint32 GemaltoToken::probe(SecTokendProbeFlags flags, char tokenUid[TOKEND_MAX_UID])
 {
 	log( "\nGemaltoToken::probe <BEGIN>\n" );
@@ -331,28 +332,64 @@ uint32 GemaltoToken::probe(SecTokendProbeFlags flags, char tokenUid[TOKEND_MAX_U
 				rv = (*C_GetFunctionList_PTR)(&s_CK_pFunctionList);
 				if (rv != CKR_OK)
 				{
-					log("GemaltoToken::probe - C_GetFunctionList() failed: %d\n", rv);
+					PKCS11_FAILED("C_GetFunctionList", rv);
 					continue;
 				}
 				
 				rv = CK_D_(C_Initialize)(NULL_PTR);
 				if (rv != CKR_OK)
 				{
-					log("GemaltoToken::probe - C_Initialize() failed: %d\n", rv);
+					PKCS11_FAILED("C_Initialize", rv);
 					continue;
 				}
 
 				CK_ULONG ulSlotCount = GEMALTO_MAX_SLOT_COUNT;
 				CK_SLOT_ID pSlotID[GEMALTO_MAX_SLOT_COUNT];
-				CKError::check(CK_D_(C_GetSlotList)(CK_TRUE, pSlotID, &ulSlotCount));
+				rv = CK_D_(C_GetSlotList)(CK_TRUE, pSlotID, &ulSlotCount);
+				if (rv != CKR_OK)
+				{
+					PKCS11_FAILED("C_GetSlotList", rv);
+					continue;
+				}
+				
 				for (CK_ULONG i=0; i<ulSlotCount; i++)
 				{
 					CK_SLOT_INFO slotInfo;
-					CKError::check(CK_D_(C_GetSlotInfo)(pSlotID[i], &slotInfo));
+					rv = CK_D_(C_GetSlotInfo)(pSlotID[i], &slotInfo);
+					if (rv != CKR_OK)
+					{
+						PKCS11_FAILED("C_GetSlotInfo", rv);
+						continue;
+					}
 					
 					/* check that the PKCS#11 slot is using the reader selected by the tokend */
 					if (strncmp((char*) slotInfo.slotDescription, readerState.szReader, strlen(readerState.szReader)) == 0)
 					{
+						rv  = CK_D_(C_GetTokenInfo)(mCKSlotId, &mCKTokenInfo);
+						{
+							PKCS11_FAILED("C_GetTokenInfo", rv);
+							continue;
+						}
+						
+						// Verify if token is initialized
+						if ((mCKTokenInfo.flags & CKF_USER_PIN_INITIALIZED) != CKF_USER_PIN_INITIALIZED)
+						{
+							// ?????????
+							//CKError::throwMe(CKR_USER_PIN_NOT_INITIALIZED);
+						}
+						
+						score = 500;
+						
+						// Setup the tokendUID
+						char label[ sizeof(mCKTokenInfo.label) ];
+						memcpy( label, mCKTokenInfo.label,  sizeof(mCKTokenInfo.label) );
+						char* trimLabel = trim_line( label );
+						snprintf(tokenUid, TOKEND_MAX_UID, "Gemalto smartcard %s (%.*s)", trimLabel, (int) sizeof(mCKTokenInfo.serialNumber), mCKTokenInfo.serialNumber );
+						
+						for (size_t len=strlen(tokenUid); tokenUid[len-1]==' '; len--)
+							tokenUid[len-1] = '\0';
+						log( "tokenUid <%s>\n", tokenUid );
+
 						found = true;
 						mCKSlotId = pSlotID[i];
 						break;
@@ -362,35 +399,13 @@ uint32 GemaltoToken::probe(SecTokendProbeFlags flags, char tokenUid[TOKEND_MAX_U
 				/* Not the correct PKCS#11 lib. Close it and try the next one */
 				if (!found)
 				{
-					CKError::check(CK_D_(C_Finalize)(NULL_PTR));
+					rv = CK_D_(C_Finalize)(NULL_PTR);
+					if (rv != CKR_OK)
+						PKCS11_FAILED("C_Finalize", rv);
 					dlclose(mDLHandle);
 				}
 			}
 			(void)closedir(dirp);
-
-			if (found)
-			{
-				CKError::check(CK_D_(C_GetTokenInfo)(mCKSlotId, &mCKTokenInfo));
-
-				// Verify if token is initialized
-				if ((mCKTokenInfo.flags & CKF_USER_PIN_INITIALIZED) != CKF_USER_PIN_INITIALIZED)
-				{
-					// ?????????
-					//CKError::throwMe(CKR_USER_PIN_NOT_INITIALIZED);
-				}
-
-				score = 999;
-
-				// Setup the tokendUID
-				char label[ sizeof(mCKTokenInfo.label) ];
-				memcpy( label, mCKTokenInfo.label,  sizeof(mCKTokenInfo.label) );
-				char* trimLabel = trim_line( label );
-				snprintf(tokenUid, TOKEND_MAX_UID, "Gemalto smartcard %s (%.*s)", trimLabel, (int) sizeof(mCKTokenInfo.serialNumber), mCKTokenInfo.serialNumber );
-
-				for (size_t len=strlen(tokenUid); tokenUid[len-1]==' '; len--)
-					tokenUid[len-1] = '\0';
-				log( "tokenUid <%s>\n", tokenUid );
-			}
 		}
 	}
 	catch (...)
