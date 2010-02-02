@@ -310,6 +310,14 @@ uint32 GemaltoToken::probe(SecTokendProbeFlags flags, char tokenUid[TOKEND_MAX_U
 				if ((strcmp(dir_entry->d_name, ".") == 0) || (strcmp(dir_entry->d_name, "..") == 0))
 					continue;
 				
+				/* only use files ending with ".dylib" */
+#define VALID_FILE_EXTENSION ".dylib"
+				char *ext = dir_entry->d_name + strlen(dir_entry->d_name) - sizeof(VALID_FILE_EXTENSION)+1;
+				if (/* file name is at least as long as the extention */
+					ext > dir_entry->d_name
+					&& strcasecmp(ext, VALID_FILE_EXTENSION) != 0)
+					continue;
+
 				lib_name.append(dir_entry->d_name);
 				dlPath = lib_name.c_str();
 				log( "GemaltoToken::probe - Using %s PKCS#11 library\n", dlPath );
