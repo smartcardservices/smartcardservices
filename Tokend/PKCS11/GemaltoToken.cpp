@@ -374,6 +374,7 @@ uint32 GemaltoToken::probe(SecTokendProbeFlags flags, char tokenUid[TOKEND_MAX_U
 					if (strncmp((char*) slotInfo.slotDescription, readerState.szReader, strlen(readerState.szReader)) == 0)
 					{
 						rv  = CK_D_(C_GetTokenInfo)(mCKSlotId, &mCKTokenInfo);
+						if (rv != CKR_OK)
 						{
 							PKCS11_FAILED("C_GetTokenInfo", rv);
 							continue;
