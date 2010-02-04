@@ -56,7 +56,6 @@
 		1FB0480110DA89FB0011231D /* keyobject.h in Headers */ = {isa = PBXBuildFile; fileRef = 1FB0479610DA89FB0011231D /* keyobject.h */; };
 		1FB0480210DA89FB0011231D /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB0479710DA89FB0011231D /* log.cpp */; };
 		1FB0480310DA89FB0011231D /* log.h in Headers */ = {isa = PBXBuildFile; fileRef = 1FB0479810DA89FB0011231D /* log.h */; };
-		1FB0480410DA89FB0011231D /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 1FB0479910DA89FB0011231D /* Makefile */; };
 		1FB0480510DA89FB0011231D /* md5.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB0479C10DA89FB0011231D /* md5.cpp */; };
 		1FB0480610DA89FB0011231D /* md5.h in Headers */ = {isa = PBXBuildFile; fileRef = 1FB0479D10DA89FB0011231D /* md5.h */; };
 		1FB0480710DA89FB0011231D /* mutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB0479E10DA89FB0011231D /* mutex.cpp */; };
@@ -173,9 +172,6 @@
 		1FB0479610DA89FB0011231D /* keyobject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = keyobject.h; sourceTree = "<group>"; };
 		1FB0479710DA89FB0011231D /* log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = log.cpp; sourceTree = "<group>"; };
 		1FB0479810DA89FB0011231D /* log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
-		1FB0479910DA89FB0011231D /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		1FB0479A10DA89FB0011231D /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.am; sourceTree = "<group>"; };
-		1FB0479B10DA89FB0011231D /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; };
 		1FB0479C10DA89FB0011231D /* md5.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = md5.cpp; sourceTree = "<group>"; };
 		1FB0479D10DA89FB0011231D /* md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = md5.h; sourceTree = "<group>"; };
 		1FB0479E10DA89FB0011231D /* mutex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mutex.cpp; sourceTree = "<group>"; };
@@ -343,9 +339,6 @@
 				1FB0479610DA89FB0011231D /* keyobject.h */,
 				1FB0479710DA89FB0011231D /* log.cpp */,
 				1FB0479810DA89FB0011231D /* log.h */,
-				1FB0479910DA89FB0011231D /* Makefile */,
-				1FB0479A10DA89FB0011231D /* Makefile.am */,
-				1FB0479B10DA89FB0011231D /* Makefile.in */,
 				1FB0479C10DA89FB0011231D /* md5.cpp */,
 				1FB0479D10DA89FB0011231D /* md5.h */,
 				1FB0479E10DA89FB0011231D /* mutex.cpp */,
@@ -555,7 +548,6 @@
 				1FB047FE10DA89FB0011231D /* event.cpp in Sources */,
 				1FB0480010DA89FB0011231D /* keyobject.cpp in Sources */,
 				1FB0480210DA89FB0011231D /* log.cpp in Sources */,
-				1FB0480410DA89FB0011231D /* Makefile in Sources */,
 				1FB0480510DA89FB0011231D /* md5.cpp in Sources */,
 				1FB0480710DA89FB0011231D /* mutex.cpp in Sources */,
 				1FB0480910DA89FB0011231D /* pkcs11.cpp in Sources */,
