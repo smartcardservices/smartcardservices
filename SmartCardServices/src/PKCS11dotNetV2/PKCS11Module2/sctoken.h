@@ -125,13 +125,19 @@ private:
     bool                    _fPinChanged;
     bool                    _fContainerChanged;
     bool                    _fFileChanged;
+   
+    BYTE m_bCardMode;
+    BYTE m_bTypePIN;
+    //u1Array* m_u1aSerialNumber;
 
 public:
     CK_BBOOL                _version;
     CK_TOKEN_INFO           _tokenInfo;
     CK_ULONG                _roleLogged;
     //bool m_isPinExternal;
-    bool m_isPinPadSupported;
+    bool m_bIsPinPadSupported;
+    bool m_bIsSSO;
+    bool m_bIsNoPinSupported;
 
 public:
     Token(std::string* reader);
@@ -144,7 +150,7 @@ public:
     void EndTransaction();
     void CardBeginTransaction();
     void CardEndTransaction();
-    void ManageGC();
+    void ManageGC( bool bForceGarbage = false );
 
     CK_RV Login(CK_ULONG userType,u1Array* pin);
     CK_RV Logout();
@@ -175,13 +181,14 @@ public:
 
     bool isAuthenticated( void );
     bool isSSO( void );
+    bool isNoPinSupported( void );
 
 private:
 
    void getCardConfiguration( BYTE& a_bMode, BYTE &a_bTypePIN );
    BYTE howToAuthenticate( BYTE bPinLen );
    bool isPinPadSupported( void );
-   bool isPinExternalSupported( void );
+   //bool isPinExternalSupported( void );
    CK_RV verifyPinWithPinPad( void );
    CK_RV verifyPinWithBio( void /*Marshaller::u1Array *pin*/ );
    DWORD m_dwIoctlVerifyPIN;

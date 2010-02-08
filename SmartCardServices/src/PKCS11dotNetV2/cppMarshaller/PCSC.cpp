@@ -26,16 +26,17 @@
 #define DBG_UNREFERENCED_LOCAL_VARIABLE(a)
 #endif
 
+#ifdef __APPLE__
+#include <PCSC/wintypes.h>
+#include <PCSC/winscard.h>
+#else
+#include <winscard.h>
+#endif
+
 #ifndef WIN32
 #include <strings.h>
 #endif
 #include <string.h>
-#ifdef __APPLE__
-#include <PCSC/winscard.h>
-#include <PCSC/wintypes.h>
-#else
-#include <winscard.h>
-#endif
 #include <stdexcept>
 #include "MarshallerCfg.h"
 #include "Array.h"
@@ -417,7 +418,8 @@ void PCSC::ExchangeData(u1Array &dataIn, u1Array &dataout)
    }
 
 #ifdef __DEBUG_APDU__
-   FILE *pFile = fopen("C:\\AxaltoProtocolAnalyzer.txt","a");
+   //FILE *pFile = fopen("C:\\AxaltoProtocolAnalyzer.txt","a");
+   FILE *pFile = fopen("C:\\Gemalto.NET.PKCS11.log","a");
 #endif
 
    try {
@@ -427,11 +429,12 @@ void PCSC::ExchangeData(u1Array &dataIn, u1Array &dataout)
       DWORD answerLen = sizeof(answerData);
 
 #ifdef __DEBUG_APDU__
-      fprintf(pFile, "APDU DataIn Buffer\n");
+      fprintf(pFile, "\nCmd DataIn\n");
       for(int i=0; i < (s4)dataIn.GetLength(); i++) {
          fprintf(pFile, "%02x",dataIn.GetBuffer()[i]);
       }
       fprintf(pFile, "\n");
+      unsigned long ulStart = GetTickCount( );
 #endif
 
       s4 lReturn = SCardTransmit(hCard, SCARD_PCI_T0, dataIn.GetBuffer(), dataIn.GetLength(), NULL, (lpByte)answerData, &answerLen);
@@ -448,7 +451,7 @@ void PCSC::ExchangeData(u1Array &dataIn, u1Array &dataout)
          temp.SetBuffer(answerData);
          dataout += temp;
 #ifdef __DEBUG_APDU__
-         fprintf(pFile, "APDU DataOut Buffer\n");
+         fprintf(pFile, "Cmd DataOut\n");
          for(int i=0; i< (s4)temp.GetLength(); i++) {
             fprintf(pFile, "%02x",temp.GetBuffer()[i]);
          }
@@ -460,9 +463,8 @@ void PCSC::ExchangeData(u1Array &dataIn, u1Array &dataout)
       u1 sw2 = answerData[answerLen - 1];
 
 #ifdef __DEBUG_APDU__
-      fprintf(pFile, "APDU Status Buffer\n");
-      fprintf(pFile, "%02x%02x",sw1,sw2);
-      fprintf(pFile, "\n");
+      fprintf( pFile, "Cmd Status => %02x%02x\n", sw1, sw2 );
+      fprintf( pFile, "Cmd Time   => %ld ms\n", GetTickCount( ) - ulStart );
 #endif
 
       while ((sw1 == 0x61) || (sw1 == 0x9F))
@@ -480,11 +482,12 @@ void PCSC::ExchangeData(u1Array &dataIn, u1Array &dataout)
          answerLen = 258;
 
 #ifdef __DEBUG_APDU__
-         fprintf(pFile, "APDU DataIn Buffer\n");
+         fprintf(pFile, "GetResponse DataIn\n");
          for(int i=0; i<5; i++) {
             fprintf(pFile, "%02x",GetResponse[i]);
          }
          fprintf(pFile, "\n");
+         ulStart = GetTickCount( );
 #endif
 
          lReturn = SCardTransmit(hCard, SCARD_PCI_T0, (lpCByte)GetResponse, 5, NULL, (lpByte)answerData, &answerLen);
@@ -501,20 +504,20 @@ void PCSC::ExchangeData(u1Array &dataIn, u1Array &dataout)
             temp.SetBuffer(answerData);
             dataout += temp;
 #ifdef __DEBUG_APDU__
-            fprintf(pFile, "APDU DataOut Buffer\n");
+            fprintf(pFile, "GetResponse DataOut\n");
             for(int i=0; i< (s4)temp.GetLength(); i++) {
-               fprintf(pFile, "%02x",temp.GetBuffer()[i]);
+               fprintf(pFile, "%02x ",temp.GetBuffer()[i]);
             }
             fprintf(pFile, "\n");
+
 #endif
          }
          sw1 = answerData[answerLen - 2];
          sw2 = answerData[answerLen - 1];
 
 #ifdef __DEBUG_APDU__
-         fprintf(pFile, "APDU Status Buffer\n");
-         fprintf(pFile, "%02x%02x",sw1,sw2);
-         fprintf(pFile, "\n");
+         fprintf( pFile, "GetResponse Status => %02x%02x\n ", sw1, sw2 );
+         fprintf( pFile, "GetResponse Time   => %ld ms\n", GetTickCount( ) - ulStart );
 #endif
       }
    } catch (...) {

@@ -1,5 +1,5 @@
 /* pkcs11f.h include file for PKCS #11. */
-/* $Revision: 1.4 $ */
+/* $Revision: 1.5 $ */
 
 /* License to copy and use this software is granted provided that it is
  * identified as "RSA Security Inc. PKCS #11 Cryptographic Token Interface

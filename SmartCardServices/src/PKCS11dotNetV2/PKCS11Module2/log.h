@@ -42,6 +42,9 @@ public:
    static void begin( const char* a_pMethod );
    static void end( const char* a_pMethod );
 
+   static void start( void );
+   static void stop( const char* a_pMethod );
+
    static void logCK_SLOT_ID_PTR( const char*, CK_SLOT_ID_PTR, CK_ULONG_PTR );
    static void logCK_SLOT_INFO_PTR( const char*, CK_SLOT_INFO_PTR );
    static void logCK_C_INITIALIZE_ARGS_PTR( const char*, CK_C_INITIALIZE_ARGS_PTR );
@@ -83,6 +86,9 @@ public:
    static void toString( const unsigned long &l, std::string &result );
 
    template<typename T> static void classtoString( const T & value, std::string &result );
+
+   static unsigned long m_ulStart;
+
 
 };
 

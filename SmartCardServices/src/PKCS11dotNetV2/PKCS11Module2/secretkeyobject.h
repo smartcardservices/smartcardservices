@@ -46,7 +46,7 @@ public:
 
 public:
     SecretKeyObject();
-    ~SecretKeyObject();
+    virtual ~SecretKeyObject();
 
     CK_BBOOL Compare(CK_ATTRIBUTE attribute);
     CK_RV SetAttribute(CK_ATTRIBUTE attribute,CK_BBOOL objCreation);

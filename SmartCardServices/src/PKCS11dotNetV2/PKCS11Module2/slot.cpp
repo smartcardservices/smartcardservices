@@ -175,7 +175,9 @@ Slot::Slot()
 
 }
 
-Slot::~Slot(){
+Slot::~Slot( )
+{
+   Log::begin( "Slot::~Slot" );
 
    if(this->_token != NULL_PTR)
    {
@@ -206,6 +208,8 @@ Slot::~Slot(){
          this->_sessions[i] = NULL_PTR;
       }
    }
+
+   Log::end( "Slot::~Slot" );
 }
 
 
@@ -322,43 +326,51 @@ CK_RV Slot::GetTokenInfo( CK_TOKEN_INFO_PTR pInfo )
    }
 
    //Log::log( "Slot::GetTokenInfo - BuildToken..." );
+   //printf( "\n Slot::GetTokenInfo - BuildToken \n" );
    CK_RV rv = this->BuildToken( );
    //Log::log( "Slot::GetTokenInfo - BuildToken <%#02x>", rv );
    if( CKR_OK == rv )
    {
-      Transaction trans(this);
+      //Transaction trans( this );
+
+      Log::log( "Slot::GetTokenInfo - 1" );
 
       CK_BYTE idx;
 
       pInfo->firmwareVersion.major = this->_token->_tokenInfo.firmwareVersion.major;
       pInfo->firmwareVersion.minor = this->_token->_tokenInfo.firmwareVersion.minor;
-      pInfo->flags                 = this->_token->_tokenInfo.flags;
       pInfo->hardwareVersion.major = this->_token->_tokenInfo.hardwareVersion.major;
       pInfo->hardwareVersion.minor = this->_token->_tokenInfo.hardwareVersion.minor;
+
+      Log::log( "Slot::GetTokenInfo - 2" );
 
       // label
       for(idx=0;idx<32;idx++)
       {
          pInfo->label[idx] = this->_token->_tokenInfo.label[idx];
       }
+      Log::log( "Slot::GetTokenInfo - 3" );
 
       // manufacturerID
       for(idx=0;idx<32;idx++)
       {
          pInfo->manufacturerID[idx]  = this->_token->_tokenInfo.manufacturerID[idx];
       }
+      Log::log( "Slot::GetTokenInfo - 4" );
 
       // model
       for(idx=0;idx<16;idx++)
       {
          pInfo->model[idx]  = this->_token->_tokenInfo.model[idx];
       }
+      Log::log( "Slot::GetTokenInfo - 5" );
 
       // serial number
       for(idx=0;idx<16;idx++)
       {
          pInfo->serialNumber[idx]  = this->_token->_tokenInfo.serialNumber[idx];
       }
+      Log::log( "Slot::GetTokenInfo - 6" );
 
       pInfo->ulFreePrivateMemory  = this->_token->_tokenInfo.ulFreePrivateMemory;
       pInfo->ulFreePublicMemory   = this->_token->_tokenInfo.ulFreePublicMemory;
@@ -371,36 +383,49 @@ CK_RV Slot::GetTokenInfo( CK_TOKEN_INFO_PTR pInfo )
       pInfo->ulTotalPrivateMemory = this->_token->_tokenInfo.ulTotalPrivateMemory;
       pInfo->ulTotalPublicMemory  = this->_token->_tokenInfo.ulTotalPublicMemory;
 
+      Log::log( "Slot::GetTokenInfo - 7" );
+
       for(size_t i=1;i<_sessions.size();i++)
       {
-         if(_sessions[i])
+         if( NULL_PTR != _sessions[ i ] )
          {
             ++pInfo->ulSessionCount;
             if(_sessions[i]->_isReadWrite)
                ++pInfo->ulRwSessionCount;
          }
       }
+      Log::log( "Slot::GetTokenInfo - 8" );
 
       // utcTime
       for(idx=0;idx<16;idx++)
       {
          pInfo->utcTime[idx]  = this->_token->_tokenInfo.utcTime[idx];
       }
+      Log::log( "Slot::GetTokenInfo - 9" );
+
+      bool bIsAuthenticated = this->_token->isAuthenticated( );
+      Log::log( "Slot::GetTokenInfo - IsNoPinSupported <%d>", this->_token->m_bIsNoPinSupported );
+      Log::log( "Slot::GetTokenInfo - IsSSO <%d>", this->_token->m_bIsSSO );
+      Log::log( "Slot::GetTokenInfo - IsAuthenticated <%d>", bIsAuthenticated );
 
       // Check if the smart card is in SSO mode
-      if( ( true == this->_token->isSSO( ) ) && ( true == this->_token->isAuthenticated( ) ) )
+      if(   ( true == this->_token->m_bIsNoPinSupported ) 
+         || ( ( true == this->_token->m_bIsSSO ) && ( true == bIsAuthenticated ) )
+         )
       {
          this->_token->_tokenInfo.flags &= ~CKF_LOGIN_REQUIRED;
+         Log::log( "Slot::GetTokenInfo - No login required" );
       }
       else
       {
          this->_token->_tokenInfo.flags |= CKF_LOGIN_REQUIRED;
+         Log::log( "Slot::GetTokenInfo - Login required" );
       }
-
-      Log::log( "Slot::GetTokenInfo - tokenInfo formated ok" );
+      pInfo->flags = this->_token->_tokenInfo.flags;
+      //Log::log( "Slot::GetTokenInfo - tokenInfo formated ok" );
    }
 
-   Log::logCK_RV( "Slot::GetTokenInfo", rv );
+   //Log::logCK_RV( "Slot::GetTokenInfo", rv );
    Log::end( "Slot::GetTokenInfo" );
 
    return rv;
@@ -489,6 +514,7 @@ CK_RV Slot::InitToken(CK_UTF8CHAR_PTR pPin,CK_ULONG ulPinLen,CK_UTF8CHAR_PTR pLa
       }
    }
 
+   //printf( "\n Slot::InitToken - BuildToken \n" );
    rv = this->BuildToken();
 
    if(rv != CKR_OK){
@@ -528,6 +554,7 @@ CK_RV Slot::OpenSession( CK_FLAGS flags, CK_VOID_PTR, CK_NOTIFY, CK_SESSION_HAND
       return CKR_SESSION_PARALLEL_NOT_SUPPORTED;
    }
 
+   //printf( "\n Slot::OpenSession - BuildToken \n" );
    CK_RV rv = this->BuildToken( );
    if( rv != CKR_OK )
    {
@@ -557,11 +584,22 @@ CK_RV Slot::OpenSession( CK_FLAGS flags, CK_VOID_PTR, CK_NOTIFY, CK_SESSION_HAND
    session->SetId(sessionId);
    session->SetSlot(this);
 
-   // Refresh the state of the session if the SSO mode is enabled
-   UpdateAuthenticationState( );
-
-   // prepare a unique session id
+    // prepare a unique session id
    *phSession = MAKE_SESSIONHANDLE(sessionId,this->_slotId);
+
+   // Refresh the state of the session if the SSO mode is enabled or No pin is required
+   //UpdateAuthenticationState( );
+   if(   ( CKU_USER == this->_token->_roleLogged )
+      || ( true == this->_token->m_bIsNoPinSupported ) 
+      || ( ( true == this->_token->m_bIsSSO ) && ( true == this->_token->isAuthenticated( ) ) )
+      )
+   {
+      UpdateSessionState( CKU_USER );
+   }
+   else if( CKU_SO == this->_token->_roleLogged )
+   {
+      UpdateSessionState( CKU_SO );
+   }
 
    return rv;
 }
@@ -576,15 +614,6 @@ CK_RV Slot::CloseSession( CK_SESSION_HANDLE hSession )
    CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
    checkConnection( pSlot );
 
-   //CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   //Slot* pSlot = NULL_PTR;
-   //GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   //checkConnection( pSlot );
-
-   //hSessionId = CK_INVALID_HANDLE;
-   //pSlot = NULL_PTR;
-   //CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-
    if( CKR_OK == rv )
    {
       CHECK_IF_NULL_SESSION( pSlot, hSessionId );
@@ -593,47 +622,46 @@ CK_RV Slot::CloseSession( CK_SESSION_HANDLE hSession )
       pSlot->RemoveSession( hSessionId );
 
       // Refresh the state of the session if the SSO mode is enabled
-      pSlot->UpdateAuthenticationState( );
+      //pSlot->UpdateAuthenticationState( );
    }
 
    return rv;
 }
 
 
-/*
-Check first if the card is in SSO mode then update the state of all sessions
-*/
-void Slot::UpdateAuthenticationState( void )
-{
-   // Check if the smart card is in SSO mode
-   if( true == _token->isSSO( ) )
-   {
-      // Affect the role to the token if the user is authenticated
-      _token->_roleLogged = CKU_NONE;
-      if( true == _token->isAuthenticated( ) )
-      {
-         _token->_roleLogged = CKU_USER;
-      }
-
-      // Update the state of all sessions
-      UpdateSessionState( );
-   }
-}
+///*
+//Check first if the card is in SSO mode then update the state of all sessions
+//*/
+//void Slot::UpdateAuthenticationState( void )
+//{
+//   if(   ( true == this->_token->_roleLogged )
+//      || ( true == this->_token->m_bIsNoPinSupported ) 
+//      || ( ( true == this->_token->m_bIsSSO ) && ( true == this->_token->isAuthenticated( ) ) )
+//      )
+//   {
+//      UpdateSessionState( CKU_USER );
+//   }
+//}
 
 
 /*
 */
 CK_RV Slot::CloseAllSessions(void)
 {
+   //if( NULL != this->_token )
+   //{
+   //   this->_token->ManageGC( true );
+   //}
+
    // remove all sessions
    for( size_t i = 1 ; i < _sessions.size( ) ; i++ )
    {
       if( NULL_PTR != this->_sessions[ i ] )
       {
          delete this->_sessions[ i ];
+         this->_sessions[ i ] = NULL_PTR;
       }
-
-      this->_sessions[ i ] = NULL_PTR;
+      //this->_sessions[ i ] = NULL_PTR;
    }
 
    _sessions.resize( 1 );
@@ -642,8 +670,10 @@ CK_RV Slot::CloseAllSessions(void)
 
    this->_token->_roleLogged = CKU_NONE;
 
-   // Refresh the state of the session if the SSO mode is enabled
-   UpdateAuthenticationState( );
+   //// Refresh the state of the session if the SSO mode is enabled
+   //UpdateAuthenticationState( );
+   //// Update the state of all sessions
+   //UpdateSessionState( );
 
    return CKR_OK;
 }
@@ -670,13 +700,15 @@ CK_RV Slot::GetSessionInfo( CK_SESSION_HANDLE hSession, CK_SESSION_INFO_PTR pInf
 
    CHECK_IF_NULL_SESSION( pSlot, hSessionId);
 
-   Transaction trans( pSlot );
+   // JCD
+   //Transaction trans( pSlot );
 
    pInfo->slotID = pSlot->_slotId;
    pInfo->ulDeviceError = CKR_OK;
 
+   // JCD
    // Check if the smart card is in SSO mode
-   pSlot->UpdateAuthenticationState( );
+   //pSlot->UpdateAuthenticationState( );
 
    pInfo->flags = ( ( pSlot->_sessions[ hSessionId ]->_isReadWrite ) ? CKF_RW_SESSION : 0 ) | (CKF_SERIAL_SESSION);
    pInfo->state = pSlot->_sessions[ hSessionId ]->_state;
@@ -704,6 +736,16 @@ CK_RV Slot::Login( CK_SESSION_HANDLE hSession,
 
    CHECK_IF_TOKEN_IS_PRESENT( pSlot );
    CHECK_IF_NULL_SESSION( pSlot, hSessionId );
+
+   if( true == pSlot->_token->m_bIsNoPinSupported )
+   {
+      return CKR_OK; //CKR_USER_ALREADY_LOGGED_IN;
+   }
+   if( ( true == pSlot->_token->m_bIsSSO ) && ( true == pSlot->_token->isAuthenticated( ) ) )
+   {
+      return CKR_USER_ALREADY_LOGGED_IN;
+   }
+
    Transaction trans( pSlot );
 
    if(userType == CKU_SO)
@@ -876,6 +918,7 @@ CK_RV  Slot::FindObjectsInit(CK_SESSION_HANDLE hSession,CK_ATTRIBUTE_PTR pTempla
 
    CHECK_IF_TOKEN_IS_PRESENT( pSlot );
    CHECK_IF_NULL_SESSION( pSlot, hSessionId );
+   
    Transaction trans( pSlot );
 
    if((pTemplate == NULL_PTR) && (ulCount != 0))
@@ -907,8 +950,6 @@ CK_RV  Slot::FindObjectsInit(CK_SESSION_HANDLE hSession,CK_ATTRIBUTE_PTR pTempla
 CK_RV  Slot::FindObjects(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE_PTR phObject,
                          CK_ULONG ulMaxObjectCount,CK_ULONG_PTR  pulObjectCount)
 {
-   Log::begin( "Slot::FindObjects" );
-
    CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
    Slot* pSlot = NULL_PTR;
    CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
@@ -920,53 +961,35 @@ CK_RV  Slot::FindObjects(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE_PTR phObje
 
    if((phObject == NULL_PTR) || (pulObjectCount == NULL_PTR))
    {
-      Log::error( "Slot::FindObjects", "CKR_ARGUMENTS_BAD" );
       return CKR_ARGUMENTS_BAD;
    }
 
-   Log::log( "Slot::FindObjects - CHECK_IF_TOKEN_IS_PRESENT" );
    CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   Log::log( "Slot::FindObjects - CHECK_IF_TOKEN_IS_PRESENT" );
-
-   Log::log( "Slot::FindObjects - CHECK_IF_NULL_SESSION" );
    CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Log::log( "Slot::FindObjects - CHECK_IF_NULL_SESSION" );
 
    // Not needed here...
-   Log::log( "Slot::FindObjects - Transaction" );
-   Transaction trans( pSlot );
-   Log::log( "Slot::FindObjects - Transaction" );
+   // JCD 1
+   //Transaction trans( pSlot );
 
-   Log::log( "Slot::FindObjects - session" );
    Session* session = pSlot->_sessions[ hSessionId ];
-   Log::log( "Slot::FindObjects - session" );
 
    // check if search is active for this session or not
-   Log::log( "Slot::FindObjects - IsSearchActive" );
    if(session->IsSearchActive() == CK_FALSE)
    {
       return CKR_OPERATION_NOT_INITIALIZED;
    }
-   Log::log( "Slot::FindObjects - IsSearchActive" );
 
    *pulObjectCount = 0;
 
    // find the token objects matching the template
    // count will tell how much of the phObject buffer was written
-   Log::log( "Slot::FindObjects - FindObjects" );
    CK_ULONG count = pSlot->_token->FindObjects( session, phObject, ulMaxObjectCount, pulObjectCount );
-   Log::log( "Slot::FindObjects - FindObjects" );
 
    if(count < ulMaxObjectCount)
    {
       // find the session objects matching the template
-      Log::log( "Slot::FindObjects - (count < ulMaxObjectCount)" );
       count = session->FindObjects(count,phObject,ulMaxObjectCount,pulObjectCount);
-      Log::log( "Slot::FindObjects - (count < ulMaxObjectCount)" );
    }
-
-   Log::logCK_RV( "Slot::FindObjects", rv );
-   Log::end( "Slot::FindObjects" );
 
    return rv;
 }
@@ -1134,10 +1157,23 @@ CK_RV Slot::CreateObject( CK_SESSION_HANDLE hSession, CK_ATTRIBUTE_PTR pTemplate
       }
    }
 
-   if ((pSlot->_token->_roleLogged != CKU_USER) && (object->_private == CK_TRUE))
+   if( CK_TRUE == object->_private )
+   {
+      if( false == pSlot->_token->m_bIsNoPinSupported )
+      {
+         if(   ( CKU_USER != pSlot->_token->_roleLogged )
+            && ( ( true == pSlot->_token->m_bIsSSO ) && ( false == pSlot->_token->isAuthenticated( ) ) )
+            )
+         {
+            return CKR_USER_NOT_LOGGED_IN;
+         }
+      }
+   }
+   /*if ((pSlot->_token->_roleLogged != CKU_USER) && (object->_private == CK_TRUE))
    {
       return CKR_USER_NOT_LOGGED_IN;
    }
+   */
 
    if(object->_tokenObject)
    {
@@ -1149,9 +1185,14 @@ CK_RV Slot::CreateObject( CK_SESSION_HANDLE hSession, CK_ATTRIBUTE_PTR pTemplate
       // CardModule service does not allow 'deletion' of any file unless user is logged in. We can create a file
       // when nobody is logged in but we can not delete. In order to be symmetrical we do not also allow
       // the creation.
-      if(pSlot->_token->_roleLogged != CKU_USER)
+      if( false == pSlot->_token->m_bIsNoPinSupported )
       {
-         return CKR_USER_NOT_LOGGED_IN;
+         if(   ( CKU_USER != pSlot->_token->_roleLogged )
+            && ( ( true == pSlot->_token->m_bIsSSO ) && ( false == pSlot->_token->isAuthenticated( ) ) )
+            )
+         {
+            return CKR_USER_NOT_LOGGED_IN;
+         }
       }
 
       // some sanity checks
@@ -1174,6 +1215,9 @@ CK_RV Slot::CreateObject( CK_SESSION_HANDLE hSession, CK_ATTRIBUTE_PTR pTemplate
       if(rv == CKR_OK)
          object.release();
    }
+
+   //printf( "\nSlot::CreateObject - ManageGC( true )\n" );
+    pSlot->_token->ManageGC( true );
 
    return rv;
 }
@@ -1618,9 +1662,19 @@ CK_RV Slot::SignInit(CK_SESSION_HANDLE hSession,CK_MECHANISM_PTR pMechanism,CK_O
       return rv;
    }
 
-   if(pSlot->_token->_roleLogged != CKU_USER){
-      return CKR_USER_NOT_LOGGED_IN;
+   if( false == pSlot->_token->m_bIsNoPinSupported )
+   {
+      if(   ( CKU_USER != pSlot->_token->_roleLogged )
+         && ( ( true == pSlot->_token->m_bIsSSO ) && ( false == pSlot->_token->isAuthenticated( ) ) )
+         )
+      {
+         return CKR_USER_NOT_LOGGED_IN;
+      }
    }
+   //if(pSlot->_token->_roleLogged != CKU_USER)
+   //{
+   //   return CKR_USER_NOT_LOGGED_IN;
+   //}
 
    // get the corresponding object
    StorageObject* object = NULL_PTR;
@@ -1948,9 +2002,19 @@ CK_RV Slot::EncryptInit(CK_SESSION_HANDLE hSession,CK_MECHANISM_PTR pMechanism,C
       return rv;
    }
 
-   if(pSlot->_token->_roleLogged != CKU_USER){
-      return CKR_USER_NOT_LOGGED_IN;
+   if( false == pSlot->_token->m_bIsNoPinSupported )
+   {
+      if(   ( CKU_USER != pSlot->_token->_roleLogged )
+         && ( ( true == pSlot->_token->m_bIsSSO ) && ( false == pSlot->_token->isAuthenticated( ) ) )
+         )
+      {
+         return CKR_USER_NOT_LOGGED_IN;
+      }
    }
+   //if(pSlot->_token->_roleLogged != CKU_USER)
+   //{
+   //   return CKR_USER_NOT_LOGGED_IN;
+   //}
 
    // get the corresponding object
    StorageObject* object = NULL_PTR;
@@ -2084,9 +2148,19 @@ CK_RV Slot::DecryptInit(CK_SESSION_HANDLE hSession,CK_MECHANISM_PTR pMechanism,C
       return rv;
    }
 
-   if(pSlot->_token->_roleLogged != CKU_USER){
-      return CKR_USER_NOT_LOGGED_IN;
+   if( false == pSlot->_token->m_bIsNoPinSupported )
+   {
+      if(   ( CKU_USER != pSlot->_token->_roleLogged )
+         && ( ( true == pSlot->_token->m_bIsSSO ) && ( false == pSlot->_token->isAuthenticated( ) ) )
+         )
+      {
+         return CKR_USER_NOT_LOGGED_IN;
+      }
    }
+   //if(pSlot->_token->_roleLogged != CKU_USER)
+   //{
+   //   return CKR_USER_NOT_LOGGED_IN;
+   //}
 
    // get the corresponding object
    StorageObject* object = NULL_PTR;
@@ -2237,9 +2311,19 @@ CK_RV  Slot::VerifyInit(CK_SESSION_HANDLE hSession,CK_MECHANISM_PTR pMechanism,C
       return rv;
    }
 
-   if(pSlot->_token->_roleLogged != CKU_USER){
-      return CKR_USER_NOT_LOGGED_IN;
+   if( false == pSlot->_token->m_bIsNoPinSupported )
+   {
+      if(   ( CKU_USER != pSlot->_token->_roleLogged )
+         && ( ( true == pSlot->_token->m_bIsSSO ) && ( false == pSlot->_token->isAuthenticated( ) ) )
+         )
+      {
+         return CKR_USER_NOT_LOGGED_IN;
+      }
    }
+   //if(pSlot->_token->_roleLogged != CKU_USER)
+   //{
+   //   return CKR_USER_NOT_LOGGED_IN;
+   //}
 
    // get the corresponding object
    StorageObject* object = NULL_PTR;
@@ -2519,7 +2603,7 @@ CK_RV Slot::VerifyFinal(CK_SESSION_HANDLE hSession,CK_BYTE_PTR pSignature,CK_ULO
 */
 /*bool*/ void Slot::checkConnection( Slot* a_pSlot )
 {
-   Log::begin( "Slot::checkConnection" );
+   //Log::begin( "Slot::checkConnection" );
 
    //bool bRet = false;
 
@@ -2541,10 +2625,12 @@ CK_RV Slot::VerifyFinal(CK_SESSION_HANDLE hSession,CK_BYTE_PTR pSignature,CK_ULO
          {
             SCARDHANDLE hCard = pMSCM->GetPcscCardHandle( );
             DWORD hResult = SCardStatus( hCard, readers, &dwLen, &dwState, &dwProtocol, &Atr[0], &dwLenAtr );
-            Log::log( "Slot::checkConnection - SCardStatus <%#02x>", hResult );
+            //Log::log( "Slot::checkConnection - SCardStatus <%#02x>", hResult );
+            //printf( "\n Slot::checkConnection - SCardStatus <%#02x> \n", hResult );
             if( ( SCARD_W_RESET_CARD == hResult ) || ( SCARD_W_REMOVED_CARD == hResult ) )
             {
                Log::error( "Slot::checkConnection", "Connection is broken" );
+               //printf( "\n Slot::checkConnection - Connection is broken \n" );
 
                // Close all session
                a_pSlot->CloseAllSessions( );
@@ -2552,6 +2638,8 @@ CK_RV Slot::VerifyFinal(CK_SESSION_HANDLE hSession,CK_BYTE_PTR pSignature,CK_ULO
                // Rebuild the token to restablish the CardModule communication
                delete a_pSlot->_token;
                a_pSlot->_token = NULL_PTR;
+
+               //printf( "\n Slot::checkConnection - BuildToken \n" );
                a_pSlot->BuildToken( );
 
               // bRet = false;
@@ -2560,7 +2648,7 @@ CK_RV Slot::VerifyFinal(CK_SESSION_HANDLE hSession,CK_BYTE_PTR pSignature,CK_ULO
       }
    }
 
-   Log::end( "Slot::checkConnection" );
+   //Log::end( "Slot::checkConnection" );
 
    //return bRet;
 }
@@ -2587,6 +2675,8 @@ CK_LONG Slot::AddSession(Session* session)
 */
 void Slot::RemoveSession( CK_LONG sessionId )
 {
+   //this->_token->ManageGC( true );
+
    delete this->_sessions[ sessionId ];
    this->_sessions[sessionId] = NULL_PTR;
 
@@ -2620,7 +2710,23 @@ void Slot::RemoveSession( CK_LONG sessionId )
    }
 }
 
-void Slot::UpdateSessionState()
+
+/*
+*/
+void Slot::UpdateSessionState( CK_ULONG ulRole )
+{
+   // update the state of all sessions
+   for(size_t i=1;i<_sessions.size();i++){
+      if(this->_sessions[i] != NULL_PTR){
+         this->_sessions[i]->UpdateState( ulRole );
+      }
+   }
+}
+
+
+/*
+*/
+void Slot::UpdateSessionState( )
 {
    // update the state of all sessions
    for(size_t i=1;i<_sessions.size();i++){
@@ -2629,6 +2735,7 @@ void Slot::UpdateSessionState()
       }
    }
 }
+
 
 CK_BBOOL Slot::HasReadOnlySession()
 {
@@ -2689,7 +2796,7 @@ CK_RV Slot::BuildToken(void)
          {
             // we not found a card in this reader
             this->_slotInfo.flags &= ~CKF_TOKEN_PRESENT;
-            Log::log( "Slot::BuildToken - ((readerStates.dwEventState & SCARD_STATE_PRESENT) != SCARD_STATE_PRESENT)" );
+            //Log::log( "Slot::BuildToken - ((readerStates.dwEventState & SCARD_STATE_PRESENT) != SCARD_STATE_PRESENT)" );
             Log::logCK_RV( "Slot::BuildToken", CKR_TOKEN_NOT_PRESENT );
             return CKR_TOKEN_NOT_PRESENT;
          }
@@ -2719,13 +2826,15 @@ CK_RV Slot::BuildToken(void)
       // TBD: Check if token is a .net smart card
 
       // token is present in the slot
-      Log::log( "Slot::BuildToken - new Token..." );
+      //Log::log( "Slot::BuildToken - new Token..." );
       this->_token = new Token( this->_readerName );
-      Log::log( "Slot::BuildToken - new Token ok"  );
+      //Log::log( "Slot::BuildToken - new Token ok"  );
 
-      Log::logCK_RV( "Slot::BuildToken", CKR_OK );
-      Log::end( "Slot::BuildToken" );
+      //Log::logCK_RV( "Slot::BuildToken", CKR_OK );
+      //Log::end( "Slot::BuildToken" );
    }
+
+   Log::end( "Slot::BuildToken" );
 
    return CKR_OK;
 }

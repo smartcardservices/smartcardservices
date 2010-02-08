@@ -30,17 +30,18 @@
 #include <vld.h>
 #endif
 
+#ifdef __APPLE__
+#include <PCSC/winscard.h>
+#else
+#include <winscard.h>
+#endif
+
 #ifndef WIN32
 #include <strings.h>
 #endif
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdexcept>
-#ifdef __APPLE__
-#include <PCSC/winscard.h>
-#else
-#include <winscard.h>
-#endif
 #include "MarshallerCfg.h"
 #include "Array.h"
 #ifndef _XCL_
@@ -456,7 +457,7 @@ SmartCardMarshaller::SmartCardMarshaller(SCARDHANDLE cardHandle, u2 portNumber, 
 
 SmartCardMarshaller::SmartCardMarshaller(M_SAL_IN std::string* readerName, u2 portNumber, M_SAL_IN std::string* uri, u4 nameSpaceHivecode, u2 typeHivecode, u4 index)
 {
-   Log::begin( "SmartCardMarshaller::SmartCardMarshaller" );
+   //Log::begin( "SmartCardMarshaller::SmartCardMarshaller" );
 
    this->uri = NULL;
    this->pcsc = NULL;
@@ -473,39 +474,39 @@ SmartCardMarshaller::SmartCardMarshaller(M_SAL_IN std::string* readerName, u2 po
    if ((readerName == NULL) || (strncasecmp("selfdiscover", readerName->c_str(),readerName->length()) == 0))
    {
 #endif
-      Log::log( "SmartCardMarshaller::SmartCardMarshaller -  new PCSC( readerName, &portNumber, uri, nameSpaceHivecode, typeHivecode, index) ..." );
+      //Log::log( "SmartCardMarshaller::SmartCardMarshaller -  new PCSC( readerName, &portNumber, uri, nameSpaceHivecode, typeHivecode, index) ..." );
 #ifndef _XCL_
       this->pcsc = new PCSC( readerName, &portNumber, uri, nameSpaceHivecode, typeHivecode, index);
 #else // _XCL
         this->pcsc = new XCLBroker(readerName, &portNumber, uri, nameSpaceHivecode, typeHivecode, index);
 #endif // _XCL_
-      Log::log( "SmartCardMarshaller::SmartCardMarshaller -  new PCSC( readerName, &portNumber, uri, nameSpaceHivecode, typeHivecode, index) ok" );
+      //Log::log( "SmartCardMarshaller::SmartCardMarshaller -  new PCSC( readerName, &portNumber, uri, nameSpaceHivecode, typeHivecode, index) ok" );
    }
    else
    {
-      Log::log( "SmartCardMarshaller::SmartCardMarshaller -  new PCSC( readerName ) ..." );
+      //Log::log( "SmartCardMarshaller::SmartCardMarshaller -  new PCSC( readerName ) ..." );
 #ifndef _XCL_
       this->pcsc = new PCSC( readerName );
 #else // _XCL_
         this->pcsc = new XCLBroker(readerName);
 #endif // _XCL_
-      Log::log( "SmartCardMarshaller::SmartCardMarshaller -  new PCSC( readerName ) ok" );
+      //Log::log( "SmartCardMarshaller::SmartCardMarshaller -  new PCSC( readerName ) ok" );
    }
 
    try
    {
-      Log::log( "SmartCardMarshaller::SmartCardMarshaller -  new std::string(uri->c_str()) ..." );
+      //Log::log( "SmartCardMarshaller::SmartCardMarshaller -  new std::string(uri->c_str()) ..." );
       this->uri = new std::string(uri->c_str());
-      Log::log( "SmartCardMarshaller::SmartCardMarshaller -  new std::string(uri->c_str()) ok" );
+      //Log::log( "SmartCardMarshaller::SmartCardMarshaller -  new std::string(uri->c_str()) ok" );
    }
    catch (...)
    {
-      Log::error( "SmartCardMarshaller::SmartCardMarshaller", "(...)" );
+      //Log::error( "SmartCardMarshaller::SmartCardMarshaller", "(...)" );
       delete this->pcsc;
       throw;
    }
 
-   Log::end( "SmartCardMarshaller::SmartCardMarshaller" );
+   //Log::end( "SmartCardMarshaller::SmartCardMarshaller" );
 }
 
 std::string* SmartCardMarshaller::GetReaderName(void)

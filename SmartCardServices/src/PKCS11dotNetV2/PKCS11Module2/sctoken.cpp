@@ -64,7 +64,10 @@ static void CMapFileSetExchSize(u1Array & file, u1 index, u2 size);
 #define CARD_PROPERTY_PIN_INFO_EX 0x87
 #define CARD_PROPERTY_PIN_INFO 0x07
 #define CARD_PROPERTY_EXTERNAL_PIN 0x01
+#define CARD_PROPERTY_NO_PIN 0x03
+#define CARD_PROPERTY_PIN_POLICY 0x80
 #define CARD_ROLE_USER 0x01
+#define CARD_SERIAL_NUMBER 0x06
 
 #define CM_IOCTL_GET_FEATURE_REQUEST SCARD_CTL_CODE(3400)
 //#define FEATURE_VERIFY_PIN_START 0x01
@@ -92,6 +95,7 @@ static void CMapFileSetExchSize(u1Array & file, u1 index, u2 size);
 #define AUTHENTICATE_PINPAD 2
 #define AUTHENTICATE_BIO 3
 
+#define LOW_FREE_MEMORY_ALLOWED 25000
 
 #pragma pack(push, mdnet, 1)
 
@@ -156,7 +160,7 @@ namespace {
    };
 }
 
-Token :: Token(std::string* reader) : _mscm(0),
+Token::Token(std::string* reader) : _mscm(0),
 _supportGarbageCollection(true),
 _cardCache(0),
 _fPinChanged(false),
@@ -174,31 +178,22 @@ _version(0)
       m_sReaderName = (*reader).c_str( );
    }
 
-   //Log::log( "Token::Token - new CardModuleService..." );
    std::string svcname("MSCM");
    _mscm = new CardModuleService( reader, 5, &svcname );
-   //Log::log( "Token::Token - new CardModuleService ok" );
 
    _mscm->DoSCardTransact(false);  // Turn off transaction handling since it is performed at application level
 
    // Transact card
-   //Log::log( "Token::Token - CardTransaction..." );
    CardTransaction ct(this);
-   //Log::log( "Token::Token - CardTransaction ok" );
 
-   //Log::log( "Token::Token - new CardCache..." );
    _cardCache = new CardCache(_mscm);
-   //Log::log( "Token::Token - new CardCache ok" );
 
    // Get seed for RNG from card. This is the first command to
    // card. If it fails, assume the card is not a .NET card.
    try
    {
-      //Log::log( "Token::Token - GetChallenge ..." );
-      auto_ptr<u1Array> challange(_mscm->GetChallenge());
-      //Log::log( "Token::Token - GetChallenge ok" );
-
-      Util::SeedRandom(*challange);
+      auto_ptr<u1Array> challenge(_mscm->GetChallenge( ));
+      Util::SeedRandom(*challenge);
    }
    catch(...)
    {
@@ -235,25 +230,41 @@ _version(0)
    this->_tokenInfo.flags  = CKF_RNG | CKF_LOGIN_REQUIRED | CKF_TOKEN_INITIALIZED | CKF_USER_PIN_INITIALIZED;
 
    // Check if the smart card is in SSO mode
-   if( ( true == this->isSSO( ) ) && ( true == this->isAuthenticated( ) ) )
+   m_bIsSSO = isSSO( );
+
+   // Check if PinPad device is supported
+   m_bIsPinPadSupported = isPinPadSupported( );
+
+   // Get the card configuration (mode, PIN type)
+   m_bCardMode = UVM_PIN_ONLY;
+   m_bTypePIN = PIN_TYPE_REGULAR;
+   getCardConfiguration( m_bCardMode, m_bTypePIN );
+   
+   m_bIsNoPinSupported = false;
+   if( m_bTypePIN == 0x03 )
+   {
+      m_bIsNoPinSupported = true;
+   }
+
+   bool bIsAuthenticated = this->isAuthenticated( );
+
+   Log::log( "Token::Token - PIN type <%ld> (0 = regular ; 1 = external ; 2 = challenge/response ; 3 = no pin)", m_bTypePIN );
+   Log::log( "Token::Token - Card mode <%ld> (1 = pin only ; 2 = fp only ; 3 = fp or pin ; 4 = fp and pin)", m_bCardMode );
+   Log::log( "Token::Token - IsNoPinSupported <%d>", m_bIsNoPinSupported );
+   Log::log( "Token::Token - IsSSO <%d>", m_bIsSSO );
+   Log::log( "Token::Token - IsAuthenticated <%d>", bIsAuthenticated );
+
+   // Is login required ?
+   if(   ( true == m_bIsNoPinSupported ) 
+      || ( ( true == m_bIsSSO ) && ( true == bIsAuthenticated ) )
+      )
    {
       this->_tokenInfo.flags &= ~CKF_LOGIN_REQUIRED;
+      Log::log( "Token::Token - No login required" );
    }
-   /*else
-   {
-   this->_tokenInfo.flags |= CKF_LOGIN_REQUIRED;
-   }*/
-
 
    // Check if the CKF_PROTECTED_AUTHENTICATION_PATH flag must be raised
-   m_isPinPadSupported = isPinPadSupported( );
-   //m_isPinExternal = isPinExternalSupported( );
-   BYTE bCardMode = UVM_PIN_ONLY;
-   BYTE bTypePIN = PIN_TYPE_REGULAR;
-   getCardConfiguration( bCardMode, bTypePIN );
-   Log::log( "Token::Token - PIN type <%ld> (0 = regular ; 1 = external)", bTypePIN );
-   Log::log( "Token::Token - Card mode <%ld> (1 = pin only ; 2 = fp only ; 3 = fp or pin ; 4 = fp and pin)", bCardMode );
-   if( ( bTypePIN == PIN_TYPE_EXTERNAL ) && ( ( ( bCardMode == UVM_PIN_ONLY ) && m_isPinPadSupported ) || ( bCardMode != UVM_PIN_ONLY ) ) )
+   if( ( m_bTypePIN == PIN_TYPE_EXTERNAL ) && ( ( ( m_bCardMode == UVM_PIN_ONLY ) && m_bIsPinPadSupported ) || ( m_bCardMode != UVM_PIN_ONLY ) ) )
    {
       Log::log( "Token::Token - Enable CKF_PROTECTED_AUTHENTICATION_PATH" );
       this->_tokenInfo.flags  |= CKF_PROTECTED_AUTHENTICATION_PATH;
@@ -276,6 +287,9 @@ _version(0)
       throw CkError(CKR_TOKEN_NOT_RECOGNIZED);
    }
    CK_ULONG cardCf = LittleEndianToInt<CK_ULONG>(fileData->GetBuffer()+2);
+
+   //Log::log( "Token::Token - get serial number" );
+   //m_u1aSerialNumber = _mscm->GetCardProperty( CARD_SERIAL_NUMBER, 0 );
 
    this->_initialized  = this->IsInitialized();
 
@@ -300,30 +314,57 @@ _version(0)
    _privCardCf = ~cardCf;
    _cacheCardCf = ~cardCf;
 
+   //printf( "\nToken::Token - ManageGC( true )\n" );
+   //ManageGC( true );
+
    //Log::end( "Token::Token" );
 }
 
-Token :: ~Token()
+Token::~Token()
 {
+   Log::begin( "Token::~Token" );
+
+   ManageGC( true );
+
    delete _cardCache;
+   
    delete this->_mscm;
+   
+   //if( NULL != m_u1aSerialNumber )
+   //{
+   //   delete m_u1aSerialNumber;
+   //}
 
    Clear();
+
+   Log::end( "Token::~Token" );
 }
 
 
 
-void Token::ManageGC()
+void Token::ManageGC( bool bForceGarbage )
 {
    if(!_supportGarbageCollection)
       return;
    try
    {
-      s4 freeMemory = _mscm->GetMemory();
-      if (freeMemory < 6000)
+      if( true == bForceGarbage )
       {
+         //printf( "\nToken::ManageGC - ForceGarbageCollector (true)\n" );
+
          Log::log( "Token::ManageGC - ForceGarbageCollector" );
          _mscm->ForceGarbageCollector( );
+      }
+      else
+      {
+         s4 freeMemory = _mscm->GetMemory( );
+         if( freeMemory < LOW_FREE_MEMORY_ALLOWED )
+         {
+            //printf( "\nToken::ManageGC - ForceGarbageCollector\n" );
+
+            Log::log( "Token::ManageGC - ForceGarbageCollector (low)" );
+            _mscm->ForceGarbageCollector( );
+         }
       }
    }
    catch(...)
@@ -337,7 +378,7 @@ void Token::Clear()
 {
    for(size_t i=0;i<_objects.size();i++)
       delete _objects[i];
-   _objects.clear();
+   _objects.clear( );
 }
 
 
@@ -363,16 +404,24 @@ void Token::BeginTransaction()
       {
          // Read cache file.
          std::string sCardcf("cardcf");
-         ManageGC( );
          auto_ptr<u1Array> fileData(_mscm->ReadFile(&sCardcf,0));
+         //ManageGC( );
          if(fileData->GetLength() < 6)
             throw CkError(CKR_TOKEN_NOT_RECOGNIZED);
 
          _cardCf = LittleEndianToInt<CK_ULONG>(fileData->GetBuffer()+2);
       }
 
-      if((_publCardCf != _cardCf) ||
-         ((_privCardCf != _cardCf) && (_roleLogged == CKU_USER)))
+      if(   ( _publCardCf != _cardCf ) 
+         || (    ( _privCardCf != _cardCf ) 
+              && (    ( CKU_USER == _roleLogged )
+                   || ( true == m_bIsNoPinSupported ) 
+                   || ( ( true == m_bIsSSO ) && ( true == this->isAuthenticated( ) ) )
+                  )
+             )
+         )
+      //if((_publCardCf != _cardCf) ||
+      //   ((_privCardCf != _cardCf) && (_roleLogged == CKU_USER)))
       {
          // Card changed, so re-synchronize
          Resynchronize();
@@ -420,10 +469,11 @@ void Token::EndTransaction( )
          IntToLittleEndian<WORD>(wContainersFreshness, fileData->GetBuffer(),2);
          IntToLittleEndian<WORD>(wFilesFreshness, fileData->GetBuffer(),4);
 
-         ManageGC( );
 
          // Write cache file back
          _mscm->WriteFile(&sCardCf, fileData.get());
+
+         ManageGC( );
 
          // As a result of own update, our own cache is still valid
          // as long as it was valid before.
@@ -456,6 +506,8 @@ void Token::EndTransaction( )
 
 void Token::Resynchronize()
 {
+   //printf( "\nToken::Resynchronize\n" );
+
    // To be called at initial creation and also whenever
    // it is detected that card has been changed.
    // When re-sync, one have to maintain the object handles
@@ -479,7 +531,10 @@ void Token::Resynchronize()
 
    _publCardCf = _cardCf;
 
-   if(_roleLogged == CKU_USER)
+   if(   ( CKU_USER == _roleLogged )
+      || ( true == m_bIsNoPinSupported ) 
+      || ( ( true == m_bIsSSO ) && ( true == this->isAuthenticated( ) ) )
+      )
    {
       CK_RV rv = CKR_OK;
       TOKEN_TRY
@@ -529,9 +584,14 @@ void Token::Resynchronize()
    // Store the list of files to delete, then delete these if logged in.
    _toDelete = toDelete;
 
-   if(_roleLogged == CKU_USER)
+   if(   ( CKU_USER == _roleLogged )
+      || ( true == m_bIsNoPinSupported ) 
+      || ( ( true == m_bIsSSO ) && ( true == this->isAuthenticated( ) ) )
+      )
+   //if(   ( CKU_USER == _roleLogged )
+   {
       PerformDeferredDelete();
-
+   }
 }
 
 u1Array* Token::ComputeCryptogram(u1Array* challenge,u1Array* pin)
@@ -1521,18 +1581,18 @@ BYTE Token::howToAuthenticate( BYTE bPinLen )
 
    // Get the card mode (1=PIN, 2=FingerPrint, 3=PIN or FP, 4=PIN and FP)
    // The default mode is PIN
-   BYTE bCardMode = UVM_PIN_ONLY;
-   BYTE bTypePIN = PIN_TYPE_REGULAR;
-   getCardConfiguration( bCardMode, bTypePIN );
-   Log::log( "Token::AuthenticateUser - PIN type <%ld> (0 = regular ; 1 = external)", bTypePIN );
-   Log::log( "Token::AuthenticateUser - Card mode <%ld> (1 = pin only ; 2 = fp only ; 3 = fp or pin ; 4 = fp and pin)", bCardMode );
+   //BYTE bCardMode = UVM_PIN_ONLY;
+   //BYTE bTypePIN = PIN_TYPE_REGULAR;
+   //getCardConfiguration( bCardMode, bTypePIN );
+   Log::log( "Token::AuthenticateUser - PIN type <%ld> (0 = regular ; 1 = external)", m_bTypePIN );
+   Log::log( "Token::AuthenticateUser - Card mode <%ld> (1 = pin only ; 2 = fp only ; 3 = fp or pin ; 4 = fp and pin)", m_bCardMode );
    Log::log( "Token::AuthenticateUser - PIN len <%ld>", bPinLen );
 
-   if( PIN_TYPE_EXTERNAL == bTypePIN )
+   if( PIN_TYPE_EXTERNAL == m_bTypePIN )
    {
-      if( UVM_PIN_ONLY == bCardMode )
+      if( UVM_PIN_ONLY == m_bCardMode )
       {
-         if( true == m_isPinPadSupported )
+         if( true == m_bIsPinPadSupported )
          {
             if( 0 == bPinLen )
             {
@@ -1559,7 +1619,7 @@ BYTE Token::howToAuthenticate( BYTE bPinLen )
    }
    else
    {
-      if( ( 0 != bPinLen ) && ( ( UVM_PIN_ONLY == bCardMode ) || ( UVM_PIN_OR_FP == bCardMode ) ) )
+      if( ( 0 != bPinLen ) && ( ( UVM_PIN_ONLY == m_bCardMode ) || ( UVM_PIN_OR_FP == m_bCardMode ) ) )
       {
          Log::log( "Token::AuthenticateUser - Regular PIN && (UVM1 || UVM3)  && valid len -> PIN normal" );
          bRet = AUTHENTICATE_REGULAR;
@@ -1651,13 +1711,23 @@ CK_RV Token::AuthenticateAdmin(Marshaller::u1Array *pin)
 CK_RV Token::Logout()
 {
    CK_RV rv = CKR_OK;
+   
+   if(   ( true == m_bIsNoPinSupported ) 
+      || ( ( true == m_bIsSSO ) && ( true == this->isAuthenticated( ) ) )
+      )
+   {
+      this->_roleLogged = CKU_NONE;
+      return rv;
+   }
+
    TOKEN_TRY
    {
-
       if(this->_roleLogged == CKU_NONE)
       {
          throw CkError(CKR_USER_NOT_LOGGED_IN);
       }
+
+      this->_roleLogged = CKU_NONE;
 
       u1 role = (this->_roleLogged == CKU_USER) ? CARD_ROLE_USER : CARD_ROLE_ADMIN;
 
@@ -1667,7 +1737,7 @@ CK_RV Token::Logout()
          if( CARD_ROLE_USER == role )
          {
             // We log out if the SSO mode is not activated
-            if( false == isSSO( ) )
+            if( false == m_bIsSSO )
             {
                this->_mscm->LogOut( role );
             }
@@ -1679,7 +1749,7 @@ CK_RV Token::Logout()
             this->_mscm->LogOut( role );
          }
 
-         this->_roleLogged = CKU_NONE;
+         //this->_roleLogged = CKU_NONE;
       }
       catch(Marshaller::RemotingException&)
       {
@@ -1831,20 +1901,32 @@ void Token::DeserializeTokenInfo()
    // serial number
    u1Array* serialNum = Util::ReadByteArrayFromVector(from,&idx);
    memcpy(this->_tokenInfo.serialNumber,serialNum->GetBuffer(),serialNum->GetLength());
-   delete serialNum;
 
    // Check MSCM's serial number. If this is larger than 8 bytes, do not
    // use stored value since serial number may already have been truncated
    // if the card was P11 enabled prior to this fix in revision 548361.
-   auto_ptr<u1Array> serialNumber(_mscm->get_SerialNumber());
-   if(serialNumber->GetLength() > 8)
+
+   //Log::log( "Token::DeserializeTokenInfo - get serial numner" );
+   //u1Array* serialNumber = NULL;
+   //serialNumber = _mscm->GetCardProperty( CARD_SERIAL_NUMBER, 0 );
+   ////auto_ptr<u1Array> serialNumber(_mscm->get_SerialNumber());
+
+   //if(m_u1aSerialNumber->GetLength() > 8)
+   if(serialNum->GetLength() > 8)
    {
       CMD5 md5;
       CK_BYTE hash[16];
-      md5.HashCore(serialNumber->GetBuffer(), 0, serialNumber->GetLength());
+      md5.HashCore(serialNum->GetBuffer(), 0, serialNum->GetLength());
       md5.HashFinal(hash);
       Util::ConvAscii(hash, 8, _tokenInfo.serialNumber);
    }
+
+   delete serialNum;
+   
+   //if( NULL != serialNumber )
+   //{
+   //   delete serialNumber;
+   //}
 
    // flags
    CK_FLAGS flags;
@@ -1911,18 +1993,39 @@ void Token::PopulateDefaultTokenInfo()
 
    // If serial number length is too big to fit in 16 (hex) digit field,
    // then use the 8 first bytes of MD5 hash of the original serial number.
-   auto_ptr<u1Array> serialNumber(_mscm->get_SerialNumber());
-   if(serialNumber->GetLength() > 8)
+   Log::log( "Token::PopulateDefaultTokenInfo - get serial numner" );
+   u1Array* u1aSerialNumber = 0;
+   // Try first to load the serial number in a V2+ way
+   try
+   {
+      u1aSerialNumber = _mscm->GetCardProperty( CARD_SERIAL_NUMBER, 0 );
+   }
+   catch( ... )
+   {
+      u1aSerialNumber = 0;
+   }
+   // Try at last to get the serial number in a old V2 way
+   if( 0 == u1aSerialNumber )
+   {
+      u1aSerialNumber = _mscm->get_SerialNumber( );
+   }
+
+   //auto_ptr<u1Array> serialNumber(_mscm->get_SerialNumber());
+   if(u1aSerialNumber->GetLength() > 8)
    {
       CMD5 md5;
       CK_BYTE hash[16];
-      md5.HashCore(serialNumber->GetBuffer(), 0, serialNumber->GetLength());
+      md5.HashCore(u1aSerialNumber->GetBuffer(), 0, u1aSerialNumber->GetLength());
       md5.HashFinal(hash);
       Util::ConvAscii(hash, 8, _tokenInfo.serialNumber);
    }
    else
-      Util::ConvAscii(serialNumber->GetBuffer(),serialNumber->GetLength(),this->_tokenInfo.serialNumber);
+      Util::ConvAscii(u1aSerialNumber->GetBuffer(),u1aSerialNumber->GetLength(),this->_tokenInfo.serialNumber);
 
+   if( NULL != u1aSerialNumber )
+   {
+      delete u1aSerialNumber;
+   }
 }
 
 CK_RV Token::GenerateRandom(CK_BYTE_PTR randomData,CK_ULONG len)
@@ -1978,11 +2081,23 @@ CK_ULONG Token::FindObjects(Session* session,CK_OBJECT_HANDLE_PTR phObject,
             continue;
          }
 
-         if((this->_objects[i]->_private == CK_TRUE) &&
-            (this->_roleLogged != CKU_USER))
+         if( this->_objects[ i ]->_private == CK_TRUE )
          {
-            continue;
+            if( false == m_bIsNoPinSupported )
+            {
+               if(   ( CKU_USER != _roleLogged )
+                  && ( ( true == m_bIsSSO ) && ( false == isAuthenticated( ) ) )
+                  )
+               {
+                  continue;
+               }
+            }
          }
+         //if((this->_objects[i]->_private == CK_TRUE) &&
+         //   (this->_roleLogged != CKU_USER))
+         //{
+         //   continue;
+         //}
 
          if(session->_searchTempl == NULL_PTR){
             phObject[idx++] = CO_TOKEN_OBJECT | (i+1);
@@ -2165,10 +2280,6 @@ CK_RV Token::AddObject(auto_ptr<StorageObject> & stobj, CK_OBJECT_HANDLE_PTR phO
    CK_RV rv = CKR_OK;
    TOKEN_TRY
    {
-      // from the class field we will be able to determine proper type
-      // and hence the corresponding file
-      //CheckAvailableSpace( );
-
       CK_RV rv = WriteObject(stobj.get());
       if(rv == CKR_OK)
       {
@@ -2177,6 +2288,7 @@ CK_RV Token::AddObject(auto_ptr<StorageObject> & stobj, CK_OBJECT_HANDLE_PTR phO
       }
    }
    TOKEN_CATCH(rv)
+   //ManageGC( true );
       return rv;
 }
 
@@ -2276,24 +2388,6 @@ CK_RV Token::AddPrivateKeyObject( auto_ptr< StorageObject > &stobj, CK_OBJECT_HA
 
       auto_ptr<u1Array> keyValue;
 
-      //
-      /*
-      if( object->_modulus->GetLength( ) != object->_d->GetLength( ) )
-      {
-      }
-      if( ( object->_modulus->GetLength( ) / 2 ) != object->_p->GetLength( ) )
-      {
-      }
-      if( ( object->_modulus->GetLength( ) / 2 ) != object->_q->GetLength( ) )
-      {
-      }
-      if( ( object->_modulus->GetLength( ) / 2 ) != object->_dp->GetLength( ) )
-      {
-      }
-      if( ( object->_modulus->GetLength( ) / 2 ) != object->_dq->GetLength( ) )
-      {
-      }
-      */
       if( ( object->_modulus->GetLength( ) / 2 ) != object->_inverseQ->GetLength( ) )
       {
          // Pad with zeros in the front since big endian
@@ -2302,27 +2396,6 @@ CK_RV Token::AddPrivateKeyObject( auto_ptr< StorageObject > &stobj, CK_OBJECT_HA
          size_t i = val.GetLength( )- object->_inverseQ->GetLength( );
          memcpy( val.GetBuffer( ) + i, object->_inverseQ->GetBuffer(), object->_inverseQ->GetLength( ) );
          *(object->_inverseQ) = val;
-         /*
-         // Create a new buffer with the a correct size
-         u1Array val( (s4)( object->_modulus->GetLength( ) / 2 ) );
-         //auto_ptr<u1Array> val = auto_ptr<u1Array>(new u1Array(keyLength));
-
-         // Fill the buffer with zero
-         for( size_t i = 0; i < val.GetLength( ) ; i++ )
-         {
-         val.SetU1At( i, 0 );
-         }
-
-         // Fill the buffer with the old value
-         u4 j = 0;
-         for( size_t i = ( val.GetLength( )- object->_inverseQ->GetLength( ) ) ; i < object->_inverseQ->GetLength( ) ; i++ )
-         {
-         val.SetU1At( i, object->_inverseQ->ReadU1At( j ) );
-         j++;
-         }
-
-         object->_inverseQ = &val;
-         */
       }
 
       // compute the total length;
@@ -2413,7 +2486,7 @@ CK_RV Token::AddPrivateKeyObject( auto_ptr< StorageObject > &stobj, CK_OBJECT_HA
       {
          try
          {
-            ManageGC( );
+            //ManageGC( );
             ntry++;
             this->_mscm->CreateCAPIContainer(ctrIdx,CK_TRUE,object->_keySpec,(modulusLen*8),keyValue.get());
             break;
@@ -2476,6 +2549,7 @@ CK_RV Token::AddPrivateKeyObject( auto_ptr< StorageObject > &stobj, CK_OBJECT_HA
       }
    }
    TOKEN_CATCH( rv )
+   //ManageGC( true );
 
       return rv;
 }
@@ -2769,6 +2843,8 @@ CK_RV Token::AddCertificateObject(auto_ptr<StorageObject> & stobj, CK_OBJECT_HAN
       }
    }
    TOKEN_CATCH(rv)
+   
+      //ManageGC( true );
       return rv;
 }
 
@@ -2780,9 +2856,21 @@ CK_RV Token::DeleteObject( CK_OBJECT_HANDLE hObject )
       StorageObject * obj = GetObject(hObject);
 
       // some more checks
-      if((this->_roleLogged != CKU_USER) && (obj->_private == CK_TRUE)){
-         throw CkError(CKR_USER_NOT_LOGGED_IN);
+      if( CK_TRUE == obj->_private )
+      {
+         if( false == m_bIsNoPinSupported )
+         {
+            if(   ( CKU_USER != _roleLogged )
+               && ( ( true == m_bIsSSO ) && ( false == isAuthenticated( ) ) )
+               )
+            {
+               throw CkError(CKR_USER_NOT_LOGGED_IN);
+            }
+         }
       }
+      //if((this->_roleLogged != CKU_USER) && (obj->_private == CK_TRUE)){
+      //   throw CkError(CKR_USER_NOT_LOGGED_IN);
+      //}
 
       if(obj->_class == CKO_CERTIFICATE){
 
@@ -2909,12 +2997,29 @@ CK_RV Token::GetAttributeValue(CK_OBJECT_HANDLE hObject,
 
       StorageObject * obj = GetObject(hObject);
 
-      if((this->_roleLogged != CKU_USER) && (obj->_private == CK_TRUE)){
-         for(u4 i=0;i<ulCount;i++){
-            pTemplate[i].ulValueLen = CK_UNAVAILABLE_INFORMATION; //(CK_LONG)-1;
+      if( CK_TRUE == obj->_private )
+      {
+         if( false == m_bIsNoPinSupported )
+         {
+            if(   ( CKU_USER != _roleLogged )
+               && ( ( true == m_bIsSSO ) && ( false == isAuthenticated( ) ) )
+               )
+            {
+               for(u4 i=0;i<ulCount;i++)
+               {
+                  pTemplate[i].ulValueLen = CK_UNAVAILABLE_INFORMATION; //(CK_LONG)-1;
+               }
+               throw CkError(CKR_USER_NOT_LOGGED_IN);
+            }
          }
-         throw CkError(CKR_USER_NOT_LOGGED_IN);
       }
+      //if((this->_roleLogged != CKU_USER) && (obj->_private == CK_TRUE))
+      //{
+      //   for(u4 i=0;i<ulCount;i++){
+      //      pTemplate[i].ulValueLen = CK_UNAVAILABLE_INFORMATION; //(CK_LONG)-1;
+      //   }
+      //   throw CkError(CKR_USER_NOT_LOGGED_IN);
+      //}
 
       for(u4 i=0;i<ulCount;i++){
          rv = obj->GetAttribute(&pTemplate[i]);
@@ -2938,10 +3043,22 @@ CK_RV Token::SetAttributeValue( CK_OBJECT_HANDLE hObject, CK_ATTRIBUTE_PTR pTemp
       // ??? pObj == NULL_PTR
 
       // Check if we have a proper session
-      if( ( this->_roleLogged != CKU_USER ) && ( pObj->_private == CK_TRUE ) )
+      if( CK_TRUE == pObj->_private )
       {
-         throw CkError( CKR_USER_NOT_LOGGED_IN );
+         if( false == m_bIsNoPinSupported )
+         {
+            if(   ( CKU_USER != _roleLogged )
+               && ( ( true == m_bIsSSO ) && ( false == isAuthenticated( ) ) )
+               )
+            {
+               throw CkError(CKR_USER_NOT_LOGGED_IN);
+            }
+         }
       }
+      // if( ( this->_roleLogged != CKU_USER ) && ( pObj->_private == CK_TRUE ) )
+      //{
+      //   throw CkError( CKR_USER_NOT_LOGGED_IN );
+      //}
 
       if( pObj->_modifiable == CK_FALSE )
       {
@@ -3014,14 +3131,6 @@ CK_RV Token::SetAttributeValue( CK_OBJECT_HANDLE hObject, CK_ATTRIBUTE_PTR pTemp
 
          if( CKR_OK != arv )
          {
-            /*try
-            {
-            _mscm->DeleteFile(&obj->_fileName);
-            }
-            catch( ... )
-            {
-            }*/
-
             if(fCreate)   // Restore state of object prior to update attempt.
             {
                pObj->_fileName.clear();
@@ -3279,9 +3388,9 @@ CK_RV Token::GenerateKeyPair(auto_ptr<StorageObject> & stobjRsaPub, auto_ptr<Sto
       {
          try
          {
-            ManageGC( );
             ntry++;
             this->_mscm->CreateCAPIContainer(ctrIdx,CK_FALSE,KEYSPEC_KEYEXCHANGE,rsaPubObject->_modulusLen,NULL_PTR);
+            //ManageGC( );
             break;
          }
          catch( Marshaller::Exception & x )
@@ -3382,7 +3491,8 @@ CK_RV Token::GenerateKeyPair(auto_ptr<StorageObject> & stobjRsaPub, auto_ptr<Sto
       }
    }
    TOKEN_CATCH(rv)
-
+   //printf( "\nToken::GenerateKeyPair - ManageGC( true )\n" );
+      ManageGC( true );
       return rv;
 }
 
@@ -3501,9 +3611,9 @@ CK_RV Token::Decrypt(StorageObject* privObj,u1Array* dataToDecrypt,CK_ULONG mech
       {
          try
          {
-            ManageGC( );
             ntry++;
             data = this->_mscm->PrivateKeyDecrypt( rsaKey->_ctrIndex, rsaKey->_keySpec, dataToDecrypt );
+            //ManageGC( );
             break;
          }
          catch( Marshaller::Exception & x )
@@ -3804,9 +3914,9 @@ CK_RV Token::Sign(StorageObject* privObj,u1Array* dataToSign,CK_ULONG mechanism,
       {
          try
          {
-            ManageGC( );
             ntry++;
             signatureData = this->_mscm->PrivateKeyDecrypt(rsaKey->_ctrIndex, rsaKey->_keySpec, messageToSign);
+            //ManageGC( );
             break;
          }
          catch( Marshaller::Exception & x )
@@ -3925,7 +4035,7 @@ u1Array* Token::EncodeHashForSigning(u1Array* hashedData,CK_ULONG modulusLen,CK_
 bool Token::PerformDeferredDelete()
 {
    bool fSync = true;
-   PKCS11_ASSERT(this->_roleLogged != CKU_NONE);
+   //PKCS11_ASSERT(this->_roleLogged != CKU_NONE);
 
    if(_toDelete.empty())
       return fSync;
@@ -4048,7 +4158,10 @@ bool Token::isAuthenticated( void )
    bool bRet = false;
    try
    {
-      bRet = (bool)(_mscm->IsAuthenticated( CARD_ROLE_USER ));
+      if( NULL != _mscm )
+      {
+         bRet = (bool)(_mscm->IsAuthenticated( CARD_ROLE_USER ));
+      }
    }
    catch( ... )
    {
@@ -4061,18 +4174,45 @@ bool Token::isAuthenticated( void )
 
 /*
 */
+bool Token::isNoPinSupported( void )
+{
+   return m_bIsNoPinSupported;
+/*
+bool bIsNoPinSupported = false;
+
+   u1Array* pinProperties = new u1Array( 0 );
+   try
+   {
+      pinProperties = _mscm->GetCardProperty( CARD_PROPERTY_PIN_INFO, CARD_ROLE_USER );
+
+      if( CARD_PROPERTY_NO_PIN == pinProperties->GetBuffer( )[ 0 ] )
+      {
+         bIsNoPinSupported = true;
+      }
+   }
+   catch( ... )
+   {
+   }
+
+   delete pinProperties;
+
+   return bIsNoPinSupported;
+*/
+}
+
+
+/*
+*/
 bool Token::isSSO( void )
 {
    bool bRet = false;
    u1Array* ba = 0;
    try
    {
-      ba = _mscm->GetCardProperty( 0x80, 0 );
+      ba = _mscm->GetCardProperty( CARD_PROPERTY_PIN_POLICY, 0 );
    }
    catch( ... )
    {
-      //Log::error( "Token::isSSO",  "GetCardProperty" );
-      Log::log( "Token::isSSO - GetCardProperty failed !" );
       bRet = false;
    }
    if( 0 != ba )
@@ -4123,6 +4263,8 @@ bool Token::isSSO( void )
 */
 void Token::CardBeginTransaction( )
 {
+#ifndef _XCL_
+
    //Log::begin( "Token::CardBeginTransaction" );
 
    //Log::log( "Token::CardBeginTransaction - _mscm->GetPcscCardHandle..." );
@@ -4167,11 +4309,14 @@ void Token::CardBeginTransaction( )
    }
 
    //Log::end( "Token::CardBeginTransaction" );
+#endif
 }
 
 
 void Token::CardEndTransaction()
 {
+#ifndef _XCL_
+
    //Log::begin( "Token::CardEndTransaction" );
 
    SCARDHANDLE hCard = _mscm->GetPcscCardHandle( );//_mscm->GetSCardHandle();
@@ -4197,6 +4342,7 @@ void Token::CardEndTransaction()
       throw PcscError(hResult);
 
    //Log::end( "Token::CardEndTransaction" );
+#endif
 }
 
 StorageObject * Token::GetObject(CK_OBJECT_HANDLE hObject)
@@ -4305,30 +4451,30 @@ bool Token::isPinPadSupported( void )
 }
 
 
-/*
-*/
-bool Token::isPinExternalSupported( void )
-{
-   bool bIsPinExternalSupported = false;
-
-   u1Array* pinProperties = new u1Array( 0 );
-   try
-   {
-      pinProperties = _mscm->GetCardProperty( CARD_PROPERTY_PIN_INFO, CARD_ROLE_USER );
-
-      if( CARD_PROPERTY_EXTERNAL_PIN == pinProperties->GetBuffer( )[ 0 ] )
-      {
-         bIsPinExternalSupported = true;
-      }
-   }
-   catch( ... )
-   {
-   }
-
-   delete pinProperties;
-
-   return bIsPinExternalSupported;
-}
+///*
+//*/
+//bool Token::isPinExternalSupported( void )
+//{
+//   bool bIsPinExternalSupported = false;
+//
+//   u1Array* pinProperties = new u1Array( 0 );
+//   try
+//   {
+//      pinProperties = _mscm->GetardProperty( CARD_PROPERTY_PIN_INFO, CARD_ROLE_USER );
+//
+//      if( CARD_PROPERTY_EXTERNAL_PIN == pinProperties->GetBuffer( )[ 0 ] )
+//      {
+//         bIsPinExternalSupported = true;
+//      }
+//   }
+//   catch( ... )
+//   {
+//   }
+//
+//   delete pinProperties;
+//
+//   return bIsPinExternalSupported;
+//}
 
 /*
 */
@@ -4421,10 +4567,6 @@ CK_RV Token::verifyPinWithPinPad( void )
    CK_RV rv = CKR_FUNCTION_FAILED;
    if( ( 0x90 == outBuffer[ 0 ] ) && ( 0x00 == outBuffer[ 1 ] ) )
    {
-      //this->_tokenInfo.flags &= ~CKF_USER_PIN_LOCKED;
-      //this->_tokenInfo.flags &= ~CKF_USER_PIN_FINAL_TRY;
-      //this->_tokenInfo.flags &= ~CKF_USER_PIN_COUNT_LOW;
-      //this->_roleLogged = CKU_USER;
       rv = CKR_OK;
    }
    else if( ( 0x63 == outBuffer[ 0 ] ) && ( 0x00 == outBuffer[ 1 ] ) )
@@ -4651,10 +4793,10 @@ void Token::getCardConfiguration( BYTE& a_bMode, BYTE &a_bTypePIN )
          ( ( ba->GetBuffer( )[ 14 ] ) << 16 ) +
          ( ( ba->GetBuffer( )[ 15 ] ) << 24 )
          );
-      Log::log( "Token::getCardMode - dwFlagsEx <%#08x>", dwFlagsEx );
+      //Log::log( "Token::getCardMode - dwFlagsEx <%#08x>", dwFlagsEx );
 
       WORD wActiveMode = (WORD)( ba->GetBuffer( )[ 12 ] + ( ( ba->GetBuffer( )[ 13 ] ) << 8 ) );
-      Log::log( "Token::getCardMode - Active mode <%ld>", wActiveMode );
+      //Log::log( "Token::getCardMode - Active mode <%ld>", wActiveMode );
 
       a_bMode = (BYTE)wActiveMode;
 

@@ -58,14 +58,27 @@ Session::Session(CK_BBOOL isReadWrite){
     _objects.clear();
     _sessionObjectsReturnedInSearch.clear();
     _tokenObjectsReturnedInSearch.clear();
+
+    if( TRUE == this->_isReadWrite )
+    {
+      this->_state = CKS_RW_PUBLIC_SESSION;
+    }
+    else
+    {
+      this->_state = CKS_RO_PUBLIC_SESSION;
+    }
 }
 
 Session::~Session(){
 
-    for(size_t i = 0; i < _objects.size(); i++){
-        delete _objects[i];
-        _objects[i] = NULL_PTR;
-    }
+   for(size_t i = 0; i < _objects.size(); i++)
+   {
+      if( NULL_PTR != _objects[i] )
+      {
+         delete _objects[i];
+      }
+      _objects[i] = NULL_PTR;
+   }
 
     if(this->_digest != NULL_PTR){
         delete this->_digest;
@@ -202,11 +215,23 @@ CK_ULONG Session::FindObjects(CK_ULONG idx,CK_OBJECT_HANDLE_PTR phObject,
             continue;
         }
 
-        if((this->_objects[i]->_private == CK_TRUE) &&
-            (this->_slot->_token->_roleLogged != CKU_USER))
-        {
-            continue;
-        }
+         if( CK_TRUE == this->_objects[i]->_private )
+         {
+            if( false == _slot->_token->m_bIsNoPinSupported )
+            {
+               if(   ( CKU_USER != _slot->_token->_roleLogged )
+                  && ( ( true == _slot->_token->m_bIsSSO ) && ( false == _slot->_token->isAuthenticated( ) ) )
+                  )
+               {
+                  continue;
+               }
+            }
+         }
+        //if((this->_objects[i]->_private == CK_TRUE) &&
+        //    (this->_slot->_token->_roleLogged != CKU_USER))
+        //{
+        //    continue;
+        //}
 
         if(this->_searchTempl == NULL_PTR){
             phObject[idx++] = MakeObjectHandle(i+1);
@@ -292,9 +317,21 @@ CK_RV Session::DeleteObject(CK_OBJECT_HANDLE hObject)
             return CKR_SESSION_READ_ONLY;
     }
 
-    if ((this->_slot->_token->_roleLogged != CKU_USER) && (obj->_private == CK_TRUE)){
-        return CKR_USER_NOT_LOGGED_IN;
-    }
+   if( CK_TRUE == obj->_private )
+   {
+      if( false == _slot->_token->m_bIsNoPinSupported )
+      {
+         if(   ( CKU_USER != _slot->_token->_roleLogged )
+            && ( ( true == _slot->_token->m_bIsSSO ) && ( false == _slot->_token->isAuthenticated( ) ) )
+            )
+         {
+            return CKR_USER_NOT_LOGGED_IN;
+         }
+      }
+   }
+    //if ((this->_slot->_token->_roleLogged != CKU_USER) && (obj->_private == CK_TRUE)){
+    //    return CKR_USER_NOT_LOGGED_IN;
+    //}
 
     delete obj;
 
@@ -319,12 +356,29 @@ CK_RV Session::GetAttributeValue(CK_OBJECT_HANDLE hObject,
 
     StorageObject* obj = this->_objects[idx-1];
 
-    if((this->_slot->_token->_roleLogged != CKU_USER) && (obj->_private == CK_TRUE)){
-        for(u4 i=0;i<ulCount;i++){
-            pTemplate[i].ulValueLen = (CK_ULONG)-1;
-        }
-        return CKR_USER_NOT_LOGGED_IN;
-    }
+   if( CK_TRUE == obj->_private )
+   {
+      if( false == _slot->_token->m_bIsNoPinSupported )
+      {
+         if(   ( CKU_USER != _slot->_token->_roleLogged )
+            && ( ( true == _slot->_token->m_bIsSSO ) && ( false == _slot->_token->isAuthenticated( ) ) )
+            )
+         {
+            for(u4 i=0;i<ulCount;i++)
+            {
+               pTemplate[i].ulValueLen = (CK_ULONG)-1;
+            }
+            return CKR_USER_NOT_LOGGED_IN;
+         }
+      }
+   }
+   //if((this->_slot->_token->_roleLogged != CKU_USER) && (obj->_private == CK_TRUE))
+   // {
+   //     for(u4 i=0;i<ulCount;i++){
+   //         pTemplate[i].ulValueLen = (CK_ULONG)-1;
+   //     }
+   //     return CKR_USER_NOT_LOGGED_IN;
+   // }
 
     for(u4 i=0;i<ulCount;i++){
         rv = obj->GetAttribute(&pTemplate[i]);
@@ -352,9 +406,21 @@ CK_RV Session::SetAttributeValue(CK_OBJECT_HANDLE hObject,
 
     StorageObject* obj = this->_objects[idx-1];
 
-    if ((this->_slot->_token->_roleLogged != CKU_USER) && (obj->_private == CK_TRUE)){
-        return CKR_USER_NOT_LOGGED_IN;
-    }
+   if( CK_TRUE == obj->_private )
+   {
+      if( false == _slot->_token->m_bIsNoPinSupported )
+      {
+         if(   ( CKU_USER != _slot->_token->_roleLogged )
+            && ( ( true == _slot->_token->m_bIsSSO ) && ( false == _slot->_token->isAuthenticated( ) ) )
+            )
+         {
+            return CKR_USER_NOT_LOGGED_IN;
+         }
+      }
+   }
+    //if ((this->_slot->_token->_roleLogged != CKU_USER) && (obj->_private == CK_TRUE)){
+    //    return CKR_USER_NOT_LOGGED_IN;
+    //}
 
     for(u4 i=0;i<ulCount;i++){
         rv = obj->SetAttribute(pTemplate[i],CK_FALSE);

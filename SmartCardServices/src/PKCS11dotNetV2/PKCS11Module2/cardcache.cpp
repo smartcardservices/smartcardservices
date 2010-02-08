@@ -28,7 +28,7 @@
 #define KEYSPEC_KEYEXCHANGE  0x01
 #define KEYSPEC_SIGNATURE    0x02
 #define MAX_RETRY 2
-#define LOW_MEMORY_LIMIT 5000
+#define LOW_MEMORY_LIMIT 25000
 
 
 /* Constructor
@@ -47,12 +47,16 @@ void CardCache::ManageGC( void )
 {
    try
    {
-      s4 freeMemory = _mscm->GetMemory( );
-
-      if ( freeMemory < LOW_MEMORY_LIMIT )
+      if( NULL != _mscm )
       {
-          Log::error( "CardCache::ManageGC", "ForceGarbageCollector" );
-         _mscm->ForceGarbageCollector( );
+         s4 freeMemory = _mscm->GetMemory( );
+
+         if ( freeMemory < LOW_MEMORY_LIMIT )
+         {
+             //printf( "\nCardCache::ManageGC - ForceGarbageCollector\n" );
+             Log::error( "CardCache::ManageGC", "ForceGarbageCollector" );
+            _mscm->ForceGarbageCollector( );
+         }
       }
    }
    catch( ... )
@@ -72,9 +76,9 @@ void CardCache::WriteFile( std::string const & path, u1Array const & data )
    {
       try
       {
-         ManageGC( );
          ntry++;
          _mscm->WriteFile( const_cast< std::string* >( &path ), const_cast< u1Array* >( &data ) );
+         ManageGC( );
          _fileCache[ path ] = data;
          break;
       }
@@ -110,6 +114,8 @@ void CardCache::WriteFile( std::string const & path, u1Array const & data )
 */
 const u1Array & CardCache::ReadFile( std::string const & path )
 {
+   //Log::log( "***** CardCache::ReadFile - path <%s>", path.c_str( ) );
+
    // V2+ cards may throw OutOfMemoryException from ReadFile, however
    // it may recover from this by forcing the garbage collection to
    // occur. In fact as a result of a ReadFile command that throws
@@ -119,14 +125,16 @@ const u1Array & CardCache::ReadFile( std::string const & path )
    map<string, u1Array>::const_iterator ifile = _fileCache.find( path );
    if( ifile == _fileCache.end( ) )
    {
+      //Log::log( "****** CardCache::ReadFile - read card" );
+
       int ntry = 0;
       while( ntry < MAX_RETRY )
       {
          try
          {
-            ManageGC( );
             ntry++;
             auto_ptr< u1Array > data( _mscm->ReadFile( const_cast< std::string* >( &path ), 0 ) );
+            ManageGC( );
             _fileCache[ path ] = *data;
             break;
          }
@@ -246,9 +254,9 @@ const vector< std::string > & CardCache::FileList( std::string const &dir )
       {
          try
          {
-            ManageGC( );
             ntry++;
             auto_ptr<StringArray> files( _mscm->GetFiles( const_cast<string*>( &dir ) ) );
+            ManageGC( );
             for( u4 i = 0; i < files->GetLength( ) ; i++ )
             {
                vfile.push_back( *files->GetStringAt( i ) );

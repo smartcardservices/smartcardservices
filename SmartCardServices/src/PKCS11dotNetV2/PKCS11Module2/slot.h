@@ -53,7 +53,9 @@ public:
    virtual ~Slot();
 
    void UpdateSessionState();
-   void UpdateAuthenticationState( void );
+   //void UpdateAuthenticationState( void );
+   void UpdateSessionState( CK_ULONG ulRole );
+
 
    static void ClearCache(void);
    static CK_RV GetSlotAndSessionIdFromSessionHandle(CK_SESSION_HANDLE hSession,
@@ -166,12 +168,10 @@ public:
          SCardCancel(m_hMonitoringContext);
          //printf( "%s - %d - %s - SCardCancel\n", __FILE__, __LINE__, __FUNCTION__);
 
-         /*
-         printf( "%s - %d - %s - SCardReleaseContext -->\n", __FILE__, __LINE__, __FUNCTION__);
-         SCardReleaseContext(m_hMonitoringContext);
-         printf( "%s - %d - %s - SCardReleaseContext <--\n", __FILE__, __LINE__, __FUNCTION__);
-         m_hMonitoringContext = 0;
-         */
+         //printf( "%s - %d - %s - SCardReleaseContext -->\n", __FILE__, __LINE__, __FUNCTION__);
+         //SCardReleaseContext(m_hMonitoringContext);
+         //printf( "%s - %d - %s - SCardReleaseContext <--\n", __FILE__, __LINE__, __FUNCTION__);
+         //m_hMonitoringContext = 0;
       }
 
 #endif // _XCL_

@@ -34,7 +34,7 @@ public:
 public:
 
     DataObject();
-    ~DataObject();
+    virtual ~DataObject();
 
     CK_BBOOL Compare(CK_ATTRIBUTE attribute);
     CK_RV SetAttribute(CK_ATTRIBUTE attribute,CK_BBOOL objCreation);

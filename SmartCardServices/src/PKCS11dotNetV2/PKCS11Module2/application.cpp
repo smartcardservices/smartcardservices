@@ -66,13 +66,13 @@ xCL_DeviceHandle Application::_deviceHandle = 0; // asadali
 #ifndef _XCL_
 CK_RV Application::InitApplication( )
 {
-   Log::begin( "Application::InitApplication" );
+   //Log::begin( "Application::InitApplication" );
 
    // do the enumeration of slots
    CK_ULONG hResult = SCardEstablishContext( SCARD_SCOPE_USER, NULL, NULL, &Application::_hContext );
 
-   Log::log( "Application::InitApplication - SCardEstablishContext <%#02x>", hResult );
-   Log::log( "Application::InitApplication - Application::_hContext <%#02x>", Application::_hContext );
+   //Log::log( "Application::InitApplication - SCardEstablishContext <%#02x>", hResult );
+   //Log::log( "Application::InitApplication - Application::_hContext <%#02x>", Application::_hContext );
 
    if( SCARD_S_SUCCESS != hResult )
    {
@@ -88,7 +88,7 @@ CK_RV Application::InitApplication( )
    }
 #endif
 
-   Log::end( "Application::InitApplication" );
+   //Log::end( "Application::InitApplication" );
 
    return CKR_OK;
 }
@@ -97,7 +97,7 @@ CK_RV Application::InitApplication( )
 
 CK_RV Application::InitApplication( )
 {
-    Log::begin( "Application::InitApplication" );
+    //Log::begin( "Application::InitApplication" );
     u4 deviceID;
     u4 rv;
     xCL_DevicePtr deviceList;
@@ -143,7 +143,7 @@ CK_RV Application::InitApplication( )
 
 CK_RV Application::Enumerate( CK_BBOOL tokenPresent, CK_SLOT_ID_PTR pSlotList, CK_ULONG_PTR pulCount )
 {
-   Log::begin( "Application::Enumerate" );
+   //Log::begin( "Application::Enumerate" );
 
    CK_ULONG   slotNb              = 0;
    LPTSTR     pReader             = NULL;
@@ -152,7 +152,7 @@ CK_RV Application::Enumerate( CK_BBOOL tokenPresent, CK_SLOT_ID_PTR pSlotList, C
 
    if( NULL_PTR == pulCount )
    {
-      Log::error( "Application::Enumerate", "CKR_ARGUMENTS_BAD" );
+      //Log::error( "Application::Enumerate", "CKR_ARGUMENTS_BAD" );
       return CKR_ARGUMENTS_BAD;
    }
 
@@ -164,35 +164,35 @@ CK_RV Application::Enumerate( CK_BBOOL tokenPresent, CK_SLOT_ID_PTR pSlotList, C
       if( NULL_PTR != Application::_slotCache[ i ] )
       {
          currentCache[ i ] = *(Application::_slotCache[ i ]->_readerName);
-         Log::log( "Application::Enumerate - currentCache[ %d ] <%s>", i, currentCache[ i ].c_str( ) );
+         //Log::log( "Application::Enumerate - currentCache[ %d ] <%s>", i, currentCache[ i ].c_str( ) );
       }
    }
 
    // Get the readers from the PCSC layer
    DWORD readerListCharLength = 0;
    hResult = SCardListReaders( Application::_hContext, NULL, NULL, &readerListCharLength );
-   Log::log( "Application::Enumerate - readerListCharLength <%#02x>", readerListCharLength );
-   Log::log( "Application::Enumerate - SCardListReaders <%#02x>", hResult );
+   //Log::log( "Application::Enumerate - readerListCharLength <%#02x>", readerListCharLength );
+   //Log::log( "Application::Enumerate - SCardListReaders <%#02x>", hResult );
    if( SCARD_S_SUCCESS != hResult )
    {
-      Log::error( "Application::Enumerate", "CKR_GENERAL_ERROR" );
+      //Log::error( "Application::Enumerate", "CKR_GENERAL_ERROR" );
       return CKR_GENERAL_ERROR;
    }
 
    LPTSTR pReaderList = (lpCharPtr)malloc( sizeof(char) * readerListCharLength );
    if( NULL == pReaderList )
    {
-      Log::error( "Application::Enumerate", "CKR_HOST_MEMORY" );
+      //Log::error( "Application::Enumerate", "CKR_HOST_MEMORY" );
       return CKR_HOST_MEMORY;
    }
    memset( pReaderList, 0, sizeof(char) * readerListCharLength );
 
    hResult = SCardListReaders( Application::_hContext, NULL, pReaderList, &readerListCharLength);
-   Log::log( "Application::Enumerate - SCardListReaders 2 <%#02x>", hResult );
+   //Log::log( "Application::Enumerate - SCardListReaders 2 <%#02x>", hResult );
    if( SCARD_S_SUCCESS != hResult )
    {
       free( pReaderList );
-      Log::error( "Application::Enumerate", "CKR_GENERAL_ERROR" );
+      //Log::error( "Application::Enumerate", "CKR_GENERAL_ERROR" );
       return CKR_GENERAL_ERROR;
    }
 
@@ -207,13 +207,13 @@ CK_RV Application::Enumerate( CK_BBOOL tokenPresent, CK_SLOT_ID_PTR pSlotList, C
    while( pReader && ( '\0' != *pReader ) )
    {
       currentPcscList[ i ] = pReader;
-      Log::log( "Application::Enumerate - PCSC List[ %d ] <%s>", i, currentPcscList[ i ].c_str( ) );
+      //Log::log( "Application::Enumerate - PCSC List[ %d ] <%s>", i, currentPcscList[ i ].c_str( ) );
       i++;
       if( i > CONFIG_MAX_SLOT )
       {
          /*
          free( pReaderList );
-         Log::error( "Application::Enumerate", "CKR_HOST_MEMORY" );
+         //Log::error( "Application::Enumerate", "CKR_HOST_MEMORY" );
          return CKR_HOST_MEMORY;
          */
          break;
@@ -282,7 +282,7 @@ CK_RV Application::Enumerate( CK_BBOOL tokenPresent, CK_SLOT_ID_PTR pSlotList, C
             CK_RV rv = addSlot( currentPcscList[ i ] );
             if( CKR_OK != rv )
             {
-               Log::error( "Application::Enumerate", "addSlot failed" );
+               //Log::error( "Application::Enumerate", "addSlot failed" );
                return rv;
             }
          }
@@ -313,13 +313,13 @@ CK_RV Application::Enumerate( CK_BBOOL tokenPresent, CK_SLOT_ID_PTR pSlotList, C
             {
                // We found a card in this reader
                Application::_slotCache[i]->_slotInfo.flags |= CKF_TOKEN_PRESENT;
-               Log::log( "Application::Enumerate - New Cache[ %d ] - Name <%s> - Token present", i, Application::_slotCache[ i ]->_readerName->c_str( ) );
+               //Log::log( "Application::Enumerate - New Cache[ %d ] - Name <%s> - Token present", i, Application::_slotCache[ i ]->_readerName->c_str( ) );
             }
             else
             {
                // No card in this reader
                Application::_slotCache[i]->_slotInfo.flags &= ~CKF_TOKEN_PRESENT;
-               Log::log( "Application::Enumerate - New Cache[ %d ] - Name <%s> - Token NOT present", i, Application::_slotCache[ i ]->_readerName->c_str( ) );
+               //Log::log( "Application::Enumerate - New Cache[ %d ] - Name <%s> - Token NOT present", i, Application::_slotCache[ i ]->_readerName->c_str( ) );
             }
          }
 
@@ -342,7 +342,7 @@ CK_RV Application::Enumerate( CK_BBOOL tokenPresent, CK_SLOT_ID_PTR pSlotList, C
    if((pSlotList != NULL_PTR)&&(*pulCount < slotNb))
    {
       *pulCount = slotNb;
-      Log::error( "Application::Enumerate", "CKR_BUFFER_TOO_SMALL" );
+      //Log::error( "Application::Enumerate", "CKR_BUFFER_TOO_SMALL" );
       return CKR_BUFFER_TOO_SMALL;
    }
 
@@ -380,7 +380,7 @@ CK_RV Application::Enumerate( CK_BBOOL tokenPresent, CK_SLOT_ID_PTR pSlotList, C
       }
    }
 
-   Log::end( "Application::Enumerate" );
+   //Log::end( "Application::Enumerate" );
 
    return CKR_OK;
 }
@@ -564,20 +564,20 @@ CK_RV Application::GetSlotFromSlotId( CK_SLOT_ID slotId, Slot** slot )
 */
 void Application::ClearCache(void)
 {
+   Log::begin( "Application::ClearCache" );
+
    // initialize the slot cache
-   CK_SLOT_ID sid = 0;
-   for(;sid<CONFIG_MAX_SLOT;sid++)
+   for( int sid = 0 ; sid < CONFIG_MAX_SLOT ; sid++ )
    {
-      if(Application::_slotCache[sid] != NULL_PTR)
+      Slot* slot = Application::_slotCache[ sid ];
+      if( NULL_PTR != slot )
       {
-         Slot* slot = Application::_slotCache[sid];
 #ifdef INCLUDE_EVENTING
          if(slot->_tracker != NULL_PTR)
          {
-            slot->_tracker->stop();
+            slot->_tracker->stop( );
          }
 #endif
-
          delete slot;
          Application::_slotCache[sid] = NULL_PTR;
       }
@@ -590,6 +590,8 @@ void Application::ClearCache(void)
    // we should just signal all the events
    CryptokiEvent.Signal();
 #endif
+
+   Log::end( "Application::ClearCache" );
 }
 
 

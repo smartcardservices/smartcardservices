@@ -27,6 +27,7 @@
 #define T_KEY_GEN_MECHANISM 7
 #define T_UNKNOWN 8
 
+unsigned long Log::m_ulStart = 0;
 
 /* Log a message into the log file
 */
@@ -2180,3 +2181,27 @@ void Log::CK_USER_TYPEToString( const CK_USER_TYPE& t, std::string &result )
 #endif
 }
 
+
+/*
+*/
+void Log::start( void )
+{
+#ifdef __DEBUG_GEMALTO__
+#ifdef WIN32
+   m_ulStart = GetTickCount( );
+#endif
+#endif
+}
+
+
+/*
+*/
+void Log::stop( const char* a_pMethod )
+{
+#ifdef __DEBUG_GEMALTO__
+#ifdef WIN32
+   unsigned long ulTickCount = GetTickCount( ) - m_ulStart;
+   Log::log( "%s - Spend <%ld> milliseconds", a_pMethod, ulTickCount );
+#endif
+#endif
+}
