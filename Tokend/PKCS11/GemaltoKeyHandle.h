@@ -88,6 +88,3 @@ public:
 
 
 #endif /* !_GEMALTOKEYHANDLE_H_ */
-
-/* arch-tag: 8B057D7A-124C-11D9-92C8-000A9595DEEE */
-

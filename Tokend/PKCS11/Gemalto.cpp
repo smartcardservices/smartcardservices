@@ -47,5 +47,3 @@ int main(int argc, const char *argv[])
 	token = new GemaltoToken();
 	return SecTokendMain(argc, argv, token->callbacks(), token->support());
 }
-
-/* arch-tag: 8B9B7BB4-124C-11D9-ACF9-000A9595DEEE */

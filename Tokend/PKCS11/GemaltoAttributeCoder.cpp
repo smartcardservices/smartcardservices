@@ -544,5 +544,3 @@ void KeyNameAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const
 
 	GemaltoToken::log( "KeyNameAttributeCoder::decode <END>\n" );
 }
-
-/* arch-tag: C8A090EE-F61D-11D8-9622-000A9595DEEE */

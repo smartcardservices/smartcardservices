@@ -105,5 +105,3 @@ typedef struct card_atr
 		(* (gemaltoToken.s_CK_pFunctionList -> _name))
 
 #endif /* !_GEMALTOTOKEN_H_ */
-
-/* arch-tag: 89FAE70D-124C-11D9-B24F-000A9595DEEE */

@@ -248,5 +248,3 @@ public:
 
 
 #endif /* !_GEMALTOATTRIBUTECODER_H_ */
-
-/* arch-tag: C909C93A-F61D-11D8-8459-000A9595DEEE */

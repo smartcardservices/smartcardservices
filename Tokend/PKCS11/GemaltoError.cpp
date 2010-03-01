@@ -259,6 +259,3 @@ const char *CKError::what() const throw ()
 
 void CKError::throwMe(CK_RV rv)
 { throw CKError(rv); }
-
-
-/* arch-tag: 8B4FF59F-124C-11D9-AFF8-000A9595DEEE */

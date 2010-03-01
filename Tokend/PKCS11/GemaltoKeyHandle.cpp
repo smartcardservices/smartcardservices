@@ -366,6 +366,3 @@ Tokend::KeyHandle* GemaltoKeyHandleFactory::keyHandle(Tokend::TokenContext *toke
 
 	return new GemaltoKeyHandle(gemaltoToken, metaRecord, key);
 }
-
-
-/* arch-tag: 8B1B6D68-124C-11D9-B5E6-000A9595DEEE */

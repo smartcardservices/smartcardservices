@@ -102,5 +102,3 @@ void GemaltoSchema::create()
 
 	GemaltoToken::log( "\nGemaltoSchema::create <END>\n" );
 }
-
-/* arch-tag: 8AB453F1-124C-11D9-B0F8-000A9595DEEE */

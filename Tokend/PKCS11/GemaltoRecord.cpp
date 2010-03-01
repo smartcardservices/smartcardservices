@@ -682,6 +682,3 @@ void GemaltoPrivateKeyRecord::getAcl(const char *tag, uint32 &count, AclEntryInf
 
 	GemaltoToken::log( "GemaltoPrivateKeyRecord::getAcl <END>\n" );
 }
-
-
-/* arch-tag: 8AE701D5-124C-11D9-AE74-000A9595DEEE */

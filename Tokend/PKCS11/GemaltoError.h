@@ -53,6 +53,3 @@ protected:
 };
 
 #endif /* !_GEMALTOERROR_H_ */
-
-
-/* arch-tag: 8B34BC1C-124C-11D9-B7AA-000A9595DEEE */
