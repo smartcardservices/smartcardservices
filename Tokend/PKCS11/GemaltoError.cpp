@@ -22,8 +22,8 @@
  */
 
 /*
- *  GemaltoError.cpp
- *  Gemalto.tokend
+ * GemaltoError.cpp
+ * $Id$
  */
 
 #include "GemaltoError.h"

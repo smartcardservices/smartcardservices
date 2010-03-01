@@ -22,8 +22,8 @@
  */
 
 /*
- *  GemaltoToken.cpp
- *  Gemalto.tokend
+ * GemaltoToken.cpp
+ * $Id$
  */
 
 #include "GemaltoToken.h"
@@ -724,5 +724,3 @@ void GemaltoToken::log( const char * format, ... )
 	fclose( pLog );
 #endif
 }
-
-/* arch-tag: 8A7C3BAF-124C-11D9-A606-000A9595DEEE */

@@ -22,8 +22,8 @@
  */
 
 /*
- *  GemaltoToken.h
- *  Gemalto.tokend
+ * GemaltoToken.h
+ * $Id$
  */
 
 #ifndef _GEMALTOTOKEN_H_

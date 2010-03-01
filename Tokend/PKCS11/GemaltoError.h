@@ -22,8 +22,8 @@
  */
 
 /*
- *  GemaltoError.h
- *  Gemalto.tokend
+ * GemaltoError.h
+ * $Id$
  */
 
 #ifndef _GEMALTOERROR_H_

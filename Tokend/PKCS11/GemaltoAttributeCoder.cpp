@@ -22,8 +22,8 @@
  */
 
 /*
- *  GemaltoAttributeCoder.cpp
- *  Gemalto.tokend
+ * GemaltoAttributeCoder.cpp
+ * $Id$
  */
 
 #include "GemaltoAttributeCoder.h"

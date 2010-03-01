@@ -23,6 +23,7 @@
 
 /*
  * Gemalto.cpp - Gemalto.tokend main program
+ * $Id$
  */
 
 #include "GemaltoToken.h"

@@ -22,8 +22,8 @@
  */
 
 /*
- *  GemaltoSchema.cpp
- *  Gemalto.tokend
+ * GemaltoSchema.cpp
+ * $Id$
  */
 
 #include "GemaltoSchema.h"

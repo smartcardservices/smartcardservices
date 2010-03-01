@@ -22,8 +22,8 @@
  */
 
 /*
- *  GemaltoAttributeCoder.h
- *  Gemalto.tokend
+ * GemaltoAttributeCoder.h
+ * $Id$
  */
 
 #ifndef _GEMALTOATTRIBUTECODER_H_

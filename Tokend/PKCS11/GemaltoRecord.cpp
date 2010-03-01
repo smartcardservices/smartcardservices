@@ -22,8 +22,8 @@
  */
 
 /*
- *  GemaltoRecord.cpp
- *  Gemalto.tokend
+ * GemaltoRecord.cpp
+ * $Id$
  */
 
 #include "GemaltoRecord.h"

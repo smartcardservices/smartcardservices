@@ -22,8 +22,8 @@
  */
 
 /*
- *  GemaltoSchema.h
- *  Gemalto.tokend
+ * GemaltoSchema.h
+ * $Id$
  */
 
 #ifndef _GEMALTOSCHEMA_H_

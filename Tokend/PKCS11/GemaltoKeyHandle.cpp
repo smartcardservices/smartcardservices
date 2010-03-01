@@ -22,8 +22,8 @@
  */
 
 /*
- *  GemaltoKeyHandle.cpp
- *  Gemalto.tokend
+ * GemaltoKeyHandle.cpp
+ * $Id$
  */
 
 #include "GemaltoKeyHandle.h"

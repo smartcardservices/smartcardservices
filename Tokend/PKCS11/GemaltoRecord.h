@@ -22,8 +22,8 @@
  */
 
 /*
- *  GemaltoRecord.h
- *  Gemalto.tokend
+ * GemaltoRecord.h
+ * $Id$
  */
 
 #ifndef _GEMALTORECORD_H_

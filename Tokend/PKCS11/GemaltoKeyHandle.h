@@ -22,8 +22,8 @@
  */
 
 /*
- *  GemaltoKeyHandle.h
- *  Gemalto.tokend
+ * GemaltoKeyHandle.h
+ * $Id$
  */
 
 #ifndef _GEMALTOKEYHANDLE_H_
