@@ -490,7 +490,7 @@ uint32 BELPICToken::probe(SecTokendProbeFlags flags,
 //	uint32 score = Tokend::ISO7816Token::probe(flags, tokenUid);
 //SCARD_PROTOCOL_T0
 	const SCARD_READERSTATE &readerState = *(*startupReaderInfo)();
-	connect(mSession, readerState.szReader, SCARD_PROTOCOL_T0);
+	connect(mSession, readerState.szReader, SCARD_SHARE_SHARED, SCARD_PROTOCOL_T0);
 	uint32 score = 0;
 	
 	bool doDisconnect = false; /*!(flags & kSecTokendProbeKeepToken); */
