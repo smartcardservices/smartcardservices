@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1999-2005
  *  David Corcoran <corcoran@linuxnet.com>
- * Copyright (C) 1999-2009
+ * Copyright (C) 2005-2009
  *  Ludovic Rousseau <ludovic.rousseau@free.fr>
  *
  * $Id: reader.h.in 4210 2009-05-14 13:14:59Z rousseau $
@@ -97,7 +97,7 @@
 #define SCARD_CTL_CODE(code) (0x42000000 + (code))
 
 /**
- * PC/SC v2.02.05 part 10 reader tags
+ * PC/SC part 10 v2.02.07 March 2010 reader tags
  */
 #define CM_IOCTL_GET_FEATURE_REQUEST SCARD_CTL_CODE(3400)
 
@@ -108,7 +108,8 @@
 #define FEATURE_GET_KEY_PRESSED          0x05
 #define FEATURE_VERIFY_PIN_DIRECT        0x06 /**< Verify PIN */
 #define FEATURE_MODIFY_PIN_DIRECT        0x07 /**< Modify PIN */
-#define FEATURE_MCT_READERDIRECT         0x08
+#define FEATURE_MCT_READERDIRECT         0x08 /**< deprecated */
+#define FEATURE_MCT_READER_DIRECT        0x08
 #define FEATURE_MCT_UNIVERSAL            0x09
 #define FEATURE_IFD_PIN_PROPERTIES       0x0A /**< retrieve properties of the IFD regarding PIN handling */
 #define FEATURE_ABORT                    0x0B
@@ -118,8 +119,10 @@
 #define FEATURE_WRITE_DISPLAY            0x0F
 #define FEATURE_GET_KEY                  0x10
 #define FEATURE_IFD_DISPLAY_PROPERTIES   0x11
+#define FEATURE_GET_TLV_PROPERTIES       0x12
+#define FEATURE_CCID_ESC_COMMAND         0x13
 
-/* structures used (but not defined) in PC/SC Part 10 revision 2.02.05:
+/* structures used (but not defined) in PC/SC Part 10:
  * "IFDs with Secure Pin Entry Capabilities" */
 
 #include <inttypes.h>
@@ -211,8 +214,6 @@ typedef struct
 /** structure used with \ref FEATURE_IFD_PIN_PROPERTIES */
 typedef struct {
 	uint16_t wLcdLayout; /**< display characteristics */
-	uint16_t wLcdMaxCharacters;
-	uint16_t wLcdMaxLines;
 	uint8_t bEntryValidationCondition;
 	uint8_t bTimeOut2;
 } PIN_PROPERTIES_STRUCTURE;
