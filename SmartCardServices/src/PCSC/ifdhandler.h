@@ -253,6 +253,7 @@ whichever location your reader resides.
 #define _ifd_handler_h_
 
 #include <PCSC/pcsclite.h>
+#include <PCSC/wintypes.h>
 
 #ifdef __cplusplus
 extern "C"
