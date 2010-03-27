@@ -26,7 +26,7 @@
  * Copyright (C) 1999
  *  David Corcoran <corcoran@linuxnet.com>
  *
- * $Id: wintypes.h 2071 2006-06-06 09:20:19Z rousseau $
+ * $Id$
  */
 
 /**

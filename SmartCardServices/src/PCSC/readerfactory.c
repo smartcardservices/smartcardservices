@@ -39,7 +39,7 @@
 	Purpose: This keeps track of a list of currently 
 	available reader structures.
 
-$Id: readerfactory.c,v 1.3 2004/10/14 20:33:35 mb Exp $
+$Id$
 
 ********************************************************************/
 

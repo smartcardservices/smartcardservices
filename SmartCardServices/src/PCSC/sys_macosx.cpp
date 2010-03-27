@@ -26,7 +26,7 @@
 			<corcoran@linuxnet.com>
 	Purpose: This handles abstract system level calls. 
 
-$Id: sys_macosx.cpp,v 1.5.40.1 2005/06/17 22:40:12 mb Exp $
+$Id$
 
 ********************************************************************/
 

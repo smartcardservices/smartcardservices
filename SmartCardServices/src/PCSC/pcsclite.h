@@ -27,7 +27,7 @@
  *  David Corcoran <corcoran@linuxnet.com>
  *  Ludovic Rousseau <ludovic.rousseau@free.fr>
  *
- * $Id: pcsclite.h.in 2124 2006-08-07 14:18:52Z rousseau $
+ * $Id$
  */
 
 /**

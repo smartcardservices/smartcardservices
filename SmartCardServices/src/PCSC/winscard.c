@@ -33,7 +33,7 @@
  *  David Corcoran <corcoran@linuxnet.com>
  *  Ludovic Rousseau <ludovic.rousseau@free.fr>
  *
- * $Id: winscard.c 2385 2007-02-05 13:55:01Z rousseau $
+ * $Id$
  */
 
 /**

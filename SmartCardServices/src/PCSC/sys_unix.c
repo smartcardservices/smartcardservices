@@ -34,7 +34,7 @@
  * Copyright (C) 1999
  *  David Corcoran <corcoran@linuxnet.com>
  *
- * $Id: sys_unix.c 2353 2007-01-23 10:31:50Z rousseau $
+ * $Id$
  */
 
 /**

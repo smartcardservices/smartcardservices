@@ -6,7 +6,7 @@
  * Copyright (C) 2005
  *  Ludovic Rousseau <ludovic.rousseau@free.fr>
  *
- * $Id: misc.h 2188 2006-10-19 11:29:29Z rousseau $
+ * $Id$
  */
 
 #ifndef __misc_h__

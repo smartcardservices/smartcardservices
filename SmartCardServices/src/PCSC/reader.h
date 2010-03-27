@@ -6,7 +6,7 @@
  * Copyright (C) 2005-2009
  *  Ludovic Rousseau <ludovic.rousseau@free.fr>
  *
- * $Id: reader.h.in 4210 2009-05-14 13:14:59Z rousseau $
+ * $Id$
  */
 
 /**

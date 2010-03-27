@@ -34,7 +34,7 @@
  *  Damien Sauveron <damien.sauveron@labri.fr>
  *  Ludoic Rousseau <ludovic.rousseau@free.fr>
  *
- * $Id: winscard_msg.c 2377 2007-02-05 13:13:56Z rousseau $
+ * $Id$
  */
 
 /**

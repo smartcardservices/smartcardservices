@@ -32,7 +32,7 @@
  * Copyright (C) 1999
  *  David Corcoran <corcoran@linuxnet.com>
  *
- * $Id: sys_generic.h 2264 2006-12-03 13:15:03Z rousseau $
+ * $Id$
  */
 
 /**

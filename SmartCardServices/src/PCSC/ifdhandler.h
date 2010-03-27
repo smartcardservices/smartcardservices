@@ -36,7 +36,7 @@
  * Copyright (C) 2002-2009
  *  Ludovic Rousseau <ludovic.rousseau@free.fr>
  *
- * $Id: ifdhandler.h 2348 2007-01-20 15:12:19Z rousseau $
+ * $Id$
  */
 
 /**

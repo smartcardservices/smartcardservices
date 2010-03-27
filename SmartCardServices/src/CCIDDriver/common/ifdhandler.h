@@ -7,7 +7,7 @@
 /            See http://www.linuxnet.com for more information.
 / License:   See file COPYING.BSD
 /
-/ $Id: ifdhandler.h,v 1.2 2004/08/16 17:50:35 stuartha Exp $
+/ $Id$
 /
 ******************************************************************/
 

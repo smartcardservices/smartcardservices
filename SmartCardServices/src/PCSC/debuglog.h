@@ -34,7 +34,7 @@
  * Copyright (C) 1999-2005
  *  Ludovic Rousseau <ludovic.rousseau@free.fr>
  *
- * $Id: debuglog.h 2151 2006-09-06 20:02:47Z rousseau $
+ * $Id$
  */
 
 /**
