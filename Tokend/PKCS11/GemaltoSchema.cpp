@@ -43,8 +43,8 @@ GemaltoSchema::~GemaltoSchema()
 
 Tokend::Relation* GemaltoSchema::createKeyRelation(CSSM_DB_RECORDTYPE keyType)
 {
-	GemaltoToken::log( "\nGemaltoSchema::createKeyRelation <BEGIN>\n" );
-	GemaltoToken::log( "CSSM_DB_RECORDTYPE <%ld>\n", keyType );
+	GemaltoToken::log("\nGemaltoSchema::createKeyRelation <BEGIN>\n");
+	GemaltoToken::log("CSSM_DB_RECORDTYPE <%ld>\n", keyType);
 
 	Relation *rn = createStandardRelation(keyType);
 
@@ -80,7 +80,7 @@ Tokend::Relation* GemaltoSchema::createKeyRelation(CSSM_DB_RECORDTYPE keyType)
 	mr.attributeCoder(kSecKeyVerifyRecover, &mVerifyRecoverCoder);
 	mr.attributeCoder(kSecKeyDerive, &mDeriveCoder);
 
-	GemaltoToken::log( "\nGemaltoSchema::createKeyRelation <END>\n" );
+	GemaltoToken::log("\nGemaltoSchema::createKeyRelation <END>\n");
 
 	return rn;
 }
@@ -88,7 +88,7 @@ Tokend::Relation* GemaltoSchema::createKeyRelation(CSSM_DB_RECORDTYPE keyType)
 
 void GemaltoSchema::create()
 {
-	GemaltoToken::log( "\nGemaltoSchema::create <BEGIN>\n" );
+	GemaltoToken::log("\nGemaltoSchema::create <BEGIN>\n");
 
 	Schema::create();
 
@@ -100,5 +100,5 @@ void GemaltoSchema::create()
 	rn_publ->metaRecord().attributeCoder(kSecKeyLabel, &mZeroCoder);
 	//rn_publ->metaRecord().attributeCoder(kSecKeyLabel, &mKeyNameCoder);
 
-	GemaltoToken::log( "\nGemaltoSchema::create <END>\n" );
+	GemaltoToken::log("\nGemaltoSchema::create <END>\n");
 }

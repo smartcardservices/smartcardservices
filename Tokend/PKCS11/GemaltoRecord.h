@@ -45,7 +45,7 @@ public:
 	GemaltoData(CK_BYTE_PTR ptr, CK_ULONG size) : _ptr(NULL) { copy(ptr, size); }
 	~GemaltoData()
 	{
-		if( NULL != _ptr )
+		if (NULL != _ptr)
 		{
 			delete[] _ptr;
 		}
@@ -56,7 +56,7 @@ public:
 
 	void copy(CK_BYTE_PTR ptr, CK_ULONG size)
 	{
-		if( NULL != _ptr )
+		if (NULL != _ptr)
 		{
 			delete[] _ptr;
 		}
@@ -72,7 +72,7 @@ public:
 
 	void reserve(CK_ULONG n)
 	{
-		if( NULL != _ptr )
+		if (NULL != _ptr)
 		{
 			delete[] _ptr;
 		}
@@ -143,13 +143,13 @@ public:
 	CK_KEY_TYPE getType() const { return mKeyType; }
 	uint32 sizeInBits() const { return mKeySize; }
 
-	const GemaltoData& getKeyPubModulus( ) const { return mKeyModulus; }
+	const GemaltoData& getKeyPubModulus() const { return mKeyModulus; }
 
 	CK_BBOOL verify() const { return mKeyPubVerify; }
-	CK_BBOOL verifyRecover() const { return ( mKeyPubVerify | mKeyPrvSign); }
-	CK_BBOOL encrypt() const { return ( mKeyPubWrap | mKeyPubEncrypt); }
+	CK_BBOOL verifyRecover() const { return (mKeyPubVerify | mKeyPrvSign); }
+	CK_BBOOL encrypt() const { return (mKeyPubWrap | mKeyPubEncrypt); }
 	CK_BBOOL derive() const { return FALSE; }
-	CK_BBOOL wrap() const { return ( mKeyPubWrap | mKeyPubEncrypt); }
+	CK_BBOOL wrap() const { return (mKeyPubWrap | mKeyPubEncrypt); }
 
 	CK_BBOOL isSelfSigned() const { return mSelfSigned; }
 	CK_BBOOL isCA() const { return mCA; }
@@ -197,18 +197,18 @@ public:
 
 	virtual CK_BBOOL verify() const { return mKeyPubVerify; }
 	virtual CK_BBOOL verifyRecover() const { return mKeyPubVerify; }
-	virtual CK_BBOOL encrypt() const { return ( mKeyPubWrap | mKeyPubEncrypt); }
+	virtual CK_BBOOL encrypt() const { return (mKeyPubWrap | mKeyPubEncrypt); }
 	virtual CK_BBOOL derive() const { return FALSE; }
 	virtual CK_BBOOL wrap() const { return mKeyPubWrap; }
 
-	virtual const GemaltoData& getModulus( ) const { return mKeyModulus; }
+	virtual const GemaltoData& getModulus() const { return mKeyModulus; }
 
 	virtual void computeSign(GemaltoToken &gemaltoToken, CK_ULONG mech, const AccessCredentials *cred, unsigned char *data, size_t dataLength, unsigned char *result, size_t &resultLength);
 
 	virtual void computeDecrypt(GemaltoToken &gemaltoToken, CK_ULONG mech, const AccessCredentials *cred, unsigned char *data, size_t dataLength, unsigned char *result, size_t &resultLength);
 
 protected:
-	GemaltoKeyRecord( );
+	GemaltoKeyRecord();
 
 	GemaltoData mLabel;
 
@@ -238,10 +238,10 @@ public:
 	void getAcl(const char *tag, uint32 &count, AclEntryInfo *&acls);
 
 	CK_BBOOL verify() const { return mKeyPubVerify; }
-	CK_BBOOL verifyRecover() const { return ( mKeyPubVerify | mKeyPrvSign); }
-	CK_BBOOL encrypt() const { return ( mKeyPubWrap | mKeyPubEncrypt); }
+	CK_BBOOL verifyRecover() const { return (mKeyPubVerify | mKeyPrvSign); }
+	CK_BBOOL encrypt() const { return (mKeyPubWrap | mKeyPubEncrypt); }
 	CK_BBOOL derive() const { return FALSE; }
-	CK_BBOOL wrap() const { return ( mKeyPubWrap | mKeyPubEncrypt); }
+	CK_BBOOL wrap() const { return (mKeyPubWrap | mKeyPubEncrypt); }
 
 protected:
 	CK_BBOOL mKeyPrvSign;

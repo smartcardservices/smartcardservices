@@ -51,7 +51,7 @@ KeyEncryptAttributeCoder::~KeyEncryptAttributeCoder()
 
 void KeyEncryptAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
-	GemaltoToken::log( "\nKeyEncryptAttributeCoder::decode <BEGIN>\n" );
+	GemaltoToken::log("\nKeyEncryptAttributeCoder::decode <BEGIN>\n");
 
 	GemaltoKeyRecord &keyRecord = dynamic_cast<GemaltoKeyRecord &>(record);
 	bool boolValue = true;
@@ -66,11 +66,11 @@ void KeyEncryptAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, co
 	}
 
 	std::string str = "";
-	GemaltoToken::toStringHex( keyRecord.getLabel( ).ptr( ), keyRecord.getLabel().size( ), str );
-	GemaltoToken::log( "KeyEncryptAttributeCoder::decode - Class <%lu> - Value <%lu>\n", keyRecord.getClass(),  boolValue );
+	GemaltoToken::toStringHex(keyRecord.getLabel().ptr(), keyRecord.getLabel().size(), str);
+	GemaltoToken::log("KeyEncryptAttributeCoder::decode - Class <%lu> - Value <%lu>\n", keyRecord.getClass(),  boolValue);
 	record.attributeAtIndex(metaAttribute.attributeIndex(), new Attribute(boolValue));
 
-	GemaltoToken::log( "KeyEncryptAttributeCoder::decode <END>\n" );
+	GemaltoToken::log("KeyEncryptAttributeCoder::decode <END>\n");
 }
 
 
@@ -84,7 +84,7 @@ KeyDecryptAttributeCoder::~KeyDecryptAttributeCoder()
 
 void KeyDecryptAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
-	GemaltoToken::log( "\nKeyDecryptAttributeCoder::decode <BEGIN>\n" );
+	GemaltoToken::log("\nKeyDecryptAttributeCoder::decode <BEGIN>\n");
 
 	GemaltoKeyRecord &keyRecord = dynamic_cast<GemaltoKeyRecord &>(record);
 	bool boolValue = true;
@@ -99,11 +99,11 @@ void KeyDecryptAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, co
 	}
 
 	std::string str = "";
-	GemaltoToken::toStringHex( keyRecord.getLabel( ).ptr( ), keyRecord.getLabel().size( ), str );
-	GemaltoToken::log( "KeyDecryptAttributeCoder::decode - Label <%s> - bool <%u>\n", str.c_str(), boolValue);
+	GemaltoToken::toStringHex(keyRecord.getLabel().ptr(), keyRecord.getLabel().size(), str);
+	GemaltoToken::log("KeyDecryptAttributeCoder::decode - Label <%s> - bool <%u>\n", str.c_str(), boolValue);
 	record.attributeAtIndex(metaAttribute.attributeIndex(), new Attribute(boolValue));
 
-	GemaltoToken::log( "KeyDecryptAttributeCoder::decode <END>\n" );
+	GemaltoToken::log("KeyDecryptAttributeCoder::decode <END>\n");
 }
 
 
@@ -117,7 +117,7 @@ KeySignAttributeCoder::~KeySignAttributeCoder()
 
 void KeySignAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
-	GemaltoToken::log( "\nKeySignAttributeCoder::decode <BEGIN>\n" );
+	GemaltoToken::log("\nKeySignAttributeCoder::decode <BEGIN>\n");
 
 	GemaltoKeyRecord &keyRecord = dynamic_cast<GemaltoKeyRecord &>(record);
 	bool boolValue = true;
@@ -132,11 +132,11 @@ void KeySignAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const
 	}
 
 	std::string str = "";
-	GemaltoToken::toStringHex( keyRecord.getLabel( ).ptr( ), keyRecord.getLabel().size( ), str );
-	GemaltoToken::log( "KeySignAttributeCoder::decode - Label <%s> - bool <%u>\n", str.c_str( ), boolValue);
+	GemaltoToken::toStringHex(keyRecord.getLabel().ptr(), keyRecord.getLabel().size(), str);
+	GemaltoToken::log("KeySignAttributeCoder::decode - Label <%s> - bool <%u>\n", str.c_str(), boolValue);
 	record.attributeAtIndex(metaAttribute.attributeIndex(), new Attribute(boolValue));
 
-	GemaltoToken::log( "KeySignAttributeCoder::decode <END>\n" );
+	GemaltoToken::log("KeySignAttributeCoder::decode <END>\n");
 }
 
 
@@ -150,7 +150,7 @@ KeyVerifyAttributeCoder::~KeyVerifyAttributeCoder()
 
 void KeyVerifyAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
-	GemaltoToken::log( "\nKeyVerifyAttributeCoder::decode <BEGIN>\n" );
+	GemaltoToken::log("\nKeyVerifyAttributeCoder::decode <BEGIN>\n");
 
 	GemaltoKeyRecord &keyRecord = dynamic_cast<GemaltoKeyRecord &>(record);
 	bool boolValue = true;
@@ -165,11 +165,11 @@ void KeyVerifyAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, con
 	}
 
 	std::string str = "";
-	GemaltoToken::toStringHex( keyRecord.getLabel( ).ptr( ), keyRecord.getLabel().size( ), str );
-	GemaltoToken::log( "KeyVerifyAttributeCoder::decode - Label <%s> - bool <%u>\n", str.c_str( ), boolValue);
+	GemaltoToken::toStringHex(keyRecord.getLabel().ptr(), keyRecord.getLabel().size(), str);
+	GemaltoToken::log("KeyVerifyAttributeCoder::decode - Label <%s> - bool <%u>\n", str.c_str(), boolValue);
 	record.attributeAtIndex(metaAttribute.attributeIndex(), new Attribute(boolValue));
 
-	GemaltoToken::log( "KeyVerifyAttributeCoder::decode <END>\n" );
+	GemaltoToken::log("KeyVerifyAttributeCoder::decode <END>\n");
 }
 
 
@@ -183,7 +183,7 @@ KeySignRecoverAttributeCoder::~KeySignRecoverAttributeCoder()
 
 void KeySignRecoverAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
-	GemaltoToken::log( "\nKeySignRecoverAttributeCoder::decode <BEGIN>\n" );
+	GemaltoToken::log("\nKeySignRecoverAttributeCoder::decode <BEGIN>\n");
 
 	GemaltoKeyRecord &keyRecord = dynamic_cast<GemaltoKeyRecord &>(record);
 	bool boolValue = true;
@@ -198,11 +198,11 @@ void KeySignRecoverAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/
 	}
 
 	std::string str = "";
-	GemaltoToken::toStringHex( keyRecord.getLabel( ).ptr( ), keyRecord.getLabel().size( ), str );
-	GemaltoToken::log( "KeySignRecoverAttributeCoder::decode - Label <%s> - bool <%u>\n", str.c_str( ), boolValue);
+	GemaltoToken::toStringHex(keyRecord.getLabel().ptr(), keyRecord.getLabel().size(), str);
+	GemaltoToken::log("KeySignRecoverAttributeCoder::decode - Label <%s> - bool <%u>\n", str.c_str(), boolValue);
 	record.attributeAtIndex(metaAttribute.attributeIndex(), new Attribute(boolValue));
 
-	GemaltoToken::log( "KeySignRecoverAttributeCoder::decode <END>\n" );
+	GemaltoToken::log("KeySignRecoverAttributeCoder::decode <END>\n");
 }
 
 
@@ -216,7 +216,7 @@ KeyVerifyRecoverAttributeCoder::~KeyVerifyRecoverAttributeCoder()
 
 void KeyVerifyRecoverAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
-	GemaltoToken::log( "\nKeyVerifyRecoverAttributeCoder::decode <BEGIN>\n" );
+	GemaltoToken::log("\nKeyVerifyRecoverAttributeCoder::decode <BEGIN>\n");
 
 	GemaltoKeyRecord &keyRecord = dynamic_cast<GemaltoKeyRecord &>(record);
 	bool boolValue = true;
@@ -231,11 +231,11 @@ void KeyVerifyRecoverAttributeCoder::decode(Tokend::TokenContext */*tokenContext
 	}
 
 	std::string str = "";
-	GemaltoToken::toStringHex( keyRecord.getLabel( ).ptr( ), keyRecord.getLabel().size( ), str );
-	GemaltoToken::log( "KeyVerifyRecoverAttributeCoder::decode - Label <%s> - bool <%u>\n", str.c_str( ), boolValue);
+	GemaltoToken::toStringHex(keyRecord.getLabel().ptr(), keyRecord.getLabel().size(), str);
+	GemaltoToken::log("KeyVerifyRecoverAttributeCoder::decode - Label <%s> - bool <%u>\n", str.c_str(), boolValue);
 	record.attributeAtIndex(metaAttribute.attributeIndex(), new Attribute(boolValue));
 
-	GemaltoToken::log( "KeyVerifyRecoverAttributeCoder::decode <END>\n" );
+	GemaltoToken::log("KeyVerifyRecoverAttributeCoder::decode <END>\n");
 }
 
 
@@ -249,7 +249,7 @@ KeyWrapAttributeCoder::~KeyWrapAttributeCoder()
 
 void KeyWrapAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
-	GemaltoToken::log( "\nKeyWrapAttributeCoder::decode <BEGIN>\n" );
+	GemaltoToken::log("\nKeyWrapAttributeCoder::decode <BEGIN>\n");
 
 	GemaltoKeyRecord &keyRecord = dynamic_cast<GemaltoKeyRecord &>(record);
 	bool boolValue = true;
@@ -264,11 +264,11 @@ void KeyWrapAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const
 	}
 
 	std::string str = "";
-	GemaltoToken::toStringHex( keyRecord.getLabel( ).ptr( ), keyRecord.getLabel().size( ), str );
-	GemaltoToken::log( "KeyWrapAttributeCoder::decode - Label <%s> - bool <%u>\n", str.c_str(), boolValue);
+	GemaltoToken::toStringHex(keyRecord.getLabel().ptr(), keyRecord.getLabel().size(), str);
+	GemaltoToken::log("KeyWrapAttributeCoder::decode - Label <%s> - bool <%u>\n", str.c_str(), boolValue);
 	record.attributeAtIndex(metaAttribute.attributeIndex(), new Attribute(boolValue));
 
-	GemaltoToken::log( "KeyWrapAttributeCoder::decode <END>\n" );
+	GemaltoToken::log("KeyWrapAttributeCoder::decode <END>\n");
 }
 
 
@@ -282,7 +282,7 @@ KeyUnwrapAttributeCoder::~KeyUnwrapAttributeCoder()
 
 void KeyUnwrapAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
-	GemaltoToken::log( "\nKeyUnwrapAttributeCoder::decode <BEGIN>\n" );
+	GemaltoToken::log("\nKeyUnwrapAttributeCoder::decode <BEGIN>\n");
 
 	GemaltoKeyRecord &keyRecord = dynamic_cast<GemaltoKeyRecord &>(record);
 	bool boolValue = true;
@@ -297,11 +297,11 @@ void KeyUnwrapAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, con
 	}
 
 	std::string str = "";
-	GemaltoToken::toStringHex( keyRecord.getLabel( ).ptr( ), keyRecord.getLabel().size( ), str );
-	GemaltoToken::log( "KeyUnwrapAttributeCoder::decode - Label <%s> - bool <%u>\n", str.c_str( ), boolValue);
+	GemaltoToken::toStringHex(keyRecord.getLabel().ptr(), keyRecord.getLabel().size(), str);
+	GemaltoToken::log("KeyUnwrapAttributeCoder::decode - Label <%s> - bool <%u>\n", str.c_str(), boolValue);
 	record.attributeAtIndex(metaAttribute.attributeIndex(), new Attribute(boolValue));
 
-	GemaltoToken::log( "KeyUnwrapAttributeCoder::decode <END>\n" );
+	GemaltoToken::log("KeyUnwrapAttributeCoder::decode <END>\n");
 }
 
 
@@ -315,17 +315,17 @@ KeyDeriveAttributeCoder::~KeyDeriveAttributeCoder()
 
 void KeyDeriveAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
-	GemaltoToken::log( "\nKeyDeriveAttributeCoder::decode <BEGIN>\n" );
+	GemaltoToken::log("\nKeyDeriveAttributeCoder::decode <BEGIN>\n");
 
 	GemaltoKeyRecord &keyRecord = dynamic_cast<GemaltoKeyRecord &>(record);
 	bool boolValue = keyRecord.derive();
 
 	std::string str = "";
-	GemaltoToken::toStringHex( keyRecord.getLabel( ).ptr( ), keyRecord.getLabel().size( ), str );
-	GemaltoToken::log( "KeyDeriveAttributeCoder::decode - Label <%s> - keyType <%ld> - bool <%u>\n", keyRecord.getType( ),str.c_str( ), boolValue);
+	GemaltoToken::toStringHex(keyRecord.getLabel().ptr(), keyRecord.getLabel().size(), str);
+	GemaltoToken::log("KeyDeriveAttributeCoder::decode - Label <%s> - keyType <%ld> - bool <%u>\n", keyRecord.getType(),str.c_str(), boolValue);
 	record.attributeAtIndex(metaAttribute.attributeIndex(), new Attribute(boolValue));
 
-	GemaltoToken::log( "KeyDeriveAttributeCoder::decode <END>\n" );
+	GemaltoToken::log("KeyDeriveAttributeCoder::decode <END>\n");
 }
 
 
@@ -339,17 +339,17 @@ KeySensitiveAttributeCoder::~KeySensitiveAttributeCoder()
 
 void KeySensitiveAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
-	GemaltoToken::log( "\nKeySensitiveAttributeCoder::decode <BEGIN>\n" );
+	GemaltoToken::log("\nKeySensitiveAttributeCoder::decode <BEGIN>\n");
 
 	GemaltoKeyRecord &keyRecord = dynamic_cast<GemaltoKeyRecord &>(record);
 	const bool boolValue = (keyRecord.getClass() == CKO_PRIVATE_KEY);
 
 	std::string str = "";
-	GemaltoToken::toStringHex( keyRecord.getLabel( ).ptr( ), keyRecord.getLabel().size( ), str );
-	GemaltoToken::log( "KeySensitiveAttributeCoder::decode - Label <%s> - keyType <%ld> - bool <%u>\n", keyRecord.getType( ), str.c_str( ), boolValue);
+	GemaltoToken::toStringHex(keyRecord.getLabel().ptr(), keyRecord.getLabel().size(), str);
+	GemaltoToken::log("KeySensitiveAttributeCoder::decode - Label <%s> - keyType <%ld> - bool <%u>\n", keyRecord.getType(), str.c_str(), boolValue);
 	record.attributeAtIndex(metaAttribute.attributeIndex(), new Attribute(boolValue));
 
-	GemaltoToken::log( "KeySensitiveAttributeCoder::decode <END>\n" );
+	GemaltoToken::log("KeySensitiveAttributeCoder::decode <END>\n");
 }
 
 
@@ -363,17 +363,17 @@ KeyPrivateAttributeCoder::~KeyPrivateAttributeCoder()
 
 void KeyPrivateAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
-	GemaltoToken::log( "\nKeyPrivateAttributeCoder::decode <BEGIN>\n" );
+	GemaltoToken::log("\nKeyPrivateAttributeCoder::decode <BEGIN>\n");
 
 	GemaltoKeyRecord &keyRecord = dynamic_cast<GemaltoKeyRecord &>(record);
 	const bool boolValue = (keyRecord.getClass() == CKO_PRIVATE_KEY);
 
 	std::string str = "";
-	GemaltoToken::toStringHex( keyRecord.getLabel( ).ptr( ), keyRecord.getLabel().size( ), str );
-	GemaltoToken::log( "KeyPrivateAttributeCoder::decode - Label <%s> - keyType <%ld> - bool <%u>\n", keyRecord.getType( ), str.c_str( ), boolValue);
+	GemaltoToken::toStringHex(keyRecord.getLabel().ptr(), keyRecord.getLabel().size(), str);
+	GemaltoToken::log("KeyPrivateAttributeCoder::decode - Label <%s> - keyType <%ld> - bool <%u>\n", keyRecord.getType(), str.c_str(), boolValue);
 	record.attributeAtIndex(metaAttribute.attributeIndex(), new Attribute(boolValue));
 
-	GemaltoToken::log( "KeyPrivateAttributeCoder::decode <END>\n" );
+	GemaltoToken::log("KeyPrivateAttributeCoder::decode <END>\n");
 }
 
 
@@ -387,17 +387,17 @@ KeyAlwaysSensitiveAttributeCoder::~KeyAlwaysSensitiveAttributeCoder()
 
 void KeyAlwaysSensitiveAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
-	GemaltoToken::log( "\nKeyAlwaysSensitiveAttributeCoder::decode <BEGIN>\n" );
+	GemaltoToken::log("\nKeyAlwaysSensitiveAttributeCoder::decode <BEGIN>\n");
 
 	GemaltoKeyRecord &keyRecord = dynamic_cast<GemaltoKeyRecord &>(record);
 	const bool boolValue = (keyRecord.getClass() == CKO_PRIVATE_KEY);
 
 	std::string str = "";
-	GemaltoToken::toStringHex( keyRecord.getLabel( ).ptr( ), keyRecord.getLabel().size( ), str );
-	GemaltoToken::log( "KeyAlwaysSensitiveAttributeCoder::decode - Label <%s> - keyType <%ld> - bool <%u>\n", keyRecord.getType( ), str.c_str( ), boolValue);
+	GemaltoToken::toStringHex(keyRecord.getLabel().ptr(), keyRecord.getLabel().size(), str);
+	GemaltoToken::log("KeyAlwaysSensitiveAttributeCoder::decode - Label <%s> - keyType <%ld> - bool <%u>\n", keyRecord.getType(), str.c_str(), boolValue);
 	record.attributeAtIndex(metaAttribute.attributeIndex(), new Attribute(boolValue));
 
-	GemaltoToken::log( "KeyAlwaysSensitiveAttributeCoder::decode <END>\n" );
+	GemaltoToken::log("KeyAlwaysSensitiveAttributeCoder::decode <END>\n");
 }
 
 
@@ -411,17 +411,17 @@ KeySizeAttributeCoder::~KeySizeAttributeCoder()
 
 void KeySizeAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
-	GemaltoToken::log( "\nKeySizeAttributeCoder::decode <BEGIN>\n" );
+	GemaltoToken::log("\nKeySizeAttributeCoder::decode <BEGIN>\n");
 
 	GemaltoKeyRecord &keyRecord = dynamic_cast<GemaltoKeyRecord &>(record);
 	const uint32 longValue = keyRecord.sizeInBits();
 
 	std::string str = "";
-	GemaltoToken::toStringHex( keyRecord.getLabel( ).ptr( ), keyRecord.getLabel().size( ), str );
-	GemaltoToken::log( "KeySizeAttributeCoder::decode - Label <%s> - keyType <%ld> - size <%lu>\n", str.c_str( ), keyRecord.getType( ), longValue);
+	GemaltoToken::toStringHex(keyRecord.getLabel().ptr(), keyRecord.getLabel().size(), str);
+	GemaltoToken::log("KeySizeAttributeCoder::decode - Label <%s> - keyType <%ld> - size <%lu>\n", str.c_str(), keyRecord.getType(), longValue);
 	record.attributeAtIndex(metaAttribute.attributeIndex(), new Attribute(longValue));
 
-	GemaltoToken::log( "KeySizeAttributeCoder::decode <END>\n" );
+	GemaltoToken::log("KeySizeAttributeCoder::decode <END>\n");
 }
 
 
@@ -435,7 +435,7 @@ KeyAlgorithmAttributeCoder::~KeyAlgorithmAttributeCoder()
 
 void KeyAlgorithmAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
-	GemaltoToken::log( "\nKeyAlgorithmAttributeCoder::decode <BEGIN>\n" );
+	GemaltoToken::log("\nKeyAlgorithmAttributeCoder::decode <BEGIN>\n");
 
 	GemaltoKeyRecord &keyRecord = dynamic_cast<GemaltoKeyRecord &>(record);
 	const CK_KEY_TYPE keyType = keyRecord.getType();
@@ -507,18 +507,18 @@ void KeyAlgorithmAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, 
 		break;
 */
 	default:
-		GemaltoToken::log( "KeyAlgorithmAttributeCoder::decode - Unknown CKA_KEY_TYPE <%02lX>  - r <%p> - rid <%08lX> - aid <%lu>\n", keyType, &record, metaAttribute.metaRecord().relationId(), metaAttribute.attributeId());
+		GemaltoToken::log("KeyAlgorithmAttributeCoder::decode - Unknown CKA_KEY_TYPE <%02lX>  - r <%p> - rid <%08lX> - aid <%lu>\n", keyType, &record, metaAttribute.metaRecord().relationId(), metaAttribute.attributeId());
 		algID = CSSM_ALGID_CUSTOM;
 		break;
 	}
 
 	std::string str = "";
-	GemaltoToken::toStringHex( keyRecord.getLabel( ).ptr( ), keyRecord.getLabel().size( ), str );
-	GemaltoToken::log( "KeyAlgorithmAttributeCoder::decode - Label <%s> - keyType <%lu> - algID <%lu>\n", str.c_str( ), keyRecord.getType( ), algID);
+	GemaltoToken::toStringHex(keyRecord.getLabel().ptr(), keyRecord.getLabel().size(), str);
+	GemaltoToken::log("KeyAlgorithmAttributeCoder::decode - Label <%s> - keyType <%lu> - algID <%lu>\n", str.c_str(), keyRecord.getType(), algID);
 
 	record.attributeAtIndex(metaAttribute.attributeIndex(), new Attribute(algID));
 
-	GemaltoToken::log( "KeyAlgorithmAttributeCoder::decode <END>\n" );
+	GemaltoToken::log("KeyAlgorithmAttributeCoder::decode <END>\n");
 }
 
 
@@ -532,15 +532,15 @@ KeyNameAttributeCoder::~KeyNameAttributeCoder()
 
 void KeyNameAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
-	GemaltoToken::log( "\nKeyNameAttributeCoder::decode <BEGIN>\n" );
+	GemaltoToken::log("\nKeyNameAttributeCoder::decode <BEGIN>\n");
 
 	GemaltoKeyRecord &keyRecord = dynamic_cast<GemaltoKeyRecord &>(record);
 
 	std::string str = "";
-	GemaltoToken::toStringHex( keyRecord.getLabel( ).ptr( ), keyRecord.getLabel().size( ), str );
-	GemaltoToken::log( "KeyNameAttributeCoder::decode - Label <%s>\n", str.c_str( ) );
+	GemaltoToken::toStringHex(keyRecord.getLabel().ptr(), keyRecord.getLabel().size(), str);
+	GemaltoToken::log("KeyNameAttributeCoder::decode - Label <%s>\n", str.c_str());
 
-	record.attributeAtIndex( metaAttribute.attributeIndex(), new Attribute( keyRecord.getLabel( ).ptr( ), keyRecord.getLabel( ).size( ) ) );
+	record.attributeAtIndex(metaAttribute.attributeIndex(), new Attribute(keyRecord.getLabel().ptr(), keyRecord.getLabel().size()));
 
-	GemaltoToken::log( "KeyNameAttributeCoder::decode <END>\n" );
+	GemaltoToken::log("KeyNameAttributeCoder::decode <END>\n");
 }

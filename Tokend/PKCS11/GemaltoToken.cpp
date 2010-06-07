@@ -67,7 +67,7 @@ GemaltoToken::GemaltoToken() :
 	mCKSession(CK_INVALID_HANDLE),
 	mDLHandle(NULL)
 {
-	log( "\nGemaltoToken::GemaltoToken <BEGIN>\n" );
+	log("\nGemaltoToken::GemaltoToken <BEGIN>\n");
 
 	mTokenContext = this;
 
@@ -75,15 +75,15 @@ GemaltoToken::GemaltoToken() :
 	::ERR_load_crypto_strings();
 	::X509V3_add_standard_extensions();
 
-	log( "GemaltoToken::GemaltoToken <END>\n" );
+	log("GemaltoToken::GemaltoToken <END>\n");
 }
 
 
 GemaltoToken::~GemaltoToken()
 {
-	log( "\nGemaltoToken::~GemaltoToken <BEGIN>\n" );
+	log("\nGemaltoToken::~GemaltoToken <BEGIN>\n");
 
-	if( NULL != mSchema )
+	if (NULL != mSchema)
 	{
 		delete mSchema;
 	}
@@ -93,41 +93,41 @@ GemaltoToken::~GemaltoToken()
 		if (s_CK_pFunctionList)
 		{
 			CK_D_(C_Logout)(mCKSession);
-			log( "GemaltoToken::~GemaltoToken <LogOut>\n" );
+			log("GemaltoToken::~GemaltoToken <LogOut>\n");
 
 			if (mCKSession != CK_INVALID_HANDLE)
 			{
 				CK_D_(C_CloseSession)(mCKSession);
 				mCKSession = CK_INVALID_HANDLE;
 			}
-			log( "GemaltoToken::~GemaltoToken <CloseSession>\n" );
+			log("GemaltoToken::~GemaltoToken <CloseSession>\n");
 
 			CK_D_(C_Finalize)(NULL_PTR);
 
 			//(*(GemaltoToken::s_CK_pFunctionList->C_Finalize))(NULL_PTR);
-			log( "GemaltoToken::~GemaltoToken <Finalize>\n" );
+			log("GemaltoToken::~GemaltoToken <Finalize>\n");
 
 			s_CK_pFunctionList = NULL;
 		}
 	}
-	catch( ... )
+	catch(...)
 	{
-		log( "## Error ## Crash \n" );
+		log("## Error ## Crash \n");
 	}
 
-	if( NULL != mDLHandle )
+	if (NULL != mDLHandle)
 	{
-		dlclose( mDLHandle );
+		dlclose(mDLHandle);
 	}
 
-	log( "GemaltoToken::~GemaltoToken <END>\n" );
+	log("GemaltoToken::~GemaltoToken <END>\n");
 }
 
 
 void GemaltoToken::changePIN(int pinNum, const unsigned char *oldPin, size_t oldPinLength, const unsigned char *newPin, size_t newPinLength)
 {
-	log( "\nGemaltoToken::changePIN <BEGIN>\n" );
-	//log( "pinNum <%d> - oldPin <%.*s> - newPin <%.*s>\n", pinNum, (int) oldPinLength, oldPin, (int) newPinLength, newPin);
+	log("\nGemaltoToken::changePIN <BEGIN>\n");
+	//log("pinNum <%d> - oldPin <%.*s> - newPin <%.*s>\n", pinNum, (int) oldPinLength, oldPin, (int) newPinLength, newPin);
 
 	if (pinNum != 1)
 		CssmError::throwMe(CSSM_ERRCODE_SAMPLE_VALUE_NOT_SUPPORTED);
@@ -137,15 +137,15 @@ void GemaltoToken::changePIN(int pinNum, const unsigned char *oldPin, size_t old
 		CssmError::throwMe(CSSM_ERRCODE_INVALID_SAMPLE_VALUE);
 
 	CK_BYTE* pOldPIN = new CK_BYTE[oldPinLength];
-	memset( pOldPIN, 0, sizeof( CK_BYTE ) * oldPinLength );
-	for( size_t i = 0 ; i < oldPinLength ; i++ )
+	memset(pOldPIN, 0, sizeof(CK_BYTE) * oldPinLength);
+	for(size_t i = 0 ; i < oldPinLength ; i++)
 	{
 		pOldPIN[ i ] = (CK_BYTE)oldPin[ i ];
 	}
 
 	CK_BYTE* pNewPIN = new CK_BYTE[newPinLength];
-	memset( pNewPIN, 0, sizeof( CK_BYTE ) * newPinLength );
-	for( size_t j = 0 ; j < newPinLength ; j++ )
+	memset(pNewPIN, 0, sizeof(CK_BYTE) * newPinLength);
+	for(size_t j = 0 ; j < newPinLength ; j++)
 	{
 		pNewPIN[ j ] = (CK_BYTE)newPin[ j ];
 	}
@@ -153,50 +153,50 @@ void GemaltoToken::changePIN(int pinNum, const unsigned char *oldPin, size_t old
 	// Log the user only if he was not previously logged in
 	bool bUserAlreadyLoggedIn = false;
 	CK_RV rv = CK_D_(C_Login)(mCKSession, CKU_USER, pOldPIN, oldPinLength);
-	if( rv == CKR_USER_ALREADY_LOGGED_IN)
+	if (rv == CKR_USER_ALREADY_LOGGED_IN)
 	{
 		bUserAlreadyLoggedIn = true;
 	}
-	else if( rv != CKR_OK )
+	else if (rv != CKR_OK)
 	{
 		delete[] pOldPIN;
 		delete[] pNewPIN;
 
-		log( "GemaltoToken::changePIN - ## Error ## <%ld>\n", rv );
+		log("GemaltoToken::changePIN - ## Error ## <%ld>\n", rv);
 
-		CKError::check( rv );
+		CKError::check(rv);
 	}
 
 	// Change PIN
 	rv = CK_D_(C_SetPIN)(mCKSession, pOldPIN, oldPinLength, pNewPIN, newPinLength);
 	delete[] pOldPIN;
 	delete[] pNewPIN;
-	CKError::check( rv );
+	CKError::check(rv);
 
 	// LogOut only if the user not previously logged in
-	if( false == bUserAlreadyLoggedIn )
+	if (false == bUserAlreadyLoggedIn)
 	{
 		CKError::check(CK_D_(C_Logout)(mCKSession));
 	}
 
 	mPinStatus = SCARD_SUCCESS;
 
-	log( "GemaltoToken::changePIN <END>\n" );
+	log("GemaltoToken::changePIN <END>\n");
 }
 
 
 uint32_t GemaltoToken::pinStatus(int pinNum)
 {
-	log( "\nGemaltoToken::pinStatus <BEGIN>\n" );
-	log( "pinNum <%d>\n", pinNum );
+	log("\nGemaltoToken::pinStatus <BEGIN>\n");
+	log("pinNum <%d>\n", pinNum);
 
 	if (pinNum != 1)
 	{
-		log( "## Error ##  pinStatus CSSM_ERRCODE_SAMPLE_VALUE_NOT_SUPPORTED\n" );
+		log("## Error ##  pinStatus CSSM_ERRCODE_SAMPLE_VALUE_NOT_SUPPORTED\n");
 		CssmError::throwMe(CSSM_ERRCODE_SAMPLE_VALUE_NOT_SUPPORTED);
 	}
 
-	log( "GemaltoToken::pinStatus <END>\n" );
+	log("GemaltoToken::pinStatus <END>\n");
 
 	return mPinStatus;
 }
@@ -204,40 +204,40 @@ uint32_t GemaltoToken::pinStatus(int pinNum)
 
 void GemaltoToken::verifyPIN(int pinNum, const uint8_t *pin, size_t pinLength)
 {
-	log( "\nGemaltoToken::verifyPIN <BEGIN>\n" );
-	//log( "pinNum <%d> - pin <%.*s>\n", pinNum, (int) pinLength, pin );
+	log("\nGemaltoToken::verifyPIN <BEGIN>\n");
+	//log("pinNum <%d> - pin <%.*s>\n", pinNum, (int) pinLength, pin);
 
 	if (pinNum != 1)
 	{
-		log( "GemaltoToken::verifyPIN - ## ERROR ## Invalid pinNum <%d>\n", pinNum );
+		log("GemaltoToken::verifyPIN - ## ERROR ## Invalid pinNum <%d>\n", pinNum);
 		CssmError::throwMe(CSSM_ERRCODE_SAMPLE_VALUE_NOT_SUPPORTED);
 	}
 
-	if ( ( pinLength < mCKTokenInfo.ulMinPinLen ) || ( pinLength > mCKTokenInfo.ulMaxPinLen ) )
+	if ((pinLength < mCKTokenInfo.ulMinPinLen) || (pinLength > mCKTokenInfo.ulMaxPinLen))
 	{
-		log( "GemaltoToken::verifyPIN - ## ERROR ## Invalid PIN length\n" );
+		log("GemaltoToken::verifyPIN - ## ERROR ## Invalid PIN length\n");
 		CssmError::throwMe(CSSM_ERRCODE_INVALID_SAMPLE_VALUE);
 	}
 
 	CK_BYTE* pPIN = new CK_BYTE[pinLength];
-	memset( pPIN, 0, sizeof( CK_BYTE ) * pinLength );
-	for( size_t i = 0 ; i < pinLength ; i++ )
+	memset(pPIN, 0, sizeof(CK_BYTE) * pinLength);
+	for(size_t i = 0 ; i < pinLength ; i++)
 	{
 		pPIN[ i ] = (CK_BYTE)pin[ i ];
 	}
 
-	CK_RV rv = CK_D_(C_Login)( mCKSession, CKU_USER, pPIN, pinLength );
+	CK_RV rv = CK_D_(C_Login)(mCKSession, CKU_USER, pPIN, pinLength);
 
 	mPinStatus = SCARD_AUTHENTICATION_FAILED;
-	if ( ( CKR_OK == rv ) || ( CKR_USER_ALREADY_LOGGED_IN == rv ) )
+	if ((CKR_OK == rv) || (CKR_USER_ALREADY_LOGGED_IN == rv))
 	{
 		mPinStatus = SCARD_SUCCESS;
 	}
 	else
 	{
-		log( "GemaltoToken::verifyPIN - ## Error ## <%ld>\n", rv );
+		log("GemaltoToken::verifyPIN - ## Error ## <%ld>\n", rv);
 
-		if ( CKR_PIN_LOCKED == rv )
+		if (CKR_PIN_LOCKED == rv)
 		{
 			mPinStatus = SCARD_AUTHENTICATION_BLOCKED;
 		}
@@ -246,14 +246,14 @@ void GemaltoToken::verifyPIN(int pinNum, const uint8_t *pin, size_t pinLength)
 	delete[ ] pPIN;
 
 
-	log( "GemaltoToken::verifyPIN <END>\n" );
+	log("GemaltoToken::verifyPIN <END>\n");
 }
 
 
 void GemaltoToken::unverifyPIN(int pinNum)
 {
-	log( "\nGemaltoToken::unverifyPIN <BEGIN>\n" );
-	log( "pinNum <%d>\n", pinNum );
+	log("\nGemaltoToken::unverifyPIN <BEGIN>\n");
+	log("pinNum <%d>\n", pinNum);
 
 	if (pinNum != -1)
 		CssmError::throwMe(CSSM_ERRCODE_SAMPLE_VALUE_NOT_SUPPORTED);
@@ -270,16 +270,16 @@ void GemaltoToken::unverifyPIN(int pinNum)
 
 	mPinStatus = 0;
 
-	log( "GemaltoToken::unverifyPIN <END>\n" );
+	log("GemaltoToken::unverifyPIN <END>\n");
 }
 
 
 #define PKCS11_FAILED(fct, rv) log("GemaltoToken::probe - " fct "() failed: %s\n", pkcs11_error(rv));
 uint32 GemaltoToken::probe(SecTokendProbeFlags flags, char tokenUid[TOKEND_MAX_UID])
 {
-	log( "\nGemaltoToken::probe <BEGIN>\n" );
-	log( "GemaltoToken::probe - flags <%x>\n", (unsigned int) flags );
-	log( "GemaltoToken::probe - tokenUid <%s>\n", tokenUid );
+	log("\nGemaltoToken::probe <BEGIN>\n");
+	log("GemaltoToken::probe - flags <%x>\n", (unsigned int) flags);
+	log("GemaltoToken::probe - tokenUid <%s>\n", tokenUid);
 
 	uint32 score = 0;
 
@@ -288,10 +288,10 @@ uint32 GemaltoToken::probe(SecTokendProbeFlags flags, char tokenUid[TOKEND_MAX_U
 		const SCARD_READERSTATE &readerState = *(*startupReaderInfo)();
 		if (readerState.cbAtr)
 		{
-			log( "GemaltoToken::probe - Reader <%s>\n", readerState.szReader);
+			log("GemaltoToken::probe - Reader <%s>\n", readerState.szReader);
 			std::string s = "";
-			GemaltoToken::toStringHex( readerState.rgbAtr, readerState.cbAtr, s );
-			log( "GemaltoToken::probe - ATR <%s>\n", s.c_str( ) );
+			GemaltoToken::toStringHex(readerState.rgbAtr, readerState.cbAtr, s);
+			log("GemaltoToken::probe - ATR <%s>\n", s.c_str());
 
 			DIR *dirp = opendir(PKCS11LIB_PATH);
 			if (NULL == dirp)
@@ -320,19 +320,19 @@ uint32 GemaltoToken::probe(SecTokendProbeFlags flags, char tokenUid[TOKEND_MAX_U
 
 				lib_name.append(dir_entry->d_name);
 				dlPath = lib_name.c_str();
-				log( "GemaltoToken::probe - Using %s PKCS#11 library\n", dlPath );
+				log("GemaltoToken::probe - Using %s PKCS#11 library\n", dlPath);
 				
 				mDLHandle = dlopen(dlPath, RTLD_LAZY | RTLD_GLOBAL);
 				if (NULL == mDLHandle)
 				{
-					log( "GemaltoToken::probe - ## ERROR ## Cannot load the PKCS#11 library\n" );
+					log("GemaltoToken::probe - ## ERROR ## Cannot load the PKCS#11 library\n");
 					continue;
 				}
 				
 				CK_C_GetFunctionList C_GetFunctionList_PTR = (CK_C_GetFunctionList) dlsym(mDLHandle, "C_GetFunctionList");
 				if (NULL == C_GetFunctionList_PTR)
 				{
-					log( "GemaltoToken::probe - ## ERROR ## Cannot load the PKCS#11 function list\n", dlerror() );
+					log("GemaltoToken::probe - ## ERROR ## Cannot load the PKCS#11 function list\n", dlerror());
 					continue;
 				}
 				
@@ -392,13 +392,13 @@ uint32 GemaltoToken::probe(SecTokendProbeFlags flags, char tokenUid[TOKEND_MAX_U
 						// Setup the tokendUID
 						char label[ sizeof(mCKTokenInfo.label)+1 ];
 						label[sizeof(mCKTokenInfo.label)] = '\0';
-						memcpy( label, mCKTokenInfo.label,  sizeof(mCKTokenInfo.label) );
-						char* trimLabel = trim_line( label );
-						snprintf(tokenUid, TOKEND_MAX_UID, "Gemalto smartcard %s (%.*s)", trimLabel, (int) sizeof(mCKTokenInfo.serialNumber), mCKTokenInfo.serialNumber );
+						memcpy(label, mCKTokenInfo.label,  sizeof(mCKTokenInfo.label));
+						char* trimLabel = trim_line(label);
+						snprintf(tokenUid, TOKEND_MAX_UID, "Gemalto smartcard %s (%.*s)", trimLabel, (int) sizeof(mCKTokenInfo.serialNumber), mCKTokenInfo.serialNumber);
 						
 						for (size_t len=strlen(tokenUid); tokenUid[len-1]==' '; len--)
 							tokenUid[len-1] = '\0';
-						log( "tokenUid <%s>\n", tokenUid );
+						log("tokenUid <%s>\n", tokenUid);
 
 						found = true;
 						mCKSlotId = pSlotID[i];
@@ -426,7 +426,7 @@ uint32 GemaltoToken::probe(SecTokendProbeFlags flags, char tokenUid[TOKEND_MAX_U
 		score = 0;
 	}
 
-	log( "GemaltoToken::probe <END>\n" );
+	log("GemaltoToken::probe <END>\n");
 
 	return score;
 }
@@ -434,8 +434,8 @@ uint32 GemaltoToken::probe(SecTokendProbeFlags flags, char tokenUid[TOKEND_MAX_U
 
 void GemaltoToken::establish(const CSSM_GUID *guid, uint32 subserviceId, SecTokendEstablishFlags flags, const char *cacheDirectory, const char *workDirectory, char mdsDirectory[PATH_MAX], char printName[PATH_MAX])
 {
-	log( "\nGemaltoToken::establish <BEGIN>\n" );
-	log( "flags <%x> - cacheDirectory <%s> - workDirectory <%s>\n", (unsigned int)flags, cacheDirectory, workDirectory );
+	log("\nGemaltoToken::establish <BEGIN>\n");
+	log("flags <%x> - cacheDirectory <%s> - workDirectory <%s>\n", (unsigned int)flags, cacheDirectory, workDirectory);
 
 	Token::establish(guid, subserviceId, flags, cacheDirectory, workDirectory, mdsDirectory, printName);
 
@@ -448,15 +448,15 @@ void GemaltoToken::establish(const CSSM_GUID *guid, uint32 subserviceId, SecToke
 	populate();
 
 	char label[ 33 ];
-	memset( label, 0, sizeof( label ) );
-	memcpy( label, mCKTokenInfo.label,  sizeof(mCKTokenInfo.label) );
- 	char* trimLabel = trim_line( label );
-	snprintf(printName, PATH_MAX, "Gemalto smartcard %s (%.*s)", trimLabel, (int) sizeof(mCKTokenInfo.serialNumber), mCKTokenInfo.serialNumber );
+	memset(label, 0, sizeof(label));
+	memcpy(label, mCKTokenInfo.label,  sizeof(mCKTokenInfo.label));
+ 	char* trimLabel = trim_line(label);
+	snprintf(printName, PATH_MAX, "Gemalto smartcard %s (%.*s)", trimLabel, (int) sizeof(mCKTokenInfo.serialNumber), mCKTokenInfo.serialNumber);
 	for (size_t len=strlen(printName); printName[len-1]==' '; len--)
 		printName[len-1] = '\0';
 
-	log( "printName <%s>\n", printName );
-	log( "GemaltoToken::establish <END>\n" );
+	log("printName <%s>\n", printName);
+	log("GemaltoToken::establish <END>\n");
 }
 
 
@@ -465,7 +465,7 @@ void GemaltoToken::establish(const CSSM_GUID *guid, uint32 subserviceId, SecToke
 //
 void GemaltoToken::getOwner(AclOwnerPrototype &owner)
 {
-	log( "\nGemaltoToken::getOwner <BEGIN>\n" );
+	log("\nGemaltoToken::getOwner <BEGIN>\n");
 
 	// we don't really know (right now), so claim we're owned by PIN #1
 	if (!mAclOwner) {
@@ -474,14 +474,14 @@ void GemaltoToken::getOwner(AclOwnerPrototype &owner)
 	}
 	owner = mAclOwner;
 
-	log( "GemaltoToken::getOwner <END>\n" );
+	log("GemaltoToken::getOwner <END>\n");
 }
 
 
 void GemaltoToken::getAcl(const char *tag, uint32 &count, AclEntryInfo *&acls)
 {
-	log( "\nGemaltoToken::getAcl <BEGIN>\n" );
-	log( "tag <%s> - count <%lu>\n", tag, count );
+	log("\nGemaltoToken::getAcl <BEGIN>\n");
+	log("tag <%s> - count <%lu>\n", tag, count);
 
 	Allocator &alloc = Allocator::standard();
 
@@ -493,11 +493,11 @@ void GemaltoToken::getAcl(const char *tag, uint32 &count, AclEntryInfo *&acls)
 		uint32_t status = this->pinStatus(pin);
 		if (status == SCARD_SUCCESS)
 		{
-			_addPinState(acl, pin, CSSM_ACL_PREAUTH_TRACKING_AUTHORIZED );
+			_addPinState(acl, pin, CSSM_ACL_PREAUTH_TRACKING_AUTHORIZED);
 		}
-		else if ( SCARD_AUTHENTICATION_BLOCKED == status )
+		else if (SCARD_AUTHENTICATION_BLOCKED == status)
 		{
-			_addPinState(acl, pin, CSSM_ACL_PREAUTH_TRACKING_BLOCKED );
+			_addPinState(acl, pin, CSSM_ACL_PREAUTH_TRACKING_BLOCKED);
 		}
 		else
 		{
@@ -506,9 +506,9 @@ void GemaltoToken::getAcl(const char *tag, uint32 &count, AclEntryInfo *&acls)
 		count = acl.size();
 		acls = acl.entries();
 
-		log( "count <%lu>\n", count );
+		log("count <%lu>\n", count);
 
-		log( "GemaltoToken::getAcl <END>\n" );
+		log("GemaltoToken::getAcl <END>\n");
 		return;
 	}
 
@@ -530,8 +530,8 @@ void GemaltoToken::getAcl(const char *tag, uint32 &count, AclEntryInfo *&acls)
 	count = mAclEntries.size();
 	acls = mAclEntries.entries();
 
-	log( "count <%lu>\n", count );
-	log( "GemaltoToken::getAcl <END>\n" );
+	log("count <%lu>\n", count);
+	log("GemaltoToken::getAcl <END>\n");
 }
 
 
@@ -540,53 +540,53 @@ void GemaltoToken::getAcl(const char *tag, uint32 &count, AclEntryInfo *&acls)
 
 void GemaltoToken::populate()
 {
-	log( "\nGemaltoToken::populate <BEGIN>\n" );
+	log("\nGemaltoToken::populate <BEGIN>\n");
 
 	Tokend::Relation &certRelation = mSchema->findRelation(CSSM_DL_DB_RECORD_X509_CERTIFICATE);
 	Tokend::Relation &privateKeyRelation = mSchema->findRelation(CSSM_DL_DB_RECORD_PRIVATE_KEY);
 
 	// Find all certificates into the smartcard
 	CK_OBJECT_CLASS	ulClass = CKO_CERTIFICATE;
-	CK_ATTRIBUTE classAttr = { CKA_CLASS, &ulClass, sizeof( CK_OBJECT_CLASS ) };
-	CKError::check( CK_D_(C_FindObjectsInit)( mCKSession, &classAttr, 1 ) );
-	while ( 1 )
+	CK_ATTRIBUTE classAttr = { CKA_CLASS, &ulClass, sizeof(CK_OBJECT_CLASS) };
+	CKError::check(CK_D_(C_FindObjectsInit)(mCKSession, &classAttr, 1));
+	while (1)
 	{
 		CK_OBJECT_HANDLE ulObject = CK_INVALID_HANDLE;
 		CK_ULONG ulObjectCount = 0;
 
-		CKError::check( CK_D_(C_FindObjects)( mCKSession, &ulObject, 1, &ulObjectCount ) );
-		if ( 0 == ulObjectCount )
+		CKError::check(CK_D_(C_FindObjects)(mCKSession, &ulObject, 1, &ulObjectCount));
+		if (0 == ulObjectCount)
 		{
-			log( "GemaltoToken::populate - No more certificate into the smartcard. Nothing more to do !!!\n" );
+			log("GemaltoToken::populate - No more certificate into the smartcard. Nothing more to do !!!\n");
 			break;
 		}
 
-		log( "GemaltoToken::populate - Found a certificate into the smartcard \n" );
+		log("GemaltoToken::populate - Found a certificate into the smartcard \n");
 
 		// Create a certificate instance
-		RefPointer<GemaltoCertRecord> cert( new GemaltoCertRecord( *this, ulObject ) );
-		certRelation.insertRecord( cert );
+		RefPointer<GemaltoCertRecord> cert(new GemaltoCertRecord(*this, ulObject));
+		certRelation.insertRecord(cert);
 
 		// If the current certificate is not a ROOT CA certificate
-		if ( false == cert->isCA( ) )
+		if (false == cert->isCA())
 		{
 			// If the current certificat is able to perform a cryptographic operation
-			if ( cert->verify( ) || cert->verifyRecover( ) || cert->encrypt( ) || cert->wrap( ) )
+			if (cert->verify() || cert->verifyRecover() || cert->encrypt() || cert->wrap())
 			{
-				log( "GemaltoToken::populate - The current certificate is not a ROOT and owns private key usage(s). Create associated private key.\n" );
+				log("GemaltoToken::populate - The current certificate is not a ROOT and owns private key usage(s). Create associated private key.\n");
 
 				// Create a private key
-				RefPointer<GemaltoKeyRecord> keyPrvRecord( new GemaltoPrivateKeyRecord( *cert ) );
-				privateKeyRelation.insertRecord( keyPrvRecord );
+				RefPointer<GemaltoKeyRecord> keyPrvRecord(new GemaltoPrivateKeyRecord(*cert));
+				privateKeyRelation.insertRecord(keyPrvRecord);
 
 				// The Adornment class links a particular CertificateRecord with its corresponding KeyRecord record
-				keyPrvRecord->setAdornment( mSchema->publicKeyHashCoder( ).certificateKey( ), new Tokend::LinkedRecordAdornment( cert ) );
+				keyPrvRecord->setAdornment(mSchema->publicKeyHashCoder().certificateKey(), new Tokend::LinkedRecordAdornment(cert));
 			}
 		}
 	}
-	CK_D_(C_FindObjectsFinal)( mCKSession );
+	CK_D_(C_FindObjectsFinal)(mCKSession);
 
-	log( "GemaltoToken::populate <END>\n" );
+	log("GemaltoToken::populate <END>\n");
 }
 
 
@@ -653,9 +653,9 @@ void GemaltoToken::_aclClear(AutoAclEntryInfoList& acl)
 void GemaltoToken::_addPinState(AutoAclEntryInfoList& acl, uint32 slot, uint32 status)
 {
 	char tag[20];
-	snprintf( tag, sizeof(tag), "PIN%d?", (int) slot );
+	snprintf(tag, sizeof(tag), "PIN%d?", (int) slot);
 
-	TypedList subj( acl.allocator(), CSSM_WORDID_PIN, new(acl.allocator()) ListElement(slot), new(acl.allocator()) ListElement(status));
+	TypedList subj(acl.allocator(), CSSM_WORDID_PIN, new(acl.allocator()) ListElement(slot), new(acl.allocator()) ListElement(status));
 
 	acl.add(subj, CSSM_WORDID_PIN, tag);
 }
@@ -667,17 +667,17 @@ void GemaltoToken::_addPinState(AutoAclEntryInfoList& acl, uint32 slot, uint32 s
 // Define to unable if you want to activate trace into the code
 #define __DEBUG_GEMALTO__
 
-void GemaltoToken::toStringHex( const unsigned char* buffer, const std::size_t& size, std::string &result )
+void GemaltoToken::toStringHex(const unsigned char* buffer, const std::size_t& size, std::string &result)
 {
 #ifdef __DEBUG_GEMALTO__
-	if( ( NULL == buffer ) || ( 1 > size ) )
+	if ((NULL == buffer) || (1 > size))
 	{
-		//result.assign( "null" );
+		//result.assign("null");
 		return;
 	}
 
     std::ostringstream oss;
-	oss.rdbuf( )->str( "" );
+	oss.rdbuf()->str("");
 
     // Afficher en hexadecimal et en majuscule
     oss << std::hex << std::uppercase;
@@ -685,7 +685,7 @@ void GemaltoToken::toStringHex( const unsigned char* buffer, const std::size_t& 
     // Remplir les blancs avec des zŽros
     oss << std::setfill('0');
 
-    for( std::size_t i = 0; i < size; ++i )
+    for(std::size_t i = 0; i < size; ++i)
     {
         // Separer chaque octet par un espace
         /*if (i != 0)
@@ -693,21 +693,21 @@ void GemaltoToken::toStringHex( const unsigned char* buffer, const std::size_t& 
 
         // Afficher sa valeur hexadécimale précédée de "0x"
         // setw(2) permet de forcer l'affichage à 2 caractères
-        oss << /*"0x" <<*/ std::setw(2) << static_cast<int>( buffer[i] );
+        oss << /*"0x" <<*/ std::setw(2) << static_cast<int>(buffer[i]);
     }
 
-    result.assign( oss.str( ) );
+    result.assign(oss.str());
 #endif
 }
 
 #define LOG_FILE "/tmp/Gemalto.TokenD.log"
 /* Log a message into the LOG_FILE file */
-void GemaltoToken::log( const char * format, ... )
+void GemaltoToken::log(const char * format, ...)
 {
 #ifdef __DEBUG_GEMALTO__
 	// Try to open the file
-	FILE* pLog = fopen( LOG_FILE, "a" );
-	if ( NULL == pLog )
+	FILE* pLog = fopen(LOG_FILE, "a");
+	if (NULL == pLog)
 	{
 		// The file does not exit
 		// Nothing to log
@@ -715,12 +715,12 @@ void GemaltoToken::log( const char * format, ... )
 	}
 
 	va_list args;
-	va_start( args, format );
+	va_start(args, format);
 
 	vfprintf(pLog, format, args);
-	va_end( args );
+	va_end(args);
 
 	// Close the file
-	fclose( pLog );
+	fclose(pLog);
 #endif
 }

@@ -54,23 +54,23 @@ GemaltoKeyHandle::~GemaltoKeyHandle()
 
 void GemaltoKeyHandle::getKeySize(CSSM_KEY_SIZE &keySize)
 {
-	GemaltoToken::log( "\nGemaltoKeyHandle::getKeySize <BEGIN>\n" );
-	GemaltoToken::log( "GemaltoKeyHandle::getOutputSize - sizeInBits <%lu>", mKey.sizeInBits() );
+	GemaltoToken::log("\nGemaltoKeyHandle::getKeySize <BEGIN>\n");
+	GemaltoToken::log("GemaltoKeyHandle::getOutputSize - sizeInBits <%lu>", mKey.sizeInBits());
 
 	keySize.EffectiveKeySizeInBits = mKey.sizeInBits();
 	keySize.LogicalKeySizeInBits = mKey.sizeInBits();
 
-	GemaltoToken::log( "GemaltoKeyHandle::getKeySize <END>\n" );
+	GemaltoToken::log("GemaltoKeyHandle::getKeySize <END>\n");
 }
 
 
 uint32 GemaltoKeyHandle::getOutputSize(const Context &/*context*/, uint32 inputSize, bool encrypting)
 {
-	GemaltoToken::log( "\nGemaltoKeyHandle::getOutputSize <BEGIN>\n" );
-	GemaltoToken::log( "GemaltoKeyHandle::getOutputSize - inputSize <%lu> - encrypting <%d>", inputSize, encrypting );
-	GemaltoToken::log( "GemaltoKeyHandle::getOutputSize - sizeInBits / 8 <%lu>", ( mKey.sizeInBits() / 8 ) );
+	GemaltoToken::log("\nGemaltoKeyHandle::getOutputSize <BEGIN>\n");
+	GemaltoToken::log("GemaltoKeyHandle::getOutputSize - inputSize <%lu> - encrypting <%d>", inputSize, encrypting);
+	GemaltoToken::log("GemaltoKeyHandle::getOutputSize - sizeInBits / 8 <%lu>", (mKey.sizeInBits() / 8));
 
-	GemaltoToken::log( "GemaltoKeyHandle::getOutputSize <END>\n" );
+	GemaltoToken::log("GemaltoKeyHandle::getOutputSize <END>\n");
 
 	return (mKey.sizeInBits() / 8);
 }
@@ -102,18 +102,18 @@ static const unsigned char md5sigheader[] =
 
 void GemaltoKeyHandle::generateSignature(const Context &context, CSSM_ALGORITHMS signOnly, const CssmData &input, CssmData &signature)
 {
-	GemaltoToken::log( "\nGemaltoKeyHandle::generateSignature <BEGIN>\n" );
-	GemaltoToken::log( "Algo <%lu> - SignOnly <%lu> Input <%s> - Signature <%s>\n", context.algorithm(), signOnly, input.toHex( ).c_str( ), signature.toHex( ).c_str( ) );
+	GemaltoToken::log("\nGemaltoKeyHandle::generateSignature <BEGIN>\n");
+	GemaltoToken::log("Algo <%lu> - SignOnly <%lu> Input <%s> - Signature <%s>\n", context.algorithm(), signOnly, input.toHex().c_str(), signature.toHex().c_str());
 
 	if (context.type() != CSSM_ALGCLASS_SIGNATURE)
 	{
-		GemaltoToken::log( "## Error ## CSSMERR_CSP_INVALID_CONTEXT\n" );
+		GemaltoToken::log("## Error ## CSSMERR_CSP_INVALID_CONTEXT\n");
 		CssmError::throwMe(CSSMERR_CSP_INVALID_CONTEXT);
 	}
 
 	if (context.algorithm() != CSSM_ALGID_RSA)
 	{
-		GemaltoToken::log( "## Error ## CSSMERR_CSP_INVALID_ALGORITHM\n" );
+		GemaltoToken::log("## Error ## CSSMERR_CSP_INVALID_ALGORITHM\n");
 		CssmError::throwMe(CSSMERR_CSP_INVALID_ALGORITHM);
 	}
 
@@ -124,12 +124,12 @@ void GemaltoKeyHandle::generateSignature(const Context &context, CSSM_ALGORITHMS
 	CK_ULONG mech = CKM_RSA_PKCS;
 	if (signOnly == CSSM_ALGID_SHA1)
 	{
-		GemaltoToken::log( "Case CSSM_ALGID_SHA1\n" );
+		GemaltoToken::log("Case CSSM_ALGID_SHA1\n");
 		//secdebug("Gemalto.tokend", "GemaltoKeyHandle: CSSM_ALGID_SHA1 (%lu)", input.Length);
 
 		if (input.Length != 20)
 		{
-			GemaltoToken::log( "## Error ## CSSMERR_CSP_BLOCK_SIZE_MISMATCH\n" );
+			GemaltoToken::log("## Error ## CSSMERR_CSP_BLOCK_SIZE_MISMATCH\n");
 			CssmError::throwMe(CSSMERR_CSP_BLOCK_SIZE_MISMATCH);
 		}
 		header = sha1sigheader;
@@ -137,12 +137,12 @@ void GemaltoKeyHandle::generateSignature(const Context &context, CSSM_ALGORITHMS
 	}
 	else if (signOnly == CSSM_ALGID_MD5)
 	{
-		GemaltoToken::log( "Case CSSM_ALGID_MD5\n" );
+		GemaltoToken::log("Case CSSM_ALGID_MD5\n");
 		//secdebug("Gemalto.tokend", "GemaltoKeyHandle: CSSM_ALGID_MD5 (%lu)", input.Length);
 
 		if (input.Length != 16)
 		{
-			GemaltoToken::log( "## Error ## CSSMERR_CSP_BLOCK_SIZE_MISMATCH\n" );
+			GemaltoToken::log("## Error ## CSSMERR_CSP_BLOCK_SIZE_MISMATCH\n");
 			CssmError::throwMe(CSSMERR_CSP_BLOCK_SIZE_MISMATCH);
 		}
 
@@ -151,7 +151,7 @@ void GemaltoKeyHandle::generateSignature(const Context &context, CSSM_ALGORITHMS
 	}
 	else if (signOnly == CSSM_ALGID_NONE)
 	{
-		GemaltoToken::log( "Case CSSM_ALGID_NONE\n" );
+		GemaltoToken::log("Case CSSM_ALGID_NONE\n");
 		//secdebug("Gemalto.tokend", "GemaltoKeyHandle: CSSM_ALGID_NONE");
 
 		// Special case used by SSL it's an RSA signature, without the ASN1 stuff
@@ -160,7 +160,7 @@ void GemaltoKeyHandle::generateSignature(const Context &context, CSSM_ALGORITHMS
 	}
 	else
 	{
-		GemaltoToken::log( "## Error ## CSSMERR_CSP_INVALID_DIGEST_ALGORITHM\n" );
+		GemaltoToken::log("## Error ## CSSMERR_CSP_INVALID_DIGEST_ALGORITHM\n");
 		//secdebug("Gemalto.tokend", "GemaltoKeyHandle: Invalid sign algo");
 		CssmError::throwMe(CSSMERR_CSP_INVALID_DIGEST_ALGORITHM);
 	}
@@ -175,7 +175,7 @@ void GemaltoKeyHandle::generateSignature(const Context &context, CSSM_ALGORITHMS
 	// Get padding, but default to pkcs1 style padding
 	uint32 padding = CSSM_PADDING_PKCS1;
 	context.getInt(CSSM_ATTRIBUTE_PADDING, padding);
-	GemaltoToken::log( "Padding <%lu>\n", padding );
+	GemaltoToken::log("Padding <%lu>\n", padding);
 
 //JCD
 /*
@@ -185,7 +185,7 @@ void GemaltoKeyHandle::generateSignature(const Context &context, CSSM_ALGORITHMS
 		}
 */
 	// Gemalto pkcs11 can handle PKCS1 padding only
-	switch( padding )
+	switch(padding)
 	{
 		case CSSM_PADDING_PKCS1:
 		mech = CKM_RSA_PKCS;
@@ -206,10 +206,10 @@ void GemaltoKeyHandle::generateSignature(const Context &context, CSSM_ALGORITHMS
 		case CSSM_PADDING_RANDOM:
 		case CSSM_PADDING_VENDOR_DEFINED:
 		default:
-		GemaltoToken::log( "## Error ## CSSMERR_CSP_INVALID_ATTR_PADDING\n" );
+		GemaltoToken::log("## Error ## CSSMERR_CSP_INVALID_ATTR_PADDING\n");
 		CssmError::throwMe(CSSMERR_CSP_INVALID_ATTR_PADDING);
 	}
-	GemaltoToken::log( "Mechanism <%lu>\n", mech );
+	GemaltoToken::log("Mechanism <%lu>\n", mech);
 //JCD
 
 	// Now copy the ASN1 header into the input buffer.
@@ -238,7 +238,7 @@ void GemaltoKeyHandle::generateSignature(const Context &context, CSSM_ALGORITHMS
 	}
 	catch (...)
 	{
-		GemaltoToken::log( "## Error ## key computeSign\n" );
+		GemaltoToken::log("## Error ## key computeSign\n");
 
 		// @@@ Switch to using tokend allocators
 		free(outputData);
@@ -248,15 +248,15 @@ void GemaltoKeyHandle::generateSignature(const Context &context, CSSM_ALGORITHMS
 	signature.Data = outputData;
 	signature.Length = outputLength;
 
-	GemaltoToken::log( "GemaltoKeyHandle::generateSignature <END>\n" );
+	GemaltoToken::log("GemaltoKeyHandle::generateSignature <END>\n");
 }
 
 
 void GemaltoKeyHandle::verifySignature(const Context &/*context*/, CSSM_ALGORITHMS /*signOnly*/, const CssmData &/*input*/, const CssmData &/*signature*/)
 {
-	GemaltoToken::log( "\nGemaltoKeyHandle::verifySignature <BEGIN>\n" );
-	GemaltoToken::log( "## Error ## CSSM_ERRCODE_FUNCTION_NOT_IMPLEMENTED\n" );
-	GemaltoToken::log( "GemaltoKeyHandle::verifySignature <END>\n" );
+	GemaltoToken::log("\nGemaltoKeyHandle::verifySignature <BEGIN>\n");
+	GemaltoToken::log("## Error ## CSSM_ERRCODE_FUNCTION_NOT_IMPLEMENTED\n");
+	GemaltoToken::log("GemaltoKeyHandle::verifySignature <END>\n");
 
 	CssmError::throwMe(CSSM_ERRCODE_FUNCTION_NOT_IMPLEMENTED);
 }
@@ -264,9 +264,9 @@ void GemaltoKeyHandle::verifySignature(const Context &/*context*/, CSSM_ALGORITH
 
 void GemaltoKeyHandle::generateMac(const Context &/*context*/, const CssmData &/*input*/, CssmData &/*output*/)
 {
-	GemaltoToken::log( "\nGemaltoKeyHandle::generateMac <BEGIN>\n" );
-	GemaltoToken::log( "## Error ## CSSM_ERRCODE_FUNCTION_NOT_IMPLEMENTED\n" );
-	GemaltoToken::log( "GemaltoKeyHandle::generateMac <END>\n" );
+	GemaltoToken::log("\nGemaltoKeyHandle::generateMac <BEGIN>\n");
+	GemaltoToken::log("## Error ## CSSM_ERRCODE_FUNCTION_NOT_IMPLEMENTED\n");
+	GemaltoToken::log("GemaltoKeyHandle::generateMac <END>\n");
 
 	CssmError::throwMe(CSSM_ERRCODE_FUNCTION_NOT_IMPLEMENTED);
 }
@@ -274,9 +274,9 @@ void GemaltoKeyHandle::generateMac(const Context &/*context*/, const CssmData &/
 
 void GemaltoKeyHandle::verifyMac(const Context &, const CssmData &, const CssmData &)
 {
-	GemaltoToken::log( "\nGemaltoKeyHandle::verifyMac <BEGIN>\n" );
-	GemaltoToken::log( "## Error ## CSSM_ERRCODE_FUNCTION_NOT_IMPLEMENTED\n" );
-	GemaltoToken::log( "GemaltoKeyHandle::verifyMac <END>\n" );
+	GemaltoToken::log("\nGemaltoKeyHandle::verifyMac <BEGIN>\n");
+	GemaltoToken::log("## Error ## CSSM_ERRCODE_FUNCTION_NOT_IMPLEMENTED\n");
+	GemaltoToken::log("GemaltoKeyHandle::verifyMac <END>\n");
 
 	CssmError::throwMe(CSSM_ERRCODE_FUNCTION_NOT_IMPLEMENTED);
 }
@@ -284,9 +284,9 @@ void GemaltoKeyHandle::verifyMac(const Context &, const CssmData &, const CssmDa
 
 void GemaltoKeyHandle::encrypt(const Context &, const CssmData &, CssmData &)
 {
-	GemaltoToken::log( "\nGemaltoKeyHandle::encrypt <BEGIN>\n" );
-	GemaltoToken::log( "## Error ## CSSM_ERRCODE_FUNCTION_NOT_IMPLEMENTED\n" );
-	GemaltoToken::log( "GemaltoKeyHandle::encrypt <END>\n" );
+	GemaltoToken::log("\nGemaltoKeyHandle::encrypt <BEGIN>\n");
+	GemaltoToken::log("## Error ## CSSM_ERRCODE_FUNCTION_NOT_IMPLEMENTED\n");
+	GemaltoToken::log("GemaltoKeyHandle::encrypt <END>\n");
 
 	CssmError::throwMe(CSSM_ERRCODE_FUNCTION_NOT_IMPLEMENTED);
 }
@@ -294,20 +294,20 @@ void GemaltoKeyHandle::encrypt(const Context &, const CssmData &, CssmData &)
 
 void GemaltoKeyHandle::decrypt(const Context &context, const CssmData &cipher, CssmData &clear)
 {
-	GemaltoToken::log( "\nGemaltoKeyHandle::decrypt <BEGIN>\n" );
-	GemaltoToken::log( "Alg <%lu> - cipher <%s> - clear <%s>\n", context.algorithm( ), cipher.toHex( ).c_str( ), clear.toHex( ).c_str( ) );
+	GemaltoToken::log("\nGemaltoKeyHandle::decrypt <BEGIN>\n");
+	GemaltoToken::log("Alg <%lu> - cipher <%s> - clear <%s>\n", context.algorithm(), cipher.toHex().c_str(), clear.toHex().c_str());
 
 	size_t keyLength = mKey.sizeInBits() / 8;
 
 	// Get padding, but default to pkcs1 style padding
 	uint32 padding = CSSM_PADDING_PKCS1;
 	context.getInt(CSSM_ATTRIBUTE_PADDING, padding);
-	GemaltoToken::log( "Padding <%lu>\n", padding );
+	GemaltoToken::log("Padding <%lu>\n", padding);
 
 	// Gemalto pkcs11 can handle PKCS1 padding only
 	if (padding != CSSM_PADDING_PKCS1)
 	{
-		GemaltoToken::log( "## Error ## CSSMERR_CSP_INVALID_ATTR_PADDING\n" );
+		GemaltoToken::log("## Error ## CSSMERR_CSP_INVALID_ATTR_PADDING\n");
 		CssmError::throwMe(CSSMERR_CSP_INVALID_ATTR_PADDING);
 	}
 
@@ -323,7 +323,7 @@ void GemaltoKeyHandle::decrypt(const Context &context, const CssmData &cipher, C
 	}
 	catch (...)
 	{
-		GemaltoToken::log( "## Error ## mKey.computeDecrypt\n" );
+		GemaltoToken::log("## Error ## mKey.computeDecrypt\n");
 
 		// @@@ Switch to using tokend allocators
 		free(outputData);
@@ -333,15 +333,15 @@ void GemaltoKeyHandle::decrypt(const Context &context, const CssmData &cipher, C
 	clear.Data = outputData;
 	clear.Length = outputLength;
 
-	GemaltoToken::log( "GemaltoKeyHandle::decrypt <END>\n" );
+	GemaltoToken::log("GemaltoKeyHandle::decrypt <END>\n");
 }
 
 
 void GemaltoKeyHandle::exportKey(const Context &, const AccessCredentials *, CssmKey &)
 {
-	GemaltoToken::log( "\nGemaltoKeyHandle::exportKey <BEGIN>\n" );
-	GemaltoToken::log( "## Error ## CSSM_ERRCODE_FUNCTION_NOT_IMPLEMENTED\n" );
-	GemaltoToken::log( "GemaltoKeyHandle::exportKey <END>\n" );
+	GemaltoToken::log("\nGemaltoKeyHandle::exportKey <BEGIN>\n");
+	GemaltoToken::log("## Error ## CSSM_ERRCODE_FUNCTION_NOT_IMPLEMENTED\n");
+	GemaltoToken::log("GemaltoKeyHandle::exportKey <END>\n");
 
 	CssmError::throwMe(CSSM_ERRCODE_FUNCTION_NOT_IMPLEMENTED);
 }
@@ -357,12 +357,12 @@ GemaltoKeyHandleFactory::~GemaltoKeyHandleFactory()
 
 Tokend::KeyHandle* GemaltoKeyHandleFactory::keyHandle(Tokend::TokenContext *tokenContext, const Tokend::MetaRecord &metaRecord, Tokend::Record &record) const
 {
-	GemaltoToken::log( "\nGemaltoKeyHandleFactory::keyHandle <BEGIN>\n" );
+	GemaltoToken::log("\nGemaltoKeyHandleFactory::keyHandle <BEGIN>\n");
 
 	GemaltoKeyRecord &key = dynamic_cast<GemaltoKeyRecord &>(record);
 	GemaltoToken &gemaltoToken = static_cast<GemaltoToken &>(*tokenContext);
 
-	GemaltoToken::log( "GemaltoKeyHandleFactory::keyHandle <END>\n" );
+	GemaltoToken::log("GemaltoKeyHandleFactory::keyHandle <END>\n");
 
 	return new GemaltoKeyHandle(gemaltoToken, metaRecord, key);
 }

@@ -59,8 +59,8 @@ public:
 
 	static CK_FUNCTION_LIST_PTR s_CK_pFunctionList;
 
-	static void log( const char * format, ... );
-	static void toStringHex( const unsigned char* pIn, const std::size_t &ulInLen, std::string &szOut );
+	static void log(const char * format, ...);
+	static void toStringHex(const unsigned char* pIn, const std::size_t &ulInLen, std::string &szOut);
 
 	inline CK_SESSION_HANDLE session(void) const	{ return mCKSession; }
 	inline const CK_TOKEN_INFO* info(void) const	{ return &mCKTokenInfo; }

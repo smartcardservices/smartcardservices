@@ -183,7 +183,7 @@ const char* pkcs11_error(CK_RV rv)
 
 void CKError::debugDiagnose(const void *id) const
 {
-	GemaltoToken::log( "### Exception - <%p> CKError debugDiagnose <%s> <%08lX>\n", this, pkcs11_error(resultValue), resultValue);
+	GemaltoToken::log("### Exception - <%p> CKError debugDiagnose <%s> <%08lX>\n", this, pkcs11_error(resultValue), resultValue);
 }
 
 //#endif //NDEBUG
@@ -200,7 +200,7 @@ CKError::CKError(CK_RV rv) : CommonError(), resultValue(rv)
 
 OSStatus CKError::osStatus() const
 {
-	GemaltoToken::log( "### Exception - <%p> CKError osStatus <%s> <%08lX>\n", this, pkcs11_error(resultValue), resultValue);
+	GemaltoToken::log("### Exception - <%p> CKError osStatus <%s> <%08lX>\n", this, pkcs11_error(resultValue), resultValue);
 
 	// Map pkcs11 errors to CSSM
     switch (resultValue)
@@ -244,7 +244,7 @@ OSStatus CKError::osStatus() const
 
 int CKError::unixError() const
 {
-	GemaltoToken::log( "### Exception - <%p> CKError unixError <%s> <%08lX>\n", this, pkcs11_error(resultValue), resultValue);
+	GemaltoToken::log("### Exception - <%p> CKError unixError <%s> <%08lX>\n", this, pkcs11_error(resultValue), resultValue);
 
 	switch (resultValue)
 	{
