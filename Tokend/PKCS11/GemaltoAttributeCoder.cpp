@@ -49,7 +49,7 @@ KeyEncryptAttributeCoder::~KeyEncryptAttributeCoder()
 }
 
 
-void KeyEncryptAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
+void KeyEncryptAttributeCoder::decode(Tokend::TokenContext * /*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
 	GemaltoToken::log("\nKeyEncryptAttributeCoder::decode <BEGIN>\n");
 
@@ -82,7 +82,7 @@ KeyDecryptAttributeCoder::~KeyDecryptAttributeCoder()
 }
 
 
-void KeyDecryptAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
+void KeyDecryptAttributeCoder::decode(Tokend::TokenContext * /*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
 	GemaltoToken::log("\nKeyDecryptAttributeCoder::decode <BEGIN>\n");
 
@@ -115,7 +115,7 @@ KeySignAttributeCoder::~KeySignAttributeCoder()
 }
 
 
-void KeySignAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
+void KeySignAttributeCoder::decode(Tokend::TokenContext * /*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
 	GemaltoToken::log("\nKeySignAttributeCoder::decode <BEGIN>\n");
 
@@ -148,7 +148,7 @@ KeyVerifyAttributeCoder::~KeyVerifyAttributeCoder()
 }
 
 
-void KeyVerifyAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
+void KeyVerifyAttributeCoder::decode(Tokend::TokenContext * /*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
 	GemaltoToken::log("\nKeyVerifyAttributeCoder::decode <BEGIN>\n");
 
@@ -181,7 +181,7 @@ KeySignRecoverAttributeCoder::~KeySignRecoverAttributeCoder()
 }
 
 
-void KeySignRecoverAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
+void KeySignRecoverAttributeCoder::decode(Tokend::TokenContext * /*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
 	GemaltoToken::log("\nKeySignRecoverAttributeCoder::decode <BEGIN>\n");
 
@@ -214,7 +214,7 @@ KeyVerifyRecoverAttributeCoder::~KeyVerifyRecoverAttributeCoder()
 }
 
 
-void KeyVerifyRecoverAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
+void KeyVerifyRecoverAttributeCoder::decode(Tokend::TokenContext * /*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
 	GemaltoToken::log("\nKeyVerifyRecoverAttributeCoder::decode <BEGIN>\n");
 
@@ -247,7 +247,7 @@ KeyWrapAttributeCoder::~KeyWrapAttributeCoder()
 }
 
 
-void KeyWrapAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
+void KeyWrapAttributeCoder::decode(Tokend::TokenContext * /*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
 	GemaltoToken::log("\nKeyWrapAttributeCoder::decode <BEGIN>\n");
 
@@ -280,7 +280,7 @@ KeyUnwrapAttributeCoder::~KeyUnwrapAttributeCoder()
 }
 
 
-void KeyUnwrapAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
+void KeyUnwrapAttributeCoder::decode(Tokend::TokenContext * /*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
 	GemaltoToken::log("\nKeyUnwrapAttributeCoder::decode <BEGIN>\n");
 
@@ -313,7 +313,7 @@ KeyDeriveAttributeCoder::~KeyDeriveAttributeCoder()
 }
 
 
-void KeyDeriveAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
+void KeyDeriveAttributeCoder::decode(Tokend::TokenContext * /*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
 	GemaltoToken::log("\nKeyDeriveAttributeCoder::decode <BEGIN>\n");
 
@@ -337,7 +337,7 @@ KeySensitiveAttributeCoder::~KeySensitiveAttributeCoder()
 }
 
 
-void KeySensitiveAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
+void KeySensitiveAttributeCoder::decode(Tokend::TokenContext * /*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
 	GemaltoToken::log("\nKeySensitiveAttributeCoder::decode <BEGIN>\n");
 
@@ -361,7 +361,7 @@ KeyPrivateAttributeCoder::~KeyPrivateAttributeCoder()
 }
 
 
-void KeyPrivateAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
+void KeyPrivateAttributeCoder::decode(Tokend::TokenContext * /*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
 	GemaltoToken::log("\nKeyPrivateAttributeCoder::decode <BEGIN>\n");
 
@@ -385,7 +385,7 @@ KeyAlwaysSensitiveAttributeCoder::~KeyAlwaysSensitiveAttributeCoder()
 }
 
 
-void KeyAlwaysSensitiveAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
+void KeyAlwaysSensitiveAttributeCoder::decode(Tokend::TokenContext * /*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
 	GemaltoToken::log("\nKeyAlwaysSensitiveAttributeCoder::decode <BEGIN>\n");
 
@@ -409,7 +409,7 @@ KeySizeAttributeCoder::~KeySizeAttributeCoder()
 }
 
 
-void KeySizeAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
+void KeySizeAttributeCoder::decode(Tokend::TokenContext * /*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
 	GemaltoToken::log("\nKeySizeAttributeCoder::decode <BEGIN>\n");
 
@@ -433,7 +433,7 @@ KeyAlgorithmAttributeCoder::~KeyAlgorithmAttributeCoder()
 }
 
 
-void KeyAlgorithmAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
+void KeyAlgorithmAttributeCoder::decode(Tokend::TokenContext * /*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
 	GemaltoToken::log("\nKeyAlgorithmAttributeCoder::decode <BEGIN>\n");
 
@@ -530,7 +530,7 @@ KeyNameAttributeCoder::~KeyNameAttributeCoder()
 }
 
 
-void KeyNameAttributeCoder::decode(Tokend::TokenContext */*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
+void KeyNameAttributeCoder::decode(Tokend::TokenContext * /*tokenContext*/, const Tokend::MetaAttribute &metaAttribute, Tokend::Record &record)
 {
 	GemaltoToken::log("\nKeyNameAttributeCoder::decode <BEGIN>\n");
 

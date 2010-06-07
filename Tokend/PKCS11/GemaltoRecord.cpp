@@ -331,7 +331,7 @@ GemaltoCertRecord::~GemaltoCertRecord()
 }
 
 
-Tokend::Attribute *GemaltoCertRecord::getDataAttribute(Tokend::TokenContext */*tokenContext*/)
+Tokend::Attribute *GemaltoCertRecord::getDataAttribute(Tokend::TokenContext * /*tokenContext*/)
 {
 	GemaltoToken::log("\nGemaltoCertRecord::getDataAttribute <BEGIN>\n");
 
@@ -404,7 +404,7 @@ GemaltoKeyRecord::~GemaltoKeyRecord()
 }
 
 
-void GemaltoKeyRecord::computeSign(GemaltoToken &/*gemaltoToken*/, CK_ULONG /*mech*/, const AccessCredentials */*cred*/, unsigned char */*data*/, size_t /*dataLength*/, unsigned char */*output*/, size_t &/*outputLength*/)
+void GemaltoKeyRecord::computeSign(GemaltoToken &/*gemaltoToken*/, CK_ULONG /*mech*/, const AccessCredentials * /*cred*/, unsigned char * /*data*/, size_t /*dataLength*/, unsigned char * /*output*/, size_t &/*outputLength*/)
 {
 	GemaltoToken::log("\nGemaltoKeyRecord::computeSign <BEGIN>\n");
 	std::string str = "";
@@ -417,7 +417,7 @@ void GemaltoKeyRecord::computeSign(GemaltoToken &/*gemaltoToken*/, CK_ULONG /*me
 }
 
 
-void GemaltoKeyRecord::computeDecrypt(GemaltoToken &/*gemaltoToken*/, CK_ULONG /*mech*/, const AccessCredentials */*cred*/, unsigned char */*data*/, size_t /*dataLength*/, unsigned char */*output*/, size_t &/*outputLength*/)
+void GemaltoKeyRecord::computeDecrypt(GemaltoToken &/*gemaltoToken*/, CK_ULONG /*mech*/, const AccessCredentials * /*cred*/, unsigned char * /*data*/, size_t /*dataLength*/, unsigned char * /*output*/, size_t &/*outputLength*/)
 {
 	GemaltoToken::log("\nGemaltoKeyRecord::computeDecrypt <BEGIN>\n");
 	std::string str = "";
