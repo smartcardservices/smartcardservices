@@ -664,8 +664,8 @@ void GemaltoToken::_addPinState(AutoAclEntryInfoList& acl, uint32 slot, uint32 s
 #pragma mark ---------------- Gemalto Debug --------------
 
 
-// Define to unable if you want to activate trace into the code
-#define __DEBUG_GEMALTO__
+// Define if you want to activate trace into the code
+#undef __DEBUG_GEMALTO__
 
 void GemaltoToken::toStringHex(const unsigned char* buffer, const std::size_t& size, std::string &result)
 {
