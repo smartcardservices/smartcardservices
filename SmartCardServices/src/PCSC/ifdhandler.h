@@ -230,18 +230,23 @@ the device name of this port. It is dependent of the OS kernel. For
 example the first serial port device is called @c /dev/ttyS0 under Linux
 and @c /dev/cuaa0 under FreeBSD.
 
+If you want to use IFDHCreateChannel() instead of
+IFDHCreateChannelByName() then do not use any DEVICENAME line in the
+configuration file.  IFDHCreateChannel() will then be called with the
+CHANNELID parameter.
+
 @subsection LIBPATH
 The LIBPATH field is the filename of the driver code. The driver is a
 dynamically loaded piece of code (generally a @c drivername.so* file).
 
 @subsection CHANNELID
 The CHANNELID is no more used for recent drivers (IFD handler 3.0) and
-has been superseded by DEVICENAME. If you have an old driver this field
-is used to indicate the port to use. You should read your driver
-documentation to know what information is needed here. It should be the
-serial port number for a serial reader.
+has been superseded by DEVICENAME.
 
-@subsection CHANNELID
+If you have an old driver this field is used to indicate the port to
+use. You should read your driver documentation to know what information
+is needed here. It should be the serial port number for a serial reader.
+
 CHANNELID was the numeric version of the port in which the reader will
 be located. This may be done by a symbolic link where @c /dev/pcsc/1 is
 the first device which may be a symbolic link to @c /dev/ttyS0 or
@@ -452,25 +457,29 @@ port used by each reader.
   So it is something like: <tt>usb:08e6/3437:libusb:001:042</tt> under
   GNU/Linux.
 
-- libhal
+- libudev
 
-  If pcscd is compiled with libhal support instead of libusb (default
-  since pcsc-lite 1.4.100) the string will look like:
+  If pcscd is compiled with libudev support instead of libusb (default
+  since pcsc-lite 1.6.8) the string will look like:
 
   @code
-  printf("usb:%04x/%04x:libhal:%s", idVendor, idProduct, udi)
+  printf("usb:%04x/%04x:libudev:%d:%s", idVendor, idProduct,
+		bInterfaceNumber, devpath);
   @endcode
 
-  udi is the Universal Device Id at the HAL level.
+  bInterfaceNumber is the number of the interface on the device. It is
+  only usefull for devices with more than one CCID interface.
+
+  devpath is the filename of the device on the file system.
 
   So it is something like:
-  <tt>usb:08e6/3437:libhal:/org/freedesktop/Hal/devices/usb_device_8e6_3437_noserial_if0</tt>
+  <tt>usb:08e6/3437:libudev:0:/dev/bus/usb/008/047</tt>
   under GNU/Linux.
 
 - other
 
   If the driver does not understand the <tt>:libusb:</tt> or
-  <tt>:libhal:</tt> scheme or if a new scheme is used, the driver should
+  <tt>:libudev:</tt> scheme or if a new scheme is used, the driver should
   ignore the part it does not understand instead of failing.
 
   The driver shall recognize the <tt>usb:VID/PID</tt> part and, only if
@@ -648,10 +657,6 @@ don't mind loading a new driver for each reader then ignore @p Lun.
 @ingroup IFDHandler
 @param[in] Lun Logical Unit Number
 @param[in] Tag Tag of the desired data value
-- \ref TAG_IFD_SLOTNUM
-  This is used in IFDHandler v1.0 to select the slot to use for the next
-  IFD_* command. This tag is no more used with versions 2.0 and 3.0 of
-  the IFD Handler.
 @param[in,out] Length Length of the desired data value
 @param[out] Value Value of the desired data
 
