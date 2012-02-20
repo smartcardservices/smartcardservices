@@ -19,6 +19,12 @@ CFLAGS="$CFLAGS -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch i386 -arch x86_64
 LDFLAGS="-arch i386 -arch x86_64"
 CONFIGURE_ARGS="--disable-dependency-tracking"
 
+# boost
+#CFLAGS="$CFLAGS -I../boost1_45"
+
+# For Mac OS X Leopard 10.5
+#CFLAGS="$CFLAGS -DMACOSX_LEOPARD"
+
 # install in /usr
 CONFIGURE_ARGS="$CONFIGURE_ARGS --prefix=/usr"
 

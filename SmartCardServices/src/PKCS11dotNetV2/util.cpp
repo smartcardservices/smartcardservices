@@ -18,17 +18,16 @@
  *
  */
 
-#include "stdafx.h"
-#include "platconfig.h"
-#include "config.h"
+#include <cstdio>
+#include "cryptoki.h"
 #include "digest.h"
 #include "sha1.h"
-#include "error.h"
+#include "PKCS11Exception.hpp"
 #include "util.h"
 
 R_RANDOM_STRUCT Util::_randomStruct;
 
-void Util::SeedRandom(u1Array const & seed)
+void Util::SeedRandom(  Marshaller::u1Array const & seed)
 {
     InitRandomStruct(&_randomStruct);
     R_RandomUpdate(&_randomStruct, const_cast<unsigned char*>(seed.GetBuffer()), seed.GetLength());
@@ -44,49 +43,66 @@ CK_ULONG Util::MakeULong(CK_BYTE_PTR buffer,CK_ULONG offset)
     return (CK_ULONG)(((CK_ULONG)buffer[offset] << 24) | ((CK_ULONG)buffer[offset+1] << 16) | ((CK_ULONG)buffer[offset+2] << 8) | buffer[offset+3]);
 }
 
-CK_BBOOL Util::CompareByteArrays(CK_BYTE_PTR abuffer,CK_BYTE_PTR bbuffer,CK_ULONG len)
-{
-    for(CK_ULONG i=0;i<len;i++){
-        if(abuffer[i] != bbuffer[i])
-            return CK_FALSE;
-    }
 
+/*
+*/
+bool Util::compareByteArrays( unsigned char* a_pBuffer1, unsigned char* a_pBuffer2, const size_t& a_ulLen ) {
 
-    return CK_TRUE;
+	if( 0 == memcmp( a_pBuffer1, a_pBuffer2, a_ulLen ) ) {
+
+		return true;
+	}
+
+    /*for( CK_ULONG i = 0 ; i < a_ulLen ; ++i ) {
+
+        if( a_pBuffer1[ i ] != a_pBuffer2[ i ] ) {
+         
+			return false;
+		}
+    }*/
+
+    return false;
 }
 
-CK_BBOOL Util::CompareU1Arrays(u1Array* abuffer,CK_VOID_PTR bbuffer,CK_ULONG len)
-{
-    if((abuffer == NULL_PTR) && (bbuffer == NULL_PTR)){
-        return CK_TRUE;
+
+bool Util::compareU1Arrays( Marshaller::u1Array* abuffer, unsigned char* bbuffer, const size_t& len ) {
+
+    if( !abuffer && !bbuffer ) {
+
+        return true;
     }
 
-    if((abuffer != NULL_PTR) && (bbuffer != NULL_PTR)){
-        if(len == abuffer->GetLength()){
-            return Util::CompareByteArrays(abuffer->GetBuffer(),(CK_BYTE_PTR)bbuffer,len);
+    if( abuffer && bbuffer ) {
+
+        if( len == abuffer->GetLength( ) ) {
+        
+            return Util::compareByteArrays( abuffer->GetBuffer( ), bbuffer, len );
         }
     }
 
-    return CK_FALSE;
+    return false;
 }
 
 
-CK_BBOOL Util::CompareU4Arrays(u4Array* abuffer,CK_VOID_PTR bbuffer,CK_ULONG len)
-{
-    if((abuffer == NULL_PTR) && (bbuffer == NULL_PTR)){
-        return CK_TRUE;
+bool Util::compareU4Arrays(  Marshaller::u4Array* abuffer, unsigned char* bbuffer, const size_t& len ) {
+
+    if( !abuffer &&  !bbuffer ) {
+
+        return true;
     }
 
-    if((abuffer != NULL_PTR) && (bbuffer != NULL_PTR)){
-        if(len == abuffer->GetLength()){
-            return Util::CompareByteArrays((u1*)abuffer->GetBuffer(),(CK_BYTE_PTR)bbuffer,len);
+    if( abuffer && bbuffer ) {
+
+        if( len == abuffer->GetLength( ) ) {
+
+            return Util::compareByteArrays( (unsigned char*) abuffer->GetBuffer( ), bbuffer, len );
         }
     }
 
-    return CK_FALSE;
+    return false;
 }
 
-void Util::PushULongInVector(vector<u1>* to, CK_ULONG value)
+void Util::PushULongInVector( std::vector<u1>* to, CK_ULONG value)
 {
     to->push_back((u1)(value >> 24));
     to->push_back((u1)(value >> 16));
@@ -94,7 +110,7 @@ void Util::PushULongInVector(vector<u1>* to, CK_ULONG value)
     to->push_back((u1)(value));
 }
 
-void Util::PushULongLongInVector(vector<u1>* to, u8 value)
+void Util::PushULongLongInVector( std::vector<u1>* to, u8 value)
 {
     to->push_back((u1)(value >> 56));
     to->push_back((u1)(value >> 48));
@@ -112,32 +128,50 @@ void Util::PushBBoolInVector(std::vector<u1>* to, CK_BBOOL value)
     to->push_back(value);
 }
 
-void Util::PushByteArrayInVector(std::vector<u1>* to, u1Array *value)
-{
-    if((value == NULL_PTR) || value->GetLength() == 0){
-        to->push_back(0);
-    }else{
-        Util::PushLengthInVector(to,value->GetLength());
-        for(u4 i=0;i<value->GetLength();i++){
-            to->push_back(value->GetBuffer()[i]);
+void Util::PushByteArrayInVector(std::vector<u1>* to,  Marshaller::u1Array *value) {
+
+    if( !value || !value->GetLength( ) ) {
+
+        to->push_back( 0 );
+    
+    } else {
+
+        int l = value->GetLength( );
+
+        Util::PushLengthInVector( to, l );
+        
+        u1* buffer = (u1*)value->GetBuffer( );
+
+        for (int i = 0 ; i < l; ++i ) {
+
+            to->push_back( buffer[ i ] );
         }
     }
 }
 
-void Util::PushIntArrayInVector(std::vector<u1>* to, u4Array *value)
-{
-    if((value == NULL_PTR) || value->GetLength() == 0){
+
+void Util::PushIntArrayInVector(std::vector<u1>* to,  Marshaller::u4Array *value) {
+
+    if( !value || !value ) {
+
         to->push_back(0);
-    }else{
-        Util::PushLengthInVector(to,(value->GetLength() * 4));
-        u1* buffer = (u1*)value->GetBuffer();
-        for(u4 i=0;i<(value->GetLength() * 4);i++){
-            to->push_back(buffer[i]);
+    
+    } else {
+
+        int l = value->GetLength( ) * 4;
+
+        Util::PushLengthInVector( to, l );
+        
+        u1* buffer = (u1*)value->GetBuffer( );
+
+        for( int i = 0 ; i < l ; ++i ) {
+
+            to->push_back( buffer[ i ] );
         }
     }
 }
 
-u1Array* Util::ReadByteArrayFromVector(std::vector<u1> from, CK_ULONG_PTR idx)
+ Marshaller::u1Array* Util::ReadByteArrayFromVector(std::vector<u1> from, CK_ULONG_PTR idx)
 {
     CK_ULONG len = Util::ReadLengthFromVector(from,idx);
 
@@ -145,7 +179,7 @@ u1Array* Util::ReadByteArrayFromVector(std::vector<u1> from, CK_ULONG_PTR idx)
         return NULL_PTR;
     }
 
-    u1Array* val = new u1Array(len);
+    Marshaller::u1Array* val = new Marshaller::u1Array(len);
 
     for(u4 i=0;i<len;i++){
         val->SetU1At(i,from.at(*idx));
@@ -155,7 +189,7 @@ u1Array* Util::ReadByteArrayFromVector(std::vector<u1> from, CK_ULONG_PTR idx)
     return val;
 }
 
-u4Array* Util::ReadIntArrayFromVector(std::vector<u1> from, CK_ULONG_PTR idx)
+ Marshaller::u4Array* Util::ReadIntArrayFromVector(std::vector<u1> from, CK_ULONG_PTR idx)
 {
     CK_ULONG len = Util::ReadLengthFromVector(from,idx);
 
@@ -163,7 +197,7 @@ u4Array* Util::ReadIntArrayFromVector(std::vector<u1> from, CK_ULONG_PTR idx)
         return NULL_PTR;
     }
 
-    u4Array* val = new u4Array(len/4);
+     Marshaller::u4Array* val = new  Marshaller::u4Array(len/4);
 
     for(u4 i=0;i<(len/4);i++){
 
@@ -183,11 +217,11 @@ u4Array* Util::ReadIntArrayFromVector(std::vector<u1> from, CK_ULONG_PTR idx)
     return val;
 }
 
-void Util::PushLengthInVector(std::vector<u1>* to, CK_USHORT len)
+void Util::PushLengthInVector(std::vector<u1>* to, CK_ULONG len)
 {
-    if(len < (CK_USHORT)0x80){
+    if(len < (CK_ULONG)0x80){
         to->push_back(len & 0x7F);
-    }else if(len <= (CK_USHORT)0xFF){
+    }else if(len <= (CK_ULONG)0xFF){
         to->push_back(0x81);
         to->push_back(len & 0xFF);
     }else{
@@ -199,9 +233,9 @@ void Util::PushLengthInVector(std::vector<u1>* to, CK_USHORT len)
 
 CK_ULONG Util::ReadLengthFromVector(std::vector<u1> from, CK_ULONG_PTR idx)
 {
-    CK_USHORT val = (CK_USHORT)from.at(*idx);
+    CK_ULONG val = (CK_ULONG)from.at(*idx);
 
-    if(val < (CK_USHORT)0x80){
+    if(val < (CK_ULONG)0x80){
         *idx = *idx + 1;
         return val;
     }else if(val == 0x81){
@@ -218,7 +252,7 @@ CK_ULONG Util::ReadLengthFromVector(std::vector<u1> from, CK_ULONG_PTR idx)
         return val;
     }
 
-    PKCS11_ASSERT(CK_FALSE);
+    //PKCS11_ASSERT(CK_FALSE);
 
     return 0;
 }
@@ -227,6 +261,16 @@ CK_BBOOL Util::ReadBBoolFromVector(std::vector<u1> from, CK_ULONG_PTR idx)
 {
     CK_BBOOL val = (CK_BBOOL)from.at(*idx);
     *idx = *idx + 1;
+
+    return val;
+}
+
+
+bool Util::ReadBoolFromVector(std::vector<u1> from, CK_ULONG_PTR idx)
+{
+    bool val = ( from.at( *idx ) != 0 ) ? true : false;
+
+	*idx = *idx + 1;
 
     return val;
 }
@@ -345,10 +389,11 @@ u8 Util::MakeCheckValue(const unsigned char * pBuf, unsigned int length)
 {
     CSHA1 sha1;
     u1 hash[20];
-    sha1.HashCore(const_cast<unsigned char *>(pBuf), 0, length);
-    sha1.HashFinal(hash);
+    sha1.hashCore(const_cast<unsigned char *>(pBuf), 0, length);
+    sha1.hashFinal(hash);
     u8 val = 0;
-    for(size_t i = 0; i< sizeof(u8); ++i)
+    size_t l = sizeof(u8);
+    for(size_t i = 0; i< l; ++i)
         val = (val << 8) | hash[i];
     return val;
 }
@@ -357,17 +402,32 @@ u8 Util::MakeUniqueId()
 {
     unsigned char buf[8];
     if(R_GenerateBytes(buf, 8, &_randomStruct))
-        throw CkError(CKR_FUNCTION_FAILED);
+        throw PKCS11Exception( CKR_FUNCTION_FAILED );
     u8 * value = reinterpret_cast<u8*>(buf);
     return *value;
 }
 
-string Util::MakeIntString(unsigned int number, int width)
+std::string Util::MakeIntString(unsigned int number, int width)
 {
     if(width < 1)
-        return string();
+        return std::string();
     char temp[16];
     sprintf(temp, "%011d", number);
-    string s(temp);
+    std::string s(temp);
     return s.substr(s.size()-width, width);
+}
+
+
+/*
+*/
+void Util::toStringHex( const unsigned char& a_ucIn, std::string& a_stOut ) {
+
+    char h1 = a_ucIn / 16;
+    h1 += ( ( h1 <= 9 ) ? '0' : ( 'A'- 10 ) );
+    
+    char h2 = a_ucIn % 16;
+    h2 += ( ( h2 <= 9 ) ? '0' : ( 'A'- 10 ) );
+
+    a_stOut += h1;
+    a_stOut += h2;
 }

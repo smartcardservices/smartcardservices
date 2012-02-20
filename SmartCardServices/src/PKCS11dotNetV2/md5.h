@@ -18,21 +18,27 @@
  *
  */
 
+
 #ifndef _include_md5_h
 #define _include_md5_h
 
-#include "MarshallerCfg.h"
-#include "algo_md5.h"
+
+#include "digest.h"
+
 
 class CMD5 : public CDigest
 {
 private:
-    void TransformBlock(CK_BYTE_PTR data,CK_LONG counter,CK_BYTE_PTR result);
-    void TransformFinalBlock(CK_BYTE_PTR data,CK_LONG length,CK_LONG counter,CK_BYTE_PTR result);
+
+    void TransformBlock( unsigned char* data, long counter, unsigned char* result );
+
+    void TransformFinalBlock( unsigned char* data, long length, long counter, unsigned char* result );
 
 public:
-    CMD5();
-    ~CMD5();
+
+    CMD5( );
+    
+	virtual ~CMD5( );
 };
 
 #endif

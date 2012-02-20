@@ -18,22 +18,32 @@
  *
  */
 
+
 #ifndef _include_algo_sha1_h
 #define _include_algo_sha1_h
 
-typedef struct algo_sha1_context
-{
-    u4 total[2];
-    u4* digest;
-    u1* input;
+
+typedef struct algo_sha1_context {
+
+    unsigned int total[ 2 ];
+    
+    unsigned int* digest;
+
+    unsigned char* input;
+
 } algo_sha1_context;
 
+
 #define SHA1_HASH_LENGTH  20
+
 #define SHA1_BLOCK_LENGTH 64
 
-extern void algo_sha1_starts(algo_sha1_context* ctx);
-extern void algo_sha1_update(algo_sha1_context* ctx, u1* input, u4 length);
-extern void algo_sha1_finish(algo_sha1_context* ctx);
+
+extern void algo_sha1_starts( algo_sha1_context* ctx );
+
+extern void algo_sha1_update( algo_sha1_context* ctx, unsigned char* input, unsigned int length );
+
+extern void algo_sha1_finish( algo_sha1_context* ctx );
+
 
 #endif
-

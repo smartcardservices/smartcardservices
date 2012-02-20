@@ -1,23 +1,40 @@
-
-/* ---------------- Gemalto Debug -------------- */
+/*
+*  PKCS#11 library for .Net smart cards
+*  Copyright (C) 2007-2009 Gemalto <support@gemalto.com>
+*
+*  This library is free software; you can redistribute it and/or
+*  modify it under the terms of the GNU Lesser General Public
+*  License as published by the Free Software Foundation; either
+*  version 2.1 of the License, or (at your option) any later version.
+*
+*  This library is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  Lesser General Public License for more details.
+*
+*  You should have received a copy of the GNU Lesser General Public
+*  License along with this library; if not, write to the Free Software
+*  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*
+*/
 
 
 #include <string.h>
-#include "log.h"
+#include <stdio.h>
 
+#include "Log.hpp"
 
-// Define to unable if you want to activate trace into the code or at compilation time
-//#define __DEBUG_GEMALTO__
 
 #ifdef WIN32
-#include <windows.h>
-#define LOG_FILE_NAME "c:\\Gemalto.NET.PKCS11.log"
+#include <Windows.h>
+clock_t Log::m_clockStart;
 #else
-#define LOG_FILE_NAME "/tmp/Gemalto.NET.PKCS11.log"
+timeval Log::m_clockStart;
 #endif
 
+bool Log::s_bEnableLog = false;
 
-#define T_BOOL 0
+const unsigned char T_BOOL = 0;
 #define T_BYTES 1
 #define T_LONG 2
 #define T_KEY_TYPE 3
@@ -27,139 +44,107 @@
 #define T_KEY_GEN_MECHANISM 7
 #define T_UNKNOWN 8
 
-unsigned long Log::m_ulStart = 0;
+
+
+//std::string Log::s_stLogFilePath = "/tmp";
+//std::string Log::s_stLogFile = "/tmp/Gemalto.NET.PKCS11.log";
+
+
+char Log::s_LogFilePath[ 255 ] = "";
+
+
+
+
+void Log::setLogPath( const std::string& stPath ) { 
+
+    std::string s = stPath + std::string( "/Gemalto.NET.PKCS11.log" );  
+    
+    memset( s_LogFilePath, 0, sizeof( s_LogFilePath ) ); 
+    
+    if( s.length( ) < sizeof( s_LogFilePath ) ) { 
+    
+        memcpy( s_LogFilePath, s.c_str( ), s.length( ) ); 
+    
+    } else { 
+        
+        char szDefaultPath[ ] = "/tmp/Gemalto.NET.PKCS11.log";
+        
+        memcpy( s_LogFilePath, szDefaultPath, sizeof( szDefaultPath ) );  
+    }
+}
 
 /* Log a message into the log file
 */
 void Log::log( const char * format, ... )
 {
-#ifdef __DEBUG_GEMALTO__
-   // Try to open the file
-   FILE* pLog = fopen( LOG_FILE_NAME, "a" );
-   if( NULL == pLog )
-   {
-      // The file does not exit. Nothing to log
-      return;
-   }
+	if( !Log::s_bEnableLog ) {
+	
+            return;
+	}
 
-   // Write the message to the log file
-   va_list args;
-   va_start( args, format );
-   vfprintf( pLog, format, args );
-   va_end( args );
-   fprintf(pLog, "\n");
+    /*
+    if( Log::s_stLogFile.empty( ) ) {
+     
+        return;
+    }*/
+
+    try {
+		va_list args;
+
+	    // Try to open the file
+	    FILE* pLog = fopen( s_LogFilePath, "a" ); /*s_stLogFile.c_str( )*/
+	    if( pLog ) {
+			// Write the message to the log file
+			va_start( args, format );
+			vfprintf( pLog, format, args );
+			va_end( args );
+			fprintf(pLog, "\n");
+
+			// Close the file
+			fclose( pLog );
+	    }
 
 #ifndef WIN32
-   // Write the message to stderr stream
-   va_start( args, format );
-	vfprintf( stderr, format, args );
-   va_end( args );
-	fprintf( stderr, "\n");
-#else
-   // Get the size of the buffer necessary to write the message
-   // The size must be extended to include the '\n' and the '\0' characters.
-   va_start( args, format );
-   size_t len = _vscprintf( format, args );
-   va_end( args );
+	    // Write the message to stderr stream
+	    va_start( args, format );
+	    vfprintf( stderr, format, args );
+	    va_end( args );
+	    fprintf( stderr, "\n");
+    #else
+	    // Get the size of the buffer necessary to write the message
+	    // The size must be extended to include the '\n' and the '\0' characters.
+	    va_start( args, format );
+	    size_t len = _vscprintf( format, args );
+	    va_end( args );
 
-   // Allocate the buffer for the message
-   char *buffer = new char[ len + 2 ];
-   memset( buffer, '\0', len + 2 );
+	    // Allocate the buffer for the message
+	    char *buffer = new char[ len + 2 ];
+	    memset( buffer, '\0', len + 2 );
 
-   // Write the message into the buffer.
-   va_start( args, format );
-   vsprintf_s( buffer, len + 1, format, args );
-   va_end( args );
-   buffer[ len ] = '\n';
+	    // Write the message into the buffer.
+	    va_start( args, format );
+	    vsprintf_s( buffer, len + 1, format, args );
+	    va_end( args );
+	    buffer[ len ] = '\n';
 
-   // Write the message to the console
-   OutputDebugString( buffer );
+	    // Write the message to the console
+	    OutputDebugString( buffer );
 
-   // Release the buffer
-   delete[] buffer;
-#endif
+	    // Release the buffer
+	    delete[] buffer;
+    #endif
 
-   va_end( args );
+	    va_end( args );
 
-   // Close the file
-   fclose( pLog );
-#endif
+    } catch( ... ) { }
 }
-
-/*
-
-#ifdef __DEBUG_GEMALTO__
-void Log::log( const char * format, ... )
-{
-   // Try to open the file
-   FILE* pLog = fopen( LOG_FILE_NAME, "a" );
-   if( NULL == pLog )
-   {
-      // The file does not exit. Nothing to log
-      return;
-   }
-
-   // Get the size of the buffer necessary to write the message
-   // The size must be extended to include the '\n' and the '\0' characters.
-   va_list args;
-   va_start( args, format );
-#ifdef WIN32
-   size_t len = _vscprintf( format, args );
-#else
-   char tmp[1];
-   int len = vsnprintf( tmp, sizeof(tmp), format, args );
-#endif
-   va_end( args );
-
-   // Allocate the buffer for the message
-   char *buffer = new char[ len + 2 ];
-   memset( buffer, '\0', len + 2 );
-
-   // Write the message into the buffer.
-   va_start( args, format );
-#ifdef WIN32
-   vsprintf_s( buffer, len + 1, format, args );
-#else
-   vsprintf( buffer, format, args );
-#endif
-   va_end( args );
-   buffer[ len ] = '\n';
-
-   // Write the message to the console
-#ifdef WIN32
-   OutputDebugString( buffer );
-#else
-   printf( buffer );
-#endif
-
-   // Write the message to the log file
-   fputs( buffer, pLog );
-   fflush( pLog );
-
-   // Close the file
-   fclose( pLog );
-
-   // Release the buffer
-   delete[] buffer;
-}
-#else
-void Log::log( const char*, ... )
-{
-}
-#endif
-*/
-
 
 
 /*
 */
 void Log::begin( const char* a_pMethod )
 {
-#ifdef __DEBUG_GEMALTO__
-   log( "%s - <BEGIN>", a_pMethod );
-#else
-	(void)a_pMethod;
-#endif
+	log( "%s - <BEGIN>", a_pMethod );
 }
 
 
@@ -167,9 +152,7 @@ void Log::begin( const char* a_pMethod )
 */
 void Log::end( const char* a_pMethod )
 {
-#ifdef __DEBUG_GEMALTO__
-   log( "%s - <END>", a_pMethod );
-#endif
+	log( "%s - <END>\n", a_pMethod );
 }
 
 
@@ -177,9 +160,7 @@ void Log::end( const char* a_pMethod )
 */
 void Log::in( const char* a_pMethod )
 {
-#ifdef __DEBUG_GEMALTO__
-   log( "%s - [IN]", a_pMethod );
-#endif
+	log( "%s - [IN]", a_pMethod );
 }
 
 
@@ -187,9 +168,7 @@ void Log::in( const char* a_pMethod )
 */
 void Log::out( const char* a_pMethod )
 {
-#ifdef __DEBUG_GEMALTO__
-   log( "%s - [OUT]", a_pMethod );
-#endif
+	log( "%s - [OUT]", a_pMethod );
 }
 
 
@@ -197,23 +176,31 @@ void Log::out( const char* a_pMethod )
 */
 void Log::error( const char* a_pMethod, const char* a_pError )
 {
-#ifdef __DEBUG_GEMALTO__
-   log( "%s - ## Error ## %s", a_pMethod, a_pError );
-#endif
+	log( "%s - ## Error ## %s", a_pMethod, a_pError );
 }
 
 
-
+/*
+*/
 void Log::logCK_UTF8CHAR_PTR( const char* a_pName, const unsigned char* a_pBuffer, const std::size_t& a_Size )
 {
-#ifdef __DEBUG_GEMALTO__
-   std::string s = "";
-   if( NULL_PTR != a_pBuffer )
-   {
-      toString( a_pBuffer, a_Size, s );
-   }
-   log( "%s - <%#02x> - size <%ld> - buffer <%s>", a_pName, a_pBuffer, a_Size, s.c_str( ) );
-#endif
+	if( !s_bEnableLog ) {
+		
+        return;
+	}
+
+	if( a_pBuffer ) {
+
+        std::string s = "";
+		
+        toString( a_pBuffer, a_Size, s );
+	    
+        log( "%s - <%#02x> - size <%ld> - buffer <%s>", a_pName, a_pBuffer, a_Size, s.c_str( ) );
+	
+    } else {
+    
+        log( "%s - NULL_PTR", a_pName );
+    }
 }
 
 
@@ -221,20 +208,22 @@ void Log::logCK_UTF8CHAR_PTR( const char* a_pName, const unsigned char* a_pBuffe
 */
 void Log::logCK_MECHANISM_INFO_PTR( const char* a_pMethod, CK_MECHANISM_INFO_PTR pInfo )
 {
-#ifdef __DEBUG_GEMALTO__
-	if( NULL_PTR != pInfo )
-	{
-	   std::string flags = "";
-	   CK_FLAGS f = pInfo->flags;
-	   mechanismFlagsToString( f, flags );
-
-      log( "%s - CK_MECHANISM_INFO - ulMinKeySize <%#02x> - ulMaxKeySize <%#02x> - flags <%s>", a_pMethod, pInfo->ulMinKeySize, pInfo->ulMaxKeySize, flags.c_str( ) );
-   }
-   else
-   {
-      log( "%s - CK_MECHANISM_INFO - NULL_PTR", a_pMethod );
+	if( !s_bEnableLog ) {
+		return;
 	}
-#endif
+
+    if( pInfo ) {
+
+		std::string flags = "";
+		CK_FLAGS f = pInfo->flags;
+		mechanismFlagsToString( f, flags );
+
+		log( "%s - CK_MECHANISM_INFO - ulMinKeySize <%#02x> - ulMaxKeySize <%#02x> - flags <%s>", a_pMethod, pInfo->ulMinKeySize, pInfo->ulMaxKeySize, flags.c_str( ) );
+	}
+	else
+	{
+		log( "%s - CK_MECHANISM_INFO - NULL_PTR", a_pMethod );
+	}
 }
 
 
@@ -242,52 +231,62 @@ void Log::logCK_MECHANISM_INFO_PTR( const char* a_pMethod, CK_MECHANISM_INFO_PTR
 */
 void Log::logCK_INFO( const char* a_pMethod, const CK_INFO_PTR pInfo )
 {
-#ifdef __DEBUG_GEMALTO__
-   if( NULL_PTR != pInfo )
-   {
-	   std::string s = "";
-	   CK_INFOToString( pInfo, s );
-      log( "%s - CK_INFO <%s>", a_pMethod, s.c_str( ) );
-   }
-   else
-   {
-      log( "%s - CK_INFO <NULL_PTR>", a_pMethod );
-   }
-#endif
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    if( pInfo )
+	{
+		std::string s = "";
+		CK_INFOToString( pInfo, s );
+		log( "%s - CK_INFO <%s>", a_pMethod, s.c_str( ) );
+	}
+	else
+	{
+		log( "%s - CK_INFO <NULL_PTR>", a_pMethod );
+	}
 }
 
 
+/*
+*/
 void Log::logCK_RV( const char* a_pMethod, const CK_RV& rv )
 {
-#ifdef __DEBUG_GEMALTO__
-   if( CKR_OK == rv )
-   {
-      log( "%s - [RV] <0x00> (CKR_OK)", a_pMethod );
-   }
-   else
-  {
-      std::string s = "";
-      CK_RVToString( rv, s );
-      log( "%s - [RV] <%#02x> (%s)", a_pMethod, rv, s.c_str( ) );
-   }
-#endif
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    if( CKR_OK == rv )
+	{
+		log( "%s - [RV] <0x00> (CKR_OK)", a_pMethod );
+	}
+	else
+	{
+		std::string s = "";
+		CK_RVToString( rv, s );
+		log( "%s - [RV] <%#02x> (%s)", a_pMethod, rv, s.c_str( ) );
+	}
 }
 
 
+/*
+*/
 void Log::logCK_C_INITIALIZE_ARGS_PTR( const char* a_pMethod, CK_C_INITIALIZE_ARGS_PTR a_pArgs )
 {
-#ifdef __DEBUG_GEMALTO__
-   if( NULL_PTR != a_pArgs )
-   {
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    if( a_pArgs )
+	{
 		//log( a_pMethod, "pInitArgs->CreateMutex <%#02x>", a_pArgs.CreateMutex );
 		log( "%s - CK_C_INITIALIZE_ARGS - DestroyMutex <%#02x> - LockMutex <%#02x> - UnlockMutex <%#02x> - flags <%#02x> - pReserved <%#02x>",
-         a_pMethod, a_pArgs->DestroyMutex, a_pArgs->LockMutex, a_pArgs->UnlockMutex, a_pArgs->flags, a_pArgs->pReserved );
-   }
-   else
-   {
+			a_pMethod, a_pArgs->DestroyMutex, a_pArgs->LockMutex, a_pArgs->UnlockMutex, a_pArgs->flags, a_pArgs->pReserved );
+	}
+	else
+	{
 		log( "%s - CK_C_INITIALIZE_ARGS - CreateMutex <NULL_PTR> - DestroyMutex <NULL_PTR> - LockMutex <NULL_PTR> - UnlockMutex <NULL_PTR> - flags <NULL_PTR> - pReserved <NULL_PTR>", a_pMethod );
-   }
-#endif
+	}
 }
 
 
@@ -295,121 +294,131 @@ void Log::logCK_C_INITIALIZE_ARGS_PTR( const char* a_pMethod, CK_C_INITIALIZE_AR
 */
 void Log::logCK_SLOT_ID_PTR( const char* a_pMethod, CK_SLOT_ID_PTR pSlotList, CK_ULONG_PTR pulCount )
 {
-#ifdef __DEBUG_GEMALTO__
-   if( NULL_PTR == pSlotList )
-   {
-      log( "%s - CK_SLOT_ID_PTR - pulCount <%#02x> (%ld) - pSlotList <NULL_PTR>", a_pMethod, pulCount, ( NULL_PTR != pulCount ) ? *pulCount : 0 );
-   }
-   else
-   {
-      std::string sList = "";
-      if( NULL_PTR != pulCount )
-      {
-	      for( size_t i = 0 ; i < (size_t)*pulCount ; i++ )
-	      {
-		      std::string s = "";
-		      toString( (unsigned long) pSlotList[ i ], s );
-		      sList += s;
-		      if( i != (size_t)( *pulCount - 1 ) )
-		      {
-			      sList += ", " ;
-		      }
-	      }
-      }
-      log( "%s - CK_SLOT_ID_PTR - pulCount <%#02x> (%ld) - pSlotList <%#02x> (%s)", a_pMethod, pulCount, ( NULL_PTR != pulCount ) ? *pulCount : 0, pSlotList, sList.c_str( ) );
-   }
-#endif
+	if( !s_bEnableLog ) {
+		return;
+    }
+
+	if( NULL_PTR == pSlotList )
+	{
+		log( "%s - CK_SLOT_ID_PTR - pulCount <%#02x> (%ld) - pSlotList <NULL_PTR>", a_pMethod, pulCount, ( NULL_PTR != pulCount ) ? *pulCount : 0 );
+	}
+	else
+	{
+		std::string sList = "";
+		if( NULL_PTR != pulCount )
+		{
+			for( size_t i = 0 ; i < (size_t)*pulCount ; i++ )
+			{
+				std::string s = "";
+				toString( (unsigned long) pSlotList[ i ], s );
+				sList += s;
+				if( i != (size_t)( *pulCount - 1 ) )
+				{
+					sList += ", " ;
+				}
+			}
+		}
+		log( "%s - CK_SLOT_ID_PTR - pulCount <%#02x> (%ld) - pSlotList <%#02x> (%s)", a_pMethod, pulCount, ( NULL_PTR != pulCount ) ? *pulCount : 0, pSlotList, sList.c_str( ) );
+	}
 }
 
 
+/*
+*/
 void Log::logCK_SLOT_INFO_PTR( const char* a_pMethod, CK_SLOT_INFO_PTR pInfo )
 {
-#ifdef __DEBUG_GEMALTO__
-	if( NULL_PTR != pInfo )
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    if( pInfo )
 	{
-	   std::string slotDescription = "";
-	   toString( pInfo->slotDescription, 64, slotDescription );
+		std::string slotDescription = "";
+		toString( pInfo->slotDescription, 64, slotDescription );
 
-	   std::string manufacturerID = "";
-	   toString( pInfo->manufacturerID, 32, manufacturerID );
+		std::string manufacturerID = "";
+		toString( pInfo->manufacturerID, 32, manufacturerID );
 
-	   std::string flags = "";
-	   CK_FLAGS f = pInfo->flags;
-	   slotFlagsToString( f, flags );
+		std::string flags = "";
+		CK_FLAGS f = pInfo->flags;
+		slotFlagsToString( f, flags );
 
-	   std::string hardwareVersion = "";
-	   CK_VERSIONToString( &(pInfo->hardwareVersion), hardwareVersion );
+		std::string hardwareVersion = "";
+		CK_VERSIONToString( &(pInfo->hardwareVersion), hardwareVersion );
 
-	   std::string firmwareVersion = "";
-	   CK_VERSIONToString( &(pInfo->firmwareVersion), firmwareVersion );
+		std::string firmwareVersion = "";
+		CK_VERSIONToString( &(pInfo->firmwareVersion), firmwareVersion );
 
-      log( "%s - CK_SLOT_INFO_PTR - slotDescription <%s> - manufacturerID <%s> - flags <%s> - hardwareVersion <%s> - firmwareVersion <%s>",
-		   a_pMethod, slotDescription.c_str( ), manufacturerID.c_str( ), flags.c_str( ), hardwareVersion.c_str( ), firmwareVersion.c_str( ) );
-   }
-   else
-   {
-      log( "%s - CK_SLOT_INFO_PTR - NULL_PTR", a_pMethod );
-   }
-#endif
+		log( "%s - CK_SLOT_INFO_PTR - slotDescription <%s> - manufacturerID <%s> - flags <%s> - hardwareVersion <%s> - firmwareVersion <%s>",
+			a_pMethod, slotDescription.c_str( ), manufacturerID.c_str( ), flags.c_str( ), hardwareVersion.c_str( ), firmwareVersion.c_str( ) );
+	}
+	else
+	{
+		log( "%s - CK_SLOT_INFO_PTR - NULL_PTR", a_pMethod );
+	}
 }
 
 
+/*
+*/
 void Log::logCK_TOKEN_INFO_PTR( const char* a_pMethod, CK_TOKEN_INFO_PTR pInfo )
 {
-#ifdef __DEBUG_GEMALTO__
-   if( NULL_PTR != pInfo )
-	{
-	   std::string label = "";
-	   toString( pInfo->label, 32, label );
-
-	   std::string manufacturerID = "";
-	   toString( pInfo->manufacturerID, 32, manufacturerID );
-
-	   std::string model = "";
-	   toString( pInfo->model, 16, model );
-
-	   std::string serialNumber = "";
-	   toString( pInfo->serialNumber, 16, serialNumber );
-
-	   std::string hardwareVersion = "";
-	   CK_VERSIONToString( &(pInfo->hardwareVersion), hardwareVersion );
-
-	   std::string firmwareVersion = "";
-	   CK_VERSIONToString( &(pInfo->firmwareVersion), firmwareVersion );
-
-	   std::string utcTime = "";
-	   toString( pInfo->utcTime, 16, utcTime );
-
-	   log( "%s - CK_TOKEN_INFO_PTR - <%#02x> - label <%s> - manufacturerID <%s> - model <%s> - serialNumber <%s> - flags <%#02x> - ulMaxSessionCount <%#02x> - ulSessionCount <%#02x> - \
-		   ulMaxRwSessionCount <%#02x> - ulRwSessionCount <%#02x> - ulMaxPinLen <%#02x> - ulMinPinLen <%#02x> - ulTotalPublicMemory <%#02x> - \
-		   ulFreePublicMemory <%#02x> - ulTotalPrivateMemory <%#02x> - ulFreePrivateMemory <%#02x> - hardwareVersion <%s> - \
-		   firmwareVersion <%s> - utcTime <%s>",
-		   a_pMethod,
-         pInfo,
-         label.c_str( ),
-		   manufacturerID.c_str( ),
-		   model.c_str( ),
-		   serialNumber.c_str( ),
-		   pInfo->flags,
-		   pInfo->ulMaxSessionCount,
-		   pInfo->ulSessionCount,
-		   pInfo->ulMaxRwSessionCount,
-		   pInfo->ulRwSessionCount,
-		   pInfo->ulMaxPinLen,
-		   pInfo->ulMinPinLen,
-		   pInfo->ulTotalPublicMemory,
-		   pInfo->ulFreePublicMemory,
-		   pInfo->ulTotalPrivateMemory,
-		   pInfo->ulFreePrivateMemory,
-		   hardwareVersion.c_str( ),
-		   firmwareVersion.c_str( ),
-		   utcTime.c_str( ) );
+	if( !s_bEnableLog ) {
+		return;
 	}
-   else
-   {
-      log( "%s - CK_TOKEN_INFO_PTR - <NULL_PTR>", a_pMethod );
-   }
-#endif
+
+    if( pInfo )
+	{
+		std::string label = "";
+		toString( pInfo->label, 32, label );
+
+		std::string manufacturerID = "";
+		toString( pInfo->manufacturerID, 32, manufacturerID );
+
+		std::string model = "";
+		toString( pInfo->model, 16, model );
+
+		std::string serialNumber = "";
+		toString( pInfo->serialNumber, 16, serialNumber );
+
+		std::string hardwareVersion = "";
+		CK_VERSIONToString( &(pInfo->hardwareVersion), hardwareVersion );
+
+		std::string firmwareVersion = "";
+		CK_VERSIONToString( &(pInfo->firmwareVersion), firmwareVersion );
+
+		std::string utcTime = "";
+		toString( pInfo->utcTime, 16, utcTime );
+
+		log( "%s - CK_TOKEN_INFO_PTR - <%#02x> - label <%s> - manufacturerID <%s> - model <%s> - serialNumber <%s> - flags <%#02x> - ulMaxSessionCount <%#02x> - ulSessionCount <%#02x> - \
+			 ulMaxRwSessionCount <%#02x> - ulRwSessionCount <%#02x> - ulMaxPinLen <%#02x> - ulMinPinLen <%#02x> - ulTotalPublicMemory <%#02x> - \
+			 ulFreePublicMemory <%#02x> - ulTotalPrivateMemory <%#02x> - ulFreePrivateMemory <%#02x> - hardwareVersion <%s> - \
+			 firmwareVersion <%s> - utcTime <%s>",
+			 a_pMethod,
+			 pInfo,
+			 label.c_str( ),
+			 manufacturerID.c_str( ),
+			 model.c_str( ),
+			 serialNumber.c_str( ),
+			 pInfo->flags,
+			 pInfo->ulMaxSessionCount,
+			 pInfo->ulSessionCount,
+			 pInfo->ulMaxRwSessionCount,
+			 pInfo->ulRwSessionCount,
+			 pInfo->ulMaxPinLen,
+			 pInfo->ulMinPinLen,
+			 pInfo->ulTotalPublicMemory,
+			 pInfo->ulFreePublicMemory,
+			 pInfo->ulTotalPrivateMemory,
+			 pInfo->ulFreePrivateMemory,
+			 hardwareVersion.c_str( ),
+			 firmwareVersion.c_str( ),
+			 utcTime.c_str( ) );
+	}
+	else
+	{
+		log( "%s - CK_TOKEN_INFO_PTR - <NULL_PTR>", a_pMethod );
+	}
 }
 
 
@@ -417,14 +426,16 @@ void Log::logCK_TOKEN_INFO_PTR( const char* a_pMethod, CK_TOKEN_INFO_PTR pInfo )
 */
 void Log::logCK_MECHANISM_TYPE( const char* a_pMethod, CK_MECHANISM_TYPE_PTR pMechanismList, CK_ULONG_PTR pulCount )
 {
-#ifdef __DEBUG_GEMALTO__
-   std::string s = "";
-   if( ( NULL_PTR != pMechanismList ) && ( NULL_PTR != pulCount ) )
-   {
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    std::string s = "";
+	if( pMechanismList && pulCount )
+	{
 		CK_MECHANISM_TYPEToString( pMechanismList, *pulCount, s );
 	}
-   log( "%s - CK_MECHANISM_TYPE_PTR - pulCount <%#02x> (%ld) - pMechanismList <%#02x> (%s)", a_pMethod, pulCount, ( ( NULL_PTR != pulCount ) ? *pulCount : 0 ), pMechanismList, s.c_str( ) );
-#endif
+	log( "%s - CK_MECHANISM_TYPE_PTR - pulCount <%#02x> (%ld) - pMechanismList <%#02x> (%s)", a_pMethod, pulCount, ( ( NULL_PTR != pulCount ) ? *pulCount : 0 ), pMechanismList, s.c_str( ) );
 }
 
 
@@ -432,11 +443,13 @@ void Log::logCK_MECHANISM_TYPE( const char* a_pMethod, CK_MECHANISM_TYPE_PTR pMe
 */
 void Log::logCK_MECHANISM_TYPE( const char* a_pMethod, CK_MECHANISM_TYPE & ulMechanism )
 {
-#ifdef __DEBUG_GEMALTO__
-   std::string s = "";
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    std::string s = "";
 	CK_MECHANISM_TYPEToString( ulMechanism, s );
-   log( "%s - CK_MECHANISM_TYPE <%s>", a_pMethod, s.c_str( ) );
-#endif
+	log( "%s - CK_MECHANISM_TYPE <%s>", a_pMethod, s.c_str( ) );
 }
 
 
@@ -444,11 +457,13 @@ void Log::logCK_MECHANISM_TYPE( const char* a_pMethod, CK_MECHANISM_TYPE & ulMec
 */
 void Log::logSessionFlags( const char* a_pMethod, CK_FLAGS & flags )
 {
-#ifdef __DEBUG_GEMALTO__
-	std::string s = "";
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    std::string s = "";
 	sessionFlagsToString( flags, s );
 	log( "%s - CK_FLAGS <%s>", a_pMethod, s.c_str( ) );
-#endif
 }
 
 
@@ -456,18 +471,20 @@ void Log::logSessionFlags( const char* a_pMethod, CK_FLAGS & flags )
 */
 void Log::logCK_SESSION_INFO_PTR( const char* a_pMethod, CK_SESSION_INFO_PTR pInfo )
 {
-#ifdef __DEBUG_GEMALTO__
-	if( NULL_PTR != pInfo )
-   {
-      std::string s = "";
-	   CK_SESSION_INFOToString( pInfo, s );
-	   log( "%s - CK_SESSION_INFO <%#02x> (%s)", a_pMethod, pInfo, s.c_str( ) );
-   }
-   else
-	{
-	   log( "%s - CK_SESSION_INFO <NULL_PTR>", a_pMethod );
+	if( !s_bEnableLog ) {
+		return;
 	}
-#endif
+
+    if( pInfo )
+	{
+		std::string s = "";
+		CK_SESSION_INFOToString( pInfo, s );
+		log( "%s - CK_SESSION_INFO <%#02x> (%s)", a_pMethod, pInfo, s.c_str( ) );
+	}
+	else
+	{
+		log( "%s - CK_SESSION_INFO <NULL_PTR>", a_pMethod );
+	}
 }
 
 
@@ -475,11 +492,13 @@ void Log::logCK_SESSION_INFO_PTR( const char* a_pMethod, CK_SESSION_INFO_PTR pIn
 */
 void Log::logCK_USER_TYPE( const char* a_pMethod, CK_USER_TYPE &userType )
 {
-#ifdef __DEBUG_GEMALTO__
-	std::string s = "";
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    std::string s = "";
 	CK_USER_TYPEToString( userType, s );
 	log( "%s - CK_USER_TYPE <%s>", a_pMethod, s.c_str( ) );
-#endif
 }
 
 
@@ -487,11 +506,13 @@ void Log::logCK_USER_TYPE( const char* a_pMethod, CK_USER_TYPE &userType )
 */
 void Log::logCK_MECHANISM_PTR( const char* a_pMethod, CK_MECHANISM_PTR pMechanism )
 {
-#ifdef __DEBUG_GEMALTO__
-	std::string s = "";
-   CK_MECHANISMToString( pMechanism, s );
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    std::string s = "";
+	CK_MECHANISMToString( pMechanism, s );
 	log( "%s - CK_MECHANISM_PTR <%s>", a_pMethod, s.c_str( ) );
-#endif
 }
 
 
@@ -499,20 +520,22 @@ void Log::logCK_MECHANISM_PTR( const char* a_pMethod, CK_MECHANISM_PTR pMechanis
 */
 void Log::logCK_ATTRIBUTE_PTR( const char* a_pMethod, CK_ATTRIBUTE_PTR pTemplate, CK_ULONG& ulCount )
 {
-#ifdef __DEBUG_GEMALTO__
-   log( "%s - pTemplate <%#02x> - ulCount <%ld>", a_pMethod, pTemplate, ulCount );
-	if( NULL_PTR != pTemplate )
-	{
-	   for( size_t i = 0; i < (size_t)ulCount; i++ )
-	   {
-		   CK_ATTRIBUTE a = pTemplate[ i ];
-		   std::string attribute = "";
-		   CK_ATTRIBUTEToString( &a, attribute );
+	if( !s_bEnableLog ) {
+		return;
+	}
 
-         log( "%s	- Attribute #%d - %s", a_pMethod, i, attribute.c_str( ) );
-	   }
-   }
-#endif
+    log( "%s - pTemplate <%#02x> - ulCount <%ld>", a_pMethod, pTemplate, ulCount );
+	if( pTemplate )
+	{
+		for( size_t i = 0; i < (size_t)ulCount; i++ )
+		{
+			CK_ATTRIBUTE a = pTemplate[ i ];
+			std::string attribute = "";
+			CK_ATTRIBUTEToString( &a, attribute );
+
+			log( "%s	- Attribute #%d - %s", a_pMethod, i, attribute.c_str( ) );
+		}
+	}
 }
 
 
@@ -520,8 +543,11 @@ void Log::logCK_ATTRIBUTE_PTR( const char* a_pMethod, CK_ATTRIBUTE_PTR pTemplate
 */
 void Log::CK_MECHANISMToString( CK_MECHANISM_PTR m, std::string &result )
 {
-#ifdef __DEBUG_GEMALTO__
-	if( NULL_PTR == m )
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    if( NULL_PTR == m )
 	{
 		return;
 	}
@@ -538,14 +564,18 @@ void Log::CK_MECHANISMToString( CK_MECHANISM_PTR m, std::string &result )
 		mechanismType.c_str( ),
 		mechanismParam.c_str( ),
 		m->ulParameterLen );
-#endif
 }
 
 
+/*
+*/
 void Log::CK_ATTRIBUTEToString( const CK_ATTRIBUTE_PTR a, std::string &result )
 {
-#ifdef __DEBUG_GEMALTO__
-	if( NULL_PTR == a )
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    if( NULL_PTR == a )
 	{
 		return;
 	}
@@ -559,7 +589,7 @@ void Log::CK_ATTRIBUTEToString( const CK_ATTRIBUTE_PTR a, std::string &result )
 		toString( result, "Type <%s> - Length <-1> - Value <UNKNOWN>", t.c_str( ) );
 		return;
 	}
-
+    
 	std::string v = "";
 	if( NULL_PTR == a->pValue )
 	{
@@ -570,7 +600,7 @@ void Log::CK_ATTRIBUTEToString( const CK_ATTRIBUTE_PTR a, std::string &result )
 		switch( type )
 		{
 		case T_BOOL:
-			toString( ((bool*)a->pValue)[0], v );
+			toString( ((CK_BBOOL*)a->pValue)[0], v );
 			break;
 
 		case T_BYTES:
@@ -607,7 +637,6 @@ void Log::CK_ATTRIBUTEToString( const CK_ATTRIBUTE_PTR a, std::string &result )
 	}
 
 	toString( result, "Type <%s> - Length <%#02x> - Value <%s>", t.c_str( ), a->ulValueLen, v.c_str( ) );
-#endif
 }
 
 
@@ -615,8 +644,11 @@ void Log::CK_ATTRIBUTEToString( const CK_ATTRIBUTE_PTR a, std::string &result )
 */
 void Log::CK_ATTRIBUTE_TYPEToString( const CK_ATTRIBUTE_TYPE& a, std::string &t, int& type )
 {
-#ifdef __DEBUG_GEMALTO__
-	switch( a )
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    switch( a )
 	{
 	case CKA_CLASS:
 		t = "CKA_CLASS";
@@ -857,7 +889,6 @@ void Log::CK_ATTRIBUTE_TYPEToString( const CK_ATTRIBUTE_TYPE& a, std::string &t,
 		toString( t, "UNKNOWN TYPE <%#02x>", a );
 		type = T_UNKNOWN;
 	}
-#endif
 }
 
 
@@ -865,8 +896,11 @@ void Log::CK_ATTRIBUTE_TYPEToString( const CK_ATTRIBUTE_TYPE& a, std::string &t,
 */
 void Log::CK_DATEToString( const CK_DATE* t, std::string &result )
 {
-#ifdef __DEBUG_GEMALTO__
-	if( NULL_PTR == t )
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    if( NULL_PTR == t )
 	{
 		return;
 	}
@@ -881,7 +915,6 @@ void Log::CK_DATEToString( const CK_DATE* t, std::string &result )
 	toString( t->day, 2, day );
 
 	result = "Year <" + year + "> - Month <" + month + "> - Day <" + day + ">";
-#endif
 }
 
 
@@ -889,8 +922,11 @@ void Log::CK_DATEToString( const CK_DATE* t, std::string &result )
 */
 void Log::CK_OBJECT_CLASSToString( const CK_OBJECT_CLASS& t, std::string &result )
 {
-#ifdef __DEBUG_GEMALTO__
-	switch( t )
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    switch( t )
 	{
 	case CKO_DATA:
 		result = "CKO_DATA";
@@ -919,7 +955,6 @@ void Log::CK_OBJECT_CLASSToString( const CK_OBJECT_CLASS& t, std::string &result
 	default:
 		toString( result, "UNKNOWN OBJECT CLASS <%#02x>", t );
 	}
-#endif
 }
 
 
@@ -927,8 +962,11 @@ void Log::CK_OBJECT_CLASSToString( const CK_OBJECT_CLASS& t, std::string &result
 */
 void Log::CK_KEY_TYPEToString( const CK_KEY_TYPE& t, std::string &result )
 {
-#ifdef __DEBUG_GEMALTO__
-	switch( t )
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    switch( t )
 	{
 	case CKK_RSA:
 		result = "CKK_RSA";
@@ -1017,7 +1055,6 @@ void Log::CK_KEY_TYPEToString( const CK_KEY_TYPE& t, std::string &result )
 	default:
 		toString( result, "UNKNOWN KEY TYPE <%#02x>", t );
 	}
-#endif
 }
 
 
@@ -1025,8 +1062,11 @@ void Log::CK_KEY_TYPEToString( const CK_KEY_TYPE& t, std::string &result )
 */
 void Log::CK_CERTIFICATE_TYPEToString( const CK_CERTIFICATE_TYPE &t, std::string &result )
 {
-#ifdef __DEBUG_GEMALTO__
-	switch( t )
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    switch( t )
 	{
 	case CKC_X_509:
 		result = "CKC_X_509";
@@ -1039,7 +1079,6 @@ void Log::CK_CERTIFICATE_TYPEToString( const CK_CERTIFICATE_TYPE &t, std::string
 	default:
 		toString( result, "UNKNOWN CERTIFICATE TYPE <%#02x>", t );
 	}
-#endif
 }
 
 
@@ -1047,8 +1086,11 @@ void Log::CK_CERTIFICATE_TYPEToString( const CK_CERTIFICATE_TYPE &t, std::string
 */
 void Log::CK_INFOToString( CK_INFO_PTR pInfo, std::string& result )
 {
-#ifdef __DEBUG_GEMALTO__
-	if( NULL_PTR == pInfo )
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    if( NULL_PTR == pInfo )
 	{
 		return;
 	}
@@ -1075,7 +1117,6 @@ void Log::CK_INFOToString( CK_INFO_PTR pInfo, std::string& result )
 		+ "> - libraryDescription <" + libraryDescription
 		+ "> - libraryVersion <" + libraryVersion
 		+ ">";
-#endif
 }
 
 
@@ -1083,8 +1124,11 @@ void Log::CK_INFOToString( CK_INFO_PTR pInfo, std::string& result )
 */
 void Log::CK_RVToString( const CK_RV& rv, std::string &result )
 {
-#ifdef __DEBUG_GEMALTO__
-	switch( rv )
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    switch( rv )
 	{
 	case CKR_OK:
 		result = "CKR_OK";
@@ -1341,47 +1385,56 @@ void Log::CK_RVToString( const CK_RV& rv, std::string &result )
 	default:
 		toString( result, "UNKNOWN ERROR <%#02x>", rv );
 	}
-#endif
 }
+
 
 /*
 */
 void Log::toString( std::string &result, const char * format, ... )
 {
-#ifdef __DEBUG_GEMALTO__
-	result = "";
+	if( !s_bEnableLog ) {
+		return;
+	}
 
-   // Get the size of the buffer necessary to write the message
-   // The size must be extended to include the '\n' and the '\0' characters.
-   va_list args;
-   va_start( args, format );
-#ifdef WIN32
-   size_t len = _vscprintf( format, args );
-#else
-   char tmp[1];
-   int len = vsnprintf( tmp, sizeof(tmp), format, args );
-#endif
-   va_end( args );
+    try {
+        result = "";
 
-   // Allocate the buffer for the message
-   char *buffer = new char[ len + 2 ];
-   memset( buffer, '\0', len + 2 );
+	    // Get the size of the buffer necessary to write the message
+	    // The size must be extended to include the '\n' and the '\0' characters.
+	    va_list args;
+	    va_start( args, format );
+    #ifdef WIN32
+	    size_t len = _vscprintf( format, args );
+    #else
+	    char tmp[1];
+	    int len = vsnprintf( tmp, sizeof(tmp), format, args );
+    #endif
+	    va_end( args );
 
-   // Write the message into the buffer.
-   va_start( args, format );
-#ifdef WIN32
-   vsprintf_s( buffer, len + 1, format, args );
-#else
-   vsprintf( buffer, format, args );
-#endif
-   va_end( args );
+	    // Allocate the buffer for the message
+	    char *buffer = new char[ len + 2 ];
+	    memset( buffer, '\0', len + 2 );
 
-   // Write the message to the string
-   result = buffer;
+	    // Write the message into the buffer.
+	    va_start( args, format );
+    #ifdef WIN32
+	    vsprintf_s( buffer, len + 1, format, args );
+    #else
+	    vsprintf( buffer, format, args );
+    #endif
+	    va_end( args );
 
-   // Release the buffer
-   delete[] buffer;
-#endif
+	    // Write the message to the string
+	    result = buffer;
+
+	    // Release the buffer
+	    delete[ ] buffer;
+    
+    } catch( ... ) {
+    
+        // An excpetion occurs if the format string is not properly
+        // set to accept all the incoming parameters
+    }
 }
 
 
@@ -1389,35 +1442,37 @@ void Log::toString( std::string &result, const char * format, ... )
 */
 void Log::toString( const unsigned char* buffer, std::size_t size, std::string &result )
 {
-#ifdef __DEBUG_GEMALTO__
-	if( ( NULL == buffer ) || ( 1 > size ) )
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    if( ( NULL == buffer ) || ( size <= 0 ) )
 	{
 		//result.assign( "null" );
 		return;
 	}
 
-    std::ostringstream oss;
+	std::ostringstream oss;
 	oss.rdbuf( )->str( "" );
 
-    // Afficher en héxadécimal et en majuscule
-    oss << std::hex << std::uppercase;
+	// Afficher en héxadécimal et en majuscule
+	oss << std::hex << std::uppercase;
 
-    // Remplir les blancs avec des zéros
-    oss << std::setfill('0');
+	// Remplir les blancs avec des zéros
+	oss << std::setfill('0');
 
-    for( std::size_t i = 0; i < size; ++i )
-    {
-        // Séparer chaque octet par un espace
-        if (i != 0)
-            oss << ' ';
+	for( std::size_t i = 0; i < size; ++i )
+	{
+		// Séparer chaque octet par un espace
+		if (i != 0)
+			oss << ' ';
 
-        // Afficher sa valeur hexadécimale précédée de "0x"
-        // setw(2) permet de forcer l'affichage à 2 caractères
-        oss << /*"0x" <<*/ std::setw(2) << static_cast<int>( buffer[i] );
-    }
+		// Afficher sa valeur hexadécimale précédée de "0x"
+		// setw(2) permet de forcer l'affichage à 2 caractères
+		oss << /*"0x" <<*/ std::setw(2) << static_cast<int>( buffer[i] );
+	}
 
-    result.assign( oss.str( ) );
-#endif
+	result.assign( oss.str( ) );
 }
 
 
@@ -1425,30 +1480,41 @@ void Log::toString( const unsigned char* buffer, std::size_t size, std::string &
 */
 void Log::toString( const unsigned long &l, std::string &result )
 {
-#ifdef __DEBUG_GEMALTO__
-	classtoString<unsigned long>( l, result );
-#endif
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    classtoString<unsigned long>( l, result );
 }
 
 
+/*
+*/
 template<typename T> void Log::classtoString( const T & value, std::string &result )
 {
-#ifdef __DEBUG_GEMALTO__
-	if( NULL == &value )
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    if( NULL == &value )
 	{
 		return;
 	}
 	std::ostringstream str;
 	str << value;
 	result.assign( str.str( ) );
-#endif
 }
 
 
+/*
+*/
 void Log::slotFlagsToString( const CK_FLAGS& f, std::string &result )
 {
-#ifdef __DEBUG_GEMALTO__
-	result = "";
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    result = "";
 
 	// Slot Information Flags
 	if( f & CKF_TOKEN_PRESENT )
@@ -1473,7 +1539,6 @@ void Log::slotFlagsToString( const CK_FLAGS& f, std::string &result )
 		}
 		result += "CKF_HW_SLOT";
 	}
-#endif
 }
 
 
@@ -1481,14 +1546,16 @@ void Log::slotFlagsToString( const CK_FLAGS& f, std::string &result )
 */
 void Log::CK_VERSIONToString( CK_VERSION_PTR pVersion, std::string &result )
 {
-#ifdef __DEBUG_GEMALTO__
-	if( NULL_PTR == pVersion )
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    if( NULL_PTR == pVersion )
 	{
 		return;
 	}
 
 	toString( result, "%#02x - %#02x", pVersion->major, pVersion->minor );
-#endif
 }
 
 
@@ -1496,8 +1563,11 @@ void Log::CK_VERSIONToString( CK_VERSION_PTR pVersion, std::string &result )
 */
 void Log::CK_MECHANISM_TYPEToString( CK_MECHANISM_TYPE_PTR pMechanismList, CK_ULONG mechanismListLen, std::string &result )
 {
-#ifdef __DEBUG_GEMALTO__
-	if( NULL_PTR == pMechanismList )
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    if( NULL_PTR == pMechanismList )
 	{
 		return;
 	}
@@ -1514,7 +1584,6 @@ void Log::CK_MECHANISM_TYPEToString( CK_MECHANISM_TYPE_PTR pMechanismList, CK_UL
 			result +=", ";
 		}
 	}
-#endif
 }
 
 
@@ -1522,8 +1591,11 @@ void Log::CK_MECHANISM_TYPEToString( CK_MECHANISM_TYPE_PTR pMechanismList, CK_UL
 */
 void Log::CK_MECHANISM_TYPEToString( const CK_MECHANISM_TYPE &t, std::string &result )
 {
-#ifdef __DEBUG_GEMALTO__
-	switch( t )
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    switch( t )
 	{
 	case CKM_RSA_PKCS_KEY_PAIR_GEN:
 		result = "CKM_RSA_PKCS_KEY_PAIR_GEN";
@@ -1972,7 +2044,6 @@ void Log::CK_MECHANISM_TYPEToString( const CK_MECHANISM_TYPE &t, std::string &re
 	default:
 		toString( result, "UNKNOWN MECHANISM <%#02x>", t );
 	}
-#endif
 }
 
 
@@ -1980,10 +2051,13 @@ void Log::CK_MECHANISM_TYPEToString( const CK_MECHANISM_TYPE &t, std::string &re
 */
 void Log::CK_MECHANISM_INFOToString( CK_MECHANISM_INFO_PTR pInfo, std::string &result )
 {
-#ifdef __DEBUG_GEMALTO__
-	if( NULL_PTR == pInfo )
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    if( NULL_PTR == pInfo )
 	{
-		 return;
+		return;
 	}
 
 	std::string flags = "";
@@ -1991,7 +2065,6 @@ void Log::CK_MECHANISM_INFOToString( CK_MECHANISM_INFO_PTR pInfo, std::string &r
 	mechanismFlagsToString( f, flags );
 
 	toString( result, "ulMinKeySize <%#02x> - ulMaxKeySize <%#02x> - flags <%s>", pInfo->ulMinKeySize, pInfo->ulMaxKeySize, flags.c_str( ) );
-#endif
 }
 
 
@@ -1999,8 +2072,11 @@ void Log::CK_MECHANISM_INFOToString( CK_MECHANISM_INFO_PTR pInfo, std::string &r
 */
 void Log::mechanismFlagsToString( const CK_FLAGS& f, std::string &result )
 {
-#ifdef __DEBUG_GEMALTO__
-	if( f & CKF_EXTENSION )
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    if( f & CKF_EXTENSION )
 	{
 		result += "CKF_EXTENSION";
 	}
@@ -2108,7 +2184,6 @@ void Log::mechanismFlagsToString( const CK_FLAGS& f, std::string &result )
 		}
 		result += "CKF_SIGN";
 	}
-#endif
 }
 
 
@@ -2116,8 +2191,11 @@ void Log::mechanismFlagsToString( const CK_FLAGS& f, std::string &result )
 */
 void Log::sessionFlagsToString( const CK_FLAGS &f, std::string &result )
 {
-#ifdef __DEBUG_GEMALTO__
-	result = "";
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    result = "";
 
 	// Session information flags
 	if( f & CKF_SERIAL_SESSION )
@@ -2133,7 +2211,6 @@ void Log::sessionFlagsToString( const CK_FLAGS &f, std::string &result )
 		}
 		result += "CKF_RW_SESSION";
 	}
-#endif
 }
 
 
@@ -2141,8 +2218,11 @@ void Log::sessionFlagsToString( const CK_FLAGS &f, std::string &result )
 */
 void Log::CK_SESSION_INFOToString( CK_SESSION_INFO_PTR pInfo, std::string& result )
 {
-#ifdef __DEBUG_GEMALTO__
-	if( NULL_PTR == pInfo )
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    if( NULL_PTR == pInfo )
 	{
 		return;
 	}
@@ -2151,21 +2231,66 @@ void Log::CK_SESSION_INFOToString( CK_SESSION_INFO_PTR pInfo, std::string& resul
 	CK_FLAGS f = pInfo->flags;
 	sessionFlagsToString( f, flags );
 
-	toString( result, "slotID <%#02x> - state <%#02x> - flags <%#02x> (%s) - ulDeviceError <%#02x>",
-				pInfo->slotID,
-				pInfo->state,
-				pInfo->flags,
-				flags.c_str( ),
-				pInfo->ulDeviceError );
-#endif
+    std::string state = "";
+    CK_STATEToString( pInfo->state, state );
+
+	toString( result, "slotID <%#02x> - state <%#02x> (%s) - flags <%#02x> (%s) - ulDeviceError <%#02x>",
+		pInfo->slotID,
+		pInfo->state,
+        state.c_str( ),
+		pInfo->flags,
+		flags.c_str( ),
+		pInfo->ulDeviceError );
 }
+
+
+/*
+*/
+void Log::CK_STATEToString( const CK_STATE& a_State, std::string& a_stResult ) {
+
+    if( !s_bEnableLog ) {
+        
+		return;
+	}
+
+    switch ( a_State ) {
+
+    case CKS_RO_PUBLIC_SESSION:
+        a_stResult = "CKS_RO_PUBLIC_SESSION";
+        break;
+
+    case CKS_RO_USER_FUNCTIONS:
+        a_stResult = "CKS_RO_USER_FUNCTIONS";
+        break;
+
+    case CKS_RW_PUBLIC_SESSION:
+        a_stResult = "CKS_RW_PUBLIC_SESSION";
+        break;
+
+    case CKS_RW_USER_FUNCTIONS:
+        a_stResult = "CKS_RW_USER_FUNCTIONS";
+        break;
+
+    case CKS_RW_SO_FUNCTIONS:
+        a_stResult = "CKS_RW_SO_FUNCTIONS";
+        break;
+
+    default:
+        a_stResult = "<<UNKNOWN CK_STATE>>";
+        break;
+    }
+}
+
 
 /*
 */
 void Log::CK_USER_TYPEToString( const CK_USER_TYPE& t, std::string &result )
 {
-#ifdef __DEBUG_GEMALTO__
-	switch( t )
+	if( !s_bEnableLog ) {
+		return;
+	}
+
+    switch( t )
 	{
 	case CKU_USER:
 		result = "CKU_USER";
@@ -2178,30 +2303,55 @@ void Log::CK_USER_TYPEToString( const CK_USER_TYPE& t, std::string &result )
 	default:
 		toString( result, "UNKNOWN USER TYPE <%#02x>", t );
 	}
+}
+
+
+/*
+*/
+void Log::start( void ) {
+#ifdef WIN32
+	m_clockStart = clock( );
+#else
+   gettimeofday( &m_clockStart, NULL ); 
 #endif
 }
 
 
 /*
 */
-void Log::start( void )
-{
-#ifdef __DEBUG_GEMALTO__
-#ifdef WIN32
-   m_ulStart = GetTickCount( );
-#endif
-#endif
-}
+void Log::stop( const char* a_pMethod ) {
 
+    	if( !s_bEnableLog ) {
+		return;
+	}
 
-/*
-*/
-void Log::stop( const char* a_pMethod )
-{
-#ifdef __DEBUG_GEMALTO__
 #ifdef WIN32
-   unsigned long ulTickCount = GetTickCount( ) - m_ulStart;
-   Log::log( "%s - Spend <%ld> milliseconds", a_pMethod, ulTickCount );
+      double duration = (double)(clock( ) - m_clockStart) / CLOCKS_PER_SEC;
+	   m_clockStart = 0;
+#else	
+      timeval now;         
+      gettimeofday( &now, NULL );  
+
+      timeval diff;
+      diff.tv_sec = now.tv_sec - m_clockStart.tv_sec;
+      diff.tv_usec = now.tv_usec - m_clockStart.tv_usec; 
+      while( diff.tv_usec < 0 )
+      {
+         diff.tv_sec--;
+         diff.tv_usec = 1000000 + ( now.tv_usec - m_clockStart.tv_usec );
+      }
+      double duration = diff.tv_sec;         
+      duration += (double)( diff.tv_usec / 1e6 ); 
+ 
+      memset( &m_clockStart, 0, sizeof( timeval ) );
 #endif
-#endif
+
+	if( 0.500 > duration ) {
+     
+        Log::log( "%s - Elapsed time <%f> seconds", a_pMethod, duration );
+    
+    } else {
+     
+        Log::log( "%s - Elapsed time <%f> seconds [LONG DURATION]\n", a_pMethod, duration );
+    }
 }

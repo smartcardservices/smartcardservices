@@ -18,60 +18,73 @@
  *
  */
 
-#ifndef _include_marshaller_h
-#define _include_marshaller_h
 
-#ifdef _XCL_
-#include "xcl_broker.h"
-#endif // _XCL_
+#ifndef __GEMALTO_MARSHALLER_H__
+#define __GEMALTO_MARSHALLER_H__
+
+
+#include "MarshallerUtil.h"
+#include "PCSC.h"
+
 
 MARSHALLER_NS_BEGIN
 
 typedef void (*pCommunicationStream)(u1Array& st,u1Array& stM);
 
-class SMARTCARDMARSHALLER_DLLAPI SmartCardMarshaller
-{
+class SMARTCARDMARSHALLER_DLLAPI SmartCardMarshaller {
 
 private:
-    u4            nameSpaceHivecode;
-    u2            typeHivecode;
-    u2            portNumber;
-    std::string*  uri;
-#ifndef _XCL_
-    PCSC*         pcsc;
-#else 	// _XCL_
-    XCLBroker*    pcsc;
-#endif 	// _XCL_
 
-    pCommunicationStream ProcessInputStream;
-    pCommunicationStream ProcessOutputStream;
+    PCSC* m_pPCSC;
+
+    u4 m_NameSpaceHivecode;
+    
+	u2 m_TypeHivecode;
+
+	u2 m_PortNumber;
+    
+	std::string m_stURI;
+
+	MarshallerUtil m_MarshallerUtil;
+
+
+    pCommunicationStream m_pProcessInputStream;
+
+    pCommunicationStream m_pProcessOutputStream;
 
 public:
     // Existing PCSC connection
-    SmartCardMarshaller(SCARDHANDLE pcscCardHandle, u2 portNumber,M_SAL_IN std::string* uri, u4 nameSpaceHivecode, u2 typeHivecode);
+    //SmartCardMarshaller( SCARDHANDLE, u2, std::string, u4, u2 );
 
     // PCSC compatible readers
-    SmartCardMarshaller(M_SAL_IN std::string* readerName, u2 portNumber,M_SAL_IN std::string* uri, u4 nameSpaceHivecode, u2 typeHivecode, u4 index);
+    SmartCardMarshaller( std::string, u2, std::string, u4, u2, u4 );
 
     // destructor
-    ~SmartCardMarshaller(void);
+    virtual ~SmartCardMarshaller( );
 
     // Remoting marshalling method
-    void Invoke(s4 nParam, ...);
+    void Invoke( s4 nParam, ... );
 
-    void UpdatePCSCCardHandle(SCARDHANDLE hCard);
+    inline void UpdatePCSCCardHandle( SCARDHANDLE m_hCard ) { if( m_pPCSC ) { m_pPCSC->setCardHandle( m_hCard ); } }
 
-    void SetInputStream(pCommunicationStream inStream);
-    void SetOutputStream(pCommunicationStream outStream);
+    inline void SetInputStream( pCommunicationStream a_inStream ) { m_pProcessInputStream = a_inStream; }
+	
+	inline void SetOutputStream( pCommunicationStream a_outStream ){ m_pProcessOutputStream = a_outStream; }
 
-    std::string* GetReaderName();
-    SCARDHANDLE GetCardHandle();
-    void DoTransact(bool flag);
+    inline std::string& GetReaderName( void ) { if( m_pPCSC ) { return m_pPCSC->getReaderName( ); } else throw ("Empty PCSC context"); }
+
+    inline SCARDHANDLE GetCardHandle( void ) { if( m_pPCSC ) { return m_pPCSC->getCardHandle( ); } return NULL; }
+    
+    inline void DoTransact( bool& flag ) { if( m_pPCSC ) { m_pPCSC->doTransact( flag ); } }
+
+    inline void beginTransaction( void ) { if( m_pPCSC ) { m_pPCSC->beginTransaction( ); } }
+
+    inline void endTransaction( void ) { if( m_pPCSC ) { m_pPCSC->endTransaction( ); } }
 
 };
 
 MARSHALLER_NS_END
 
-#endif
+#endif // __GEMALTO_MARSHALLER_H__
 
 

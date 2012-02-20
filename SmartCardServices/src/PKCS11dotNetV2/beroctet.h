@@ -18,7 +18,6 @@
  *
  */
 
-// This code is based on class in ACS baseline.
 
 #ifndef _include_beroctet_h
 #define _include_beroctet_h

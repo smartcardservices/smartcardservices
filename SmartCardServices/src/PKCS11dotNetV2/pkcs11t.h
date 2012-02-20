@@ -1,5 +1,5 @@
 /* pkcs11t.h include file for PKCS #11. */
-/* $Revision: 1.5 $ */
+/* $Revision: 1.1 $ */
 
 /* License to copy and use this software is granted provided that it is
  * identified as "RSA Security Inc. PKCS #11 Cryptographic Token Interface
@@ -35,8 +35,6 @@
 #define TRUE CK_TRUE
 #endif
 #endif
-
-typedef unsigned short CK_USHORT;
 
 /* an unsigned 8-bit value */
 typedef unsigned char     CK_BYTE;
@@ -280,13 +278,6 @@ typedef CK_ULONG          CK_USER_TYPE;
 #define CKU_USER  1
 /* Context specific (added in v2.20) */
 #define CKU_CONTEXT_SPECIFIC   2
-
-/* Not defined in PKCS#11, Add by KS */
-#define CKU_NONE 99
-#define CO_OBJECT_HANDLE_MASK  0x0000FFFF
-#define CO_SESSION_OBJECT      0x00000000
-#define CO_TOKEN_OBJECT        0x10000000
-
 
 /* CK_STATE enumerates the session states */
 /* CK_STATE has been changed from an enum to a CK_ULONG for
@@ -558,9 +549,6 @@ typedef CK_ULONG          CK_ATTRIBUTE_TYPE;
 
 #define CKA_VENDOR_DEFINED     0x80000000
 
-// Gemalto CKA
-#define CKA_GEMALTO_CTRINDEX   0x80000001
-#define CKA_GEMALTO_KEYSPEC    0x80000002
 
 /* CK_ATTRIBUTE is a structure that includes the type, length
  * and value of an attribute */
@@ -931,9 +919,6 @@ typedef struct CK_MECHANISM_INFO {
  *      Bit Flag               Mask        Meaning */
 #define CKF_HW                 0x00000001  /* performed by HW */
 
-// Added by KS
-#define CKF_SW                 0x00000000 /* performed by SW */
-
 /* The flags CKF_ENCRYPT, CKF_DECRYPT, CKF_DIGEST, CKF_SIGN,
  * CKG_SIGN_RECOVER, CKF_VERIFY, CKF_VERIFY_RECOVER,
  * CKF_GENERATE, CKF_GENERATE_KEY_PAIR, CKF_WRAP, CKF_UNWRAP,
@@ -1155,7 +1140,7 @@ typedef CK_CALLBACK_FUNCTION(CK_RV, CK_UNLOCKMUTEX)(
 /* CK_C_INITIALIZE_ARGS provides the optional arguments to
  * C_Initialize */
 typedef struct CK_C_INITIALIZE_ARGS {
-  CK_CREATEMUTEX CreateMutex;
+  CK_CREATEMUTEX _CreateMutex;
   CK_DESTROYMUTEX DestroyMutex;
   CK_LOCKMUTEX LockMutex;
   CK_UNLOCKMUTEX UnlockMutex;
@@ -1698,4 +1683,3 @@ typedef struct CK_PKCS5_PBKD2_PARAMS {
 typedef CK_PKCS5_PBKD2_PARAMS CK_PTR CK_PKCS5_PBKD2_PARAMS_PTR;
 
 #endif
-

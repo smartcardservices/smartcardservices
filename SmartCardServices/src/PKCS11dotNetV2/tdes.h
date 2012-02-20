@@ -18,25 +18,28 @@
  *
  */
 
-#ifndef _include_tdes_h
-#define _include_tdes_h
 
-#include "MarshallerCfg.h"
+#ifndef __GEMALTO_3DES__
+#define __GEMALTO_3DES__
+
+
+//#include "MarshallerCfg.h"
 #include "algo_des.h"
+#include "symmalgo.h"
 
-class CTripleDES : public CSymmAlgo
-{
+
+class CTripleDES : public CSymmAlgo {
 
 public:
-    CTripleDES();
-    ~CTripleDES();
+
+    inline CTripleDES( ) { _blockSize = 8; }
+    
+    inline virtual ~CTripleDES( ) { }
 
 private:
-    void TransformBlockInternal(CK_BYTE_PTR iv,CK_BYTE_PTR key,CK_LONG encryptMode,
-                                CK_BYTE_PTR input,CK_LONG input_offset,
-                                CK_BYTE_PTR output,CK_LONG output_offset);
+
+    void TransformBlockInternal( unsigned char* iv, unsigned char* key, long encryptMode, unsigned char* input, long input_offset, unsigned char* output, long output_offset );
 
 };
 
-#endif
-
+#endif // __GEMALTO_3DES__

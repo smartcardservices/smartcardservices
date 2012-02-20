@@ -1,744 +1,601 @@
 /*
- *  PKCS#11 library for .Net smart cards
- *  Copyright (C) 2007-2009 Gemalto <support@gemalto.com>
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- */
+*  PKCS#11 library for .Net smart cards
+*  Copyright (C) 2007-2009 Gemalto <support@gemalto.com>
+*
+*  This library is free software; you can redistribute it and/or
+*  modify it under the terms of the GNU Lesser General Public
+*  License as published by the Free Software Foundation; either
+*  version 2.1 of the License, or (at your option) any later version.
+*
+*  This library is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  Lesser General Public License for more details.
+*
+*  You should have received a copy of the GNU Lesser General Public
+*  License along with this library; if not, write to the Free Software
+*  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*
+*/
 
-#ifdef __APPLE__
-#include <PCSC/winscard.h>
-#else
-#include <winscard.h>
+#ifndef WIN32
+#include <stdlib.h>
 #endif
-#include "cardmoduleservice.h"
-
+#include <memory>
 #include <string>
-
-#include <assert.h>
-#include "stdafx.h"
-#include "platconfig.h"
-#include "config.h"
-#include "thread.h"
-#include "event.h"
-#include "session.h"
-#include "slot.h"
-#include "application.h"
-#include "log.h"
-
-#ifdef _XCL_
-#include <xcl_utils.h>
-#endif // _XCL_
-
-#ifdef __sun
-typedef LPSTR LPTSTR;
+#include <boost/foreach.hpp>
+#include <boost/filesystem.hpp>
+#include "Application.hpp"
+#include "Configuration.hpp"
+#include "PKCS11Exception.hpp"
+#include "Log.hpp"
+#ifdef WIN32 
+#include <shlobj.h> // For SHGetFolderPath
+#else
 #endif
 
-// Initialization of Static fields
-SCARDCONTEXT Application::_hContext = 0;
 
-Slot* Application::_slotCache[CONFIG_MAX_SLOT] = {
-   NULL_PTR,NULL_PTR,NULL_PTR,NULL_PTR,NULL_PTR,NULL_PTR,NULL_PTR,NULL_PTR,
-   NULL_PTR,NULL_PTR,NULL_PTR,NULL_PTR,NULL_PTR,NULL_PTR,NULL_PTR,NULL_PTR
-};
+// Determine Processor Endianess
+#include <limits.h>
+#if (UINT_MAX == 0xffffffffUL)
+   typedef unsigned int _u4;
+#else
+#  if (ULONG_MAX == 0xffffffffUL)
+     typedef unsigned long _u4;
+#  else
+#    if (USHRT_MAX == 0xffffffffUL)
+       typedef unsigned short _u4;
+#    endif
+#  endif
+#endif
 
-CK_ULONG Application::_numSlots = 0;
+_u4 endian = 1;
 
-#ifdef _XCL_
-xCL_DeviceHandle Application::_deviceHandle = 0; // asadali
-#endif // _XCL_
+bool IS_LITTLE_ENDIAN = (*((unsigned char *)(&endian))) ? true  : false;
+bool IS_BIG_ENDIAN    = (*((unsigned char *)(&endian))) ? false : true;
 
+#ifdef MACOSX_LEOPARD
+#define SCardIsValidContext(x) SCARD_S_SUCCESS
+#endif
+
+extern boost::condition_variable g_WaitForSlotEventCondition;
 
 /*
 */
-#ifndef _XCL_
-CK_RV Application::InitApplication( )
-{
-   //Log::begin( "Application::InitApplication" );
+Application::Application( ) {
 
-   // do the enumeration of slots
-   CK_ULONG hResult = SCardEstablishContext( SCARD_SCOPE_USER, NULL, NULL, &Application::_hContext );
+    Log::start( );
+	std::string stConfigurationDirectoryPath;
 
-   //Log::log( "Application::InitApplication - SCardEstablishContext <%#02x>", hResult );
-   //Log::log( "Application::InitApplication - Application::_hContext <%#02x>", Application::_hContext );
+#ifdef WIN32 
+    
+    // For each user (roaming) data, use the CSIDL_APPDATA value. 
+    // This defaults to the following path: "\Documents and Settings\All Users\Application Data" 
+    TCHAR szPath[MAX_PATH];
 
-   if( SCARD_S_SUCCESS != hResult )
-   {
-      return CKR_GENERAL_ERROR;
-   }
+    SHGetFolderPath( NULL, CSIDL_COMMON_APPDATA | CSIDL_FLAG_CREATE, NULL, 0, szPath );
 
-#ifdef __APPLE__
-   /* Apple bug 5256035 */
-   {
-      SCARDHANDLE h;
-      DWORD p;
-      SCardConnect(Application::_hContext, "fake reader", SCARD_SHARE_SHARED, SCARD_PROTOCOL_T0, &h, &p);
-   }
+    stConfigurationDirectoryPath = std::string( szPath ) + std::string( "/Gemalto/DotNet PKCS11/" );
+
+#else
+	char *home = getenv("HOME");
+	if (home)
+		stConfigurationDirectoryPath = std::string( home ) + std::string( "/.config/Gemalto/DotNet PKCS11/" );
+	else
+		stConfigurationDirectoryPath = std::string( "/tmp/Gemalto/DotNet PKCS11/" );
 #endif
 
-   //Log::end( "Application::InitApplication" );
-
-   return CKR_OK;
-}
-
-#else // _XCL_
-
-CK_RV Application::InitApplication( )
-{
-    //Log::begin( "Application::InitApplication" );
-    u4 deviceID;
-    u4 rv;
-    xCL_DevicePtr deviceList;
-    xCL_DevicePtr device;
-    u4 numberOfDevices;
-    u4 i;
-
-    PRINT_MSG("IN Application::Init");
-
-    rv = xCL_InterfaceInit();
-
-    rv = xCL_DiscoverDevices(&deviceList, &numberOfDevices);
-    if (rv == 0 && numberOfDevices != 0)
-    {
-        // Pick the first device, with ID=0
-        device = deviceList + 0;
-        deviceID = device->deviceID ;
-        PRINT_DATA(NULL, 0, (char*)device->uniqueName);
-
-        // Create device handle
-        rv = xCL_CreateHandleFromDeviceID(deviceID, &Application::_deviceHandle);
-        if (rv == 0)
-        {
-            PRINT_MSG("IN Application::Init , device handle created");
-        }
-
-        // Free memory for all devices
-        for (i=0; i<numberOfDevices; i++)
-        {
-            rv = xCL_FreeDeviceMemory(deviceList + i);
-        }
-    }
-    return CKR_OK;
-}
-
-#endif // _XCL_
-
-
-/*
-*/
-
-#ifndef _XCL_
-
-CK_RV Application::Enumerate( CK_BBOOL tokenPresent, CK_SLOT_ID_PTR pSlotList, CK_ULONG_PTR pulCount )
-{
-   //Log::begin( "Application::Enumerate" );
-
-   CK_ULONG   slotNb              = 0;
-   LPTSTR     pReader             = NULL;
-   CK_LONG    hResult             = 0;
-   CK_SLOT_ID sid                 = 0;
-
-   if( NULL_PTR == pulCount )
-   {
-      //Log::error( "Application::Enumerate", "CKR_ARGUMENTS_BAD" );
-      return CKR_ARGUMENTS_BAD;
-   }
-
-   // Get the supported readers from the current cache
-   std::string currentCache[ CONFIG_MAX_SLOT ];
-   for( CK_SLOT_ID i = 0; i < CONFIG_MAX_SLOT; i++ )
-   {
-      currentCache[ i ] = "";
-      if( NULL_PTR != Application::_slotCache[ i ] )
-      {
-         currentCache[ i ] = *(Application::_slotCache[ i ]->_readerName);
-         //Log::log( "Application::Enumerate - currentCache[ %d ] <%s>", i, currentCache[ i ].c_str( ) );
-      }
-   }
-
-   // Get the readers from the PCSC layer
-   DWORD readerListCharLength = 0;
-   hResult = SCardListReaders( Application::_hContext, NULL, NULL, &readerListCharLength );
-   //Log::log( "Application::Enumerate - readerListCharLength <%#02x>", readerListCharLength );
-   //Log::log( "Application::Enumerate - SCardListReaders <%#02x>", hResult );
-   if( SCARD_S_SUCCESS != hResult )
-   {
-      //Log::error( "Application::Enumerate", "CKR_GENERAL_ERROR" );
-      return CKR_GENERAL_ERROR;
-   }
-
-   LPTSTR pReaderList = (lpCharPtr)malloc( sizeof(char) * readerListCharLength );
-   if( NULL == pReaderList )
-   {
-      //Log::error( "Application::Enumerate", "CKR_HOST_MEMORY" );
-      return CKR_HOST_MEMORY;
-   }
-   memset( pReaderList, 0, sizeof(char) * readerListCharLength );
-
-   hResult = SCardListReaders( Application::_hContext, NULL, pReaderList, &readerListCharLength);
-   //Log::log( "Application::Enumerate - SCardListReaders 2 <%#02x>", hResult );
-   if( SCARD_S_SUCCESS != hResult )
-   {
-      free( pReaderList );
-      //Log::error( "Application::Enumerate", "CKR_GENERAL_ERROR" );
-      return CKR_GENERAL_ERROR;
-   }
-
-   // Construct the PCSC reader list
-   std::string currentPcscList[ CONFIG_MAX_SLOT ];
-   for( CK_SLOT_ID i = 0; i < CONFIG_MAX_SLOT; i++ )
-   {
-      currentPcscList[ i ] = "";
-   }
-   pReader = pReaderList; //readers;
-   int i = 0;
-   while( pReader && ( '\0' != *pReader ) )
-   {
-      currentPcscList[ i ] = pReader;
-      //Log::log( "Application::Enumerate - PCSC List[ %d ] <%s>", i, currentPcscList[ i ].c_str( ) );
-      i++;
-      if( i > CONFIG_MAX_SLOT )
-      {
-         /*
-         free( pReaderList );
-         //Log::error( "Application::Enumerate", "CKR_HOST_MEMORY" );
-         return CKR_HOST_MEMORY;
-         */
-         break;
-      }
-
-      // Advance to the next value.
-      size_t readerNameLen = strlen( (const char*)pReader );
-      pReader = (lpTCharPtr)((lpTCharPtr)pReader + readerNameLen + 1);
-   }
-   free( pReaderList );
-
-   // Does a reader desappeared ?
-   for( CK_SLOT_ID i = 0; i < CONFIG_MAX_SLOT; i++ )
-   {
-      if( NULL_PTR != Application::_slotCache[ i ] )
-      {
-         //printf( "Application::_slotCache[ %lu ]->_readerName <%s>\n", i, Application::_slotCache[ i ]->_readerName->c_str( ) );
-
-         bool bFound = false;
-         for( int j = 0 ; j < CONFIG_MAX_SLOT; j++ )
-         {
-            //printf( "currentPcscList[ %d ] <%s>\n", j, currentPcscList[ j ].c_str( ) );
-
-            if( 0 == (Application::_slotCache[ i ]->_readerName)->compare( currentPcscList[ j ] ) )
-            {
-               bFound = true;
-               //printf( "!! Found !!\n" );
-               break;
-            }
-         }
-         if( false == bFound )
-         {
-            // Not found into the PCSC reader list
-            deleteSlot( i );
-            //printf( "!! Not Found -> delete !!\n" );
-         }
-      }
-   }
-
-   // Does a new reader appears ?
-   //printf( "\n\nDoes a new reader appears ?\n" );
-   for( int i = 0; i < CONFIG_MAX_SLOT; i++ )
-   {
-      if( false == currentPcscList[ i ].empty( ) )
-      {
-         //printf( "currentPcscList[ %d ] <%s>\n", i, currentPcscList[ i ].c_str( ) );
-
-         bool bFound = false;
-         for( int j = 0 ; j < CONFIG_MAX_SLOT; j++ )
-         {
-            if( 0 != Application::_slotCache[ j ] )
-            {
-               //printf( "   Application::_slotCache[ %d ] <%s>\n", j, Application::_slotCache[ j ]->_readerName->c_str( ) );
-               if( 0 == ( currentPcscList[ i ].compare( *(Application::_slotCache[ j ]->_readerName) ) ) )
-               {
-                  bFound = true;
-                  //printf( "   !! Found !!\n" );
-                  break;
-               }
-            }
-         }
-         if( false == bFound )
-         {
-            //printf( "!! Not Found -> add !!\n" );
-
-            CK_RV rv = addSlot( currentPcscList[ i ] );
-            if( CKR_OK != rv )
-            {
-               //Log::error( "Application::Enumerate", "addSlot failed" );
-               return rv;
-            }
-         }
-      }
-   }
-
-
-   // Scan Reader List
-   slotNb = 0;
-   Application::_numSlots = 0;
-   for (int i = 0; i < CONFIG_MAX_SLOT; i++)
-   {
-      // Existing Slots only are scanned
-      if (Application::_slotCache[i] != NULL_PTR)
-      {
-         //Log::log( "Application::Enumerate - New Cache[ %d ] <%s>", i, Application::_slotCache[ i ]->_readerName->c_str( ) );
-         Application::_numSlots++;
-
-         SCARD_READERSTATE readerStates;
-         memset( &readerStates, 0, sizeof( SCARD_READERSTATE ) );
-         readerStates.dwCurrentState = SCARD_STATE_UNAWARE;
-         readerStates.szReader = Application::_slotCache[i]->_readerName->c_str();
-
-         // Lets check if token is present or not
-         if (SCardGetStatusChange(Application::_hContext, 100, &readerStates, 1) == SCARD_S_SUCCESS)
-         {
-            if ((readerStates.dwEventState & SCARD_STATE_PRESENT) == SCARD_STATE_PRESENT)
-            {
-               // We found a card in this reader
-               Application::_slotCache[i]->_slotInfo.flags |= CKF_TOKEN_PRESENT;
-               //Log::log( "Application::Enumerate - New Cache[ %d ] - Name <%s> - Token present", i, Application::_slotCache[ i ]->_readerName->c_str( ) );
-            }
-            else
-            {
-               // No card in this reader
-               Application::_slotCache[i]->_slotInfo.flags &= ~CKF_TOKEN_PRESENT;
-               //Log::log( "Application::Enumerate - New Cache[ %d ] - Name <%s> - Token NOT present", i, Application::_slotCache[ i ]->_readerName->c_str( ) );
-            }
-         }
-
-         // Slots with Token Present
-         if((tokenPresent == TRUE) &&
-            (Application::_slotCache[i]->_slotInfo.flags & CKF_TOKEN_PRESENT))
-         {
-            slotNb++;
-         }
-         // All slots
-         else if (tokenPresent == FALSE)
-         {
-            slotNb++;
-         }
-      }
-   }
-
-   // If pSlotList is not NULL then *pulCount contains the buffer size of pSlotList
-   // so we need to check if size passed is valid or not.
-   if((pSlotList != NULL_PTR)&&(*pulCount < slotNb))
-   {
-      *pulCount = slotNb;
-      //Log::error( "Application::Enumerate", "CKR_BUFFER_TOO_SMALL" );
-      return CKR_BUFFER_TOO_SMALL;
-   }
-
-   *pulCount = slotNb;
-
-   // Fill slot list if not NULL
-   if (pSlotList != NULL_PTR)
-   {
-      for (int i = 0; i < CONFIG_MAX_SLOT; i++)
-      {
-         // Existing Slots only are scanned
-         if (Application::_slotCache[i] != NULL_PTR)
-         {
-            CK_BBOOL IsFound = FALSE;
-
-            // Slots with Token Present
-            if((tokenPresent == TRUE) &&
-               (Application::_slotCache[i]->_slotInfo.flags & CKF_TOKEN_PRESENT))
-            {
-               IsFound = TRUE;
-            }
-
-            // All slots
-            else if (tokenPresent == FALSE)
-            {
-               IsFound = TRUE;
-            }
-
-            // Fill Slot List
-            if(IsFound == TRUE)
-            {
-               pSlotList[sid++] = Application::_slotCache[i]->_slotId;
-            }
-         }
-      }
-   }
-
-   //Log::end( "Application::Enumerate" );
-
-   return CKR_OK;
-}
-
-#else // _XCL_
-
-CK_RV Application::Enumerate( CK_BBOOL tokenPresent, CK_SLOT_ID_PTR pSlotList, CK_ULONG_PTR pulCount )
-{
-    PRINT_MSG("IN Application::Enumerate");
-
-    LPTSTR     pReaderList         = NULL;
-    CK_SLOT_ID slotIdx             = 0;
-    CK_ULONG   slotNb              = 0;
-    LPTSTR     pReader             = NULL;
-    CK_LONG    hResult             = 0;
-    CK_SLOT_ID sid                 = 0;
-
-    if(pulCount == NULL_PTR){
-        return CKR_ARGUMENTS_BAD;
-    }
-
-    DWORD readerListCharLength = SCARD_AUTOALLOCATE;
-
-    // asadali
-    // Get reader list, For now only ONE SEG-Lite token ...
-    pReaderList = (char *) malloc(64);
-    strcpy(pReaderList, "xCL_Token");
-    readerListCharLength = strlen(pReaderList);
-    *(pReaderList + readerListCharLength) = '\0';
-    *(pReaderList + readerListCharLength + 1) = '\0';
-
-    // Get Reader List if not already Get
-    if (Application::_numSlots == 0)
-    {
-        // clear the slot cache
-        //CSlot::ClearCache();
-
-        pReader = pReaderList;
-
-        while ('\0' != *pReader )
-        {
-            size_t readerNameLen = strlen((const char*)pReader);
-            size_t sd;
-
-            Slot* slot         = new Slot();
-            slot->_slotId      = slotIdx++;
-
-            // fill in the slot description
-            for(sd = 0; sd < readerNameLen; sd++)
-            {
-                slot->_slotInfo.slotDescription[sd] = pReader[sd];
-            }
-
-            if(slotIdx > CONFIG_MAX_SLOT){
-                return CKR_HOST_MEMORY;
-            }
-
-            slotNb++;
-
-            slot->_readerName  = new std::string(pReader);
-
-// GD            Application::AddSlotToCache(slot);
-                Application::addSlot (slot);
-
-            // Advance to the next value.
-            pReader = (lpTCharPtr)((lpTCharPtr)pReader + readerNameLen + 1);
-        }
-
-        free(pReaderList);
-        Application::_numSlots = slotNb;
-    }
-
-    // Scan Reader List
-    slotNb = 0;
-
-    for (int i = 0; i < CONFIG_MAX_SLOT; i++)
-    {
-        // Existing Slots only are scanned
-        if (Application::_slotCache[i] != NULL_PTR)
-        {
-            SCARD_READERSTATE readerStates;
-
-            readerStates.dwCurrentState = SCARD_STATE_UNAWARE;
-            readerStates.szReader = Application::_slotCache[i]->_readerName->c_str();
-
-            // Lets check if token is present or not
-
-            // asadali
-            if (xCL_IsTokenPresent())
-            {
-                // We found a card in this reader
-                Application::_slotCache[i]->_slotInfo.flags |= CKF_TOKEN_PRESENT;
-            }
-            else
-            {
-                // No card in reader
-                Application::_slotCache[i]->_slotInfo.flags &= ~CKF_TOKEN_PRESENT;
-            }
-
-            // Slots with Token Present
-            if((tokenPresent == TRUE) &&
-               (Application::_slotCache[i]->_slotInfo.flags & CKF_TOKEN_PRESENT))
-            {
-                slotNb++;
-            }
-            // All slots
-            else if (tokenPresent == FALSE)
-            {
-                slotNb++;
-            }
-        }
-    }
-
-    // If pSlotList is not NULL then *pulCount contains the buffer size of pSlotList
-    // so we need to check if size passed is valid or not.
-    if((pSlotList != NULL_PTR)&&(*pulCount < slotNb))
-    {
-        *pulCount = slotNb;
-        return CKR_BUFFER_TOO_SMALL;
-    }
-
-    *pulCount = slotNb;
-
-    // Fill slot list if not NULL
-    if (pSlotList != NULL_PTR)
-    {
-        for (int i = 0; i < CONFIG_MAX_SLOT; i++)
-        {
-            // Existing Slots only are scanned
-            if (Application::_slotCache[i] != NULL_PTR)
-            {
-                CK_BBOOL IsFound = FALSE;
-
-                // Slots with Token Present
-                if((tokenPresent == TRUE) &&
-                   (Application::_slotCache[i]->_slotInfo.flags & CKF_TOKEN_PRESENT))
-                {
-                    IsFound = TRUE;
+    std::string stConfigurationFilePath = stConfigurationDirectoryPath + std::string( "Gemalto.NET.PKCS11.ini" );
+
+    Log::log( "Application::Application - stConfigurationFilePath <%s>", stConfigurationFilePath.c_str( ) );
+    boost::filesystem::path configurationDirectoryPath( stConfigurationFilePath );
+
+    if( ! boost::filesystem::exists( configurationDirectoryPath ) ) {
+    
+        Log::s_bEnableLog = false;
+        
+        Device::s_bEnableCache = true;
+    
+    } else {
+
+        // Initialize the configuration 
+	    Configuration c;
+	    try {
+
+		    c.load( stConfigurationFilePath );
+
+            const std::string stCacheSectionName( "Cache" );
+            const std::string stCacheParameterEnable( "Enable" );
+            const std::string stLogSectionName( "Log" );
+            const std::string stLogParameterEnable( "Enable" );
+            const std::string stLogParameterPath( "Path" );
+
+		    // Read the flag in the configuration to enable/disable the log
+		    std::string stResult = "";
+
+		    c.getValue( stLogSectionName, stLogParameterEnable, stResult );
+		
+            if( 0 == stResult.compare( "1" ) ) {
+	
+			    Log::s_bEnableLog = true;
+
+		        // Read the flag in the configuration for the log filepath
+		        stResult = "";
+		
+                c.getValue( stLogSectionName, stLogParameterPath, stResult );
+		
+                if( stResult.size( ) > 0 ) {
+	
+			        Log::setLogPath( stResult );
+		        
+                } else {
+#ifdef WIN32
+                    Log::setLogPath( stConfigurationDirectoryPath );
+#endif
                 }
+		    }
 
-                // All slots
-                else if (tokenPresent == FALSE)
-                {
-                    IsFound = TRUE;
-                }
+		    // Read the flag in the configuration to enable/disable the cache on disk
+		    stResult = "";
+		
+            c.getValue( stCacheSectionName, stCacheParameterEnable, stResult );
+		
+            if( 0 == stResult.compare( "1" ) ) {
 
-                // Fill Slot List
-                if(IsFound == TRUE)
-                {
-                    pSlotList[sid++] = Application::_slotCache[i]->_slotId;
-                }
-            }
+			    Device::s_bEnableCache = true;
+
+		    } else {
+
+			    Device::s_bEnableCache = false;
+		    }
+	    } catch( ... ) {
+
+		    // Unable to find the configuration file
+		    // Use default settings instead
+            Log::error( "Application::Application", "No configuration file found. Use default settings" );
+	    }
+    }
+
+    Log::log( "" );
+    Log::log( "" );
+    Log::log( "######   ######   ######   ######   ######   ######   ######   ######   ######" );
+    Log::log( "######   ######   ######   ######   ######   ######   ######   ######   ######" );
+    Log::log( " PKCS11 STARTS" );
+    Log::log( "######   ######   ######   ######   ######   ######   ######   ######   ######" );
+    Log::log( "######   ######   ######   ######   ######   ######   ######   ######   ######" );
+    Log::log( "" );
+
+    m_DeviceMonitor.reset( new DeviceMonitor( ) );
+
+	// Initialise the PCSC devices listener
+	m_DeviceMonitor->addListener( this );
+
+    Log::stop( "Application::Application" );
+}
+
+
+/*
+*/
+Application::~Application( ) {
+
+    if( m_DeviceMonitor.get( ) ) {
+
+	    // Remove the application from the PCSC devices listener list
+	    m_DeviceMonitor->removeListener( this ); 
+    }
+
+    finalize( );
+
+    Log::log( "" );
+    Log::log( "" );
+    Log::log( "######   ######   ######   ######   ######   ######   ######   ######   ######" );
+    Log::log( "######   ######   ######   ######   ######   ######   ######   ######   ######" );
+    Log::log( " PKCS11 STOPS" );
+    Log::log( "######   ######   ######   ######   ######   ######   ######   ######   ######" );
+    Log::log( "######   ######   ######   ######   ######   ######   ######   ######   ######" );
+    Log::log( "" );
+}
+
+
+/*
+*/
+void Application::notifyReaderInserted( const std::string& a_stReaderName ) {
+
+	BOOST_FOREACH( boost::shared_ptr< Device >& d, m_DeviceMonitor->getDeviceList( ) ) {
+	    
+        // Search the device associated to this new reader
+		if( d.get( ) && ( 0 == d->getReaderName( ).compare( a_stReaderName ) ) ) {
+            
+            // Create the PKCS11 slot associated to this new reader
+			addSlot( d );
+			
+			return;
+		}
+	}
+}
+
+
+/*
+*/
+void Application::notifyReaderRemoved( const std::string& a_stReaderName ) {
+
+    unsigned char ucSlotId = 0;
+
+	BOOST_FOREACH( boost::shared_ptr< Slot >& s, m_Slots ) {
+	
+		// If the slot exists and the the names are the same
+		if( s.get( ) && !s->getReaderName( ).compare( a_stReaderName ) ) {
+
+            s->tokenDelete( );
+
+            s->setEvent( true, ucSlotId );
+
+			return;
+		}
+
+        ++ucSlotId;
+	}
+}
+
+
+/*
+*/
+void Application::notifySmartCardRemoved( const std::string& a_stReaderName ) {
+
+    unsigned char ucSlotId = 0;
+
+	BOOST_FOREACH( boost::shared_ptr< Slot >& s, m_Slots ) {
+	
+		// If the slot exists and the the names are the same
+		if( s.get( ) && !s->getReaderName( ).compare( a_stReaderName ) ) {
+
+			s->tokenDelete( );
+            
+            s->setEvent( true, ucSlotId );
+			
+            return;
+		}
+
+        ++ucSlotId;
+	}
+}
+
+
+/*
+*/
+void Application::notifySmartCardInserted( const std::string& a_stReaderName ) {
+
+    unsigned char ucSlotId = 0;
+
+    BOOST_FOREACH( boost::shared_ptr< Slot >& s, m_Slots ) {
+	
+		// If the slot exists and the names are the same
+		if( s.get( ) && !s->getReaderName( ).compare( a_stReaderName ) ) {
+
+// LCA: Not create token on event but register insertion in slot
+//			s->tokenCreate( );
+            s->tokenInserted();
+
+            s->setEvent( true, ucSlotId );
+
+			return;
+		}
+
+        ++ucSlotId;
+	}
+
+
+}
+
+
+/*
+*/
+void Application::notifySmartCardChanged( const std::string& a_stReaderName ) {
+	
+    unsigned char ucSlotId = 0;
+
+    BOOST_FOREACH( boost::shared_ptr< Slot >& s, m_Slots ) {
+	
+		// If the slot exists and the the names are the same
+		if( s.get( ) && !s->getReaderName( ).compare( a_stReaderName ) ) {
+
+			s->tokenUpdate( );
+
+            s->setEvent( true, ucSlotId );
+
+			return;
+		}
+
+        ++ucSlotId;
+	}
+}
+
+
+///*
+//*/
+//void Application::getSlotList( const CK_BBOOL& a_bTokenPresent, CK_SLOT_ID_PTR a_pSlotList, CK_ULONG_PTR a_pulCount ) {
+//
+//    *a_pulCount = 1;
+//
+//    if( a_pSlotList ) {
+//     
+//        a_pSlotList[ 0 ] = 1;
+//    }
+//
+///*
+//	CK_ULONG ulCountSlot = 0;
+//	
+//	CK_ULONG ulCountSlotWithToken = 0;
+//
+//	CK_SLOT_ID iIndex = 0;
+//
+//    CK_RV rv = CKR_OK;
+//
+//	// Build the slot list
+//    size_t l = m_Slots.size( );
+//
+//	for( size_t i = 0; i < l ; ++i ) {
+//
+//		if( m_Slots[ i ].get( ) ) {
+//
+//			if( !a_bTokenPresent ) {
+//
+//				// Found a valid slot
+//				++ulCountSlot;
+//
+//				if( a_pSlotList ) {
+//					
+//                    if ( ulCountSlot > *a_pulCount ) {
+//                 
+//                        rv  = CKR_BUFFER_TOO_SMALL;
+//                    
+//                    } else {
+//
+//					    a_pSlotList[ iIndex ] = i;
+//					
+//                        ++iIndex;
+//                    }
+//				}
+//
+//			} else if( m_Slots[ i ]->getToken( ).get( ) ) { //isCardPresent( ) ) {
+//			
+//				// Found a slot within a token
+//				++ulCountSlotWithToken;
+// 
+//				if( a_pSlotList ) {
+//					
+//                   if ( ulCountSlotWithToken > *a_pulCount ) {
+//                 
+//                        rv = CKR_BUFFER_TOO_SMALL;
+//                    }
+//
+//                   a_pSlotList[ iIndex ] = i;
+//					
+//                   ++iIndex;
+//				}
+//			}
+//		}
+//	}
+//
+//	// Return the slot count
+//	if( a_bTokenPresent ) {
+//	
+//		*a_pulCount = ulCountSlotWithToken;	
+//	
+//    } else {
+//	
+//		*a_pulCount = ulCountSlot;
+//	}
+//
+//    if ( CKR_OK != rv ) {
+//                 
+//        throw PKCS11Exception( CKR_BUFFER_TOO_SMALL );
+//    }
+//*/
+//}
+
+
+/*
+*/
+void Application::getSlotList( const CK_BBOOL& a_bTokenPresent, CK_SLOT_ID_PTR a_pSlotList, CK_ULONG_PTR a_pulCount ) {
+
+	CK_ULONG ulCountSlot = 0;
+	
+	CK_ULONG ulCountSlotWithToken = 0;
+
+	CK_SLOT_ID iIndex = 0;
+
+    CK_RV rv = CKR_OK;
+
+	// Build the slot list
+    size_t l = m_Slots.size( );
+
+	for( size_t i = 0; i < l ; ++i ) {
+
+        Slot* s = m_Slots[ i ].get( );
+
+		if( s ) {
+
+			if( !a_bTokenPresent ) {
+
+				// Found a valid slot
+				++ulCountSlot;
+
+				if( a_pSlotList ) {
+					
+                    if ( ulCountSlot > *a_pulCount ) {
+                 
+                        rv  = CKR_BUFFER_TOO_SMALL;
+                    
+                    } else {
+
+					    a_pSlotList[ iIndex ] = i;
+					
+                        ++iIndex;
+                    }
+				}
+			
+//            } else if( m_Slots[ i ]->getToken( ).get( ) ) { //isCardPresent( ) ) {
+            } else if( /*s->isTokenInserted( ) ||*/ s->isCardPresent( ) ) {
+			
+				// Found a slot within a token
+				++ulCountSlotWithToken;
+ 
+				if( a_pSlotList ) {
+					
+                   if ( ulCountSlotWithToken > *a_pulCount ) {
+                 
+                        rv = CKR_BUFFER_TOO_SMALL;
+                    }
+
+                   a_pSlotList[ iIndex ] = i;
+					
+                   ++iIndex;
+				}
+			}
+		}
+	}
+
+	// Return the slot count
+	if( a_bTokenPresent ) {
+	
+		*a_pulCount = ulCountSlotWithToken;	
+	
+    } else {
+	
+		*a_pulCount = ulCountSlot;
+	}
+
+    if ( CKR_OK != rv ) {
+                 
+        throw PKCS11Exception( CKR_BUFFER_TOO_SMALL );
+    }
+}
+
+
+/*
+*/
+const boost::shared_ptr< Slot >& Application::getSlot( const CK_SLOT_ID& a_slotId ) {
+
+    if( a_slotId >= m_Slots.size( ) ) {
+    
+        throw PKCS11Exception( CKR_SLOT_ID_INVALID );
+    }
+    
+    boost::shared_ptr< Slot >& s = m_Slots.at( a_slotId );
+    
+    if( !s.get( ) ) {
+    
+        throw PKCS11Exception( CKR_SLOT_ID_INVALID );
+    }
+
+    return s;
+}
+
+
+/* Initialize the slot list from the device list
+*/
+void Application::getDevices( void ) {
+
+	BOOST_FOREACH( boost::shared_ptr< Device >& d, m_DeviceMonitor->getDeviceList( ) ) {
+	
+		if( d.get( ) ) {
+
+			unsigned char ucDeviceId = d->getDeviceID( );
+
+            m_Slots[ ucDeviceId ].reset( new Slot( d ) );
+		}
+	}
+}
+
+
+/*
+*/
+void Application::addSlot( const boost::shared_ptr< Device >& a_pDevice ) {
+
+    if( !a_pDevice ) {
+    
+        return;
+    }
+
+    Log::begin( "Application::addSlot" ); 
+
+    unsigned char ucDeviceId = a_pDevice->getDeviceID( );
+
+    m_Slots[ ucDeviceId ].reset( new Slot( a_pDevice ) );
+
+    m_Slots[ ucDeviceId ]->setEvent( true, ucDeviceId );
+
+    Log::end( "Application::addSlot" ); 
+}
+
+
+/*
+*/
+const boost::shared_ptr< Slot >& Application::getSlotFromSession( const CK_SESSION_HANDLE& a_hSession ) {
+
+	BOOST_FOREACH( boost::shared_ptr< Slot >& s, m_Slots ) {
+	
+		if( s.get( ) && s->isSessionOwner( a_hSession ) ) {
+
+			return s;
+		}	
+	}
+
+	throw PKCS11Exception( CKR_SESSION_HANDLE_INVALID );
+}
+
+
+/*
+*/
+void Application::initialize( ) {
+
+	// Start the PCSC devices listener
+	if( m_DeviceMonitor.get( ) ) {
+        
+        m_DeviceMonitor->start( );
+    }
+
+  	// Get the known PCSC devices
+	getDevices( );
+}
+
+//extern boost::mutex g_WaitForSlotEventMutex;
+
+/*
+*/
+void Application::finalize( void ) {
+
+    g_WaitForSlotEventCondition.notify_all( );
+  
+    long rv = SCardIsValidContext( DeviceMonitor::m_hContext );
+
+
+    if( SCARD_S_SUCCESS == rv ) {
+
+        // Call the finalize method for all managed device
+	    BOOST_FOREACH( boost::shared_ptr< Slot >& s, m_Slots ) {
+	
+		    if( s.get( ) ) {
+
+               
+
+			    s->finalize( );
+		    }	
+	    }
+
+        
+
+  	    // Stop the PCSC devices listenening thread
+	    if( m_DeviceMonitor.get( ) ) {
+
+            //g_WaitForSlotEventMutex.unlock( );
+
+            //DeviceMonitor::m_bAlive = false;
+
+            m_DeviceMonitor->stop( );
+
+            SCardReleaseContext( DeviceMonitor::m_hContext );
         }
     }
-
-    return CKR_OK;
 }
-
-#endif // _XCL_
-
-/*
-*/
-CK_RV Application::GetSlotFromSlotId( CK_SLOT_ID slotId, Slot** slot )
-{
-   if(((int)slotId < 0) || (slotId >= CONFIG_MAX_SLOT))
-   {
-      return CKR_SLOT_ID_INVALID;
-   }
-
-   if (Application::_slotCache[slotId] != NULL_PTR)
-   {
-      *slot = Application::_slotCache[slotId];
-      return CKR_OK;
-   }
-
-   return CKR_SLOT_ID_INVALID;
-}
-
-
-/*
-*/
-void Application::ClearCache(void)
-{
-   Log::begin( "Application::ClearCache" );
-
-   // initialize the slot cache
-   for( int sid = 0 ; sid < CONFIG_MAX_SLOT ; sid++ )
-   {
-      Slot* slot = Application::_slotCache[ sid ];
-      if( NULL_PTR != slot )
-      {
-#ifdef INCLUDE_EVENTING
-         if(slot->_tracker != NULL_PTR)
-         {
-            slot->_tracker->stop( );
-         }
-#endif
-         delete slot;
-         Application::_slotCache[sid] = NULL_PTR;
-      }
-   }
-
-   // set the number of actual slots present to zero
-   Application::_numSlots = 0;
-
-#ifdef INCLUDE_EVENTING
-   // we should just signal all the events
-   CryptokiEvent.Signal();
-#endif
-
-   Log::end( "Application::ClearCache" );
-}
-
-
-/*
-*/
-void Application::Release( void )
-{
-   if( 0 != Application::_hContext )
-   {
-#ifndef _XCL_
-      SCardReleaseContext( Application::_hContext );
-#endif // _XCL_
-      Application::_hContext = 0;
-   }
-}
-
-
-/*
-*/
-void Application::End( void )
-{
-   Application::ClearCache( );
-   Application::Release( );
-}
-
-
-/*
-*/
-void Application::deleteSlot( int i )
-{
-   if( NULL_PTR != Application::_slotCache[ i ] )
-   {
-#ifdef INCLUDE_EVENTING
-      if( NULL_PTR != (Application::_slotCache[ i ]->_tracker) )
-      {
-         (Application::_slotCache[ i ])->_tracker->stop( );
-      }
-#endif
-      delete (Application::_slotCache[ i ]);
-      Application::_slotCache[ i ] = NULL_PTR;
-
-#ifdef INCLUDE_EVENTING
-      // we should just signal all the events
-      CryptokiEvent.Signal( );
-#endif
-
-   }
-}
-
-
-/*
-*/
-
-#ifndef _XCL_
-
-CK_RV Application::addSlot( std::string& a_readerName )
-{
-   int iSlotID = -1;
-   for( int j = 0 ; j < CONFIG_MAX_SLOT ; j++ )
-   {
-      if( NULL_PTR == Application::_slotCache[ j ] )
-      {
-         iSlotID = j;
-         break;
-      }
-   }
-   if( -1 == iSlotID )
-   {
-      return CKR_HOST_MEMORY;
-   }
-
-   Slot* slot = new Slot( );
-   slot->_readerName  = new std::string( a_readerName );
-
-   // Fill in the slot description
-   size_t l = ( a_readerName.length( ) > sizeof( slot->_slotInfo.slotDescription ) ) ? sizeof( slot->_slotInfo.slotDescription ) : a_readerName.length( );
-   for( size_t i = 0 ; i < l ; i++ )
-   {
-      slot->_slotInfo.slotDescription[ i ] = a_readerName[ i ];
-   }
-
-   // Add Slot in Cache
-   slot->_slotId = iSlotID;
-   Application::_slotCache[ iSlotID ] = slot;
-
-#ifdef INCLUDE_EVENTING
-   SCARD_READERSTATE readerStates;
-
-   readerStates.dwCurrentState = SCARD_STATE_UNAWARE;
-   readerStates.szReader = slot->_readerName->c_str();
-
-   if (SCardGetStatusChange(Application::_hContext, 0, &readerStates, 1) == SCARD_S_SUCCESS)
-   {
-      if ((readerStates.dwEventState & SCARD_STATE_PRESENT) != SCARD_STATE_PRESENT)
-      {
-         // we not found a card in this reader
-         slot->_slotInfo.flags &= ~CKF_TOKEN_PRESENT;
-      }
-      else
-      {
-         // we found a card in this reader
-         slot->_slotInfo.flags |= CKF_TOKEN_PRESENT;
-      }
-   }
-
-   // Start the monitoring also
-   slot->_tracker = new CardMonitoringThread(slot->_readerName->c_str());
-   slot->_tracker->SetSlot(slot);
-   slot->_tracker->start();
-
-#endif
-
-   return CKR_OK;
-}
-
-#else // _XCL_
-
-void Application::addSlot( Slot* slot )
-{
-    PRINT_MSG("IN Application::AddslotToCache");
-
-    // Add Slot in Cache
-    Application::_slotCache[slot->_slotId] = slot;
-
-#ifdef INCLUDE_EVENTING
-    SCARD_READERSTATE readerStates;
-
-    readerStates.dwCurrentState = SCARD_STATE_UNAWARE;
-    readerStates.szReader = slot->_readerName->c_str();
-
-    // asadali
-    if (xCL_IsTokenPresent())
-    {
-        // we found a card in this reader
-        slot->_slotInfo.flags |= CKF_TOKEN_PRESENT;
-    }
-    else
-    {
-        // No card in reader
-        slot->_slotInfo.flags &= ~CKF_TOKEN_PRESENT;
-    }
-
-    // Start the monitoring also
-    slot->_tracker = new CardMonitoringThread(slot->_readerName->c_str());
-    slot->_tracker->SetSlot(slot);
-    slot->_tracker->start();
-#endif
-}
-
-#endif // _XCL_

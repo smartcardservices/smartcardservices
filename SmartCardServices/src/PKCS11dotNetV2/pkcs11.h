@@ -1,5 +1,5 @@
 /* pkcs11.h include file for PKCS #11. */
-/* $Revision: 1.5 $ */
+/* $Revision: 1.1 $ */
 
 /* License to copy and use this software is granted provided that it is
  * identified as "RSA Security Inc. PKCS #11 Cryptographic Token Interface
@@ -7,10 +7,10 @@
 
  * License is also granted to make and use derivative works provided that
  * such works are identified as "derived from the RSA Security Inc. PKCS #11
- * Cryptographic Token Interface (Cryptoki)" in all material mentioning or
+ * Cryptographic Token Interface (Cryptoki)" in all material mentioning or 
  * referencing the derived work.
 
- * RSA Security Inc. makes no representations concerning either the
+ * RSA Security Inc. makes no representations concerning either the 
  * merchantability of this software or the suitability of this software for
  * any particular purpose. It is provided "as is" without express or implied
  * warranty of any kind.
@@ -275,7 +275,7 @@ extern "C" {
 
 #define CK_PKCS11_FUNCTION_INFO(name) \
   __PASTE(CK_,name) name;
-
+  
 struct CK_FUNCTION_LIST {
 
   CK_VERSION    version;  /* Cryptoki version */
@@ -297,4 +297,3 @@ struct CK_FUNCTION_LIST {
 #endif
 
 #endif
-

@@ -18,11 +18,12 @@
  *
  */
 
-#ifndef _include_algo_des_h
-#define _include_algo_des_h
+#ifndef __GEMALTO_ALGO_DES__
+#define __GEMALTO_ALGO_DES__
 
-extern void algo_DES_DESProcess(u1* key, u1* input, u1* output, u1 mode);
-extern void algo_DES_3DESProcess(u1 keyLength, u1* key, u1* input, u1* output, u1 mode);
 
-#endif
+extern void algo_DES_DESProcess( unsigned char* key, unsigned char* input, unsigned char* output, unsigned char mode );
 
+extern void algo_DES_3DESProcess( unsigned char keyLength, unsigned char* key, unsigned char* input, unsigned char* output, unsigned char mode );
+
+#endif // __GEMALTO_ALGO_DES__

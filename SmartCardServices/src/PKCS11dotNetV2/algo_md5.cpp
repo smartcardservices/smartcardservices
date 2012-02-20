@@ -18,10 +18,14 @@
  *
  */
 
-#include "stdafx.h"
+#include <cstring>
+
 #include "MarshallerCfg.h"
 #include "algo_utils.h"
 #include "algo_md5.h"
+
+extern bool IS_LITTLE_ENDIAN;
+extern bool IS_BIG_ENDIAN;
 
 const u1 md5_padding[64] = {
     0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

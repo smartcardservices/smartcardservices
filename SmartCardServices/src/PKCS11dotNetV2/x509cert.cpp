@@ -18,15 +18,11 @@
  *
  */
 
-// This implementation is based on RFC 2459 which can be fetched from
-// http://www.ietf.org.
+// This implementation is based on RFC 2459 which can be fetched from http://www.ietf.org.
 
-// This code is based on class in ACS baseline.
 
-//#include "slbPki.h"
 #include "x509cert.h"
 
-using namespace std;
 
 X509Cert::X509Cert()
 {
@@ -46,7 +42,7 @@ X509Cert::X509Cert(const unsigned char *buffer, const unsigned long size)
 {
    m_Cert = BEROctet(BEROctet::Blob(buffer,size));
    if(size != m_Cert.Octet().size())
-      throw runtime_error("X509CertFormatError");
+      throw std::runtime_error("X509CertFormatError");
 
    Decode();
 }
@@ -63,27 +59,27 @@ X509Cert& X509Cert::operator=(const BEROctet::Blob &buffer)
 {
    m_Cert = BEROctet(buffer);
    if(buffer.size() != m_Cert.Octet().size())
-      throw runtime_error("X509CertFormatError");
+      throw std::runtime_error("X509CertFormatError");
    Decode();
 
    return *this;
 }
 
-// Returns whole DER string of Serial Number.
+// Returns whole DER std::string of Serial Number.
 
 BEROctet::Blob X509Cert::SerialNumber() const
 {
    return m_SerialNumber.Octet();
 }
 
-// Returns whole DER string of Issuer
+// Returns whole DER std::string of Issuer
 
 BEROctet::Blob X509Cert::Issuer() const
 {
    return m_Issuer.Octet();
 }
 
-// Returns whole string of Issuer in UTF8.
+// Returns whole std::string of Issuer in UTF8.
 
 BEROctet::Blob X509Cert::UTF8Issuer() const
 {
@@ -102,16 +98,18 @@ std::vector<std::string> X509Cert::IssuerOrg() const
 
    m_Issuer.SearchOIDNext(OID_id_at_organizationName,orgOcts);
 
-   for(unsigned long i=0; i<orgOcts.size(); i++)
-      orgNames.push_back(string((char*)orgOcts[i]->Data().data(),orgOcts[i]->Data().size()));
+   size_t l = orgOcts.size( );
+   for( unsigned long i = 0; i < l ; ++i ) {
 
+      orgNames.push_back(std::string((char*)orgOcts[i]->Data().data(),orgOcts[i]->Data().size()));
+   }
    return orgNames;
 
 }
 
 // Returns list of attributes in Issuer matching id-at-organizationName.
 // List will be invalidated when object changes.
-// the string in the list is in UTF8 format.
+// the std::string in the list is in UTF8 format.
 
 std::vector<std::string> X509Cert::UTF8IssuerOrg() const
 {
@@ -121,23 +119,25 @@ std::vector<std::string> X509Cert::UTF8IssuerOrg() const
 
    m_Issuer.SearchOIDNext(OID_id_at_organizationName,orgOcts);
 
-   for(unsigned long i=0; i<orgOcts.size(); i++)
-   {
-      BEROctet::Blob blbData = ToUTF8(orgOcts[i]->Tag(), orgOcts[i]->Data());
-      orgNames.push_back(string((char*)blbData.data(),blbData.size()));
-   }
+   size_t l = orgOcts.size( );
+   for( unsigned long i = 0; i < l ; ++i ) {
 
+       BEROctet::Blob blbData = ToUTF8(orgOcts[i]->Tag(), orgOcts[i]->Data());
+      
+       orgNames.push_back(std::string((char*)blbData.data(),blbData.size()));
+   }
+	
    return orgNames;
 }
 
 
 // Returns Validity notBefore attribute as "YYYYMMDDHHMMSS"
 
-string X509Cert::ValidityNotBefore() const
+std::string X509Cert::ValidityNotBefore() const
 {
 
    if(m_Validity.SubOctetList().size()!=2)
-      throw runtime_error("X509CertFormatError");
+      throw std::runtime_error("X509CertFormatError");
 
    return m_Validity.SubOctetList()[0]->Time();
 
@@ -145,18 +145,18 @@ string X509Cert::ValidityNotBefore() const
 
 // Returns Validity notAfter attribute as "YYYYMMDDHHMMSS"
 
-string X509Cert::ValidityNotAfter() const
+std::string X509Cert::ValidityNotAfter() const
 {
 
    if(m_Validity.SubOctetList().size()!=2)
-      throw runtime_error("X509CertFormatError");
+      throw std::runtime_error("X509CertFormatError");
 
    return m_Validity.SubOctetList()[1]->Time();
 
 }
 
 
-// Returns whole DER string of Subject
+// Returns whole DER std::string of Subject
 
 BEROctet::Blob X509Cert::Subject() const
 {
@@ -181,16 +181,19 @@ std::vector<std::string> X509Cert::SubjectCommonName() const
 
    m_Subject.SearchOIDNext(OID_id_at_commonName,cnOcts);
 
-   for(std::vector<BEROctet const*>::size_type i=0; i<cnOcts.size(); i++)
-      cnNames.push_back(string((char*)cnOcts[i]->Data().data(),cnOcts[i]->Data().size()));
+   std::vector<BEROctet const*>::size_type l = cnOcts.size( );
 
+   for( std::vector<BEROctet const*>::size_type i = 0; i< l; ++i ) {
+       
+       cnNames.push_back(std::string((char*)cnOcts[i]->Data().data(),cnOcts[i]->Data().size()));
+   }
    return cnNames;
 
 }
 
 // Returns list of attributes in Subject matching id-at-commonName
 // List will be invalidated when object changes.
-// string in list is in UTF8.
+// std::string in list is in UTF8.
 
 std::vector<std::string> X509Cert::UTF8SubjectCommonName() const
 {
@@ -200,10 +203,13 @@ std::vector<std::string> X509Cert::UTF8SubjectCommonName() const
 
    m_Subject.SearchOIDNext(OID_id_at_commonName,cnOcts);
 
-   for(std::vector<BEROctet const*>::size_type i=0; i<cnOcts.size(); i++)
-   {
-      BEROctet::Blob blbData = ToUTF8(cnOcts[i]->Tag(), cnOcts[i]->Data());
-      cnNames.push_back(string((char*)blbData.data(),blbData.size()));
+   std::vector<BEROctet const*>::size_type l = cnOcts.size( );
+
+   for( std::vector<BEROctet const*>::size_type i = 0; i< l; ++i ) {
+
+       BEROctet::Blob blbData = ToUTF8(cnOcts[i]->Tag(), cnOcts[i]->Data());
+      
+       cnNames.push_back(std::string((char*)blbData.data(),blbData.size()));
    }
 
    return cnNames;
@@ -230,20 +236,20 @@ BEROctet::Blob X509Cert::RawModulus() const
 {
 
    if(m_SubjectPublicKeyInfo.SubOctetList().size()!=2)
-      throw runtime_error("X509CertFormatError");
+      throw std::runtime_error("X509CertFormatError");
 
    BEROctet PubKeyString = *(m_SubjectPublicKeyInfo.SubOctetList()[1]);
 
    BEROctet::Blob KeyBlob = PubKeyString.Data();
 
    if(KeyBlob[0])                                 // Expect number of unused bits in
-      throw runtime_error("X509CertFormatError");    // last octet to be zero.
+      throw std::runtime_error("X509CertFormatError");    // last octet to be zero.
 
 
 
    BEROctet PubKeyOct(KeyBlob.substr(1,BEROctet::Blob::npos));
 
-   if(PubKeyOct.SubOctetList().size()!=2) throw runtime_error("X509CertFormatError");
+   if(PubKeyOct.SubOctetList().size()!=2) throw std::runtime_error("X509CertFormatError");
 
    return PubKeyOct.SubOctetList()[0]->Data();
 
@@ -268,19 +274,19 @@ BEROctet::Blob X509Cert::RawPublicExponent() const
 {
 
    if(m_SubjectPublicKeyInfo.SubOctetList().size()!=2)
-      throw runtime_error("X509CertFormatError");
+      throw std::runtime_error("X509CertFormatError");
 
    BEROctet PubKeyString = *(m_SubjectPublicKeyInfo.SubOctetList()[1]);
 
    BEROctet::Blob KeyBlob = PubKeyString.Data();
 
    if(KeyBlob[0])                                  // Expect number of unused bits
-      throw runtime_error("X509CertFormatError");     // in last octet to be zero.
+      throw std::runtime_error("X509CertFormatError");     // in last octet to be zero.
 
 
    BEROctet PubKeyOct(KeyBlob.substr(1,BEROctet::Blob::npos));
 
-   if(PubKeyOct.SubOctetList().size()!=2) throw runtime_error("X509CertFormatError");
+   if(PubKeyOct.SubOctetList().size()!=2) throw std::runtime_error("X509CertFormatError");
 
    return PubKeyOct.SubOctetList()[1]->Data();
 
@@ -292,7 +298,7 @@ unsigned long X509Cert::KeyUsage() const
 {
 
    if(!m_Extensions.Data().size())
-      throw runtime_error("X509CertExtensionNotPresent");
+      throw std::runtime_error("X509CertExtensionNotPresent");
 
    unsigned long ReturnKeyUsage = 0;
 
@@ -303,7 +309,7 @@ unsigned long X509Cert::KeyUsage() const
    m_Extensions.SearchOID(OID_id_ce_keyUsage,ExtensionList);
 
    if(ExtensionList.size()!=1)
-      throw runtime_error("X509CertExtensionNotPresent"); // One and only one instance
+      throw std::runtime_error("X509CertExtensionNotPresent"); // One and only one instance
 
    BEROctet const* Extension = ExtensionList[0];
    BEROctet* extnValue = 0;
@@ -314,10 +320,10 @@ unsigned long X509Cert::KeyUsage() const
       extnValue = Extension->SubOctetList()[2];  // A "critical" attribute present
 
    else
-      throw runtime_error("X509CertFormatError");    // "Extensions" must contain either 2 or 3 octets
+      throw std::runtime_error("X509CertFormatError");    // "Extensions" must contain either 2 or 3 octets
 
-   BEROctet KeyUsage(extnValue->Data());
-   BEROctet::Blob KeyUsageBitString = KeyUsage.Data();
+   BEROctet v_KeyUsage(extnValue->Data());
+   BEROctet::Blob KeyUsageBitString = v_KeyUsage.Data();
 
    unsigned char UnusedBits = KeyUsageBitString[0];
    size_t NumBytes = KeyUsageBitString.size()-1;
@@ -328,9 +334,11 @@ unsigned long X509Cert::KeyUsage() const
    }
 
    unsigned long Shift = 24;
-   for(unsigned long i=0; i<NumBytes-1; i++)
-   {
+   unsigned long l = NumBytes - 1;
+   for( unsigned long i = 0 ; i < l ; ++i ) {
+
       ReturnKeyUsage |= (((unsigned long)KeyUsageBitString[i+1]) << Shift);
+      
       Shift -= 8;
    }
 
@@ -340,12 +348,12 @@ unsigned long X509Cert::KeyUsage() const
 
 }
 
-bool X509Cert::ExtendedKeyUsage(string const &strOID) const
+bool X509Cert::ExtendedKeyUsage(std::string const &strOID) const
 {
    if(!m_Extensions.Data().size())
       return false;
 
-   vector<BEROctet const*> veku;
+   std::vector<BEROctet const*> veku;
 
    m_Extensions.SearchOIDNext(OID_id_ce_extKeyUsage, veku);
    if(veku.size() != 1)
@@ -354,7 +362,7 @@ bool X509Cert::ExtendedKeyUsage(string const &strOID) const
    try
    {
       BEROctet berEKU(veku[0]->Data());
-      vector<BEROctet const*> ekuOcts;
+      std::vector<BEROctet const*> ekuOcts;
       berEKU.SearchOID(strOID,ekuOcts);
       if(ekuOcts.size() > 0)
          return true;
@@ -385,18 +393,18 @@ void X509Cert::Decode()
    //const unsigned int dwTagSubjectUniqueID = 2;
    const unsigned int dwTagExtensions      = 3;
 
-   if(m_Cert.SubOctetList().size()!=3)  throw runtime_error("X509CertFormatError");
+   if(m_Cert.SubOctetList().size()!=3)  throw std::runtime_error("X509CertFormatError");
 
    BEROctet *tbsCert = m_Cert.SubOctetList()[0];
    size_t Size = tbsCert->SubOctetList().size();
-   if(!Size) throw runtime_error("X509CertFormatError");
+   if(!Size) throw std::runtime_error("X509CertFormatError");
 
    std::vector<BEROctet const*>::size_type  i = 0;
    BEROctet *first = tbsCert->SubOctetList()[i];
    if((first->Class()==tcContext) && (first->Tag()==dwTagVersion)) i++; // Version
 
    if(Size < static_cast<unsigned long>(6+i))
-      throw runtime_error("X509CertFormatError");
+      throw std::runtime_error("X509CertFormatError");
 
    m_SerialNumber = *(tbsCert->SubOctetList()[i]); i++;            // SerialNumber
    i++;                                                            // Signature (algorithm)
@@ -459,13 +467,13 @@ BEROctet::Blob X509Cert::ToUTF8( unsigned int dwTag, const BEROctet::Blob &blbDa
    switch(dwTag)
    {
    case dwBerBMPString:
-      //string in 2 byte Unicode Big Endian format.
+      //std::string in 2 byte Unicode Big Endian format.
       cUnicode = 2;
       bConvert = true;
       break;
    case dwBerUniversalString:
    case dwBerCharacterString:
-      //string in ISO10646, 4 byte unicode big endian format.
+      //std::string in ISO10646, 4 byte unicode big endian format.
       //this is hardly used but we never know.
       cUnicode = 4;
       bConvert = true;
@@ -476,12 +484,13 @@ BEROctet::Blob X509Cert::ToUTF8( unsigned int dwTag, const BEROctet::Blob &blbDa
    }
 
    if(bConvert)
-   {
-      unsigned char bAppend = 0;
-      for(size_t i = 0; i < blbData.size() / cUnicode; i++ )
-      {
+   {                                                                                                                                                                                                    
+      unsigned char bAppend = 0;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+      size_t l = blbData.size() / cUnicode;
+      for(size_t i = 0; i < l; ++i ) {
+
          unsigned int dwUnicode = 0;
-         unsigned int dwTemp = 0;
+         unsigned int dwTemp = 0;                                                                                                                                                                           
          int nBytesInUTF8 = 0;
 
          //first get the Unicode unsigned int from BIG ENDIAN BYTES.
@@ -561,4 +570,13 @@ BEROctet::Blob X509Cert::ToUTF8( unsigned int dwTag, const BEROctet::Blob &blbDa
       blbReturn.append( &bAppend, 1);
    }
    return blbReturn;
+}
+
+
+/* Check if the Smart Card Logon OID (1.3.6.1.4.1.311.20.2.2)
+is present in the Enhanced/Extended Key Usage
+*/
+bool X509Cert::isSmartCardLogon( void ) const
+{
+   return ExtendedKeyUsage( OID_ms_smartCardLogin );
 }

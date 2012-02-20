@@ -18,13 +18,13 @@
  *
  */
 
-#include "stdafx.h"
-#include "platconfig.h"
-#include "symmalgo.h"
+//#include "stdafx.h"
+#include "cryptoki.h"
+//#include "symmalgo.h"
 #include "des.h"
 
 CDES::CDES(){
-    this->_blockSize = 8;
+    _blockSize = 8;
 }
 
 CDES::~CDES(){
@@ -35,7 +35,7 @@ void CDES::TransformBlockInternal(CK_BYTE_PTR iv,CK_BYTE_PTR key,CK_LONG encrypt
                                   CK_BYTE_PTR output,CK_LONG output_offset)
 {
     // encryprtMode == ENCRYPT then we need to XOR input with iv
-    if(iv != NULL_PTR && this->_encryptMode == ENCRYPT){
+    if(iv != NULL_PTR && _encryptMode == ENCRYPT){
         for(CK_LONG i=0;i<8;i++){
             input[input_offset+i] ^= iv[i];
         }
@@ -43,7 +43,7 @@ void CDES::TransformBlockInternal(CK_BYTE_PTR iv,CK_BYTE_PTR key,CK_LONG encrypt
 
     algo_DES_DESProcess(key,&input[input_offset],&output[output_offset],(u1)encryptMode);
 
-    if(iv != NULL_PTR && this->_encryptMode == DECRYPT){
+    if(iv != NULL_PTR && _encryptMode == DECRYPT){
         for(CK_LONG i=0;i<8;i++){
             output[output_offset+i] ^= iv[i];
         }

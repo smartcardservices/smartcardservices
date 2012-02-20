@@ -18,22 +18,29 @@
  *
  */
 
-#ifndef _include_sha1_h
-#define _include_sha1_h
 
-#include "MarshallerCfg.h"
+#ifndef __GEMALTO_SHA1__
+#define __GEMALTO_SHA1__
+
+
+#include "digest.h"
 #include "algo_sha1.h"
 
-class CSHA1 : public CDigest
-{
+
+class CSHA1 : public CDigest {
+
 private:
-    void TransformBlock(CK_BYTE_PTR data,CK_LONG counter,CK_BYTE_PTR result);
-    void TransformFinalBlock(CK_BYTE_PTR data,CK_LONG length,CK_LONG counter,CK_BYTE_PTR result);
+    
+    void TransformBlock( unsigned char* data, long counter, unsigned char* result );
+    
+    void TransformFinalBlock( unsigned char* data, long length, long counter, unsigned char* result );
 
 public:
-    CSHA1();
-    ~CSHA1();
+
+    CSHA1( );
+    
+    virtual ~CSHA1( );
+
 };
 
-#endif
-
+#endif // __GEMALTO_SHA1__

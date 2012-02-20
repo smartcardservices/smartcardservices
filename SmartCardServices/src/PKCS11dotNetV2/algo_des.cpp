@@ -18,7 +18,7 @@
  *
  */
 
-#include "stdafx.h"
+//#include "stdafx.h"
 #include "MarshallerCfg.h"
 #include "algo_des.h"
 

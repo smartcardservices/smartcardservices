@@ -23,6 +23,7 @@
 
 #include "MarshallerCfg.h"
 #include "algo_des.h"
+#include "symmalgo.h"
 
 class CDES : public CSymmAlgo
 {

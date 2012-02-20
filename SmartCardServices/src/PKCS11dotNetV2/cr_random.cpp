@@ -18,11 +18,11 @@
  *
  */
 
-#include "stdafx.h"
+#include <cstring>
 #include "ha_config.h"
 #include "cr_random.h"
 #include "cr_global.h"
-#include "platconfig.h"
+//#include "cryptoki.h"
 #include "digest.h"
 #include "md5.h"
 
@@ -54,8 +54,8 @@ int R_GenerateBytes(
 
         // Generate new output
         CMD5* md4Ctx = new CMD5();
-        md4Ctx->HashCore(randomStruct->state,0,16);
-        md4Ctx->HashFinal(randomStruct->output);
+        md4Ctx->hashCore(randomStruct->state,0,16);
+        md4Ctx->hashFinal(randomStruct->output);
         delete md4Ctx;
 
         available = 16;
@@ -96,8 +96,8 @@ int R_RandomUpdate(
     unsigned int i, x;
 
     CMD5* md5Ctx = new CMD5();
-    md5Ctx->HashCore(block,0,blockLen);
-    md5Ctx->HashFinal(digest);
+    md5Ctx->hashCore(block,0,blockLen);
+    md5Ctx->hashFinal(digest);
     delete md5Ctx;
 
     /* add digest to state */

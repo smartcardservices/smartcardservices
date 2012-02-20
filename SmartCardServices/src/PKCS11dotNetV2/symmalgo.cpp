@@ -18,65 +18,82 @@
  *
  */
 
-#include "stdafx.h"
-#include "platconfig.h"
+
+#include <cstdlib>
+#include <cstring>
+
 #include "symmalgo.h"
+#include <memory>
 
-CSymmAlgo::CSymmAlgo(){
-    this->_cipherMode  = CIPHER_MODE_CBC;
-    this->_paddingMode = PADDING_MODE_PKCS7;
-    this->_iv          = NULL_PTR;
-    this->_key         = NULL_PTR;
+
+CSymmAlgo::CSymmAlgo( ) {
+
+    _cipherMode  = CIPHER_MODE_CBC;
+    
+    _paddingMode = PADDING_MODE_PKCS7;
+    
+    _iv          = NULL;
+    
+    _key         = NULL;
 }
 
-CSymmAlgo::~CSymmAlgo(){
-    if(this->_key != NULL_PTR)
-        free(this->_key);
+
+/*
+*/
+CSymmAlgo::~CSymmAlgo( ) {
+
+    if( _key )
+        free(_key);
 }
 
-void CSymmAlgo::SetKey(CK_BYTE_PTR key,CK_LONG keyLength){
-    this->_key       = (CK_BYTE_PTR)malloc(keyLength);
-    this->_keyLength = keyLength;
 
-    memcpy(this->_key,key,keyLength);
+/*
+*/
+void CSymmAlgo::SetKey( unsigned char* key, long keyLength ) {
+
+    _key = (unsigned char*)malloc(keyLength);
+    
+    _keyLength = keyLength;
+
+    memcpy(_key,key,keyLength);
 }
 
-void CSymmAlgo::SetIV(CK_BYTE_PTR iv){
-    this->_iv = iv;
+void CSymmAlgo::SetIV(unsigned char* iv){
+    _iv = iv;
 }
 
-void CSymmAlgo::SetEncryptMode(CK_LONG mode){
-    this->_encryptMode = mode;
+void CSymmAlgo::SetEncryptMode(long mode){
+    _encryptMode = mode;
 }
 
-void CSymmAlgo::SetCipherMode(CK_LONG cmode){
-    this->_cipherMode = cmode;
+void CSymmAlgo::SetCipherMode(long cmode){
+    _cipherMode = cmode;
 }
 
-void CSymmAlgo::SetPaddingMode(CK_LONG pmode){
-    this->_paddingMode = pmode;
+void CSymmAlgo::SetPaddingMode(long pmode){
+    _paddingMode = pmode;
 }
 
-CK_LONG CSymmAlgo::GetOutputLength(CK_LONG input_count){
+long CSymmAlgo::GetOutputLength(long input_count){
 
-    CK_LONG outputLen;
+    long outputLen;
 
-    if(this->_encryptMode == ENCRYPT){
-        outputLen = input_count & -this->_blockSize;
+    if(_encryptMode == ENCRYPT){
+        outputLen = input_count & -_blockSize;
 
-        switch(this->_paddingMode){
+        switch(_paddingMode){
 
             case PADDING_MODE_ISO9797M2:
             case PADDING_MODE_PKCS7:
                 // atleast 1 padding byte will be needed
                 if(input_count >= outputLen){
-                    outputLen += this->_blockSize;
+                    outputLen += _blockSize;
                 }
                 break;
 
             case PADDING_MODE_ZEROS:
                 if(input_count > outputLen){
-                    outputLen += this->_blockSize;
+                    outputLen += _blockSize;
                 }
                 break;
 
@@ -91,10 +108,10 @@ CK_LONG CSymmAlgo::GetOutputLength(CK_LONG input_count){
     return outputLen;
 }
 
-CK_LONG CSymmAlgo::TransformBlock(CK_BYTE_PTR input,CK_LONG input_offset,CK_LONG input_count,
-                                  CK_BYTE_PTR output,CK_LONG output_offset)
+long CSymmAlgo::TransformBlock(unsigned char* input,long input_offset,long input_count,
+                                  unsigned char* output,long output_offset)
 {
-    CK_LONG res = 0;
+    long res = 0;
     while (res != input_count)
     {
         TransformBlockInternal(_iv,_key,_encryptMode,input,input_offset,output,output_offset);
@@ -120,20 +137,20 @@ CK_LONG CSymmAlgo::TransformBlock(CK_BYTE_PTR input,CK_LONG input_offset,CK_LONG
     return res;
 }
 
-CK_LONG CSymmAlgo::TransformFinalBlock(CK_BYTE_PTR input,CK_LONG input_offset,CK_LONG input_count,
-                                       CK_BYTE_PTR output,CK_LONG output_offset)
+long CSymmAlgo::TransformFinalBlock(unsigned char* input,long input_offset,long input_count,
+                                       unsigned char* output,long output_offset)
 {
-    CK_LONG workingLength;
+    long workingLength;
 
-    if (((this->_paddingMode == PADDING_MODE_NONE) ||
-         (this->_encryptMode == DECRYPT)) &&
-         (input_count % _blockSize != 0))
-    {
-        PKCS11_ASSERT(CK_FALSE);
-    }
+    //if (((_paddingMode == PADDING_MODE_NONE) ||
+    //     (_encryptMode == DECRYPT)) &&
+    //     (input_count % _blockSize != 0))
+    //{
+    //    PKCS11_ASSERT(CK_FALSE);
+    //}
 
     // prepare outbuffer in case of encryption
-    if (this->_encryptMode == ENCRYPT)
+    if (_encryptMode == ENCRYPT)
     {
         // ~ round_down(inputCount, _blockSizeByte)
         workingLength = input_count & -_blockSize;
@@ -154,15 +171,15 @@ CK_LONG CSymmAlgo::TransformFinalBlock(CK_BYTE_PTR input,CK_LONG input_offset,CK
         input_count -= workingLength;
     }
 
-    if (this->_encryptMode == DECRYPT)
+    if (_encryptMode == DECRYPT)
     {
-        switch (this->_paddingMode)
+        switch (_paddingMode)
         {
             case PADDING_MODE_PKCS7:
-                // check the padding value make sense
-                if (output[output_offset - 1] > _blockSize){
-                    PKCS11_ASSERT(CK_FALSE);
-                }
+                //// check the padding value make sense
+                //if (output[output_offset - 1] > _blockSize){
+                //    PKCS11_ASSERT(CK_FALSE);
+                //}
                 workingLength -= output[output_offset - 1];
                 break;
 
@@ -173,9 +190,9 @@ CK_LONG CSymmAlgo::TransformFinalBlock(CK_BYTE_PTR input,CK_LONG input_offset,CK
                     output_offset--;
                 }
                 // check initial byte is 0x80
-                if (output[output_offset - 1] != 0x80){
-                    PKCS11_ASSERT(CK_FALSE);
-                }
+                //if (output[output_offset - 1] != 0x80){
+                //    PKCS11_ASSERT(CK_FALSE);
+                //}
                 workingLength--;
                 break;
 
@@ -184,17 +201,17 @@ CK_LONG CSymmAlgo::TransformFinalBlock(CK_BYTE_PTR input,CK_LONG input_offset,CK
     }
     else
     {
-        if ((this->_paddingMode == PADDING_MODE_PKCS7)
-            || (this->_paddingMode == PADDING_MODE_ISO9797M2)
-            || ((this->_paddingMode == PADDING_MODE_ZEROS) && (input_count > 0)))
+        if ((_paddingMode == PADDING_MODE_PKCS7)
+            || (_paddingMode == PADDING_MODE_ISO9797M2)
+            || ((_paddingMode == PADDING_MODE_ZEROS) && (input_count > 0)))
         {
-            CK_BYTE_PTR paddedIntput = (CK_BYTE_PTR)malloc(_blockSize);
+            unsigned char* paddedIntput = (unsigned char*)malloc(_blockSize);
             memset(paddedIntput,0,_blockSize);
 
             memcpy(paddedIntput,&input[input_offset],input_count);
 
             // add padding information in buffer if relevant
-            switch (this->_paddingMode)
+            switch (_paddingMode)
             {
                 // set first bit to 1, all other bits already set to 0
                 case PADDING_MODE_ISO9797M2:
@@ -202,8 +219,8 @@ CK_LONG CSymmAlgo::TransformFinalBlock(CK_BYTE_PTR input,CK_LONG input_offset,CK
                     break;
 
                 case PADDING_MODE_PKCS7:
-                    CK_BYTE paddingValue = (CK_BYTE)(_blockSize - input_count);
-                    for (CK_LONG i = input_count; i < _blockSize; i++){
+                    unsigned char paddingValue = (unsigned char)(_blockSize - input_count);
+                    for (long i = input_count; i < _blockSize; i++){
                         paddedIntput[i] = paddingValue;
                     }
                     break;

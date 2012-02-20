@@ -18,36 +18,29 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  */
-#include "stdafx.h"
-#include "platconfig.h"
-#include "symmalgo.h"
+
+
 #include "tdes.h"
 
-CTripleDES::CTripleDES(){
-    this->_blockSize = 8;
-}
 
-CTripleDES::~CTripleDES(){
-}
+void CTripleDES::TransformBlockInternal( unsigned char* iv, unsigned char* key, long encryptMode, unsigned char* input, long input_offset, unsigned char* output, long output_offset ) {
 
-void CTripleDES::TransformBlockInternal(CK_BYTE_PTR iv,CK_BYTE_PTR key,CK_LONG encryptMode,
-                                        CK_BYTE_PTR input,CK_LONG input_offset,
-                                        CK_BYTE_PTR output,CK_LONG output_offset)
-{
     // encryprtMode == ENCRYPT then we need to XOR input with iv
-    if(iv != NULL_PTR && this->_encryptMode == ENCRYPT){
-        for(CK_LONG i=0;i<8;i++){
-            input[input_offset+i] ^= iv[i];
+    if( iv && ( _encryptMode == ENCRYPT ) ) {
+
+        for( long i = 0 ; i < 8 ; ++i ) {
+
+            input[ input_offset + i ] ^= iv[ i ];
         }
     }
 
-    algo_DES_3DESProcess((u1)_keyLength,key,&input[input_offset],&output[output_offset],(u1)encryptMode);
+    algo_DES_3DESProcess( (unsigned char)_keyLength, key, &input[ input_offset ], &output[ output_offset ], (unsigned char)encryptMode );
 
-    if(iv != NULL_PTR && this->_encryptMode == DECRYPT){
-        for(CK_LONG i=0;i<8;i++){
-            output[output_offset+i] ^= iv[i];
+    if( iv && ( _encryptMode == DECRYPT) ) {
+
+        for( long i = 0 ; i < 8 ; ++i ) {
+
+            output[ output_offset + i ] ^= iv[ i ];
         }
     }
 }
-
-

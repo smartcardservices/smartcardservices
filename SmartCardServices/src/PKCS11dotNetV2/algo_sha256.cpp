@@ -18,10 +18,13 @@
  *
  */
 
-#include "stdafx.h"
+#include <cstring>
+
 #include "MarshallerCfg.h"
 #include "algo_utils.h"
 #include "algo_sha256.h"
+
+extern bool IS_LITTLE_ENDIAN;
 
 const u1 sha256_padding[64] =
 {

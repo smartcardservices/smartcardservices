@@ -18,7 +18,7 @@
  *
  */
 
-#include "stdafx.h"
+//#include "stdafx.h"
 #include "cr_global.h"
 #include "cr_nn.h"
 #include "cr_digit.h"

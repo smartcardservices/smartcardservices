@@ -1,604 +1,339 @@
 /*
- *  PKCS#11 library for .Net smart cards
- *  Copyright (C) 2007-2009 Gemalto <support@gemalto.com>
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- */
+*  PKCS#11 library for .Net smart cards
+*  Copyright (C) 2007-2009 Gemalto <support@gemalto.com>
+*
+*  This library is free software; you can redistribute it and/or
+*  modify it under the terms of the GNU Lesser General Public
+*  License as published by the Free Software Foundation; either
+*  version 2.1 of the License, or (at your option) any later version.
+*
+*  This library is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  Lesser General Public License for more details.
+*
+*  You should have received a copy of the GNU Lesser General Public
+*  License along with this library; if not, write to the Free Software
+*  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*
+*/
 
-#include "stdafx.h"
-#ifdef __APPLE__
-#include <PCSC/winscard.h>
-#else
-#include <winscard.h>
-#endif
-#include "platconfig.h"
-#include "config.h"
-#include "thread.h"
-#include "event.h"
-#include "template.h"
-#include "session.h"
-#include "slot.h"
 
-Session::Session(CK_BBOOL isReadWrite){
-    this->_isReadWrite    = isReadWrite;
-    this->_searchTempl    = NULL_PTR;
-    this->_isSearchActive = CK_FALSE;
+#include "Template.hpp"
+#include "Session.hpp"
+#include "Slot.hpp"
+#include "PKCS11Exception.hpp"
+#include <boost/foreach.hpp>
 
-    this->_digest         = NULL_PTR;
-    this->_digestRSA      = NULL_PTR;
-    this->_digestRSAVerification = NULL_PTR;
 
-    this->_isDigestActive = CK_FALSE;
-    this->_isDigestRSAActive = CK_FALSE;
-    this->_isDigestRSAVerificationActive = CK_FALSE;
+unsigned char Session::s_ucSessionObjectIndex = 0;
 
-    this->_signature = NULL_PTR;
-    this->_decryption     = NULL_PTR;
-    this->_encryption     = NULL_PTR;
-    this->_verification   = NULL_PTR;
 
-    this->_soPIN     = NULL_PTR;
+/*
+*/
+Session::Session( Slot* a_pSlot, const CK_SESSION_HANDLE& a_hSession, const CK_BBOOL& a_bIsReadWrite ) {
+    
+	m_Slot = a_pSlot; 
+	
+	m_ulId = a_hSession;
 
-    this->_accumulatedDataToSign = NULL_PTR;
-    this->_accumulatedDataToVerify = NULL_PTR;
+	m_bIsReadWrite = a_bIsReadWrite;
+	
+	m_bIsSearchActive = false;
+	
+	m_bIsDigestActive = false;
+	
+	m_bIsDigestActiveRSA = false;
+	
+	m_bIsDigestVerificationActiveRSA = false;
 
-    _objects.clear();
-    _sessionObjectsReturnedInSearch.clear();
-    _tokenObjectsReturnedInSearch.clear();
-
-    if( TRUE == this->_isReadWrite )
-    {
-      this->_state = CKS_RW_PUBLIC_SESSION;
-    }
-    else
-    {
-      this->_state = CKS_RO_PUBLIC_SESSION;
-    }
+	// The User or the SO has may be performed a login before to open this session
+	// In this case the state of the session must be updated
+    getState( );
 }
 
-Session::~Session(){
 
-   for(size_t i = 0; i < _objects.size(); i++)
-   {
-      if( NULL_PTR != _objects[i] )
-      {
-         delete _objects[i];
-      }
-      _objects[i] = NULL_PTR;
-   }
-
-    if(this->_digest != NULL_PTR){
-        delete this->_digest;
+/*
+*/
+CK_STATE Session::getState( void ) { 
+    
+    if( !m_Slot ) {
+    
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
     }
 
-    if(this->_digestRSA != NULL_PTR){
-        delete this->_digestRSA;
-    }
+    CK_USER_TYPE ulRole = m_Slot->getUserType( );
 
-    if(this->_digestRSAVerification != NULL_PTR){
-        delete this->_digestRSAVerification;
-    }
+    updateState( ulRole );
 
-    if(this->_signature != NULL_PTR){
-        delete this->_signature;
-    }
-
-    if(this->_decryption != NULL_PTR){
-        delete this->_decryption;
-    }
-
-    if(this->_encryption != NULL_PTR){
-        delete this->_encryption;
-    }
-
-    if(this->_verification != NULL_PTR){
-        delete this->_verification;
-    }
-
-    if(this->_soPIN != NULL_PTR){
-        delete this->_soPIN;
-    }
-
-    if(this->_accumulatedDataToSign != NULL_PTR){
-        delete this->_accumulatedDataToSign;
-    }
-
-    if(this->_accumulatedDataToVerify != NULL_PTR){
-        delete this->_accumulatedDataToVerify;
-    }
+    return m_ulState; 
 }
 
-void Session::SetSearchTemplate(Template* templ)
-{
-    PKCS11_ASSERT(this->_isSearchActive == CK_FALSE);
 
-    this->_searchTempl = templ;
-    this->_isSearchActive = CK_TRUE;
+/*
+*/
+void Session::updateState( const CK_ULONG& a_ulRoleLogged ) {
 
-    _tokenObjectsReturnedInSearch.clear();
-    _sessionObjectsReturnedInSearch.clear();
+	if( m_bIsReadWrite ) {
+
+		switch( a_ulRoleLogged ) {
+
+		case CK_UNAVAILABLE_INFORMATION:
+			m_ulState = CKS_RW_PUBLIC_SESSION;
+			break;
+
+		case CKU_USER:
+			m_ulState = CKS_RW_USER_FUNCTIONS;
+			break;
+
+		case CKU_SO:
+			m_ulState = CKS_RW_SO_FUNCTIONS;
+			break;
+		}
+
+	} else {
+		
+		switch( a_ulRoleLogged ) {
+
+		case CK_UNAVAILABLE_INFORMATION:
+			m_ulState = CKS_RO_PUBLIC_SESSION;
+			break;
+
+		case CKU_USER:
+			m_ulState = CKS_RO_USER_FUNCTIONS;
+			break;
+
+		case CKU_SO:
+			throw PKCS11Exception( CKR_SESSION_READ_ONLY );
+		}
+	}
 }
 
-void Session::RemoveSearchTemplate()
-{
-    if(this->_searchTempl != NULL_PTR){
-        delete this->_searchTempl;
-        this->_searchTempl = NULL_PTR;
+
+/*
+*/
+StorageObject* Session::getObject( const CK_OBJECT_HANDLE& a_hObject ) {
+
+	if( !a_hObject ) {
+
+		throw PKCS11Exception( CKR_OBJECT_HANDLE_INVALID );
+	}
+
+	// Find the targeted object
+	SESSION_OBJECTS::iterator i = m_Objects.find( a_hObject );
+
+     if( i == m_Objects.end( ) ) {
+	
+		 throw PKCS11Exception( CKR_OBJECT_HANDLE_INVALID );
+	 }
+
+	return i->second;
+}
+
+
+/*
+*/
+void Session::findObjects( CK_OBJECT_HANDLE_PTR a_phObject, const CK_ULONG& a_ulMaxObjectCount, CK_ULONG_PTR a_pulObjectCount ) {
+    
+    if( !m_Slot ) {
+    
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
     }
 
-    this->_isSearchActive = CK_FALSE;
-}
+    bool bIsNotAllowedToAccessPrivateObjects = !m_Slot->isAuthenticated( );
 
-void Session::UpdateState(CK_ULONG roleLogged)
-{
-    if(this->_isReadWrite)
-    {
-        switch(roleLogged)
-        {
-            case CKU_NONE:
-                this->_state = CKS_RW_PUBLIC_SESSION;
-                break;
+    Session::EXPLORED_HANDLES::iterator end = m_SessionObjectsReturnedInSearch.end( );
 
-            case CKU_SO:
-                this->_state = CKS_RW_SO_FUNCTIONS;
-                break;
+    // For each P11 object
+    BOOST_FOREACH( const SESSION_OBJECTS::value_type& o, m_Objects ) {
 
-            case CKU_USER:
-                this->_state = CKS_RW_USER_FUNCTIONS;
-                break;
+        // Check if the search has reached the allowed maximum of objects to search 
+        if( *a_pulObjectCount >= a_ulMaxObjectCount ) {
+
+            break;
         }
-    }
-    else
-    {
-        switch(roleLogged)
-        {
-            case CKU_NONE:
-                this->_state = CKS_RO_PUBLIC_SESSION;
-                break;
 
-            case CKU_USER:
-                this->_state = CKS_RO_USER_FUNCTIONS;
-                break;
-        }
-    }
-}
+        // Check if this object has been already compared to the search template
+        if( end != m_SessionObjectsReturnedInSearch.find( o->first ) ) {
 
-CK_BBOOL Session::IsSearchActive()
-{
-    return this->_isSearchActive;
-}
-
-void Session::SetId(CK_ULONG id)
-{
-    this->_id = id;
-}
-
-void Session::SetSlot(Slot* slot)
-{
-    this->_slot = slot;
-}
-
-CK_ULONG Session::MakeObjectHandle(CK_ULONG idx)
-{
-     CK_ULONG objHandle = CO_SESSION_OBJECT | idx;
-     objHandle = (this->_id << 16) | objHandle;
-
-     return objHandle;
-}
-
-CK_ULONG Session::FindObjects(CK_ULONG idx,CK_OBJECT_HANDLE_PTR phObject,
-                              CK_ULONG ulMaxObjectCount,CK_ULONG_PTR  pulObjectCount)
-{
-
-    PKCS11_ASSERT(this->_isSearchActive);
-
-    for(CK_LONG i=0;i<static_cast<CK_LONG>(_objects.size()) && (idx < ulMaxObjectCount);i++){
-
-        if(this->_objects[i] == NULL_PTR){
+            // This object has already been analysed by a previous call of findObjects for this template
             continue;
         }
 
-        if(this->_sessionObjectsReturnedInSearch[i] == CK_TRUE){
+        // If the object is private and the user is not logged in
+        if( o->second->isPrivate( ) && bIsNotAllowedToAccessPrivateObjects )
+        {
+            // Then avoid this element. 
+            // Do not add it the list of already explored objects (may be a C_Login can occur)
             continue;
         }
 
-         if( CK_TRUE == this->_objects[i]->_private )
-         {
-            if( false == _slot->_token->m_bIsNoPinSupported )
-            {
-               if(   ( CKU_USER != _slot->_token->_roleLogged )
-                  && ( ( true == _slot->_token->m_bIsSSO ) && ( false == _slot->_token->isAuthenticated( ) ) )
-                  )
-               {
-                  continue;
-               }
-            }
-         }
-        //if((this->_objects[i]->_private == CK_TRUE) &&
-        //    (this->_slot->_token->_roleLogged != CKU_USER))
-        //{
-        //    continue;
-        //}
+        // Add the object to the list of the objects compared to the search template
+        m_SessionObjectsReturnedInSearch.insert( o->first );
 
-        if(this->_searchTempl == NULL_PTR){
-            phObject[idx++] = MakeObjectHandle(i+1);
-            *pulObjectCount = *pulObjectCount + 1;
-            this->_sessionObjectsReturnedInSearch[i] = CK_TRUE;
-        }
-        else{
-            CK_BBOOL match = CK_TRUE;
+        // If the template is NULL then return all objects
+        if( !_searchTempl ) {
 
-            vector<CK_ATTRIBUTE> attributes = this->_searchTempl->_attributes;
-            for(CK_ULONG a=0;a<attributes.size();a++){
-                if(this->_objects[i]->Compare(attributes.at(a)) == CK_FALSE){
-                    match = CK_FALSE;
+            a_phObject[ *a_pulObjectCount ] = o->first;
+
+            ++(*a_pulObjectCount);
+
+        } else {
+            // The template is not NULL.
+   
+            bool match = true;
+
+            // In this case the template attributes have to be compared to the objects ones.
+            BOOST_FOREACH( CK_ATTRIBUTE& t, _searchTempl->getAttributes( ) ) {
+
+                if( ! o->second->compare( t ) ) {
+
+                    match = false;
+
                     break;
                 }
             }
 
-            if(match == CK_TRUE){
-                phObject[idx++] = MakeObjectHandle(i+1);
-                *pulObjectCount = *pulObjectCount + 1;
-                this->_sessionObjectsReturnedInSearch[i] = CK_TRUE;
+            // The attributes match
+            if( match ) {
+
+                // Add the object handle to the outgoing list
+                a_phObject[ *a_pulObjectCount ] = o->first;
+
+                // Increment the number of found objects
+                ++(*a_pulObjectCount);
             }
-
         }
     }
-
-    return idx;
 }
 
-CK_RV Session::AddObject(StorageObject* obj,CK_OBJECT_HANDLE_PTR phObject)
-{
-    for(CK_ULONG i = 0; i < static_cast<CK_ULONG>(_objects.size()); i++)
-    {
-        if(this->_objects[i] == NULL_PTR)
-        {
-            this->_objects[i] = obj;
-            *phObject = MakeObjectHandle(i+1);
 
-            return CKR_OK;
-        }
+/*
+*/
+void Session::deleteObject( const CK_OBJECT_HANDLE& a_hObject ) {
+
+    if( !m_Slot ) {
+    
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
     }
 
-    _objects.push_back(obj);
+	// Find the targeted object
+	StorageObject* o = getObject( a_hObject );
 
-    *phObject = MakeObjectHandle(static_cast<CK_ULONG>(_objects.size()));
+	// if this is a readonly session and user is not logged 
+	// then only public session objects can be created
+	if( !m_bIsReadWrite && o->isToken( ) ) {
 
-    return CKR_OK;
+		throw PKCS11Exception( CKR_SESSION_READ_ONLY );
+	}
+
+	if( o->isPrivate( ) && !m_Slot->isAuthenticated( ) ) {
+        
+		throw PKCS11Exception( CKR_USER_NOT_LOGGED_IN );
+	}
+	
+	try {
+    
+        m_Objects.erase( a_hObject );
+    
+    } catch( ... ) {
+    
+        throw PKCS11Exception( CKR_OBJECT_HANDLE_INVALID );
+    }
 }
 
-CK_RV Session::DeleteObject(CK_OBJECT_HANDLE hObject)
-{
-    // object handle also encodes the session to which it
-    // belongs, it is also possible to delete object of one
-    // session from other
 
-    CK_SESSION_HANDLE encodedSId = ((hObject >> 16) & 0x0000FFFF);
+/*
+*/
+void Session::getAttributeValue( const CK_OBJECT_HANDLE& a_hObject, CK_ATTRIBUTE_PTR a_pTemplate, const CK_ULONG& a_ulCount ) {
 
-    if ((encodedSId < 1) || (encodedSId >= _slot->_sessions.size())){
-        return CKR_OBJECT_HANDLE_INVALID;
+    if( !m_Slot ) {
+    
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
     }
 
-    if(this->_slot->_sessions[encodedSId] == NULL_PTR){
-        return CKR_OBJECT_HANDLE_INVALID;
+    // Find the targeted object
+	StorageObject* o = getObject( a_hObject );
+
+	if( o->isPrivate( ) && !m_Slot->isAuthenticated( ) ) {
+        
+		for( u4 i = 0 ; i < a_ulCount ; ++i ) {
+
+			a_pTemplate[ i ].ulValueLen = (CK_ULONG)CK_UNAVAILABLE_INFORMATION;
+		}
+
+		throw PKCS11Exception( CKR_USER_NOT_LOGGED_IN );
+	}
+
+	for( CK_ULONG i = 0 ; i < a_ulCount ; ++i ) {
+		
+		o->getAttribute( &a_pTemplate[ i ] );
+	}
+}
+
+
+/*
+*/
+void Session::setAttributeValue( const CK_OBJECT_HANDLE& a_hObject, CK_ATTRIBUTE_PTR a_pTemplate, const CK_ULONG& a_ulCount ) {
+
+    if( !m_Slot ) {
+    
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
     }
 
-    // determine the index
-    CK_LONG idx = (CK_LONG)(hObject & CO_OBJECT_HANDLE_MASK);
-    if(idx < 1 || idx > static_cast<CK_LONG>(_slot->_sessions[encodedSId]->_objects.size()))
-        return CKR_OBJECT_HANDLE_INVALID;
+    // Find the targeted object
+	StorageObject* o = getObject( a_hObject );
 
-    StorageObject* obj = this->_slot->_sessions[encodedSId]->_objects[idx-1];
+	if( o->isPrivate( ) && !m_Slot->isAuthenticated( ) ) {
+        
+        throw PKCS11Exception( CKR_USER_NOT_LOGGED_IN );
+	}
 
-    if(obj == NULL_PTR){
-        return CKR_OBJECT_HANDLE_INVALID;
-    }
+	for( CK_ULONG i = 0 ; i < a_ulCount ; ++i ) {
 
-    // if this is a readonly session and
-    // user is not logged then only public session objects
-    // can be created
-    if(this->_isReadWrite == CK_FALSE)
-    {
-        if(obj->_tokenObject)
-            return CKR_SESSION_READ_ONLY;
-    }
-
-   if( CK_TRUE == obj->_private )
-   {
-      if( false == _slot->_token->m_bIsNoPinSupported )
-      {
-         if(   ( CKU_USER != _slot->_token->_roleLogged )
-            && ( ( true == _slot->_token->m_bIsSSO ) && ( false == _slot->_token->isAuthenticated( ) ) )
-            )
-         {
-            return CKR_USER_NOT_LOGGED_IN;
-         }
-      }
-   }
-    //if ((this->_slot->_token->_roleLogged != CKU_USER) && (obj->_private == CK_TRUE)){
-    //    return CKR_USER_NOT_LOGGED_IN;
-    //}
-
-    delete obj;
-
-    this->_slot->_sessions[encodedSId]->_objects[idx-1] = NULL_PTR;
-
-    return CKR_OK;
+		o->setAttribute( a_pTemplate[ i ], false );
+	}
 }
 
-CK_RV Session::GetAttributeValue(CK_OBJECT_HANDLE hObject,
-                               CK_ATTRIBUTE_PTR pTemplate,
-                               CK_ULONG ulCount)
-{
-    CK_RV rv  = CKR_OK;
-    CK_RV arv = CKR_OK;
 
-    CK_LONG idx = (CK_LONG)(hObject & CO_OBJECT_HANDLE_MASK);
+/*
+*/
+CK_OBJECT_HANDLE Session::computeObjectHandle( const CK_OBJECT_CLASS& a_ulClass, const bool& a_bIsPrivate ) { 
+    
+    // Register the session object id (value from 0 to 255)
+    unsigned char ucByte1 = ++s_ucSessionObjectIndex;
 
-    //  lets see if the object handle provided is a correct handle or not
-    if((idx < 1) || (idx > static_cast<CK_LONG>(_objects.size())) || (this->_objects[idx-1] == NULL_PTR)){
-        return CKR_OBJECT_HANDLE_INVALID;
-    }
+    // Register the object class and if the object is private:
+	// Private Data	        1000 [08] = set class to CKO_DATA (0x00) and Private to TRUE (0x08)
+	// Public Data	        0000 [00] = set class to CKO_DATA (0x00) and Private to FALSE (0x00)	
+	// Private Certificate	1001 [09] = set class to CKO_CERTIFICATE (0x01) and Private to TRUE (0x08)
+	// Public Certificate	0001 [01] = set class to CKO_CERTIFICATE (0x01) and Private to FALSE (0x00)		
+	// Private Public Key	1010 [10] = set class to CKO_PUBLIC_KEY (0x02) and Private to TRUE (0x08)
+	// Public Public Key	0010 [02] = set class to CKO_PUBLIC_KEY (0x02) and Private to FALSE (0x00)    
+    // Private Private Key	1011 [11] = set class to CKO_PRIVATE_KEY (0x03) and Private to TRUE (0x08)			
+	// Public Private Key	0011 [03] = set class to CKO_PRIVATE_KEY (0x03) and Private to FALSE (0x00)
+	unsigned char ucByte2 = (unsigned char)a_ulClass + ( a_bIsPrivate ? 0x08 : 0x00 );
 
-    StorageObject* obj = this->_objects[idx-1];
+    // Register if the object is owned by the token (value 0) or the session (value corresponding to the session id from 1 to 255)
+    unsigned char ucByte3 = (unsigned char) ( 0x000000FF & m_ulId );
 
-   if( CK_TRUE == obj->_private )
-   {
-      if( false == _slot->_token->m_bIsNoPinSupported )
-      {
-         if(   ( CKU_USER != _slot->_token->_roleLogged )
-            && ( ( true == _slot->_token->m_bIsSSO ) && ( false == _slot->_token->isAuthenticated( ) ) )
-            )
-         {
-            for(u4 i=0;i<ulCount;i++)
-            {
-               pTemplate[i].ulValueLen = (CK_ULONG)-1;
-            }
-            return CKR_USER_NOT_LOGGED_IN;
-         }
-      }
-   }
-   //if((this->_slot->_token->_roleLogged != CKU_USER) && (obj->_private == CK_TRUE))
-   // {
-   //     for(u4 i=0;i<ulCount;i++){
-   //         pTemplate[i].ulValueLen = (CK_ULONG)-1;
-   //     }
-   //     return CKR_USER_NOT_LOGGED_IN;
-   // }
+    // Register the slot id
+    unsigned char ucByte4 = (unsigned char) ( 0x000000FF & m_Slot->getSlotId( ) );
 
-    for(u4 i=0;i<ulCount;i++){
-        rv = obj->GetAttribute(&pTemplate[i]);
-        if(rv != CKR_OK){
-            arv = rv;
-        }
-    }
+    // Compute the object handle: byte4 as Slot Id, byte3 as Token/Session, byte2 as attributes and byte1 as object Id					
+    CK_OBJECT_HANDLE h = ( ucByte4 << 24 ) + ( ucByte3 << 16 ) + ( ucByte2 << 8 )+ ucByte1;
 
-    return arv;
+    return h; 
 }
 
-CK_RV Session::SetAttributeValue(CK_OBJECT_HANDLE hObject,
-                               CK_ATTRIBUTE_PTR pTemplate,
-                               CK_ULONG ulCount)
-{
-    CK_RV rv  = CKR_OK;
-    CK_RV arv = CKR_OK;
 
-    CK_LONG idx = (CK_LONG)(hObject & CO_OBJECT_HANDLE_MASK);
-
-    //  lets see if the object handle provided is a correct handle or not
-    if((idx < 1) || (idx > static_cast<CK_LONG>(_objects.size())) || (this->_objects[idx-1] == NULL_PTR)){
-        return CKR_OBJECT_HANDLE_INVALID;
-    }
-
-    StorageObject* obj = this->_objects[idx-1];
-
-   if( CK_TRUE == obj->_private )
-   {
-      if( false == _slot->_token->m_bIsNoPinSupported )
-      {
-         if(   ( CKU_USER != _slot->_token->_roleLogged )
-            && ( ( true == _slot->_token->m_bIsSSO ) && ( false == _slot->_token->isAuthenticated( ) ) )
-            )
-         {
-            return CKR_USER_NOT_LOGGED_IN;
-         }
-      }
-   }
-    //if ((this->_slot->_token->_roleLogged != CKU_USER) && (obj->_private == CK_TRUE)){
-    //    return CKR_USER_NOT_LOGGED_IN;
-    //}
-
-    for(u4 i=0;i<ulCount;i++){
-        rv = obj->SetAttribute(pTemplate[i],CK_FALSE);
-        if(rv != CKR_OK){
-            arv = rv;
-        }
-    }
-
-    return arv;
+/*
+*/
+void Session::addObject( StorageObject* a_pObj, CK_OBJECT_HANDLE_PTR a_phObject ) { 
+    
+    *a_phObject = computeObjectHandle( a_pObj->getClass( ), a_pObj->isPrivate( ) ); 
+    
+    CK_OBJECT_HANDLE h = *a_phObject; 
+    
+    m_Objects.insert( h, a_pObj ); 
 }
-
-void Session::SetDigest(CDigest *digest)
-{
-    this->_digest = digest;
-    this->_isDigestActive = CK_TRUE;
-}
-
-void Session::RemoveDigest()
-{
-    if(this->_digest != NULL_PTR){
-        delete this->_digest;
-        this->_digest = NULL_PTR;
-    }
-
-    this->_isDigestActive = CK_FALSE;
-}
-
-CK_BBOOL Session::IsDigestActive()
-{
-    return this->_isDigestActive;
-}
-
-void Session::SetDigestRSA(CDigest *digest)
-{
-    this->_digestRSA = digest;
-    this->_isDigestRSAActive = CK_TRUE;
-}
-
-void Session::RemoveDigestRSA()
-{
-    if(this->_digestRSA != NULL_PTR){
-        delete this->_digestRSA;
-        this->_digestRSA = NULL_PTR;
-    }
-
-    this->_isDigestRSAActive = CK_FALSE;
-}
-
-CK_BBOOL Session::IsDigestRSAActive()
-{
-    return this->_isDigestRSAActive;
-}
-
-void Session::SetDigestRSAVerification(CDigest *digest)
-{
-    this->_digestRSAVerification = digest;
-    this->_isDigestRSAVerificationActive = CK_TRUE;
-}
-
-void Session::RemoveDigestRSAVerification()
-{
-    if(this->_digestRSAVerification != NULL_PTR){
-        delete this->_digestRSAVerification;
-        this->_digestRSAVerification = NULL_PTR;
-    }
-
-    this->_isDigestRSAVerificationActive = CK_FALSE;
-}
-
-CK_BBOOL Session::IsDigestRSAVerificationActive()
-{
-    return this->_isDigestRSAVerificationActive;
-}
-
-CK_RV Session::GetObject(CK_OBJECT_HANDLE hObject,StorageObject** object)
-{
-    if(hObject == 0){
-        return CKR_OBJECT_HANDLE_INVALID;
-    }
-
-    CK_SESSION_HANDLE encodedSId = ((hObject >> 16) & 0x0000FFFF);
-
-    if ((encodedSId < 1) || (encodedSId >= _slot->_sessions.size())){
-        return CKR_OBJECT_HANDLE_INVALID;
-    }
-
-    if(this->_slot->_sessions[encodedSId] == NULL_PTR){
-        return CKR_OBJECT_HANDLE_INVALID;
-    }
-
-    // determine the index
-    CK_LONG idx = (CK_LONG)(hObject & CO_OBJECT_HANDLE_MASK);
-
-    StorageObject* obj = this->_slot->_sessions[encodedSId]->_objects[idx-1];
-
-    if(obj == NULL_PTR){
-        return CKR_OBJECT_HANDLE_INVALID;
-    }
-
-    *object = obj;
-
-    return CKR_OK;
-}
-
-void Session::SetEncryptionOperation(CryptoOperation *encryption)
-{
-    this->_encryption = encryption;
-}
-
-void Session::RemoveEncryptionOperation()
-{
-    if(this->_encryption != NULL_PTR){
-        delete this->_encryption;
-    }
-
-    this->_encryption = NULL_PTR;
-}
-
-CK_BBOOL Session::IsEncryptionActive(){
-
-   return (this->_encryption != NULL_PTR);
-}
-
-void Session::SetVerificationOperation(CryptoOperation *verification)
-{
-    this->_verification = verification;
-}
-
-void Session::RemoveVerificationOperation()
-{
-    if(this->_verification != NULL_PTR){
-        delete this->_verification;
-    }
-
-    this->_verification = NULL_PTR;
-}
-
-CK_BBOOL Session::IsVerificationActive(){
-
-   return (this->_verification != NULL_PTR);
-}
-
-void Session::SetDecryptionOperation(CryptoOperation *decryption)
-{
-    this->_decryption = decryption;
-}
-
-void Session::RemoveDecryptionOperation()
-{
-    if(this->_decryption != NULL_PTR){
-        delete this->_decryption;
-    }
-
-    this->_decryption = NULL_PTR;
-}
-
-CK_BBOOL Session::IsDecryptionActive(){
-
-   return (this->_decryption != NULL_PTR);
-}
-
-void Session::SetSignatureOperation(CryptoOperation* signature)
-{
-    this->_signature = signature;
-}
-
-void Session::RemoveSignatureOperation()
-{
-    if(this->_signature != NULL_PTR){
-        delete this->_signature;
-    }
-
-    this->_signature = NULL_PTR;
-}
-
-CK_BBOOL Session::IsSignatureActive(){
-
-    return (this->_signature != NULL_PTR);
-
-}
-

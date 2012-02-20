@@ -1,5 +1,5 @@
 /* pkcs11f.h include file for PKCS #11. */
-/* $Revision: 1.5 $ */
+/* $Revision: 1.2 $ */
 
 /* License to copy and use this software is granted provided that it is
  * identified as "RSA Security Inc. PKCS #11 Cryptographic Token Interface
@@ -7,10 +7,10 @@
 
  * License is also granted to make and use derivative works provided that
  * such works are identified as "derived from the RSA Security Inc. PKCS #11
- * Cryptographic Token Interface (Cryptoki)" in all material mentioning or
+ * Cryptographic Token Interface (Cryptoki)" in all material mentioning or 
  * referencing the derived work.
 
- * RSA Security Inc. makes no representations concerning either the
+ * RSA Security Inc. makes no representations concerning either the 
  * merchantability of this software or the suitability of this software for
  * any particular purpose. It is provided "as is" without express or implied
  * warranty of any kind.
@@ -53,6 +53,7 @@ CK_PKCS11_FUNCTION_INFO(C_GetInfo)
 );
 #endif
 
+
 /* C_GetFunctionList returns the function list. */
 CK_PKCS11_FUNCTION_INFO(C_GetFunctionList)
 #ifdef CK_NEED_ARG_LIST
@@ -61,6 +62,8 @@ CK_PKCS11_FUNCTION_INFO(C_GetFunctionList)
                                             * function list */
 );
 #endif
+
+
 
 /* Slot and token management */
 
@@ -74,6 +77,7 @@ CK_PKCS11_FUNCTION_INFO(C_GetSlotList)
 );
 #endif
 
+
 /* C_GetSlotInfo obtains information about a particular slot in
  * the system. */
 CK_PKCS11_FUNCTION_INFO(C_GetSlotInfo)
@@ -83,7 +87,6 @@ CK_PKCS11_FUNCTION_INFO(C_GetSlotInfo)
   CK_SLOT_INFO_PTR pInfo    /* receives the slot information */
 );
 #endif
-
 
 
 /* C_GetTokenInfo obtains information about a particular token
@@ -96,6 +99,7 @@ CK_PKCS11_FUNCTION_INFO(C_GetTokenInfo)
 );
 #endif
 
+
 /* C_GetMechanismList obtains a list of mechanism types
  * supported by a token. */
 CK_PKCS11_FUNCTION_INFO(C_GetMechanismList)
@@ -106,6 +110,7 @@ CK_PKCS11_FUNCTION_INFO(C_GetMechanismList)
   CK_ULONG_PTR          pulCount         /* gets # of mechs. */
 );
 #endif
+
 
 /* C_GetMechanismInfo obtains information about a particular
  * mechanism possibly supported by a token. */
@@ -248,6 +253,8 @@ CK_PKCS11_FUNCTION_INFO(C_Logout)
 );
 #endif
 
+
+
 /* Object management */
 
 /* C_CreateObject creates a new object. */
@@ -357,6 +364,7 @@ CK_PKCS11_FUNCTION_INFO(C_FindObjectsFinal)
   CK_SESSION_HANDLE hSession  /* the session's handle */
 );
 #endif
+
 
 
 /* Encryption and decryption */
@@ -556,7 +564,7 @@ CK_PKCS11_FUNCTION_INFO(C_Sign)
 
 
 /* C_SignUpdate continues a multiple-part signature operation,
- * where the signature is (will be) an appendix to the data,
+ * where the signature is (will be) an appendix to the data, 
  * and plaintext cannot be recovered from the signature. */
 CK_PKCS11_FUNCTION_INFO(C_SignUpdate)
 #ifdef CK_NEED_ARG_LIST
@@ -568,7 +576,7 @@ CK_PKCS11_FUNCTION_INFO(C_SignUpdate)
 #endif
 
 
-/* C_SignFinal finishes a multiple-part signature operation,
+/* C_SignFinal finishes a multiple-part signature operation, 
  * returning the signature. */
 CK_PKCS11_FUNCTION_INFO(C_SignFinal)
 #ifdef CK_NEED_ARG_LIST
@@ -617,12 +625,12 @@ CK_PKCS11_FUNCTION_INFO(C_VerifyInit)
 (
   CK_SESSION_HANDLE hSession,    /* the session's handle */
   CK_MECHANISM_PTR  pMechanism,  /* the verification mechanism */
-  CK_OBJECT_HANDLE  hKey         /* verification key */
+  CK_OBJECT_HANDLE  hKey         /* verification key */ 
 );
 #endif
 
 
-/* C_Verify verifies a signature in a single-part operation,
+/* C_Verify verifies a signature in a single-part operation, 
  * where the signature is an appendix to the data, and plaintext
  * cannot be recovered from the signature. */
 CK_PKCS11_FUNCTION_INFO(C_Verify)
@@ -638,7 +646,7 @@ CK_PKCS11_FUNCTION_INFO(C_Verify)
 
 
 /* C_VerifyUpdate continues a multiple-part verification
- * operation, where the signature is an appendix to the data,
+ * operation, where the signature is an appendix to the data, 
  * and plaintext cannot be recovered from the signature. */
 CK_PKCS11_FUNCTION_INFO(C_VerifyUpdate)
 #ifdef CK_NEED_ARG_LIST
@@ -764,7 +772,7 @@ CK_PKCS11_FUNCTION_INFO(C_GenerateKey)
 #endif
 
 
-/* C_GenerateKeyPair generates a public-key/private-key pair,
+/* C_GenerateKeyPair generates a public-key/private-key pair, 
  * creating new key objects. */
 CK_PKCS11_FUNCTION_INFO(C_GenerateKeyPair)
 #ifdef CK_NEED_ARG_LIST
@@ -888,6 +896,8 @@ CK_PKCS11_FUNCTION_INFO(C_CancelFunction)
 );
 #endif
 
+
+
 /* Functions added in for Cryptoki Version 2.01 or later */
 
 /* C_WaitForSlotEvent waits for a slot event (token insertion,
@@ -901,3 +911,28 @@ CK_PKCS11_FUNCTION_INFO(C_WaitForSlotEvent)
 );
 #endif
 
+
+
+    /* C_GetCardProperty obtains a property value from the .NET MiniDriver */
+    CK_PKCS11_FUNCTION_INFO(C_GetCardProperty)
+    #ifdef CK_NEED_ARG_LIST
+    (
+        CK_SLOT_ID ulSlotID, 
+        CK_BYTE a_ucProperty, 
+        CK_BYTE a_ucFlags, 
+        CK_BYTE_PTR a_pValue, 
+        CK_ULONG_PTR a_pValueLen
+    );
+    #endif
+
+    /* C_SetCardProperty pushes a property value to the .NET MiniDriver */
+    CK_PKCS11_FUNCTION_INFO(C_SetCardProperty)
+    #ifdef CK_NEED_ARG_LIST
+    (
+        CK_SLOT_ID ulSlotID, 
+        CK_BYTE a_ucProperty, 
+        CK_BYTE a_ucFlags, 
+        CK_BYTE_PTR a_pValue, 
+        CK_ULONG a_pValueLen
+    );
+    #endif

@@ -18,8 +18,12 @@
  *
  */
 
-#ifndef _include_symmalgo_h
-#define _include_symmalgo_h
+
+#ifndef __GEMALTO_SYMMETRIC_ALGO__
+#define __GEMALTO_SYMMETRIC_ALGO__
+
+
+//#include "cryptoki.h"
 
 #define PADDING_MODE_ISO9797M2 1
 #define PADDING_MODE_NONE      2
@@ -32,41 +36,44 @@
 #define CIPHER_MODE_CBC 1
 #define CIPHER_MODE_ECB 2
 
-class CSymmAlgo
-{
+
+/*
+*/
+class CSymmAlgo {
 
 protected:
-    CK_BYTE_PTR _iv;
-    CK_BYTE_PTR _key;
-    CK_LONG     _keyLength;
-    CK_LONG     _blockSize;
-    CK_LONG     _cipherMode;
-    CK_LONG     _paddingMode;
-    CK_LONG     _encryptMode;
+    
+    unsigned char* _iv;
+    unsigned char* _key;
+    long     _keyLength;
+    long     _blockSize;
+    long     _cipherMode;
+    long     _paddingMode;
+    long     _encryptMode;
 
-protected:
-    virtual void TransformBlockInternal(CK_BYTE_PTR iv,CK_BYTE_PTR key,CK_LONG encryptMode,
-                                           CK_BYTE_PTR input,CK_LONG input_offset,
-                                           CK_BYTE_PTR output,CK_LONG output_offset) = 0;
+    virtual void TransformBlockInternal(unsigned char* iv,unsigned char* key,long encryptMode, unsigned char* input,long input_offset, unsigned char* output,long output_offset) = 0;
 
 public:
-    CSymmAlgo();
-    virtual ~CSymmAlgo();
 
-    void SetKey(CK_BYTE_PTR key,CK_LONG keyLength);
-    void SetIV(CK_BYTE_PTR iv);
-    void SetEncryptMode(CK_LONG mode);
-    void SetCipherMode(CK_LONG cmode);
-    void SetPaddingMode(CK_LONG pmode);
+    CSymmAlgo( );
+    
+    virtual ~CSymmAlgo( );
 
-    CK_LONG GetOutputLength(CK_LONG input_count);
+    void SetKey( unsigned char* key, long keyLength );
 
-    CK_LONG TransformBlock(CK_BYTE_PTR input,CK_LONG input_offset,CK_LONG input_count,
-                           CK_BYTE_PTR output,CK_LONG output_offset);
+    void SetIV( unsigned char* iv );
+    
+    void SetEncryptMode( long mode );
+    
+    void SetCipherMode( long cmode );
+    
+    void SetPaddingMode( long pmode );
 
-    CK_LONG TransformFinalBlock(CK_BYTE_PTR input,CK_LONG input_offset,CK_LONG input_count,
-                                CK_BYTE_PTR output,CK_LONG output_offset);
+    long GetOutputLength( long input_count );
+
+    long TransformBlock( unsigned char* input, long input_offset,long input_count, unsigned char* output,long output_offset);
+
+    long TransformFinalBlock(unsigned char* input,long input_offset,long input_count, unsigned char* output,long output_offset);
 };
 
-#endif
-
+#endif // 

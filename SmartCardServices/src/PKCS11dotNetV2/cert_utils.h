@@ -20,6 +20,16 @@
 
 #pragma once
 
+#ifdef WIN32
+#include <Windows.h>
+#else
+#ifdef __APPLE__
+#include <PCSC/wintypes.h>
+#else
+#include <wintypes.h>
+#endif
+#endif
+
 #define CERT_TYPE_UNKNOWN     (0)
 #define CERT_TYPE_USER        (1)
 #define CERT_TYPE_CA_ROOT     (2)

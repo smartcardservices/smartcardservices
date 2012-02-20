@@ -1,303 +1,320 @@
 /*
- *  PKCS#11 library for .Net smart cards
- *  Copyright (C) 2007-2009 Gemalto <support@gemalto.com>
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- */
-
-#include "stdafx.h"
-#include "platconfig.h"
-#include "config.h"
-#include "template.h"
-
-Template::Template(CK_ATTRIBUTE_PTR attrTemplate,CK_ULONG ulCount){
+*  PKCS#11 library for .Net smart cards
+*  Copyright (C) 2007-2009 Gemalto <support@gemalto.com>
+*
+*  This library is free software; you can redistribute it and/or
+*  modify it under the terms of the GNU Lesser General Public
+*  License as published by the Free Software Foundation; either
+*  version 2.1 of the License, or (at your option) any later version.
+*
+*  This library is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  Lesser General Public License for more details.
+*
+*  You should have received a copy of the GNU Lesser General Public
+*  License along with this library; if not, write to the Free Software
+*  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*
+*/
 
 
-   for(CK_ULONG i=0;i<ulCount;i++){
-      CK_ATTRIBUTE attribute;
+#include "Template.hpp"
+#include <boost/foreach.hpp>
+#include "PKCS11Exception.hpp"
+#include "Log.hpp"
 
-      attribute.type = attrTemplate[i].type;
-      attribute.ulValueLen = attrTemplate[i].ulValueLen;
-      attribute.pValue = NULL_PTR;
 
-      if(attribute.ulValueLen > 0) {
-         attribute.pValue = malloc(attribute.ulValueLen);
-         memcpy(attribute.pValue, attrTemplate[i].pValue, attribute.ulValueLen);
-      }
+extern bool IS_LITTLE_ENDIAN;
 
-      this->_attributes.push_back(attribute);
-   }
+
+/*
+*/
+Template::Template( CK_ATTRIBUTE_PTR a_Template, const CK_ULONG& a_ulCount ) {
+
+    for( CK_ULONG i = 0 ; i < a_ulCount ; ++i ) {
+
+        CK_ATTRIBUTE a;
+
+        a.type = a_Template[ i ].type;
+
+        a.ulValueLen = a_Template[ i ].ulValueLen;
+
+        a.pValue = NULL_PTR;
+
+        if( a.ulValueLen > 0 ) {
+
+            a.pValue = new CK_BYTE[ a.ulValueLen ];
+            
+            memcpy( a.pValue, a_Template[ i ].pValue, a.ulValueLen );
+        }
+
+        m_Attributes.push_back( a );
+    }
 }
 
 
-Template::~Template( )
-{
-   std::vector<CK_ATTRIBUTE>::size_type sz = _attributes.size( );
-   for( std::vector<CK_ATTRIBUTE>::size_type i = 0 ; i < sz ; i++ )
-   {
-      if( NULL_PTR != _attributes[ i ].pValue )
-      {
-         free( _attributes[ i ].pValue );
-      }
-   }
+/*
+*/
+Template::~Template( ) {
+
+    BOOST_FOREACH( CK_ATTRIBUTE& a, m_Attributes ) {
+
+        if( 1 == a.ulValueLen ) {
+
+            delete ( ( CK_BYTE* ) a.pValue );
+
+        } else if( a.ulValueLen > 1 ) {
+        
+            delete[ ] ( ( CK_BYTE* ) a.pValue );
+        }
+    }
 }
 
 
-void Template::FixEndianness(CK_ATTRIBUTE attrTemplate)
-{
-   // Only for Little Endian processors
-   if (IS_LITTLE_ENDIAN)
-   {
-      // we need to fix the endianness if
-      // we are dealing with data on 2 or 4 or 8 bytes
-      switch(attrTemplate.ulValueLen)
-      {
-      case 2:
-      case 4:
-      case 8:
-         {
-            // fix up needs to be done for specific
-            // attributes. Byte arrays may have sizes of 2,4 or 8
-            switch(attrTemplate.type)
-            {
-               // CK_ULONG data types
-            case CKA_CLASS:
-            case CKA_CERTIFICATE_TYPE:
-            case CKA_JAVA_MIDP_SECURITY_DOMAIN:
-            case CKA_KEY_TYPE:
-            case CKA_KEY_GEN_MECHANISM:
-            case CKA_MODULUS_BITS:
-               {
-                  PKCS11_ASSERT(attrTemplate.ulValueLen == sizeof(CK_ULONG));
-                  CK_BYTE b1 = ((CK_BYTE_PTR)attrTemplate.pValue)[0];
-                  CK_BYTE b2 = ((CK_BYTE_PTR)attrTemplate.pValue)[1];
-                  CK_BYTE b3 = ((CK_BYTE_PTR)attrTemplate.pValue)[2];
-                  CK_BYTE b4 = ((CK_BYTE_PTR)attrTemplate.pValue)[3];
-                  ((CK_BYTE_PTR)attrTemplate.pValue)[3] = b1;
-                  ((CK_BYTE_PTR)attrTemplate.pValue)[2] = b2;
-                  ((CK_BYTE_PTR)attrTemplate.pValue)[1] = b3;
-                  ((CK_BYTE_PTR)attrTemplate.pValue)[0] = b4;
-               }
-               break;
-            }
-         }
-         break;
+/*
+*/
+void Template::fixEndianness( CK_ATTRIBUTE& a_attribute ) {
 
-      default:
-         break;
-      }
-   }
+    // Only for Little Endian processors
+    if( IS_LITTLE_ENDIAN ) {
+
+        // we need to fix the endianness if we are dealing with data on 2 or 4 or 8 bytes
+        switch( a_attribute.ulValueLen ) {
+
+        case 2:
+        case 4:
+        case 8:
+            {
+                // fix up needs to be done for specific attributes. Byte arrays may have sizes of 2,4 or 8
+                switch( a_attribute.type ) {
+
+                    // CK_ULONG data types
+                case CKA_CLASS:
+                case CKA_CERTIFICATE_TYPE:
+                case CKA_JAVA_MIDP_SECURITY_DOMAIN:
+                case CKA_KEY_TYPE:
+                case CKA_KEY_GEN_MECHANISM:
+                case CKA_MODULUS_BITS:
+                    {
+                        //PKCS11_ASSERT(attrTemplate.ulValueLen == sizeof(CK_ULONG));
+                        CK_BYTE b1 = ((CK_BYTE_PTR)a_attribute.pValue)[0];
+                        CK_BYTE b2 = ((CK_BYTE_PTR)a_attribute.pValue)[1];
+                        CK_BYTE b3 = ((CK_BYTE_PTR)a_attribute.pValue)[2];
+                        CK_BYTE b4 = ((CK_BYTE_PTR)a_attribute.pValue)[3];
+                        ((CK_BYTE_PTR)a_attribute.pValue)[3] = b1;
+                        ((CK_BYTE_PTR)a_attribute.pValue)[2] = b2;
+                        ((CK_BYTE_PTR)a_attribute.pValue)[1] = b3;
+                        ((CK_BYTE_PTR)a_attribute.pValue)[0] = b4;
+                    }
+                    break;
+                }
+            }
+            break;
+
+        default:
+            break;
+        }
+    }
 }
 
-CK_ULONG Template::FindClassFromTemplate(CK_ATTRIBUTE_PTR pTemplate,CK_ULONG ulCount)
-{
-   CK_ULONG idx = 0;
 
-   for(idx=0;idx<ulCount;idx++)
-   {
-      if(pTemplate[idx].type == CKA_CLASS)
-      {
-         return *(CK_ULONG*)pTemplate[idx].pValue;
-      }
-   }
+/*
+*/
+CK_OBJECT_CLASS Template::getClass( CK_ATTRIBUTE_PTR a_pTemplate, const CK_ULONG& a_ulCount ) {
 
-   return (CK_ULONG)-1;
+    for( CK_ULONG idx = 0; idx < a_ulCount ; ++idx ) {
+
+        if( CKA_CLASS == a_pTemplate[ idx ].type ) {
+
+            return (*(CK_ULONG*)a_pTemplate[ idx ].pValue);
+        }
+    }
+
+    return CK_UNAVAILABLE_INFORMATION;
 }
 
-CK_ULONG Template::FindCertTypeFromTemplate(CK_ATTRIBUTE_PTR pTemplate,CK_ULONG ulCount)
-{
-   CK_ULONG idx = 0;
 
-   for(idx=0;idx<ulCount;idx++)
-   {
-      if(pTemplate[idx].type == CKA_CERTIFICATE_TYPE)
-      {
-         return *(CK_ULONG*)pTemplate[idx].pValue;
-      }
-   }
+/*
+*/
+CK_CERTIFICATE_TYPE Template::getCertificateType( CK_ATTRIBUTE_PTR a_pTemplate, const CK_ULONG& a_ulCount ) {
 
-   return (CK_ULONG)-1;
+    for( CK_ULONG idx = 0; idx < a_ulCount ; ++idx ) {
+
+        if( CKA_CERTIFICATE_TYPE == a_pTemplate[ idx ].type ) {
+
+            return (*(CK_ULONG*)a_pTemplate[ idx ].pValue);
+        }
+    }
+
+    return CK_UNAVAILABLE_INFORMATION;
 }
 
-CK_BBOOL Template::FindTokenFromTemplate(CK_ATTRIBUTE_PTR pTemplate,CK_ULONG ulCount)
-{
-   CK_ULONG idx = 0;
 
-   for(idx=0;idx<ulCount;idx++)
-   {
-      if(pTemplate[idx].type == CKA_TOKEN)
-      {
-         return *(CK_BBOOL*)pTemplate[idx].pValue;
-      }
-   }
+/*
+*/
+bool Template::isToken( CK_ATTRIBUTE_PTR a_pTemplate, const CK_ULONG& a_ulCount ) {
 
-   return CK_FALSE;
+    for( CK_ULONG idx = 0; idx < a_ulCount ; ++idx ) {
+
+        if( CKA_TOKEN == a_pTemplate[ idx ].type ) {
+
+            return (*(bool*)a_pTemplate[ idx ].pValue);
+        }
+    }
+
+    return false;
 }
 
-CK_BBOOL Template::IsAttrInTemplate(CK_ATTRIBUTE_PTR pTemplate,CK_ULONG ulCount, CK_ATTRIBUTE_TYPE AttrType)
-{
-   CK_ULONG idx = 0;
 
-   for(idx=0;idx<ulCount;idx++)
-   {
-      if(pTemplate[idx].type == AttrType)
-      {
-         return CK_TRUE;
-      }
-   }
+/*
+*/
+bool Template::isPrivate( CK_ATTRIBUTE_PTR a_pTemplate, const CK_ULONG& a_ulCount ) {
 
-   return CK_FALSE;
+    for( CK_ULONG idx = 0; idx < a_ulCount ; ++idx ) {
+
+        if( CKA_PRIVATE == a_pTemplate[ idx ].type ) {
+
+            return (*(bool*)a_pTemplate[ idx ].pValue);
+        }
+    }
+
+    return false;
 }
 
-CK_RV Template::CheckTemplate(CK_ATTRIBUTE_PTR pTemplate,CK_ULONG ulCount, CK_BYTE bMode)
-{
-   CK_OBJECT_CLASS     ObjClass = (CK_ULONG)-1;
-   CK_CERTIFICATE_TYPE CertType = (CK_ULONG)-1;
 
-   // Get Object Class
-   ObjClass = FindClassFromTemplate(pTemplate, ulCount);
+/*
+*/
+bool Template::isPresent( CK_ATTRIBUTE_PTR a_pTemplate, const CK_ULONG& a_ulCount, const CK_ATTRIBUTE_TYPE& a_ulType ) {
 
-   // Get Cert Type
-   if (ObjClass == CKO_CERTIFICATE)
-   {
-      CertType = FindCertTypeFromTemplate(pTemplate, ulCount);
-   }
+    for( CK_ULONG idx = 0; idx < a_ulCount ; ++idx ) {
 
-   // Check Creation Template
-   if (bMode == MODE_CREATE)
-   {
-      switch (ObjClass)
-      {
-      case CKO_DATA:
-         {
-            if (IsAttrInTemplate(pTemplate, ulCount, CKA_CLASS))
+        if( a_ulType == a_pTemplate[ idx ].type ) {
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+/*
+*/
+void Template::checkTemplate( CK_ATTRIBUTE_PTR a_pTemplate, const CK_ULONG& a_ulCount, const CK_BYTE& a_bMode ) {
+
+    // Get Object Class
+    CK_OBJECT_CLASS c = getClass( a_pTemplate, a_ulCount );
+
+    // Get Cert Type
+    CK_CERTIFICATE_TYPE t = CK_UNAVAILABLE_INFORMATION;
+    if( CKO_CERTIFICATE == c ) {
+
+        t = getCertificateType( a_pTemplate, a_ulCount );
+    }
+
+    // Check Creation Template
+    if( MODE_CREATE == a_bMode ) {
+
+        switch( c ) {
+
+        case CKO_DATA:
             {
-               return CKR_OK;
+                if( isPresent( a_pTemplate, a_ulCount, CKA_CLASS ) ) {
+                    return;
+                }
             }
-         }
-         break;
+            break;
 
-      case CKO_CERTIFICATE:
-         {
-            if (CertType == CKC_X_509)
+        case CKO_CERTIFICATE:
             {
-               if (  (IsAttrInTemplate(pTemplate, ulCount, CKA_CLASS))
-                  &&(IsAttrInTemplate(pTemplate, ulCount, CKA_SUBJECT))
-                  &&(IsAttrInTemplate(pTemplate, ulCount, CKA_VALUE))
-                  )
-               {
-                  return CKR_OK;
-               }
-            }
+                if( ( CKC_X_509 == t ) && isPresent( a_pTemplate, a_ulCount, CKA_CLASS ) && isPresent( a_pTemplate, a_ulCount, CKA_SUBJECT ) && isPresent( a_pTemplate, a_ulCount, CKA_VALUE ) ) {
 
-            else if (CertType == CKC_X_509_ATTR_CERT)
+                    return;
+
+                } else if( ( CKC_X_509_ATTR_CERT == t ) && isPresent( a_pTemplate, a_ulCount, CKA_CLASS ) && isPresent( a_pTemplate, a_ulCount, CKA_OWNER ) && isPresent( a_pTemplate, a_ulCount, CKA_VALUE ) ) {
+
+                    return;
+
+                } else {
+                    throw PKCS11Exception( CKR_TEMPLATE_INCONSISTENT );
+                }
+            }
+            break;
+
+        case CKO_PUBLIC_KEY:
             {
-               if (  (IsAttrInTemplate(pTemplate, ulCount, CKA_CLASS))
-                  &&(IsAttrInTemplate(pTemplate, ulCount, CKA_OWNER))
-                  &&(IsAttrInTemplate(pTemplate, ulCount, CKA_VALUE))
-                  )
-               {
-                  return CKR_OK;
-               }
-            }
+                if(  isPresent( a_pTemplate, a_ulCount, CKA_CLASS ) && isPresent( a_pTemplate, a_ulCount, CKA_KEY_TYPE ) && !isPresent( a_pTemplate, a_ulCount, CKA_LOCAL ) && !isPresent( a_pTemplate, a_ulCount, CKA_KEY_GEN_MECHANISM )
+                    && isPresent( a_pTemplate, a_ulCount, CKA_MODULUS ) && !isPresent( a_pTemplate, a_ulCount, CKA_MODULUS_BITS ) && isPresent(a_pTemplate, a_ulCount, CKA_PUBLIC_EXPONENT ) ) {
 
-            else
+                        return;
+                }
+            }
+            break;
+
+        case CKO_PRIVATE_KEY:
             {
-               return CKR_TEMPLATE_INCONSISTENT;
+                if (  ( isPresent(a_pTemplate, a_ulCount, CKA_CLASS))
+                    &&( isPresent(a_pTemplate, a_ulCount, CKA_KEY_TYPE))
+                    &&(!isPresent(a_pTemplate, a_ulCount, CKA_LOCAL))
+                    &&(!isPresent(a_pTemplate, a_ulCount, CKA_KEY_GEN_MECHANISM))
+                    &&(!isPresent(a_pTemplate, a_ulCount, CKA_ALWAYS_SENSITIVE))
+                    &&(!isPresent(a_pTemplate, a_ulCount, CKA_NEVER_EXTRACTABLE))
+                    &&( isPresent(a_pTemplate, a_ulCount, CKA_MODULUS))
+                    &&( isPresent(a_pTemplate, a_ulCount, CKA_PRIVATE_EXPONENT))
+                    &&( isPresent(a_pTemplate, a_ulCount, CKA_PRIME_1))
+                    &&( isPresent(a_pTemplate, a_ulCount, CKA_PRIME_2))
+                    &&( isPresent(a_pTemplate, a_ulCount, CKA_EXPONENT_1))
+                    &&( isPresent(a_pTemplate, a_ulCount, CKA_EXPONENT_2))
+                    &&( isPresent(a_pTemplate, a_ulCount, CKA_COEFFICIENT))
+                    )
+                {
+                    return;
+                }
             }
-         }
-         break;
+            break;
 
-      case CKO_PUBLIC_KEY:
-         {
-            if (  ( IsAttrInTemplate(pTemplate, ulCount, CKA_CLASS))
-               &&( IsAttrInTemplate(pTemplate, ulCount, CKA_KEY_TYPE))
-               &&(!IsAttrInTemplate(pTemplate, ulCount, CKA_LOCAL))
-               &&(!IsAttrInTemplate(pTemplate, ulCount, CKA_KEY_GEN_MECHANISM))
-               &&( IsAttrInTemplate(pTemplate, ulCount, CKA_MODULUS))
-               &&(!IsAttrInTemplate(pTemplate, ulCount, CKA_MODULUS_BITS))
-               &&( IsAttrInTemplate(pTemplate, ulCount, CKA_PUBLIC_EXPONENT))
-               )
-            {
-               return CKR_OK;
-            }
-         }
-         break;
+        default:
+            throw PKCS11Exception( CKR_TEMPLATE_INCONSISTENT );
 
-      case CKO_PRIVATE_KEY:
-         {
-            if (  ( IsAttrInTemplate(pTemplate, ulCount, CKA_CLASS))
-               &&( IsAttrInTemplate(pTemplate, ulCount, CKA_KEY_TYPE))
-               &&(!IsAttrInTemplate(pTemplate, ulCount, CKA_LOCAL))
-               &&(!IsAttrInTemplate(pTemplate, ulCount, CKA_KEY_GEN_MECHANISM))
-               &&(!IsAttrInTemplate(pTemplate, ulCount, CKA_ALWAYS_SENSITIVE))
-               &&(!IsAttrInTemplate(pTemplate, ulCount, CKA_NEVER_EXTRACTABLE))
-               &&( IsAttrInTemplate(pTemplate, ulCount, CKA_MODULUS))
-               &&( IsAttrInTemplate(pTemplate, ulCount, CKA_PRIVATE_EXPONENT))
-               &&( IsAttrInTemplate(pTemplate, ulCount, CKA_PRIME_1))
-               &&( IsAttrInTemplate(pTemplate, ulCount, CKA_PRIME_2))
-               &&( IsAttrInTemplate(pTemplate, ulCount, CKA_EXPONENT_1))
-               &&( IsAttrInTemplate(pTemplate, ulCount, CKA_EXPONENT_2))
-               &&( IsAttrInTemplate(pTemplate, ulCount, CKA_COEFFICIENT))
-               )
-            {
-               return CKR_OK;
-            }
-         }
-         break;
+        }
+    }
 
-      default:
-         return CKR_TEMPLATE_INCONSISTENT;
-      }
-   }
+    // Check Public Key Generation Template
+    else if (a_bMode == MODE_GENERATE_PUB)
+    {
+        if (  (!isPresent(a_pTemplate, a_ulCount, CKA_LOCAL))
+            &&(!isPresent(a_pTemplate, a_ulCount, CKA_KEY_GEN_MECHANISM))
+            &&(!isPresent(a_pTemplate, a_ulCount, CKA_MODULUS))
+            &&( isPresent(a_pTemplate, a_ulCount, CKA_MODULUS_BITS))
+            &&( isPresent(a_pTemplate, a_ulCount, CKA_PUBLIC_EXPONENT))
+            )
+        {
+            return;
+        }
+    }
 
-   // Check Public Key Generation Template
-   else if (bMode == MODE_GENERATE_PUB)
-   {
-      if (  (!IsAttrInTemplate(pTemplate, ulCount, CKA_LOCAL))
-         &&(!IsAttrInTemplate(pTemplate, ulCount, CKA_KEY_GEN_MECHANISM))
-         &&(!IsAttrInTemplate(pTemplate, ulCount, CKA_MODULUS))
-         &&( IsAttrInTemplate(pTemplate, ulCount, CKA_MODULUS_BITS))
-         &&( IsAttrInTemplate(pTemplate, ulCount, CKA_PUBLIC_EXPONENT))
-         )
-      {
-         return CKR_OK;
-      }
-   }
+    // Check Private Key Generation Template
+    else if (a_bMode == MODE_GENERATE_PRIV)
+    {
+        if (  (!isPresent(a_pTemplate, a_ulCount, CKA_LOCAL))
+            &&(!isPresent(a_pTemplate, a_ulCount, CKA_KEY_GEN_MECHANISM))
+            &&(!isPresent(a_pTemplate, a_ulCount, CKA_ALWAYS_SENSITIVE))
+            &&(!isPresent(a_pTemplate, a_ulCount, CKA_NEVER_EXTRACTABLE))
+            &&(!isPresent(a_pTemplate, a_ulCount, CKA_MODULUS))
+            &&(!isPresent(a_pTemplate, a_ulCount, CKA_PUBLIC_EXPONENT))
+            &&(!isPresent(a_pTemplate, a_ulCount, CKA_PRIVATE_EXPONENT))
+            &&(!isPresent(a_pTemplate, a_ulCount, CKA_PRIME_1))
+            &&(!isPresent(a_pTemplate, a_ulCount, CKA_PRIME_2))
+            &&(!isPresent(a_pTemplate, a_ulCount, CKA_EXPONENT_1))
+            &&(!isPresent(a_pTemplate, a_ulCount, CKA_EXPONENT_2))
+            &&(!isPresent(a_pTemplate, a_ulCount, CKA_COEFFICIENT))
+            )
+        {
+            return;
+        }
+    }
 
-   // Check Private Key Generation Template
-   else if (bMode == MODE_GENERATE_PRIV)
-   {
-      if (  (!IsAttrInTemplate(pTemplate, ulCount, CKA_LOCAL))
-         &&(!IsAttrInTemplate(pTemplate, ulCount, CKA_KEY_GEN_MECHANISM))
-         &&(!IsAttrInTemplate(pTemplate, ulCount, CKA_ALWAYS_SENSITIVE))
-         &&(!IsAttrInTemplate(pTemplate, ulCount, CKA_NEVER_EXTRACTABLE))
-         &&(!IsAttrInTemplate(pTemplate, ulCount, CKA_MODULUS))
-         &&(!IsAttrInTemplate(pTemplate, ulCount, CKA_PUBLIC_EXPONENT))
-         &&(!IsAttrInTemplate(pTemplate, ulCount, CKA_PRIVATE_EXPONENT))
-         &&(!IsAttrInTemplate(pTemplate, ulCount, CKA_PRIME_1))
-         &&(!IsAttrInTemplate(pTemplate, ulCount, CKA_PRIME_2))
-         &&(!IsAttrInTemplate(pTemplate, ulCount, CKA_EXPONENT_1))
-         &&(!IsAttrInTemplate(pTemplate, ulCount, CKA_EXPONENT_2))
-         &&(!IsAttrInTemplate(pTemplate, ulCount, CKA_COEFFICIENT))
-         )
-      {
-         return CKR_OK;
-      }
-   }
+    throw PKCS11Exception( CKR_TEMPLATE_INCONSISTENT );
 
-   return CKR_TEMPLATE_INCONSISTENT;
 }

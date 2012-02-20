@@ -1,2949 +1,2889 @@
 /*
- *  PKCS#11 library for .Net smart cards
- *  Copyright (C) 2007-2009 Gemalto <support@gemalto.com>
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- */
+*  PKCS#11 library for .Net smart cards
+*  Copyright (C) 2007-2009 Gemalto <support@gemalto.com>
+*
+*  This library is free software; you can redistribute it and/or
+*  modify it under the terms of the GNU Lesser General Public
+*  License as published by the Free Software Foundation; either
+*  version 2.1 of the License, or (at your option) any later version.
+*
+*  This library is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  Lesser General Public License for more details.
+*
+*  You should have received a copy of the GNU Lesser General Public
+*  License along with this library; if not, write to the Free Software
+*  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*
+*/
 
-#ifdef __APPLE__
-#include <PCSC/winscard.h>
-#else
-#include <winscard.h>
-#endif
-#include "cardmoduleservice.h"
 
-#include <assert.h>
-#include "stdafx.h"
-#include "platconfig.h"
-#include "config.h"
-#include "thread.h"
-#include "event.h"
-#include "template.h"
+#include "Slot.hpp"
+#include <boost/foreach.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/array.hpp>
+#include "cryptoki.h"
+#include "Template.hpp"
 #include "digest.h"
 #include "sha1.h"
 #include "sha256.h"
 #include "md5.h"
-#include "session.h"
-#include "slot.h"
-#include "dataobject.h"
-#include "secretkeyobject.h"
-#include "rsaprivatekeyobject.h"
-#include "rsapublickeyobject.h"
-#include "x509pubkeycertobject.h"
-#include "application.h"
-#include "transaction.h"
-#include "log.h"
-#include "error.h"
+#include "Pkcs11ObjectData.hpp"
+#include "Pkcs11ObjectKeyPrivateRSA.hpp"
+#include "Pkcs11ObjectKeyPublicRSA.hpp"
+#include "Pkcs11ObjectCertificateX509PublicKey.hpp"
+#include "Log.hpp"
 
-#ifdef _XCL_
-#include "xcl_utils.h"
-#endif // _XCL_
 
-CK_MECHANISM_TYPE MechanismList[] = {
-   CKM_RSA_PKCS_KEY_PAIR_GEN, // 0
-   CKM_RSA_PKCS,              // 1
-   CKM_RSA_X_509,             // 2
-   CKM_MD5_RSA_PKCS,          // 3
-   CKM_SHA1_RSA_PKCS,         // 4
-   CKM_SHA256_RSA_PKCS,       // 5
-#ifdef ENABLE_DIGEST
-   CKM_MD5,                   // 6
-   CKM_SHA_1,                 // 7
-   CKM_SHA256,                // 8
-#endif
-#ifdef ENABLE_SYMMETRIC
-   CKM_AES_KEY_GEN,           // 9
-   CKM_AES_ECB,               // 10
-   CKM_AES_CBC,               // 11
-   CKM_AES_CBC_PAD,           // 12
-   CKM_DES_KEY_GEN,           // 13
-   CKM_DES_ECB,               // 14
-   CKM_DES_CBC,               // 15
-   CKM_DES_CBC_PAD,           // 16
-   CKM_DES2_KEY_GEN,          // 17
-   CKM_DES3_KEY_GEN,          // 18
-   CKM_DES3_ECB,              // 19
-   CKM_DES3_CBC,              // 20
-   CKM_DES3_CBC_PAD           // 21
-#endif
+CK_MECHANISM_TYPE g_mechanismList[ ] = {
+    CKM_RSA_PKCS_KEY_PAIR_GEN, // 0
+    CKM_RSA_PKCS,              // 1
+    CKM_RSA_X_509,             // 2
+    CKM_MD5_RSA_PKCS,          // 3
+    CKM_SHA1_RSA_PKCS,         // 4
+    CKM_SHA256_RSA_PKCS,       // 5
+    CKM_MD5,                   // 6
+    CKM_SHA_1,                 // 7
+    CKM_SHA256,                // 8
 };
 
-CK_MECHANISM_INFO MechanismInfo[] = {
-   {/* 0 */  RSA_KEY_MIN_LENGTH,RSA_KEY_MAX_LENGTH, CKF_HW | CKF_GENERATE_KEY_PAIR},
-#ifdef ENABLE_SYMMETRIC
-   {/* 1 */  RSA_KEY_MIN_LENGTH,RSA_KEY_MAX_LENGTH, CKF_HW | CKF_ENCRYPT  | CKF_DECRYPT | CKF_SIGN | CKF_VERIFY | CKF_SIGN_RECOVER | CKF_VERIFY_RECOVER | CKF_WRAP | CKF_UNWRAP},
-   {/* 2 */  RSA_KEY_MIN_LENGTH,RSA_KEY_MAX_LENGTH, CKF_HW | CKF_ENCRYPT  | CKF_DECRYPT | CKF_SIGN | CKF_VERIFY | CKF_SIGN_RECOVER | CKF_VERIFY_RECOVER | CKF_WRAP | CKF_UNWRAP},
-#else
-   {/* 1 */  RSA_KEY_MIN_LENGTH,RSA_KEY_MAX_LENGTH, CKF_HW | CKF_ENCRYPT  | CKF_DECRYPT | CKF_SIGN | /*CKF_SIGN_RECOVER |*/ CKF_VERIFY /*| CKF_VERIFY_RECOVER*/},
-   {/* 2 */  RSA_KEY_MIN_LENGTH,RSA_KEY_MAX_LENGTH, CKF_HW | CKF_ENCRYPT  | CKF_DECRYPT | CKF_SIGN | /*CKF_SIGN_RECOVER |*/ CKF_VERIFY /*| CKF_VERIFY_RECOVER*/},
-#endif
-   {/* 3 */  RSA_KEY_MIN_LENGTH,RSA_KEY_MAX_LENGTH, CKF_HW | CKF_SIGN | CKF_VERIFY},
-   {/* 4 */  RSA_KEY_MIN_LENGTH,RSA_KEY_MAX_LENGTH, CKF_HW | CKF_SIGN | CKF_VERIFY},
-   {/* 5 */  RSA_KEY_MIN_LENGTH,RSA_KEY_MAX_LENGTH, CKF_HW | CKF_SIGN | CKF_VERIFY},
-#ifdef ENABLE_DIGEST
-   {/* 6 */  0,0, CKF_SW | CKF_DIGEST},
-   {/* 7 */  0,0, CKF_SW | CKF_DIGEST},
-   {/* 8 */  0,0, CKF_SW | CKF_DIGEST},
-#endif
-#ifdef ENABLE_SYMMETRIC
-   {/* 9 */  16,32, CKF_HW | CKF_GENERATE},
-   {/* 10 */  0,0, CKF_HW | CKF_ENCRYPT  | CKF_DECRYPT | CKF_WRAP | CKF_UNWRAP},
-   {/* 11 */  0,0, CKF_HW | CKF_ENCRYPT  | CKF_DECRYPT | CKF_WRAP | CKF_UNWRAP},
-   {/* 12 */  0,0, CKF_HW | CKF_ENCRYPT  | CKF_DECRYPT | CKF_WRAP | CKF_UNWRAP},
-   {/* 13 */  0,0, CKF_HW | CKF_GENERATE},
-   {/* 14 */  0,0, CKF_HW | CKF_ENCRYPT  | CKF_DECRYPT | CKF_WRAP | CKF_UNWRAP},
-   {/* 15 */  0,0, CKF_HW | CKF_ENCRYPT  | CKF_DECRYPT | CKF_WRAP | CKF_UNWRAP},
-   {/* 16 */  0,0, CKF_HW | CKF_ENCRYPT  | CKF_DECRYPT | CKF_WRAP | CKF_UNWRAP},
-   {/* 17 */  0,0, CKF_HW | CKF_GENERATE},
-   {/* 18 */  0,0, CKF_HW | CKF_GENERATE},
-   {/* 19 */  0,0, CKF_HW | CKF_ENCRYPT  | CKF_DECRYPT | CKF_WRAP | CKF_UNWRAP},
-   {/* 20 */  0,0, CKF_HW | CKF_ENCRYPT  | CKF_DECRYPT | CKF_WRAP | CKF_UNWRAP},
-   {/* 21 */  0,0, CKF_HW | CKF_ENCRYPT  | CKF_DECRYPT | CKF_WRAP | CKF_UNWRAP}
-#endif
+CK_MECHANISM_INFO g_mechanismInfo[] = {
+    {/* 0 */  MiniDriver::s_iMinLengthKeyRSA, MiniDriver::s_iMaxLengthKeyRSA, CKF_HW | CKF_GENERATE_KEY_PAIR },
+    {/* 1 */  MiniDriver::s_iMinLengthKeyRSA, MiniDriver::s_iMaxLengthKeyRSA, CKF_HW | CKF_SIGN | CKF_VERIFY | CKF_ENCRYPT | CKF_DECRYPT },
+    {/* 2 */  MiniDriver::s_iMinLengthKeyRSA, MiniDriver::s_iMaxLengthKeyRSA, CKF_HW | CKF_SIGN | CKF_VERIFY | CKF_ENCRYPT | CKF_DECRYPT },
+    {/* 3 */  MiniDriver::s_iMinLengthKeyRSA, MiniDriver::s_iMaxLengthKeyRSA, CKF_HW | CKF_SIGN | CKF_VERIFY },
+    {/* 4 */  MiniDriver::s_iMinLengthKeyRSA, MiniDriver::s_iMaxLengthKeyRSA, CKF_HW | CKF_SIGN | CKF_VERIFY },
+    {/* 5 */  MiniDriver::s_iMinLengthKeyRSA, MiniDriver::s_iMaxLengthKeyRSA, CKF_HW | CKF_SIGN | CKF_VERIFY },
+    {/* 6 */  0,0, CKF_DIGEST },
+    {/* 7 */  0,0, CKF_DIGEST },
+    {/* 8 */  0,0, CKF_DIGEST },
 };
 
-#define MAKE_SESSIONHANDLE(H,S)         (H | (S << 24))
-#define GET_SESSIONID(H)                (H & 0x00FFFFFF)
-#define GET_SLOTID(H)                   ((H & 0xFF000000) >> 24)
+const int g_iLabelSize = 32;
 
-//#define CHECK_IF_NULL_SESSION(A,S)      if(A->_sessions[S] == NULL_PTR){return CKR_SESSION_HANDLE_INVALID;}
-#define CHECK_IF_NULL_SESSION(A,S) try \
-   { \
-      if( A->_sessions.at( S ) == NULL_PTR ) \
-      { \
-         return CKR_SESSION_HANDLE_INVALID; \
-      } \
-   } \
-   catch( ... ) \
-   { \
-      return CKR_SESSION_HANDLE_INVALID; \
-   } \
-
-#define CHECK_IF_TOKEN_IS_PRESENT(S)    if(S->_token == NULL_PTR){return CKR_TOKEN_NOT_PRESENT;}
-
-Slot::Slot()
-{
-   // initialize the fields
-
-   CK_ULONG idx;
-
-   this->_token = NULL_PTR;
-   this->_readerName = NULL_PTR;
-
-   _sessions.resize(1,NULL_PTR);   // First element is dummy
-
-   // initialize this slot
-   this->_slotId = 0;
-   this->_slotInfo.firmwareVersion.major = 0;
-   this->_slotInfo.firmwareVersion.minor = 0;
-   this->_slotInfo.flags                 = CKF_REMOVABLE_DEVICE | CKF_HW_SLOT;
-   this->_slotInfo.hardwareVersion.major = 0;
-   this->_slotInfo.hardwareVersion.minor = 0;
-
-   for(idx=0;idx<64;idx++)
-      this->_slotInfo.slotDescription[idx] = ' ';
-
-   this->_slotInfo.manufacturerID[0] = 'U';
-   this->_slotInfo.manufacturerID[1] = 'n';
-   this->_slotInfo.manufacturerID[2] = 'k';
-   this->_slotInfo.manufacturerID[3] = 'n';
-   this->_slotInfo.manufacturerID[4] = 'o';
-   this->_slotInfo.manufacturerID[5] = 'w';
-   this->_slotInfo.manufacturerID[6] = 'n';
-
-   for(idx=7;idx<32;idx++){
-      this->_slotInfo.manufacturerID[idx] = ' ';
-   }
-
-#ifdef INCLUDE_EVENTING
-   this->_tracker = NULL_PTR;
-   this->_event   = CK_FALSE;
-#endif
-
-}
-
-Slot::~Slot( )
-{
-   Log::begin( "Slot::~Slot" );
-
-   if(this->_token != NULL_PTR)
-   {
-      delete this->_token;
-      this->_token = NULL_PTR;
-   }
-
-#ifdef INCLUDE_EVENTING
-   if(this->_tracker != NULL_PTR)
-   {
-      delete this->_tracker;
-      this->_tracker = NULL_PTR;
-   }
-#endif
-
-   if(this->_readerName != NULL_PTR)
-   {
-      delete this->_readerName;
-      this->_readerName = NULL_PTR;
-   }
-
-   // destroy all opened sessions
-   for(size_t i=1;i<_sessions.size();i++)
-   {
-      if( this->_sessions[i] != NULL_PTR)
-      {
-         delete this->_sessions[i];
-         this->_sessions[i] = NULL_PTR;
-      }
-   }
-
-   Log::end( "Slot::~Slot" );
-}
+// Index used to compute the session handle. The first session handle must start from 1 because 0 is used for an unvalid handle
+unsigned char Slot::s_ucSessionIndex = 0;
 
 
-#ifdef INCLUDE_EVENTING
+/*
+*/
+Slot::Slot( const boost::shared_ptr < Device >& a_pDevice ) {
 
-void Slot::SetEvent(CK_BBOOL event)
-{
-   this->_event = event;
-}
+    Log::begin( "Slot::Slot" ); 
 
-CK_BBOOL Slot::GetEvent()
-{
-   return this->_event;
-}
+    // LCA: used to remember card insertion
+    m_isTokenInserted = false;
 
-void Slot::Clear()
-{
-   // close all the sessions when card is removed
-   this->CloseAllSessions();
+    //m_SessionState = CKS_RO_PUBLIC_SESSION;
 
-   if(this->_token != NULL_PTR)
-   {
-      delete this->_token;
-      this->_token = NULL_PTR;
-   }
-}
+    m_ulUserType = CK_UNAVAILABLE_INFORMATION;
 
-#endif
+    m_stEmpty = "";
 
-CK_RV Slot::GetInfo(CK_SLOT_INFO_PTR pInfo)
-{
-   CK_BYTE idx;
+    m_ucEventSlotId = 0xFF;
 
-   // Check Parameters
-   if(pInfo == NULL_PTR)
-   {
-      return CKR_ARGUMENTS_BAD;
-   }
+    m_bEvent = false;
 
-   for(idx=0;idx<64;idx++)
-   {
-      pInfo->slotDescription[idx] = this->_slotInfo.slotDescription[idx];
-   }
+    // Store a pointer to the device instance
+    m_Device = a_pDevice;
 
-   for(idx=0;idx<32;idx++)
-   {
-      pInfo->manufacturerID[idx]  = this->_slotInfo.manufacturerID[idx];
-   }
+    try {
 
-   pInfo->hardwareVersion.major = this->_slotInfo.hardwareVersion.major;
-   pInfo->hardwareVersion.minor = this->_slotInfo.hardwareVersion.minor;
-   pInfo->firmwareVersion.major = this->_slotInfo.firmwareVersion.major;
-   pInfo->firmwareVersion.minor = this->_slotInfo.firmwareVersion.minor;
+        // Create a token instance if a smart card is present into the reader
+        if( m_Device.get( ) && m_Device->isSmartCardPresent( ) ) {
 
-   // it turns out that we need to dynamically poll if
-   // token is present or not. rest of the information should not
-   // change since we enumerated
-   SCARD_READERSTATE readerStates;
+            Log::log( "Slot::Slot - Reader Name <%s> - SmartCard present <%d>", m_Device->getReaderName( ).c_str( ), m_Device->isSmartCardPresent( ) );
 
-   readerStates.dwCurrentState = SCARD_STATE_UNAWARE;
-   readerStates.szReader = this->_readerName->c_str();
+            //m_Token.reset( new Token( this, m_Device.get( ) ) );
 
-   // lets check if token is present
-#ifndef _XCL_
+            //// Analyse the current state of the smart card to consider the slot as connected or not
+            //if( m_Device->isNoPin( ) || ( m_Device->isSSO( ) && m_Device->isAuthenticated( ) ) ) {
 
-   if (SCardGetStatusChange(Application::_hContext, 0, &readerStates, 1) == SCARD_S_SUCCESS)
-   {
-      if ((readerStates.dwEventState & SCARD_STATE_PRESENT) == SCARD_STATE_PRESENT)
-      {
-         // we found a card in this reader
-         this->_slotInfo.flags |= CKF_TOKEN_PRESENT;
-      }
-      else
-      {
-         // No card in reader
-         this->_slotInfo.flags &= ~CKF_TOKEN_PRESENT;
-         CloseAllSessions();
-      }
-   }
+            //    Log::log( "Slot::Slot - No PIN or SSO activated" );
 
-#else // _XCL_
+            //    m_ulUserType = CKU_USER;
+            //}
 
-    PRINT_MSG("IN Slot::GetInfo");
-    if (xCL_IsTokenPresent())
-    {
-        // we found a card in this reader
-        this->_slotInfo.flags |= CKF_TOKEN_PRESENT;
-    }
-    else
-    {
-        // No card in reader
-        this->_slotInfo.flags &= ~CKF_TOKEN_PRESENT;
+            tokenInserted( );
+        }
+
+    } catch( MiniDriverException& ) {
+
+        m_Token.reset( );
+
+        Log::error( "Slot::Slot", "MiniDriverException" );
     }
 
-#endif // _XCL_
+    // Initialize the slot info
+    memset( &m_SlotInfo, 0, sizeof( CK_SLOT_INFO ) );
 
-   pInfo->flags = this->_slotInfo.flags;
+    m_SlotInfo.flags = CKF_REMOVABLE_DEVICE | CKF_HW_SLOT;
 
-   return CKR_OK;
-}
+    memset( m_SlotInfo.slotDescription, ' ', sizeof( m_SlotInfo.slotDescription ) );
 
+    if( m_Device.get( ) ) {
 
-CK_RV Slot::GetTokenInfo( CK_TOKEN_INFO_PTR pInfo )
-{
-   Log::begin( "Slot::GetTokenInfo" );
+        memcpy( m_SlotInfo.slotDescription, m_Device->getReaderName( ).c_str( ), m_Device->getReaderName( ).length( ) );
+    }
 
-   checkConnection( this );
+    memset( m_SlotInfo.manufacturerID, ' ', sizeof( m_SlotInfo.manufacturerID ) );
 
-   // Check Parameters
-   if( NULL_PTR == pInfo )
-   {
-      Log::error( "Slot::GetTokenInfo", "CKR_ARGUMENTS_BAD" );
-      return CKR_ARGUMENTS_BAD;
-   }
+    m_SlotInfo.manufacturerID[0] = 'U';
+    m_SlotInfo.manufacturerID[1] = 'n';
+    m_SlotInfo.manufacturerID[2] = 'k';
+    m_SlotInfo.manufacturerID[3] = 'n';
+    m_SlotInfo.manufacturerID[4] = 'o';
+    m_SlotInfo.manufacturerID[5] = 'w';
+    m_SlotInfo.manufacturerID[6] = 'n';
 
-   //Log::log( "Slot::GetTokenInfo - BuildToken..." );
-   //printf( "\n Slot::GetTokenInfo - BuildToken \n" );
-   CK_RV rv = this->BuildToken( );
-   //Log::log( "Slot::GetTokenInfo - BuildToken <%#02x>", rv );
-   if( CKR_OK == rv )
-   {
-      //Transaction trans( this );
-
-      Log::log( "Slot::GetTokenInfo - 1" );
-
-      CK_BYTE idx;
-
-      pInfo->firmwareVersion.major = this->_token->_tokenInfo.firmwareVersion.major;
-      pInfo->firmwareVersion.minor = this->_token->_tokenInfo.firmwareVersion.minor;
-      pInfo->hardwareVersion.major = this->_token->_tokenInfo.hardwareVersion.major;
-      pInfo->hardwareVersion.minor = this->_token->_tokenInfo.hardwareVersion.minor;
-
-      Log::log( "Slot::GetTokenInfo - 2" );
-
-      // label
-      for(idx=0;idx<32;idx++)
-      {
-         pInfo->label[idx] = this->_token->_tokenInfo.label[idx];
-      }
-      Log::log( "Slot::GetTokenInfo - 3" );
-
-      // manufacturerID
-      for(idx=0;idx<32;idx++)
-      {
-         pInfo->manufacturerID[idx]  = this->_token->_tokenInfo.manufacturerID[idx];
-      }
-      Log::log( "Slot::GetTokenInfo - 4" );
-
-      // model
-      for(idx=0;idx<16;idx++)
-      {
-         pInfo->model[idx]  = this->_token->_tokenInfo.model[idx];
-      }
-      Log::log( "Slot::GetTokenInfo - 5" );
-
-      // serial number
-      for(idx=0;idx<16;idx++)
-      {
-         pInfo->serialNumber[idx]  = this->_token->_tokenInfo.serialNumber[idx];
-      }
-      Log::log( "Slot::GetTokenInfo - 6" );
-
-      pInfo->ulFreePrivateMemory  = this->_token->_tokenInfo.ulFreePrivateMemory;
-      pInfo->ulFreePublicMemory   = this->_token->_tokenInfo.ulFreePublicMemory;
-      pInfo->ulMaxPinLen          = this->_token->_tokenInfo.ulMaxPinLen;
-      pInfo->ulMinPinLen          = this->_token->_tokenInfo.ulMinPinLen;
-      pInfo->ulMaxRwSessionCount  = CK_EFFECTIVELY_INFINITE;
-      pInfo->ulSessionCount       = 0;
-      pInfo->ulMaxSessionCount    = CK_EFFECTIVELY_INFINITE;
-      pInfo->ulRwSessionCount     = 0;
-      pInfo->ulTotalPrivateMemory = this->_token->_tokenInfo.ulTotalPrivateMemory;
-      pInfo->ulTotalPublicMemory  = this->_token->_tokenInfo.ulTotalPublicMemory;
-
-      Log::log( "Slot::GetTokenInfo - 7" );
-
-      for(size_t i=1;i<_sessions.size();i++)
-      {
-         if( NULL_PTR != _sessions[ i ] )
-         {
-            ++pInfo->ulSessionCount;
-            if(_sessions[i]->_isReadWrite)
-               ++pInfo->ulRwSessionCount;
-         }
-      }
-      Log::log( "Slot::GetTokenInfo - 8" );
-
-      // utcTime
-      for(idx=0;idx<16;idx++)
-      {
-         pInfo->utcTime[idx]  = this->_token->_tokenInfo.utcTime[idx];
-      }
-      Log::log( "Slot::GetTokenInfo - 9" );
-
-      bool bIsAuthenticated = this->_token->isAuthenticated( );
-      Log::log( "Slot::GetTokenInfo - IsNoPinSupported <%d>", this->_token->m_bIsNoPinSupported );
-      Log::log( "Slot::GetTokenInfo - IsSSO <%d>", this->_token->m_bIsSSO );
-      Log::log( "Slot::GetTokenInfo - IsAuthenticated <%d>", bIsAuthenticated );
-
-      // Check if the smart card is in SSO mode
-      if(   ( true == this->_token->m_bIsNoPinSupported ) 
-         || ( ( true == this->_token->m_bIsSSO ) && ( true == bIsAuthenticated ) )
-         )
-      {
-         this->_token->_tokenInfo.flags &= ~CKF_LOGIN_REQUIRED;
-         Log::log( "Slot::GetTokenInfo - No login required" );
-      }
-      else
-      {
-         this->_token->_tokenInfo.flags |= CKF_LOGIN_REQUIRED;
-         Log::log( "Slot::GetTokenInfo - Login required" );
-      }
-      pInfo->flags = this->_token->_tokenInfo.flags;
-      //Log::log( "Slot::GetTokenInfo - tokenInfo formated ok" );
-   }
-
-   //Log::logCK_RV( "Slot::GetTokenInfo", rv );
-   Log::end( "Slot::GetTokenInfo" );
-
-   return rv;
+    Log::end( "Slot::Slot" ); 
 }
 
 
 /*
 */
-CK_RV Slot::GetMechanismList(CK_MECHANISM_TYPE_PTR pMechanismList,CK_ULONG_PTR pulCount)
-{
-   if(pulCount == NULL_PTR)
-   {
-      return CKR_ARGUMENTS_BAD;
-   }
-
-   if(pMechanismList == NULL_PTR)
-   {
-      *pulCount = (sizeof(MechanismList)/sizeof(CK_ULONG));
-   }
-   else
-   {
-      if(*pulCount < (sizeof(MechanismList)/sizeof(CK_ULONG)))
-      {
-         *pulCount = (sizeof(MechanismList)/sizeof(CK_ULONG));
-         return CKR_BUFFER_TOO_SMALL;
-      }
-
-      for(size_t i=0;i<(sizeof(MechanismList)/sizeof(CK_ULONG));i++)
-      {
-         pMechanismList[i] = MechanismList[i];
-      }
-      *pulCount = (sizeof(MechanismList)/sizeof(CK_ULONG));
-   }
-
-   return CKR_OK;
-}
-
-
-/*
-*/
-CK_RV Slot::GetMechanismInfo(CK_MECHANISM_TYPE type,CK_MECHANISM_INFO_PTR pInfo)
-{
-   if(pInfo == NULL_PTR)
-   {
-      return CKR_ARGUMENTS_BAD;
-   }
-
-   size_t i = 0;
-   CK_BBOOL found = CK_FALSE;
-   for( ;i<(sizeof(MechanismList)/sizeof(CK_ULONG));i++)
-   {
-      if(MechanismList[i] == type)
-      {
-         found = CK_TRUE;
-         break;
-      }
-   }
-
-   if(found == CK_FALSE)
-   {
-      return CKR_MECHANISM_INVALID;
-   }
-
-   pInfo->ulMinKeySize = MechanismInfo[i].ulMinKeySize;
-   pInfo->ulMaxKeySize = MechanismInfo[i].ulMaxKeySize;
-   pInfo->flags  = MechanismInfo[i].flags;
-
-   return CKR_OK;
-}
-
-
-CK_RV Slot::InitToken(CK_UTF8CHAR_PTR pPin,CK_ULONG ulPinLen,CK_UTF8CHAR_PTR pLabel)
-{
-   CK_RV rv = CKR_OK;
-
-   checkConnection( this );
-
-   if(pPin == NULL_PTR || ulPinLen == 0 || pLabel == NULL_PTR){
-      return CKR_ARGUMENTS_BAD;
-   }
-
-   // check if we have an open session
-   for(size_t i=1;i<_sessions.size();i++){
-      if(this->_sessions[i] != NULL_PTR){
-         return CKR_SESSION_EXISTS;
-      }
-   }
-
-   //printf( "\n Slot::InitToken - BuildToken \n" );
-   rv = this->BuildToken();
-
-   if(rv != CKR_OK){
-      return rv;
-   }
-
-   u1Array* pin = new u1Array(ulPinLen);
-   pin->SetBuffer(pPin);
-
-   u1Array* label = new u1Array(32);
-   label->SetBuffer(pLabel);
-
-   // Don't do the Transaction here.
-
-   rv = this->_token->InitToken(pin,label);
-
-   delete pin;
-   delete label;
-
-   return rv;
-}
-
-
-/*
-*/
-CK_RV Slot::OpenSession( CK_FLAGS flags, CK_VOID_PTR, CK_NOTIFY, CK_SESSION_HANDLE_PTR phSession )
-{
-   checkConnection( this );
-
-   if(phSession == NULL_PTR)
-   {
-      return CKR_ARGUMENTS_BAD;
-   }
-
-   if( ( flags & CKF_SERIAL_SESSION ) != CKF_SERIAL_SESSION )
-   {
-      return CKR_SESSION_PARALLEL_NOT_SUPPORTED;
-   }
-
-   //printf( "\n Slot::OpenSession - BuildToken \n" );
-   CK_RV rv = this->BuildToken( );
-   if( rv != CKR_OK )
-   {
-      return rv;
-   }
-
-   Transaction trans( this );
-
-   // if admin is logged we can not open RO session
-   CK_BBOOL rwSession = ((flags & CKF_RW_SESSION) == CKF_RW_SESSION);
-
-   if( ( this->_token->_roleLogged == CKU_SO ) && ( !rwSession ) )
-   {
-      return CKR_SESSION_READ_WRITE_SO_EXISTS;
-   }
-
-   // Create the session instance
-   Session* session = new Session( rwSession );
-
-   // lets create a session
-   s4 sessionId = this->AddSession( session );
-   if( 0 == sessionId )
-   {
-      return CKR_SESSION_COUNT;
-   }
-
-   session->SetId(sessionId);
-   session->SetSlot(this);
-
-    // prepare a unique session id
-   *phSession = MAKE_SESSIONHANDLE(sessionId,this->_slotId);
-
-   // Refresh the state of the session if the SSO mode is enabled or No pin is required
-   //UpdateAuthenticationState( );
-   if(   ( CKU_USER == this->_token->_roleLogged )
-      || ( true == this->_token->m_bIsNoPinSupported ) 
-      || ( ( true == this->_token->m_bIsSSO ) && ( true == this->_token->isAuthenticated( ) ) )
-      )
-   {
-      UpdateSessionState( CKU_USER );
-   }
-   else if( CKU_SO == this->_token->_roleLogged )
-   {
-      UpdateSessionState( CKU_SO );
-   }
-
-   return rv;
-}
-
-
-/*
-*/
-CK_RV Slot::CloseSession( CK_SESSION_HANDLE hSession )
-{
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   checkConnection( pSlot );
-
-   if( CKR_OK == rv )
-   {
-      CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-      CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-
-      pSlot->RemoveSession( hSessionId );
-
-      // Refresh the state of the session if the SSO mode is enabled
-      //pSlot->UpdateAuthenticationState( );
-   }
-
-   return rv;
-}
-
-
-///*
-//Check first if the card is in SSO mode then update the state of all sessions
-//*/
-//void Slot::UpdateAuthenticationState( void )
-//{
-//   if(   ( true == this->_token->_roleLogged )
-//      || ( true == this->_token->m_bIsNoPinSupported ) 
-//      || ( ( true == this->_token->m_bIsSSO ) && ( true == this->_token->isAuthenticated( ) ) )
-//      )
-//   {
-//      UpdateSessionState( CKU_USER );
-//   }
-//}
-
-
-/*
-*/
-CK_RV Slot::CloseAllSessions(void)
-{
-   //if( NULL != this->_token )
-   //{
-   //   this->_token->ManageGC( true );
-   //}
-
-   // remove all sessions
-   for( size_t i = 1 ; i < _sessions.size( ) ; i++ )
-   {
-      if( NULL_PTR != this->_sessions[ i ] )
-      {
-         delete this->_sessions[ i ];
-         this->_sessions[ i ] = NULL_PTR;
-      }
-      //this->_sessions[ i ] = NULL_PTR;
-   }
-
-   _sessions.resize( 1 );
-
-   CHECK_IF_TOKEN_IS_PRESENT( this );
-
-   this->_token->_roleLogged = CKU_NONE;
-
-   //// Refresh the state of the session if the SSO mode is enabled
-   //UpdateAuthenticationState( );
-   //// Update the state of all sessions
-   //UpdateSessionState( );
-
-   return CKR_OK;
-}
-
-
-/*
-*/
-CK_RV Slot::GetSessionInfo( CK_SESSION_HANDLE hSession, CK_SESSION_INFO_PTR pInfo )
-{
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   checkConnection( pSlot );
-
-   if( CKR_OK != rv )
-   {
-      return rv;
-   }
-
-   if(pInfo == NULL_PTR)
-   {
-      return CKR_ARGUMENTS_BAD;
-   }
-
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId);
-
-   // JCD
-   //Transaction trans( pSlot );
-
-   pInfo->slotID = pSlot->_slotId;
-   pInfo->ulDeviceError = CKR_OK;
-
-   // JCD
-   // Check if the smart card is in SSO mode
-   //pSlot->UpdateAuthenticationState( );
-
-   pInfo->flags = ( ( pSlot->_sessions[ hSessionId ]->_isReadWrite ) ? CKF_RW_SESSION : 0 ) | (CKF_SERIAL_SESSION);
-   pInfo->state = pSlot->_sessions[ hSessionId ]->_state;
-
-   return rv;
-}
-
-
-/*
-*/
-CK_RV Slot::Login( CK_SESSION_HANDLE hSession,
-                   CK_USER_TYPE userType,
-                   CK_UTF8CHAR_PTR pPin,
-                   CK_ULONG ulPinLen )
-{
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   checkConnection( pSlot );
-
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-
-   if( true == pSlot->_token->m_bIsNoPinSupported )
-   {
-      return CKR_OK; //CKR_USER_ALREADY_LOGGED_IN;
-   }
-   if( ( true == pSlot->_token->m_bIsSSO ) && ( true == pSlot->_token->isAuthenticated( ) ) )
-   {
-      return CKR_USER_ALREADY_LOGGED_IN;
-   }
-
-   Transaction trans( pSlot );
-
-   if(userType == CKU_SO)
-   {
-      if(pSlot->HasReadOnlySession())
-      {
-         return CKR_SESSION_READ_ONLY_EXISTS;
-      }
-   }
-
-   if( NULL_PTR == pPin )
-   {
-      ulPinLen = 0;
-   }
-
-   u1Array* pinValue = new u1Array(ulPinLen);
-   u1* pinValueBuffer = pinValue->GetBuffer();
-   CK_BYTE idx = 0;
-   for(idx=0;idx<ulPinLen;idx++)
-   {
-      pinValueBuffer[idx] = pPin[idx];
-   }
-   rv = pSlot->_token->Login(userType,pinValue);
-
-   if(rv == CKR_OK || rv == CKR_USER_ALREADY_LOGGED_IN)
-   {
-      if(userType == CKU_SO)
-      {
-         // cache SO PIN for the duration of this session
-         pSlot->_sessions[ hSessionId ]->_soPIN = new u1Array(pinValue->GetLength());
-         pSlot->_sessions[ hSessionId ]->_soPIN->SetBuffer(pinValue->GetBuffer());
-      }
-   }
-
-   if(rv == CKR_OK)
-   {
-      pSlot->UpdateSessionState();
-   }
-
-   delete pinValue;
-
-   return rv;
-}
-
-
-
-CK_RV Slot::Logout( CK_SESSION_HANDLE hSession )
-{
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   checkConnection( pSlot );
-
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   rv = pSlot->_token->Logout( );
-
-   pSlot->UpdateSessionState( );
-
-   return rv;
-}
-
-
-CK_RV Slot::InitPIN(CK_SESSION_HANDLE hSession,CK_UTF8CHAR_PTR pPin,CK_ULONG ulPinLen)
-{
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   checkConnection( pSlot );
-
-   if(rv != CKR_OK){
-      return rv;
-   }
-
-   if(pPin == NULL_PTR || ulPinLen == 0){
-      return CKR_ARGUMENTS_BAD;
-   }
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   Session* session = pSlot->_sessions[ hSessionId ];
-
-   if(session->_state != CKS_RW_SO_FUNCTIONS)
-   {
-      return CKR_USER_NOT_LOGGED_IN;
-   }
-
-   PKCS11_ASSERT(session->_soPIN != NULL_PTR);
-
-   u1Array* pin = new u1Array(ulPinLen);
-   pin->SetBuffer(pPin);
-
-   rv = pSlot->_token->InitPIN(session->_soPIN,pin);
-
-   delete pin;
-
-   return rv;
-}
-
-
-/*
-*/
-CK_RV Slot::SetPIN( CK_SESSION_HANDLE hSession,
-                    CK_UTF8CHAR_PTR pOldPin,
-                    CK_ULONG ulOldLen,
-                    CK_UTF8CHAR_PTR pNewPin,
-                    CK_ULONG ulNewLen )
-{
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-   checkConnection( pSlot );
-
-   if(pOldPin == NULL_PTR || ulOldLen == 0 || pNewPin == NULL_PTR || ulNewLen == 0)
-   {
-      return CKR_ARGUMENTS_BAD;
-   }
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   CK_ULONG state = pSlot->_sessions[ hSessionId ]->_state;
-
-   if((state != CKS_RW_PUBLIC_SESSION) &&
-      (state != CKS_RW_SO_FUNCTIONS)&&
-      (state != CKS_RW_USER_FUNCTIONS))
-   {
-      return CKR_SESSION_READ_ONLY;
-   }
-
-   u1Array* oldPin = new u1Array(ulOldLen);
-   oldPin->SetBuffer(pOldPin);
-
-   u1Array* newPin = new u1Array(ulNewLen);
-   newPin->SetBuffer(pNewPin);
-
-   rv = pSlot->_token->SetPIN(oldPin,newPin);
-
-   delete oldPin;
-   delete newPin;
-
-   return rv;
-}
-
-
-CK_RV  Slot::FindObjectsInit(CK_SESSION_HANDLE hSession,CK_ATTRIBUTE_PTR pTemplate,CK_ULONG ulCount)
-{
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-   checkConnection( pSlot );
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
+inline void Slot::tokenCreate( void ) { 
+        
+    m_ulUserType = CK_UNAVAILABLE_INFORMATION; 
+        
+    m_Token.reset( new Token( this, m_Device.get( ) ) ); 
    
-   Transaction trans( pSlot );
+    try { 
 
-   if((pTemplate == NULL_PTR) && (ulCount != 0))
-   {
-      return CKR_ARGUMENTS_BAD;
-   }
+        // Analyse the current state of the smart card to consider the slot as connected or not
+        if( m_Device->isNoPin( ) || ( m_Device->isSSO( ) && m_Device->isAuthenticated( ) ) ) {
 
-   Session* session = pSlot->_sessions[ hSessionId ];
+            Log::log( "Slot::Slot - No PIN or SSO activated" );
 
-   // check if search is active for this session or not
-   if(session->IsSearchActive() == CK_TRUE)
-   {
-      return CKR_OPERATION_ACTIVE;
-   }
+            m_ulUserType = CKU_USER;
+        }
+                    
+        if( !Device::s_bEnableCache && m_Device.get( ) ) { 
+                
+            m_Device->forceGarbageCollection( ); 
+        } 
+            
+        updateAllSessionsState( ); 
+        
+    } catch( ... ) { } 
+}
 
-   Template* searchTmpl = NULL_PTR;
-   if(ulCount != 0)
-   {
-      searchTmpl = new Template(pTemplate,ulCount);
-   }
+	
+/*
+*/
+void Slot::finalize( void ) {
 
-   session->SetSearchTemplate(searchTmpl);
+    Log::begin( "Slot::finalize" ); 
 
-   return rv;
+    //m_SessionState = CKS_RO_PUBLIC_SESSION;
+
+    m_ulUserType = CK_UNAVAILABLE_INFORMATION;
+
+    try {
+
+        closeAllSessions( );
+
+        if( m_Device.get( ) ) {
+
+            if( m_Device->isSmartCardPresent( ) ) {
+
+                m_Device->logOut( );
+
+                m_Device->administratorLogout( );
+
+                if( !Device::s_bEnableCache ) {
+
+                    m_Device->forceGarbageCollection( );
+                }
+            }
+
+            m_Device->saveCache( );
+        }
+
+    } catch( ... ) { }
+
+    Log::end( "Slot::finalize" ); 
 }
 
 
+/*
+*/
+void Slot::checkTokenInsertion( void ) {
 
-CK_RV  Slot::FindObjects(CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE_PTR phObject,
-                         CK_ULONG ulMaxObjectCount,CK_ULONG_PTR  pulObjectCount)
-{
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   checkConnection( pSlot );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
+    if( m_isTokenInserted ) {
 
-   if((phObject == NULL_PTR) || (pulObjectCount == NULL_PTR))
-   {
-      return CKR_ARGUMENTS_BAD;
-   }
+        tokenCreate( );
 
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
+        m_isTokenInserted = false;
 
-   // Not needed here...
-   // JCD 1
-   //Transaction trans( pSlot );
-
-   Session* session = pSlot->_sessions[ hSessionId ];
-
-   // check if search is active for this session or not
-   if(session->IsSearchActive() == CK_FALSE)
-   {
-      return CKR_OPERATION_NOT_INITIALIZED;
-   }
-
-   *pulObjectCount = 0;
-
-   // find the token objects matching the template
-   // count will tell how much of the phObject buffer was written
-   CK_ULONG count = pSlot->_token->FindObjects( session, phObject, ulMaxObjectCount, pulObjectCount );
-
-   if(count < ulMaxObjectCount)
-   {
-      // find the session objects matching the template
-      count = session->FindObjects(count,phObject,ulMaxObjectCount,pulObjectCount);
-   }
-
-   return rv;
+        m_Device->saveCache( );
+    }
 }
 
 
+/*
+*/
+void Slot::getInfo( CK_SLOT_INFO_PTR p ) {
 
-CK_RV  Slot::FindObjectsFinal(CK_SESSION_HANDLE hSession)
-{
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   checkConnection( pSlot );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
+    if( !p ) {
 
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
+        return;
+    }
 
-   // Not needed here
-   // Transaction trans(slot);
+    memcpy( p->slotDescription, m_SlotInfo.slotDescription, sizeof( p->slotDescription ) );
 
-   Session* session = pSlot->_sessions[ hSessionId ];
+    memcpy( p->manufacturerID, m_SlotInfo.manufacturerID, sizeof( p->manufacturerID ) );
 
-   // check if search is active for this session or not
-   if(session->IsSearchActive() == CK_FALSE)
-   {
-      return CKR_OPERATION_NOT_INITIALIZED;
-   }
+    p->hardwareVersion.major = m_SlotInfo.hardwareVersion.major;
 
-   session->RemoveSearchTemplate();
+    p->hardwareVersion.minor = m_SlotInfo.hardwareVersion.minor;
 
-   return rv;
-}
+    p->firmwareVersion.major = m_SlotInfo.firmwareVersion.major;
 
-CK_RV Slot::GenerateRandom(CK_SESSION_HANDLE hSession,CK_BYTE_PTR randomData,CK_ULONG ulRandomLen)
-{
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   checkConnection( pSlot );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
+    p->firmwareVersion.minor = m_SlotInfo.firmwareVersion.minor;
 
-   if((randomData == NULL_PTR) || (ulRandomLen == 0))
-   {
-      return CKR_ARGUMENTS_BAD;
-   }
+    // No card in reader
+    m_SlotInfo.flags &= ~CKF_TOKEN_PRESENT;
 
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
 
-   return pSlot->_token->GenerateRandom(randomData,ulRandomLen);
+// LCA: Token inserted?
+    checkTokenInsertion( );
+
+    try {
+
+        if( getToken( ).get( ) ) { //m_Device.get( ) && m_Device->isSmartCardPresent( ) ) {
+
+            // we found a card in this reader
+            m_SlotInfo.flags |= CKF_TOKEN_PRESENT;
+        } 
+
+    } catch( ... ) { }
+
+    p->flags = m_SlotInfo.flags;
 }
 
 
+/*
+*/
+void Slot::getTokenInfo( CK_TOKEN_INFO_PTR p ) {
 
-CK_RV Slot::CreateObject( CK_SESSION_HANDLE hSession, CK_ATTRIBUTE_PTR pTemplate, CK_ULONG ulCount, CK_OBJECT_HANDLE_PTR phObject )
-{
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   checkConnection( pSlot );
+    if( !p ) {
 
-  if(rv != CKR_OK)
-   {
-      return rv;
-   }
+        return;
+    }
 
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
+    // LCA: Token inserted?
+    checkTokenInsertion( );
 
-   // check the pointer arguments
-   if((pTemplate == NULL_PTR) || (ulCount == 0) || (phObject == NULL_PTR))
-   {
-      return CKR_ARGUMENTS_BAD;
-   }
+    if( !m_Token.get( ) ) {
 
-   // Check Template Consitency
-   rv = Template::CheckTemplate(pTemplate, ulCount, MODE_CREATE);
-   if (rv != CKR_OK)
-   {
-      return rv;
-   }
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
 
-   CK_ULONG classVal = Template::FindClassFromTemplate(pTemplate,ulCount);
-   PKCS11_ASSERT(classVal != -1);
+    //Log::begin( "Slot::GetTokenInfo" );
 
-   auto_ptr<StorageObject> object;
+    try {
 
-   switch(classVal){
+        p->firmwareVersion.major = m_Token->getTokenInfo( ).firmwareVersion.major;
+        p->firmwareVersion.minor = m_Token->getTokenInfo( ).firmwareVersion.minor;
+        p->hardwareVersion.major = m_Token->getTokenInfo( ).hardwareVersion.major;
+        p->hardwareVersion.minor = m_Token->getTokenInfo( ).hardwareVersion.minor;
 
-        case CKO_DATA:
-           object = auto_ptr<StorageObject>(new DataObject());
-           break;
+        memcpy( p->label, m_Token->getTokenInfo( ).label, sizeof( p->label ) );
 
-        case CKO_SECRET_KEY:
-           object = auto_ptr<StorageObject>(new SecretKeyObject());
-           break;
+        memcpy( p->manufacturerID, m_Token->getTokenInfo( ).manufacturerID, sizeof( p->manufacturerID ) );
+
+        memcpy( p->model, m_Token->getTokenInfo( ).model, sizeof( p->model ) );
+
+        memcpy( p->serialNumber, m_Token->getTokenInfo( ).serialNumber, sizeof( p->serialNumber ) );
+
+        //Log::logCK_UTF8CHAR_PTR( "Slot::GetTokenInfo - m_TokenInfo.serialNumber", m_Token->getTokenInfo( ).serialNumber, sizeof( m_Token->getTokenInfo( ).serialNumber ) );
+
+        p->ulFreePrivateMemory  = m_Token->getTokenInfo( ).ulFreePrivateMemory;
+        p->ulFreePublicMemory   = m_Token->getTokenInfo( ).ulFreePublicMemory;
+        p->ulMaxPinLen          = m_Token->getTokenInfo( ).ulMaxPinLen;
+        p->ulMinPinLen          = m_Token->getTokenInfo( ).ulMinPinLen;
+        p->ulMaxRwSessionCount  = CK_EFFECTIVELY_INFINITE;
+        p->ulSessionCount       = 0;
+        p->ulMaxSessionCount    = CK_EFFECTIVELY_INFINITE;
+        p->ulRwSessionCount     = 0;
+        p->ulTotalPrivateMemory = m_Token->getTokenInfo( ).ulTotalPrivateMemory;
+        p->ulTotalPublicMemory  = m_Token->getTokenInfo( ).ulTotalPublicMemory;
+
+        BOOST_FOREACH( const MAP_SESSIONS::value_type& s, m_Sessions ) {
+
+            // Count the number of opened sessions
+            ++p->ulSessionCount;
+
+            if( s.second->isReadWrite( ) ) {
+
+                ++p->ulRwSessionCount;
+            }
+        }
+
+        memcpy( p->utcTime, m_Token->getTokenInfo( ).utcTime, sizeof( p->utcTime ) );
+
+        if( !m_Device.get( ) ) {
+
+            throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+        }
+
+        try {
+
+            //Log::log( "Slot::GetTokenInfo - isNoPinSupported <%d>", m_Device->isNoPin( ) );
+            //Log::log( "Slot::GetTokenInfo - IsSSO <%d>", m_Device->isSSO( ) );
+            //Log::log( "Slot::GetTokenInfo - IsAuthenticated <%d>", bIsAuthenticated );
+
+            // Check if the smart card is in SSO mode
+            if(  m_Device->isNoPin( ) || ( m_Device->isSSO( ) && isAuthenticated( ) ) ) {
+
+                m_Token->getTokenInfo( ).flags &= ~CKF_LOGIN_REQUIRED;
+                //Log::log( "Slot::GetTokenInfo - No login required" );
+
+            } else {
+
+                m_Token->getTokenInfo( ).flags |= CKF_LOGIN_REQUIRED;
+                //Log::log( "Slot::GetTokenInfo - Login required" );
+            }
+
+        } catch( MiniDriverException& x ) {
+
+            Log::error( "Slot::getTokenInfo", "MiniDriverException" );
+            throw PKCS11Exception( Token::checkException( x ) );
+        }
+
+        p->flags = m_Token->getTokenInfo( ).flags;
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    //Log::end( "Slot::GetTokenInfo" );
+}
+
+
+/*
+*/
+void Slot::getMechanismList( CK_MECHANISM_TYPE_PTR a_pMechanismList, CK_ULONG_PTR a_pulCount ) {
+
+    size_t l = sizeof( g_mechanismList ) / sizeof( CK_ULONG );
+
+    if( *a_pulCount < l ) {
+
+        *a_pulCount = l;
+        
+        throw PKCS11Exception( CKR_BUFFER_TOO_SMALL );
+    }
+
+    if( a_pMechanismList ) {
+    
+        for( size_t i = 0 ; i < l ; ++i ) {
+
+            a_pMechanismList[ i ] = g_mechanismList[ i ];
+        }
+     }
+  
+    *a_pulCount = l;
+}
+
+
+/*
+*/
+void Slot::getMechanismInfo( const CK_MECHANISM_TYPE& t, CK_MECHANISM_INFO_PTR p ) {
+
+    //if( !p ) {
+
+    //    return;
+    //}
+
+    size_t i = 0;
+
+    bool found = false;
+
+    size_t l = sizeof( g_mechanismList ) / sizeof( CK_ULONG );
+
+    for( ; i < l ; ++i ) {
+
+        if( g_mechanismList[ i ] == t ) {
+
+            found = true;
+
+            break;
+        }
+    }
+
+    if( !found ) {
+
+        throw PKCS11Exception( CKR_MECHANISM_INVALID );
+    }
+
+    p->ulMinKeySize = g_mechanismInfo[ i ].ulMinKeySize;
+
+    p->ulMaxKeySize = g_mechanismInfo[ i ].ulMaxKeySize;
+
+    p->flags = g_mechanismInfo[ i ].flags;
+}
+
+
+/*
+*/
+void Slot::initToken( CK_UTF8CHAR_PTR pPin, const CK_ULONG& ulPinLen, CK_UTF8CHAR_PTR pLabel ) {
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    // Check if we have an open session
+    if( m_Sessions.size( ) ) {
+
+        throw PKCS11Exception( CKR_SESSION_EXISTS );
+    }
+
+    Marshaller::u1Array p( ulPinLen );
+    p.SetBuffer( pPin );
+
+    Marshaller::u1Array l( g_iLabelSize );
+    l.SetBuffer( pLabel );
+
+    try {
+
+        m_Token->initToken( &p, &l );
+
+    } catch( PKCS11Exception& x ) {
+
+        checkAccessException( x );
+
+        throw;
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+}
+
+
+/*
+*/
+void Slot::checkAccessException( const PKCS11Exception& a_Exception ) {
+
+    if( CKR_USER_NOT_LOGGED_IN == a_Exception.getError( ) ) {
+
+        Log::log( "Slot::checkAccessException - !! User desauthenticated !!" );
+
+        m_ulUserType = CK_UNAVAILABLE_INFORMATION;
+
+        // Update the state of all sessions because write access is no more allowed
+        updateAllSessionsState( );
+    }
+}
+
+
+/*
+*/
+void Slot::openSession( const CK_FLAGS& flags, CK_VOID_PTR, CK_NOTIFY, CK_SESSION_HANDLE_PTR phSession ) {
+
+    bool bIsReadWrite = ( ( flags & CKF_RW_SESSION ) == CKF_RW_SESSION );
+
+
+// LCA: Token inserted?
+    checkTokenInsertion( );
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+
+    // if admin is logged we can not open R/O session because R/O session is not allowed for SO
+    if( administratorIsAuthenticated( ) && !bIsReadWrite ) {
+
+        throw PKCS11Exception( CKR_SESSION_READ_WRITE_SO_EXISTS );
+    }
+
+    // Create the session
+    *phSession = addSession( bIsReadWrite );
+}
+
+
+/*
+*/
+void Slot::closeAllSessions( void ) {
+
+    try {
+
+        // The user or SO must be desauthenticated
+        if( isAuthenticated( ) || administratorIsAuthenticated( ) ) {
+        
+            if( m_Device.get( ) && m_Device->isSmartCardPresent( ) ) {
+
+                if( m_Token.get( ) ) {
+
+                    m_Token->logout( );
+                }
+            }
+        }
+
+    } catch( ... ) { }
+
+    m_Sessions.clear( );
+
+    //m_SessionState = CKS_RO_PUBLIC_SESSION;
+    m_ulUserType = CK_UNAVAILABLE_INFORMATION;
+}
+
+
+/*
+*/
+void Slot::closeSession( const CK_SESSION_HANDLE& a_hSession ) {
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    getSession( a_hSession );
+
+    m_Sessions.erase( a_hSession );
+
+    try {
+
+        // Last session ? The user or SO must be desauthenticated
+        if( !m_Sessions.size( ) && ( isAuthenticated( ) || administratorIsAuthenticated( ) ) ) {
+
+            m_Token->logout( );
+
+            //m_SessionState = CKS_RO_PUBLIC_SESSION;
+
+            m_ulUserType = CK_UNAVAILABLE_INFORMATION;
+        }
+
+    } catch( MiniDriverException& x ) {
+
+        Log::error( "Slot::closeSession", "MiniDriverException" );
+        throw PKCS11Exception( Token::checkException( x ) );
+
+    } catch( PKCS11Exception& ) {
+
+        throw;
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+}
+
+
+/*
+*/
+void Slot::getSessionInfo( const CK_SESSION_HANDLE& a_hSession, CK_SESSION_INFO_PTR a_pInfo ) {
+
+    Session* s = getSession( a_hSession );
+
+    // Return the session information
+    unsigned char ucDeviceID = 0xFF;
+
+    if( !m_Device.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    try {
+
+        ucDeviceID = m_Device->getDeviceID( );
+
+    } catch( MiniDriverException& x ) {
+
+        Log::error( "Slot::getSessionInfo", "MiniDriverException" );
+        throw PKCS11Exception( Token::checkException( x ) );
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    a_pInfo->slotID = ucDeviceID;
+
+    //// Lead Firefox to crash when it is called from the "Certificate Manager"
+    //// when the smart card was previously logged in by Firefox but is now logged 
+    //// out by another application than Firefox:
+    //// Check that the user is still logged in
+    if( m_ulUserType == CKU_USER ) {
+
+        if ( m_Device.get( ) && !m_Device->isAuthenticated( ) ) {
+        
+            m_ulUserType = CK_UNAVAILABLE_INFORMATION;
+
+            // Update the state of all sessions because write access is no more allowed
+            updateAllSessionsState( );
+        }
+    }
+
+    a_pInfo->state = s->getState( );
+
+    a_pInfo->flags = s->getFlags( );
+
+    a_pInfo->ulDeviceError = CKR_OK;
+}
+
+
+/*
+*/
+void Slot::login( const CK_SESSION_HANDLE& a_hSession, const CK_USER_TYPE& a_UserType, CK_UTF8CHAR_PTR a_pPin, const CK_ULONG& a_ulPinLen ) {
+
+    if( !m_Token.get(  ) || !m_Device.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    Session* s = getSession( a_hSession );
+
+    try {
+
+        // The smart card is configured in "no pin" mode
+        if( m_Device->isNoPin( ) && !administratorIsAuthenticated( ) ) {
+
+            //m_SessionState = s->isReadWrite( ) ? ( ( CKU_USER == a_UserType ) ? CKS_RW_USER_FUNCTIONS : CKS_RW_SO_FUNCTIONS ) : ( ( CKU_USER == a_UserType ) ? CKS_RO_USER_FUNCTIONS : CKS_RW_SO_FUNCTIONS );
+
+            m_ulUserType = a_UserType;
+
+            updateAllSessionsState( );
+
+            return;
+        }
+
+        // The smart card is configured in "sso" mode and the end-user is already logged in
+        if( m_Device->isSSO( ) && isAuthenticated( ) ) {
+
+            m_ulUserType = a_UserType;
+
+            updateAllSessionsState( );
+
+            return;
+        }
+
+    } catch( MiniDriverException& x ) {
+
+        Log::error( "Slot::login", "MiniDriverException" );
+        throw PKCS11Exception( Token::checkException( x ) );
+    }
+
+    // The SO wants to log in but a session exists
+    if( ( CKU_SO == a_UserType ) && hasReadOnlySession( ) ) {
+
+        throw PKCS11Exception( CKR_SESSION_READ_ONLY_EXISTS );
+    }
+
+    CK_ULONG ulPinLen = a_ulPinLen;
+
+    if( !a_pPin ) {
+
+        ulPinLen = 0;
+    }
+
+    Marshaller::u1Array pPin( a_ulPinLen );
+
+    pPin.SetBuffer( a_pPin );
+
+    try {
+
+        m_Token->login( a_UserType, &pPin );
+
+    } catch( PKCS11Exception& ) {
+
+        throw;
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    if( CKU_SO == a_UserType ) {
+
+        // cache SO PIN for the duration of this session        
+        if( s ) {
+
+            s->setPinSO( pPin );
+        }
+    }
+
+    m_ulUserType = a_UserType;
+
+    // Update the state of all sessions because write access is now allowed
+    updateAllSessionsState( );
+}
+
+
+/*
+*/
+void Slot::logout( const CK_SESSION_HANDLE& a_hSession ) {
+
+    if( !m_Device.get( ) || !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    getSession( a_hSession );
+
+    try {
+
+        // Log out from the smart card
+        m_Token->logout( );
+
+    } catch( MiniDriverException& x ) {
+
+        Log::error( "Slot::closeSession", "MiniDriverException" );
+        throw PKCS11Exception( Token::checkException( x ) );
+
+    } catch( PKCS11Exception& ) {
+
+        throw;
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    m_ulUserType = CK_UNAVAILABLE_INFORMATION;
+
+    // Analyse the current stae of the smart card to consider the slot as connected or not
+    if( m_Device->isNoPin( ) || ( m_Device->isSSO( ) && m_Device->isAuthenticated( ) ) ) {
+
+        m_ulUserType = CKU_USER;
+    }
+
+    // Update the state of all sessions because write access is no more allowed
+    updateAllSessionsState( );
+}
+
+
+/*
+*/
+void Slot::updateAllSessionsState( void ) {
+
+    //CK_ULONG ulRole = CK_UNAVAILABLE_INFORMATION;
+    //
+    //    if( isAuthenticated( ) ) {
+
+    //        ulRole = CKU_USER;
+
+    //    } else if( administratorIsAuthenticated( ) ) {
+
+    //        ulRole = CKU_SO;
+    //    }
+
+    BOOST_FOREACH( const MAP_SESSIONS::value_type& i, m_Sessions ) {
+
+        if( i.second ) {
+
+            i.second->updateState( m_ulUserType );
+        }
+    }
+}
+
+
+/*
+*/
+void Slot::initPIN( const CK_SESSION_HANDLE& a_hSession, CK_UTF8CHAR_PTR a_pPin, const CK_ULONG& a_ulPinLen ) {
+
+    Session* s = getSession( a_hSession );
+
+    if( CKS_RW_SO_FUNCTIONS != s->getState( ) ) {
+
+        throw PKCS11Exception( CKR_USER_NOT_LOGGED_IN );
+    }
+
+    Marshaller::u1Array p( a_ulPinLen );
+    p.SetBuffer( a_pPin );
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    try {
+
+        m_Token->initPIN( s->getPinSO( ), &p );
+
+    } catch( PKCS11Exception& x ) {
+
+        checkAccessException( x );
+
+        throw;
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+}
+
+
+/*
+*/
+void Slot::setPIN( const CK_SESSION_HANDLE& a_hSession, CK_UTF8CHAR_PTR a_pOldPin, const CK_ULONG& a_ulOldLen, CK_UTF8CHAR_PTR a_pNewPin, const CK_ULONG& a_ulNewLen ) {
+
+    Session* s = getSession( a_hSession );
+
+    CK_ULONG ulState = s->getState( );
+
+    if( ( CKS_RW_PUBLIC_SESSION != ulState ) && ( CKS_RW_SO_FUNCTIONS != ulState ) && ( CKS_RW_USER_FUNCTIONS != ulState ) ) {
+
+        throw PKCS11Exception( CKR_SESSION_READ_ONLY );
+    }
+
+    Marshaller::u1Array o( a_ulOldLen );
+    o.SetBuffer( a_pOldPin );
+
+    Marshaller::u1Array n( a_ulNewLen );
+    n.SetBuffer( a_pNewPin );
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    try {
+
+        m_Token->setPIN( &o, &n );
+
+    } catch( MiniDriverException& x ) {
+
+        Log::error( "Slot::closeSession", "MiniDriverException" );
+        throw PKCS11Exception( Token::checkException( x ) );
+
+    } catch( PKCS11Exception& x ) {
+
+        checkAccessException( x );
+
+        throw;
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+}
+
+
+/*
+*/
+void Slot::findObjectsInit( const CK_SESSION_HANDLE& a_hSession, CK_ATTRIBUTE_PTR a_pTemplate, const CK_ULONG& a_ulCount ) {
+
+    Session* s = getSession( a_hSession );
+
+    // check if search is active for this session or not
+    if( s->isSearchActive( ) ) {
+
+        throw PKCS11Exception( CKR_OPERATION_ACTIVE );
+    }
+
+    Template* searchTmpl = NULL_PTR;
+
+    if( a_ulCount ) {
+
+        searchTmpl = new Template( a_pTemplate, a_ulCount );
+    }
+
+    s->removeSearchTemplate( );
+
+    s->setSearchTemplate( searchTmpl );
+
+    if( !m_Token ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    try {
+
+        m_Token->findObjectsInit( );
+
+    } catch( MiniDriverException& x ) {
+
+        Log::error( "Slot::closeSession", "MiniDriverException" );
+        throw PKCS11Exception( Token::checkException( x ) );
+
+    } catch( PKCS11Exception& x ) {
+
+        checkAccessException( x );
+
+        throw;
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+}
+
+
+/*
+*/
+void Slot::findObjects( const CK_SESSION_HANDLE& a_hSession, CK_OBJECT_HANDLE_PTR a_phObject, const CK_ULONG& a_ulMaxObjectCount, CK_ULONG_PTR a_pulObjectCount ) {
+
+    Session* s = getSession( a_hSession );
+
+    // check if search is active for this session or not
+    if( !s->isSearchActive( )  ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    *a_pulObjectCount = 0;
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    try {
+
+        // Find the token objects matching the template
+        m_Token->findObjects( s, a_phObject, a_ulMaxObjectCount, a_pulObjectCount );
+
+    } catch( MiniDriverException& x ) {
+
+        throw PKCS11Exception( Token::checkException( x ) );
+
+    } catch( PKCS11Exception& x ) {
+
+        checkAccessException( x );
+
+        throw;
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    // Find the session objects matching the template
+    s->findObjects( a_phObject, a_ulMaxObjectCount, a_pulObjectCount );
+}
+
+
+/*
+*/
+void Slot::findObjectsFinal( const CK_SESSION_HANDLE& a_hSession ) {
+
+    Session* s = getSession( a_hSession );
+
+    // check if search is active for this session or not
+    if( !s->isSearchActive( )  ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    s->removeSearchTemplate( );
+}
+
+
+/*
+*/
+void Slot::createObject( const CK_SESSION_HANDLE& a_hSession, CK_ATTRIBUTE_PTR a_pTemplate, const CK_ULONG& a_ulCount, CK_OBJECT_HANDLE_PTR a_phObject ) {
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    // Check template consistency
+    Template t;
+    t.checkTemplate( a_pTemplate, a_ulCount, Template::MODE_CREATE );
+
+    bool bIsToken = t.isToken( a_pTemplate, a_ulCount );
+
+    // if this is a readonly session and user is not logged 
+    // then only public session objects can be created
+    Session* s = getSession( a_hSession );
+
+    if( !s->isReadWrite( ) && bIsToken ) {
+
+        throw PKCS11Exception( CKR_SESSION_READ_ONLY );
+    }
+
+    StorageObject* o = 0;
+
+    CK_ULONG ulClass = t.getClass( a_pTemplate, a_ulCount );
+
+    switch( ulClass ) {
+
+    case CKO_DATA:
+        o = new DataObject( );
+        break;
+
+    case CKO_PUBLIC_KEY:
+        o = new Pkcs11ObjectKeyPublicRSA( );
+        break;
+
+    case CKO_PRIVATE_KEY:
+        o = new RSAPrivateKeyObject( );
+        break;
+
+    case CKO_CERTIFICATE:
+        o = new X509PubKeyCertObject( );
+        break;
+
+    default:
+        throw PKCS11Exception( CKR_ATTRIBUTE_TYPE_INVALID );
+    }
+
+    for( CK_BYTE idx = 0; idx < a_ulCount; ++idx ) {
+
+        o->setAttribute( a_pTemplate[ idx ], true );
+    }
+
+    switch( ulClass ) {
+
+    case CKO_PUBLIC_KEY:
+        if(((Pkcs11ObjectKeyPublicRSA*)o)->_keyType != CKK_RSA) {
+
+            throw PKCS11Exception( CKR_KEY_TYPE_INCONSISTENT );
+        }
+        break;
+
+    case CKO_PRIVATE_KEY:
+        if(((RSAPrivateKeyObject*)o)->_keyType != CKK_RSA) {
+
+            throw PKCS11Exception( CKR_KEY_TYPE_INCONSISTENT );
+        }
+        break;
+    }
+
+    if( bIsToken ) {
+
+        switch( ulClass ) {
 
         case CKO_PUBLIC_KEY:
-           object = auto_ptr<StorageObject>(new RSAPublicKeyObject());
-           break;
+            m_Token->addObjectPublicKey( (Pkcs11ObjectKeyPublicRSA*)o, a_phObject );
+            break;
 
         case CKO_PRIVATE_KEY:
-           object = auto_ptr<StorageObject>(new RSAPrivateKeyObject());
-           break;
+            m_Token->addObjectPrivateKey( (RSAPrivateKeyObject*)o, a_phObject );
+            break;
 
         case CKO_CERTIFICATE:
-           object = auto_ptr<StorageObject>(new X509PubKeyCertObject());
-           break;
+            m_Token->addObjectCertificate( (X509PubKeyCertObject*)o, a_phObject );
+            break;
 
         default:
-           PKCS11_ASSERT(CK_FALSE);
-           break;
-   }
+            m_Token->addObject( o, a_phObject );
+            break;
+        }
 
-   CK_BBOOL objCreationFailed = CK_FALSE;
-   CK_BYTE idx;
-   for(idx = 0; idx < ulCount; idx++)
-   {
-      if((rv = object->SetAttribute(pTemplate[idx],CK_TRUE)) != CKR_OK){
-         objCreationFailed = CK_TRUE;
-         break;
-      }
-   }
+    } else {
 
-   if(objCreationFailed)
-   {
-      return rv;
-   }
-
-   switch(object->_class)
-   {
-        case CKO_PUBLIC_KEY:
-           if(((RSAPublicKeyObject*)object.get())->_keyType != CKK_RSA)
-           {
-              return CKR_KEY_TYPE_INCONSISTENT;
-           }
-           break;
-
-        case CKO_PRIVATE_KEY:
-           if(((RSAPrivateKeyObject*)object.get())->_keyType != CKK_RSA)
-           {
-              return CKR_KEY_TYPE_INCONSISTENT;
-           }
-           break;
-   }
-
-   Session* session = pSlot->_sessions[ hSessionId ];
-
-   // if this is a readonly session and
-   // user is not logged then only public session objects
-   // can be created
-   if(session->_isReadWrite == CK_FALSE)
-   {
-      if(object->_tokenObject)
-      {
-         return CKR_SESSION_READ_ONLY;
-      }
-   }
-
-   if( CK_TRUE == object->_private )
-   {
-      if( false == pSlot->_token->m_bIsNoPinSupported )
-      {
-         if(   ( CKU_USER != pSlot->_token->_roleLogged )
-            && ( ( true == pSlot->_token->m_bIsSSO ) && ( false == pSlot->_token->isAuthenticated( ) ) )
-            )
-         {
-            return CKR_USER_NOT_LOGGED_IN;
-         }
-      }
-   }
-   /*if ((pSlot->_token->_roleLogged != CKU_USER) && (object->_private == CK_TRUE))
-   {
-      return CKR_USER_NOT_LOGGED_IN;
-   }
-   */
-
-   if(object->_tokenObject)
-   {
-
-      // any type of token object cannot be created
-      // unless user is logged in
-
-      // NOTE : Not PKCS#11 compilance
-      // CardModule service does not allow 'deletion' of any file unless user is logged in. We can create a file
-      // when nobody is logged in but we can not delete. In order to be symmetrical we do not also allow
-      // the creation.
-      if( false == pSlot->_token->m_bIsNoPinSupported )
-      {
-         if(   ( CKU_USER != pSlot->_token->_roleLogged )
-            && ( ( true == pSlot->_token->m_bIsSSO ) && ( false == pSlot->_token->isAuthenticated( ) ) )
-            )
-         {
-            return CKR_USER_NOT_LOGGED_IN;
-         }
-      }
-
-      // some sanity checks
-      if(object->_class == CKO_PRIVATE_KEY)
-      {
-         rv = pSlot->_token->AddPrivateKeyObject(object, phObject);
-      }
-      else if(object->_class == CKO_CERTIFICATE)
-      {
-         rv = pSlot->_token->AddCertificateObject(object, phObject);
-      }
-      else
-      {
-         rv = pSlot->_token->AddObject(object, phObject);
-      }
-   }
-   else
-   {
-      rv = session->AddObject(object.get(),phObject);
-      if(rv == CKR_OK)
-         object.release();
-   }
-
-   //printf( "\nSlot::CreateObject - ManageGC( true )\n" );
-    pSlot->_token->ManageGC( true );
-
-   return rv;
-}
-
-
-
-CK_RV Slot::DestroyObject(CK_SESSION_HANDLE hSession,CK_OBJECT_HANDLE hObject)
-{
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-   checkConnection( pSlot );
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   Session* session = pSlot->_sessions[ hSessionId ];
-
-   // from object handle we can determine
-   // if it is a token object or session object
-   CK_BBOOL istoken = ((hObject & CO_TOKEN_OBJECT) == CO_TOKEN_OBJECT);
-
-   // if this is a readonly session and
-   // user is not logged then only public session objects
-   // can be created
-   if(session->_isReadWrite == CK_FALSE)
-   {
-      if(istoken)
-      {
-         return CKR_SESSION_READ_ONLY;
-      }
-   }
-
-   if(istoken)
-   {
-      rv = pSlot->_token->DeleteObject(hObject);
-   }
-   else
-   {
-      rv = session->DeleteObject(hObject);
-   }
-
-   return rv;
+        s->addObject( o, a_phObject );
+    }
 }
 
 
 /*
 */
-CK_RV Slot::GetAttributeValue( CK_SESSION_HANDLE hSession,
-                               CK_OBJECT_HANDLE hObject,
-                               CK_ATTRIBUTE_PTR pTemplate,
-                               CK_ULONG ulCount )
-{
-   if(pTemplate == NULL_PTR || ulCount == 0)
-   {
-      return CKR_ARGUMENTS_BAD;
-   }
+void Slot::destroyObject( const CK_SESSION_HANDLE& a_hSession, const CK_OBJECT_HANDLE& a_hObject ) {
 
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-   checkConnection( pSlot );
+    if( !m_Token.get( ) ) {
 
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
 
-   Session* session = pSlot->_sessions[ hSessionId ];
+    Session* s = getSession( a_hSession );
 
-   // from object handle we can determine
-   // if it is a token object or session object
-   CK_BBOOL istoken = ((hObject & CO_TOKEN_OBJECT) == CO_TOKEN_OBJECT);
+    try {
 
-   // TBD : Attributes of types such as Array which have not be initialized ?
-   // for eg label
+        // from object handle we can determine if it is a token object or session object
+        if( m_Token->isToken( a_hObject ) ) {
 
-   if(istoken)
-   {
-      rv = pSlot->_token->GetAttributeValue(hObject,pTemplate,ulCount);
-   }
-   else
-   {
-      rv = session->GetAttributeValue(hObject,pTemplate,ulCount);
-   }
+            // if this is a readonly session and user is not logged then only public session objects can be created
+            if( !s->isReadWrite( ) ) {
 
-   return rv;
-}
-
-
-/*
-*/
-CK_RV Slot::SetAttributeValue( CK_SESSION_HANDLE hSession, CK_OBJECT_HANDLE hObject, CK_ATTRIBUTE_PTR pTemplate, CK_ULONG ulCount )
-{
-   if(pTemplate == NULL_PTR || ulCount == 0)
-   {
-      return CKR_ARGUMENTS_BAD;
-   }
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-  if(rv != CKR_OK)
-   {
-      return rv;
-   }
-   checkConnection( pSlot );
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   Session* pSession = pSlot->_sessions[ hSessionId ];
-
-   // From object handle we can determine if it is a token object or session object
-   CK_BBOOL istoken = ( ( hObject & CO_TOKEN_OBJECT ) == CO_TOKEN_OBJECT );
-   if( TRUE == istoken )
-   {
-      if( CK_FALSE == pSession->_isReadWrite )
-      {
-         return CKR_SESSION_READ_ONLY;
-      }
-
-      rv = pSlot->_token->SetAttributeValue( hObject, pTemplate, ulCount );
-   }
-   else
-   {
-      rv = pSession->SetAttributeValue( hObject, pTemplate, ulCount );
-   }
-
-   return rv;
-}
-
-
-CK_RV Slot::GenerateKeyPair(CK_SESSION_HANDLE hSession,CK_MECHANISM_PTR pMechanism,CK_ATTRIBUTE_PTR pPublicKeyTemplate,
-                            CK_ULONG ulPublicKeyAttributeCount,CK_ATTRIBUTE_PTR pPrivateKeyTemplate,CK_ULONG ulPrivateKeyAttributeCount,
-                            CK_OBJECT_HANDLE_PTR phPublicKey,CK_OBJECT_HANDLE_PTR phPrivateKey)
-{
-   // Since MODULUS_BITS is an essential attribute pPublicKeyTemplate should never be NULL or ulPublicKeyAttributeCount
-   // should not be zero. For private key template there is not compuslary attributes to be specified so it can be
-   // NULL_PTR
-
-   if((pMechanism == NULL_PTR) || (pPublicKeyTemplate == NULL_PTR) ||
-      (ulPublicKeyAttributeCount == 0) || (phPublicKey == NULL_PTR) ||
-      (phPrivateKey == NULL_PTR))
-   {
-      return CKR_ARGUMENTS_BAD;
-   }
-
-   if(pMechanism->mechanism != CKM_RSA_PKCS_KEY_PAIR_GEN)
-      return CKR_MECHANISM_INVALID;
-
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-   checkConnection( pSlot );
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   //Session* session = pSlot->_sessions[ hSessionId ];
-
-   // Check Public Template Consitency
-   rv = Template::CheckTemplate(pPublicKeyTemplate, ulPublicKeyAttributeCount, MODE_GENERATE_PUB);
-   if (rv != CKR_OK)
-      return rv;
-
-   // Check Private Template Consitency
-   rv = Template::CheckTemplate(pPrivateKeyTemplate, ulPrivateKeyAttributeCount, MODE_GENERATE_PRIV);
-   if (rv != CKR_OK)
-      return rv;
-
-   auto_ptr<StorageObject> rsaPubKey(new RSAPublicKeyObject());
-   for(u4 i=0;i<ulPublicKeyAttributeCount;i++){
-      rv = rsaPubKey->SetAttribute(pPublicKeyTemplate[i],CK_TRUE);
-      if(rv != CKR_OK){
-         return rv;
-      }
-   }
-
-   auto_ptr<StorageObject> rsaPrivKey(new RSAPrivateKeyObject());
-   for(u4 i=0;i<ulPrivateKeyAttributeCount;i++){
-      rv = rsaPrivKey->SetAttribute(pPrivateKeyTemplate[i],CK_TRUE);
-      if(rv != CKR_OK){
-         return rv;
-      }
-   }
-
-   if(rsaPrivKey->_tokenObject){
-      rv = pSlot->_token->GenerateKeyPair(rsaPubKey,rsaPrivKey,phPublicKey,phPrivateKey);
-   }else{
-
-      // We do not support generation of key pair in the software
-      // TBD: Should we ?. I have noticed that during the import of
-      // p12 file using firefox it asks you to generate it in session
-
-      return CKR_ATTRIBUTE_VALUE_INVALID;
-   }
-
-   if(rv == CKR_OK)
-   {
-      if(rsaPubKey.get() && !rsaPubKey->_tokenObject)
-      {
-         pSlot->_sessions[ hSessionId ]->AddObject(rsaPubKey.get(),phPublicKey);
-         rsaPubKey.release();
-      }
-   }
-   return rv;
-}
-
-// ------------------------------------------------------------------------------------------------
-//                                  DIGEST RELATED FUNCTIONS
-// ------------------------------------------------------------------------------------------------
-CK_RV Slot::DigestInit(CK_SESSION_HANDLE hSession,CK_MECHANISM_PTR pMechanism)
-{
-   if(pMechanism == NULL_PTR)
-   {
-      return CKR_ARGUMENTS_BAD;
-   }
-
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-   checkConnection( pSlot );
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   // Not needed
-   Transaction trans( pSlot );
-
-   Session* session = pSlot->_sessions[ hSessionId ];
-
-   if(session->IsDigestActive()){
-      return CKR_OPERATION_ACTIVE;
-   }
-
-   switch(pMechanism->mechanism){
-
-        case CKM_SHA_1:
-           session->SetDigest(new CSHA1());
-           break;
-
-        case CKM_SHA256:
-           session->SetDigest(new CSHA256());
-           break;
-
-        case CKM_MD5:
-           session->SetDigest(new CMD5());
-           break;
-
-        default:
-           return CKR_MECHANISM_INVALID;
-
-   }
-
-   return rv;
-}
-
-
-/*
-*/
-CK_RV Slot::Digest(CK_SESSION_HANDLE hSession,CK_BYTE_PTR pData,CK_ULONG ulDataLen,
-                   CK_BYTE_PTR pDigest,CK_ULONG_PTR pulDigestLen)
-{
-   if((pData == NULL_PTR) || (ulDataLen == 0) || (pulDigestLen == NULL_PTR)){
-      return CKR_ARGUMENTS_BAD;
-   }
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-   checkConnection( pSlot );
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   Session* session = pSlot->_sessions[ hSessionId ];
-
-
-   if(session->IsDigestActive() == CK_FALSE){
-      return CKR_OPERATION_NOT_INITIALIZED;
-   }
-
-   CDigest* digest = session->_digest;
-
-   if((*pulDigestLen < (CK_ULONG)digest->HashLength()) && (pDigest != NULL_PTR)){
-      *pulDigestLen = (CK_ULONG)digest->HashLength();
-      return CKR_BUFFER_TOO_SMALL;
-   }
-   else if(!pDigest){
-      *pulDigestLen = digest->HashLength();
-      return CKR_OK;
-   }
-
-   digest->HashCore(pData, 0, ulDataLen);
-
-   *pulDigestLen = (CK_ULONG)digest->HashLength();
-
-   if (pDigest != NULL_PTR)
-   {
-      digest->HashFinal(pDigest);
-      session->RemoveDigest();
-   }
-
-   return rv;
-}
-
-
-/*
-*/
-CK_RV Slot::DigestUpdate(CK_SESSION_HANDLE hSession,CK_BYTE_PTR pPart,CK_ULONG ulPartLen)
-{
-   if(pPart == NULL_PTR || ulPartLen == 0)
-   {
-      return CKR_ARGUMENTS_BAD;
-   }
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-   checkConnection( pSlot );
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   Session* session = pSlot->_sessions[ hSessionId ];
-
-
-   if(session->IsDigestActive() == CK_FALSE)
-   {
-      return CKR_OPERATION_NOT_INITIALIZED;
-   }
-
-   session->_digest->HashCore(pPart,0,ulPartLen);
-
-   return rv;
-}
-
-
-/*
-*/
-CK_RV Slot::DigestFinal(CK_SESSION_HANDLE hSession,CK_BYTE_PTR pDigest,CK_ULONG_PTR pulDigestLen)
-{
-   if(pulDigestLen == NULL_PTR)
-   {
-      return CKR_ARGUMENTS_BAD;
-   }
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-   checkConnection( pSlot );
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   Session* session = pSlot->_sessions[ hSessionId ];
-
-   if(session->IsDigestActive() == CK_FALSE){
-      return CKR_OPERATION_NOT_INITIALIZED;
-   }
-
-   CDigest*    digest   = session->_digest;
-
-   if((*pulDigestLen < (CK_ULONG)digest->HashLength()) && (pDigest != NULL_PTR)){
-      *pulDigestLen = (CK_ULONG)digest->HashLength();
-      return CKR_BUFFER_TOO_SMALL;
-   }
-   else if(!pDigest){
-      *pulDigestLen = digest->HashLength();
-      return CKR_OK;
-   }
-
-   *pulDigestLen = (CK_ULONG)digest->HashLength();
-
-   if (pDigest != NULL_PTR){
-      digest->HashFinal(pDigest);
-      session->RemoveDigest();
-   }
-
-   return rv;
-}
-
-// ------------------------------------------------------------------------------------------------
-//                                  SIGNATURE RELATED FUNCTIONS
-// ------------------------------------------------------------------------------------------------
-CK_RV Slot::SignInit(CK_SESSION_HANDLE hSession,CK_MECHANISM_PTR pMechanism,CK_OBJECT_HANDLE hKey)
-{
-   if(pMechanism == NULL_PTR){
-      return CKR_ARGUMENTS_BAD;
-   }
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-   checkConnection( pSlot );
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   Session* session = pSlot->_sessions[ hSessionId ];
-
-   if(session->IsSignatureActive() == CK_TRUE){
-      return CKR_OPERATION_ACTIVE;
-   }
-
-   rv = Slot::IsValidMechanism(pMechanism->mechanism,CKF_SIGN);
-
-   if(rv != CKR_OK){
-      return rv;
-   }
-
-   if( false == pSlot->_token->m_bIsNoPinSupported )
-   {
-      if(   ( CKU_USER != pSlot->_token->_roleLogged )
-         && ( ( true == pSlot->_token->m_bIsSSO ) && ( false == pSlot->_token->isAuthenticated( ) ) )
-         )
-      {
-         return CKR_USER_NOT_LOGGED_IN;
-      }
-   }
-   //if(pSlot->_token->_roleLogged != CKU_USER)
-   //{
-   //   return CKR_USER_NOT_LOGGED_IN;
-   //}
-
-   // get the corresponding object
-   StorageObject* object = NULL_PTR;
-
-   // from object handle we can determine
-   // if it is a token object or session object
-   CK_BBOOL istoken = ((hKey & CO_TOKEN_OBJECT) == CO_TOKEN_OBJECT);
-
-   if(istoken){
-      rv = pSlot->_token->GetObject(hKey,&object);
-   }else{
-      rv = session->GetObject(hKey,&object);
-   }
-
-   if(rv != CKR_OK){
-
-      if(rv == CKR_OBJECT_HANDLE_INVALID){
-         return CKR_KEY_HANDLE_INVALID;
-      }
-
-      return rv;
-   }
-
-   rv = Slot::IsValidCryptoOperation(object,CKF_SIGN);
-
-   if(rv != CKR_OK){
-      return rv;
-   }
-
-   // let's initialize this crypto operation
-   session->SetSignatureOperation(new CryptoOperation(pMechanism->mechanism,object));
-
-   if(pMechanism->mechanism == CKM_SHA1_RSA_PKCS){
-      session->SetDigestRSA(new CSHA1());
-   }else if(pMechanism->mechanism == CKM_SHA256_RSA_PKCS){
-      session->SetDigestRSA(new CSHA256());
-   }else if(pMechanism->mechanism == CKM_MD5_RSA_PKCS){
-      session->SetDigestRSA(new CMD5());
-   }
-
-   return rv;
-}
-
-
-
-CK_RV Slot::Sign(CK_SESSION_HANDLE hSession,CK_BYTE_PTR pData,CK_ULONG ulDataLen,
-                 CK_BYTE_PTR pSignature,CK_ULONG_PTR pulSignatureLen)
-{
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-   checkConnection( pSlot );
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   Session* session = pSlot->_sessions[ hSessionId ];
-
-
-   if(session->IsSignatureActive() == CK_FALSE){
-      return CKR_OPERATION_NOT_INITIALIZED;
-   }
-
-   if(pData == NULL_PTR || ulDataLen == 0 || pulSignatureLen == NULL_PTR){
-      return CKR_ARGUMENTS_BAD;
-   }
-
-   StorageObject* object = session->_signature->GetObject();
-
-   PKCS11_ASSERT(object->_class == CKO_PRIVATE_KEY);
-
-   CK_ULONG mechanism = session->_signature->GetMechanism();
-
-   // TBD : Private key may not necessarily have the modulus or modulus bits
-   // if that is the case then we need to locate the corresponding public key
-   // or may be I should always put the modulus bits in private key attributes
-
-   u1Array* modulus = ((RSAPrivateKeyObject*)object)->_modulus;
-
-   PKCS11_ASSERT(modulus != NULL_PTR);
-
-   if(((mechanism == CKM_RSA_PKCS) && (ulDataLen > modulus->GetLength() - 11)) ||
-      ((mechanism == CKM_RSA_X_509) && (ulDataLen > modulus->GetLength())))
-   {
-      return CKR_DATA_LEN_RANGE;
-   }
-
-   if(pSignature == NULL_PTR){
-      *pulSignatureLen = modulus->GetLength();
-      return CKR_OK;
-   }else{
-      if(*pulSignatureLen < modulus->GetLength()){
-         *pulSignatureLen = modulus->GetLength();
-         return CKR_BUFFER_TOO_SMALL;
-      }
-   }
-
-   u1Array* dataToSign = NULL_PTR;
-
-   if(session->IsDigestRSAActive() == CK_TRUE){
-      // require hashing also
-      CK_BYTE_PTR hash   = NULL_PTR;
-      CDigest* digest = session->_digestRSA;
-
-      hash = (CK_BYTE_PTR)malloc(digest->HashLength());
-
-      digest->HashCore(pData,0,ulDataLen);
-      digest->HashFinal(hash);
-
-      dataToSign  = new u1Array(digest->HashLength());
-      dataToSign->SetBuffer(hash);
-
-      free(hash);
-   }
-   // Sign Only
-   else {
-      dataToSign = new u1Array(ulDataLen);
-      dataToSign->SetBuffer(pData);
-   }
-
-   rv = pSlot->_token->Sign(session->_signature->GetObject(),dataToSign,session->_signature->GetMechanism(),pSignature);
-
-   if(rv == CKR_OK){
-      *pulSignatureLen = modulus->GetLength();
-   }
-
-   session->RemoveDigestRSA();
-   session->RemoveSignatureOperation();
-
-   delete dataToSign;
-
-   return rv;
-}
-
-
-
-CK_RV Slot::SignUpdate(CK_SESSION_HANDLE hSession, CK_BYTE_PTR pPart, CK_ULONG ulPartLen)
-{
-   // what we do here is to update the hash or
-   // if hashing is not getting used we just accumulate it
-
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-   checkConnection( pSlot );
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   Session* session = pSlot->_sessions[ hSessionId ];
-
-
-   if(session->IsSignatureActive() == CK_FALSE){
-      return CKR_OPERATION_NOT_INITIALIZED;
-   }
-
-   if(pPart == NULL_PTR || ulPartLen == 0){
-      return CKR_ARGUMENTS_BAD;
-   }
-
-   if(session->IsDigestRSAActive() == CK_TRUE){
-      CDigest* digest = session->_digestRSA;
-      digest->HashCore(pPart,0,ulPartLen);
-   }
-   // Sign Only
-   else {
-
-      if(session->_accumulatedDataToSign != NULL_PTR){
-         // just accumulate the data
-         u1Array* updatedData = new u1Array(session->_accumulatedDataToSign->GetLength() + ulPartLen);
-         memcpy(updatedData->GetBuffer(),session->_accumulatedDataToSign->GetBuffer(),session->_accumulatedDataToSign->GetLength());
-
-         memcpy((u1*)&updatedData->GetBuffer()[session->_accumulatedDataToSign->GetLength()],pPart,ulPartLen);
-
-         delete session->_accumulatedDataToSign;
-
-         session->_accumulatedDataToSign = updatedData;
-      }else{
-
-         session->_accumulatedDataToSign = new u1Array(ulPartLen);
-         session->_accumulatedDataToSign->SetBuffer(pPart);
-      }
-
-      CK_ULONG mech = session->_signature->GetMechanism();
-      u1Array* modulus = ((RSAPrivateKeyObject*)session->_signature->GetObject())->_modulus;
-
-      if(((mech == CKM_RSA_PKCS) && (session->_accumulatedDataToSign->GetLength() > modulus->GetLength() - 11)) ||
-         ((mech == CKM_RSA_X_509) && (session->_accumulatedDataToSign->GetLength() > modulus->GetLength())))
-      {
-         return CKR_DATA_LEN_RANGE;
-      }
-   }
-
-   return rv;
-}
-
-
-/*
-*/
-CK_RV Slot::SignFinal(CK_SESSION_HANDLE hSession,CK_BYTE_PTR pSignature,CK_ULONG_PTR pulSignatureLen)
-{
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-   checkConnection( pSlot );
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   Session* session = pSlot->_sessions[ hSessionId ];
-
-
-   if(session->IsSignatureActive() == CK_FALSE){
-      return CKR_OPERATION_NOT_INITIALIZED;
-   }
-
-   if(pulSignatureLen == NULL_PTR){
-      return CKR_ARGUMENTS_BAD;
-   }
-
-   StorageObject* object = session->_signature->GetObject();
-
-   PKCS11_ASSERT(object->_class == CKO_PRIVATE_KEY);
-
-
-   // TBD : Private key may not necessarily have the modulus or modulus bits
-   // if that is the case then we need to locate the corresponding public key
-   // or may be I should always put the modulus bits in private key attributes
-
-   u1Array* modulus = ((RSAPrivateKeyObject*)object)->_modulus;
-
-   PKCS11_ASSERT(modulus != NULL_PTR);
-
-   if(pSignature == NULL_PTR){
-      *pulSignatureLen = modulus->GetLength();
-      return CKR_OK;
-   }else{
-      if(*pulSignatureLen < modulus->GetLength()){
-         *pulSignatureLen = modulus->GetLength();
-         return CKR_BUFFER_TOO_SMALL;
-      }
-   }
-
-   u1Array* dataToSign = NULL_PTR;
-
-   if(session->IsDigestRSAActive() == CK_TRUE){
-      // require hashing also
-      CK_BYTE_PTR hash   = NULL_PTR;
-      CDigest* digest = session->_digestRSA;
-
-      hash = (CK_BYTE_PTR)malloc(digest->HashLength());
-
-      digest->HashFinal(hash);
-
-      dataToSign  = new u1Array(digest->HashLength());
-      dataToSign->SetBuffer(hash);
-
-      free(hash);
-   }
-   // Sign Only
-   else {
-      dataToSign = session->_accumulatedDataToSign;
-   }
-
-   rv = pSlot->_token->Sign(session->_signature->GetObject(),dataToSign,session->_signature->GetMechanism(),pSignature);
-
-   if(rv == CKR_OK){
-      *pulSignatureLen = modulus->GetLength();
-   }
-
-   session->RemoveDigestRSA();
-   session->RemoveSignatureOperation();
-
-   delete dataToSign;
-   session->_accumulatedDataToSign = NULL_PTR;
-
-   return rv;
-}
-
-
-
-CK_RV Slot::EncryptInit(CK_SESSION_HANDLE hSession,CK_MECHANISM_PTR pMechanism,CK_OBJECT_HANDLE hKey)
-{
-   if(pMechanism == NULL_PTR){
-      return CKR_ARGUMENTS_BAD;
-   }
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-   checkConnection( pSlot );
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   Session* session = pSlot->_sessions[ hSessionId ];
-
-
-   if(session->IsEncryptionActive() == CK_TRUE){
-      return CKR_OPERATION_ACTIVE;
-   }
-
-   rv = Slot::IsValidMechanism(pMechanism->mechanism,CKF_ENCRYPT);
-
-   if(rv != CKR_OK){
-      return rv;
-   }
-
-   if( false == pSlot->_token->m_bIsNoPinSupported )
-   {
-      if(   ( CKU_USER != pSlot->_token->_roleLogged )
-         && ( ( true == pSlot->_token->m_bIsSSO ) && ( false == pSlot->_token->isAuthenticated( ) ) )
-         )
-      {
-         return CKR_USER_NOT_LOGGED_IN;
-      }
-   }
-   //if(pSlot->_token->_roleLogged != CKU_USER)
-   //{
-   //   return CKR_USER_NOT_LOGGED_IN;
-   //}
-
-   // get the corresponding object
-   StorageObject* object = NULL_PTR;
-
-   // from object handle we can determine
-   // if it is a token object or session object
-   CK_BBOOL istoken = ((hKey & CO_TOKEN_OBJECT) == CO_TOKEN_OBJECT);
-
-   if(istoken){
-      rv = pSlot->_token->GetObject(hKey,&object);
-   }else{
-      rv = session->GetObject(hKey,&object);
-   }
-
-   if(rv != CKR_OK){
-      if(rv == CKR_OBJECT_HANDLE_INVALID){
-         return CKR_KEY_HANDLE_INVALID;
-      }
-
-      return rv;
-   }
-
-   rv = Slot::IsValidCryptoOperation(object,CKF_ENCRYPT);
-
-   if(rv != CKR_OK){
-      return rv;
-   }
-
-   // let's initialize this crypto operation
-   session->SetEncryptionOperation(new CryptoOperation(pMechanism->mechanism,object));
-
-   return rv;
-}
-
-
-/*
-*/
-CK_RV Slot::Encrypt(CK_SESSION_HANDLE hSession,CK_BYTE_PTR pData,CK_ULONG ulDataLen,
-                    CK_BYTE_PTR pEncryptedData,CK_ULONG_PTR pulEncryptedDataLen)
-{
-   if(pData == NULL_PTR || ulDataLen == 0 || pulEncryptedDataLen == NULL_PTR){
-      return CKR_ARGUMENTS_BAD;
-   }
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-    if(rv != CKR_OK)
-   {
-      return rv;
-   }
-  checkConnection( pSlot );
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   Session* session = pSlot->_sessions[ hSessionId ];
-
-
-   if(session->IsEncryptionActive() == CK_FALSE){
-      return CKR_OPERATION_NOT_INITIALIZED;
-   }
-
-   StorageObject* object = session->_encryption->GetObject();
-
-   PKCS11_ASSERT(object->_class == CKO_PUBLIC_KEY);
-
-   //CK_ULONG mechanism = session->_encryption->GetMechanism();
-
-   u1Array* modulus = ((RSAPublicKeyObject*)object)->_modulus;
-
-   PKCS11_ASSERT(modulus != NULL_PTR);
-
-   if(pEncryptedData == NULL_PTR){
-      *pulEncryptedDataLen = modulus->GetLength();
-      return CKR_OK;
-   }else{
-      if(*pulEncryptedDataLen < modulus->GetLength()){
-         *pulEncryptedDataLen = modulus->GetLength();
-         return CKR_BUFFER_TOO_SMALL;
-      }
-   }
-
-   u1Array* dataToEncrypt = new u1Array(ulDataLen);
-   dataToEncrypt->SetBuffer(pData);
-
-   rv = pSlot->_token->Encrypt(session->_encryption->GetObject(),dataToEncrypt,session->_encryption->GetMechanism(),pEncryptedData);
-
-   if(rv == CKR_OK){
-      *pulEncryptedDataLen = modulus->GetLength();
-   }
-
-   session->RemoveEncryptionOperation();
-
-   delete dataToEncrypt;
-
-   return rv;
-}
-
-
-/*
-*/
-CK_RV Slot::DecryptInit(CK_SESSION_HANDLE hSession,CK_MECHANISM_PTR pMechanism,CK_OBJECT_HANDLE hKey)
-{
-   if(pMechanism == NULL_PTR){
-      return CKR_ARGUMENTS_BAD;
-   }
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-   checkConnection( pSlot );
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   Session* session = pSlot->_sessions[ hSessionId ];
-
-
-   if(session->IsDecryptionActive() == CK_TRUE){
-      return CKR_OPERATION_ACTIVE;
-   }
-
-   rv = Slot::IsValidMechanism(pMechanism->mechanism,CKF_DECRYPT);
-
-   if(rv != CKR_OK){
-      return rv;
-   }
-
-   if( false == pSlot->_token->m_bIsNoPinSupported )
-   {
-      if(   ( CKU_USER != pSlot->_token->_roleLogged )
-         && ( ( true == pSlot->_token->m_bIsSSO ) && ( false == pSlot->_token->isAuthenticated( ) ) )
-         )
-      {
-         return CKR_USER_NOT_LOGGED_IN;
-      }
-   }
-   //if(pSlot->_token->_roleLogged != CKU_USER)
-   //{
-   //   return CKR_USER_NOT_LOGGED_IN;
-   //}
-
-   // get the corresponding object
-   StorageObject* object = NULL_PTR;
-
-   // from object handle we can determine
-   // if it is a token object or session object
-   CK_BBOOL istoken = ((hKey & CO_TOKEN_OBJECT) == CO_TOKEN_OBJECT);
-
-   if(istoken){
-      rv = pSlot->_token->GetObject(hKey,&object);
-   }else{
-      rv = session->GetObject(hKey,&object);
-   }
-
-   if(rv != CKR_OK){
-      if(rv == CKR_OBJECT_HANDLE_INVALID){
-         return CKR_KEY_HANDLE_INVALID;
-      }
-
-      return rv;
-   }
-
-   rv = Slot::IsValidCryptoOperation(object,CKF_DECRYPT);
-
-   if(rv != CKR_OK){
-      return rv;
-   }
-
-   // let's initialize this crypto operation
-   session->SetDecryptionOperation(new CryptoOperation(pMechanism->mechanism,object));
-
-   return rv;
-}
-
-
-/*
-*/
-CK_RV Slot::Decrypt(CK_SESSION_HANDLE hSession,CK_BYTE_PTR pEncryptedData,CK_ULONG ulEncryptedDataLen,
-                    CK_BYTE_PTR pData,CK_ULONG_PTR pulDataLen)
-{
-   if(pEncryptedData == NULL_PTR || ulEncryptedDataLen == 0 ||pulDataLen == NULL_PTR){
-      return CKR_ARGUMENTS_BAD;
-   }
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-   checkConnection( pSlot );
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   Session* session = pSlot->_sessions[ hSessionId ];
-
-
-   if(session->IsDecryptionActive() == CK_FALSE){
-      return CKR_OPERATION_NOT_INITIALIZED;
-   }
-
-   StorageObject* object = session->_decryption->GetObject();
-
-   PKCS11_ASSERT(object->_class == CKO_PRIVATE_KEY);
-
-   CK_ULONG mechanism = session->_decryption->GetMechanism();
-
-   // TBD : Private key may not necessarily have the modulus or modulus bits
-   // if that is the case then we need to locate the corresponding public key
-   // or may be I should always put the modulus bits in private key attributes
-
-   u1Array* modulus = ((RSAPrivateKeyObject*)object)->_modulus;
-
-   PKCS11_ASSERT(modulus != NULL_PTR);
-
-   // [HB]: Fix length of return value
-   if(mechanism == CKM_RSA_PKCS){
-      // Can't know exact size of returned value before decryption has been done
-      if(pData == NULL_PTR){
-         *pulDataLen = modulus->GetLength() - 11;
-         return CKR_OK;
-      }
-   }
-   else if(mechanism == CKM_RSA_X_509){
-      if(pData == NULL_PTR){
-         *pulDataLen = modulus->GetLength();
-         return CKR_OK;
-      }else{
-         if(*pulDataLen < modulus->GetLength()){
-            *pulDataLen = modulus->GetLength();
-            return CKR_BUFFER_TOO_SMALL;
-         }
-      }
-   }
-   else
-      return CKR_MECHANISM_INVALID;
-
-   if(ulEncryptedDataLen != modulus->GetLength()){
-      return CKR_ENCRYPTED_DATA_LEN_RANGE;
-   }
-
-   u1Array* dataToDecrypt = new u1Array(ulEncryptedDataLen);
-   dataToDecrypt->SetBuffer(pEncryptedData);
-
-   rv = pSlot->_token->Decrypt(session->_decryption->GetObject(),dataToDecrypt,session->_decryption->GetMechanism(),pData, pulDataLen);
-
-   session->RemoveDecryptionOperation();
-
-   delete dataToDecrypt;
-
-   return rv;
-}
-
-
-/*
-*/
-CK_RV  Slot::VerifyInit(CK_SESSION_HANDLE hSession,CK_MECHANISM_PTR pMechanism,CK_OBJECT_HANDLE hKey)
-{
-   if(pMechanism == NULL_PTR){
-      return CKR_ARGUMENTS_BAD;
-   }
-
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-    if(rv != CKR_OK)
-   {
-      return rv;
-   }
-  checkConnection( pSlot );
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   Session* session = pSlot->_sessions[ hSessionId ];
-
-
-   if(session->IsVerificationActive() == CK_TRUE){
-      return CKR_OPERATION_ACTIVE;
-   }
-
-   rv = Slot::IsValidMechanism(pMechanism->mechanism,CKF_VERIFY);
-
-   if(rv != CKR_OK){
-      return rv;
-   }
-
-   if( false == pSlot->_token->m_bIsNoPinSupported )
-   {
-      if(   ( CKU_USER != pSlot->_token->_roleLogged )
-         && ( ( true == pSlot->_token->m_bIsSSO ) && ( false == pSlot->_token->isAuthenticated( ) ) )
-         )
-      {
-         return CKR_USER_NOT_LOGGED_IN;
-      }
-   }
-   //if(pSlot->_token->_roleLogged != CKU_USER)
-   //{
-   //   return CKR_USER_NOT_LOGGED_IN;
-   //}
-
-   // get the corresponding object
-   StorageObject* object = NULL_PTR;
-
-   // from object handle we can determine
-   // if it is a token object or session object
-   CK_BBOOL istoken = ((hKey & CO_TOKEN_OBJECT) == CO_TOKEN_OBJECT);
-
-   if(istoken){
-      rv = pSlot->_token->GetObject(hKey,&object);
-   }else{
-      rv = session->GetObject(hKey,&object);
-   }
-
-   if(rv != CKR_OK){
-
-      if(rv == CKR_OBJECT_HANDLE_INVALID){
-         return CKR_KEY_HANDLE_INVALID;
-      }
-
-      return rv;
-   }
-
-   rv = Slot::IsValidCryptoOperation(object,CKF_VERIFY);
-
-   if(rv != CKR_OK){
-      return rv;
-   }
-
-   // let's initialize this crypto operation
-   session->SetVerificationOperation(new CryptoOperation(pMechanism->mechanism,object));
-
-   if(pMechanism->mechanism == CKM_SHA1_RSA_PKCS){
-      session->SetDigestRSAVerification(new CSHA1());
-   }else if(pMechanism->mechanism == CKM_SHA256_RSA_PKCS){
-      session->SetDigestRSAVerification(new CSHA256());
-   }else if(pMechanism->mechanism == CKM_MD5_RSA_PKCS){
-      session->SetDigestRSAVerification(new CMD5());
-   }
-
-   return CKR_OK;
-
-}
-
-
-/*
-*/
-CK_RV  Slot::Verify(CK_SESSION_HANDLE hSession,CK_BYTE_PTR pData,CK_ULONG ulDataLen,
-                    CK_BYTE_PTR pSignature,CK_ULONG ulSignatureLen)
-{
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-   checkConnection( pSlot );
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   Session* session = pSlot->_sessions[ hSessionId ];
-
-
-   if(session->IsVerificationActive() == CK_FALSE){
-      return CKR_OPERATION_NOT_INITIALIZED;
-   }
-
-   if((pData == NULL_PTR) || (ulDataLen == 0) ||
-      (pSignature == NULL_PTR) || (ulSignatureLen == 0))
-   {
-      return CKR_ARGUMENTS_BAD;
-   }
-
-   CK_ULONG mechanism = session->_verification->GetMechanism();
-
-
-   // I am doubtful regarding these 3 lines as
-   // the object could be privatekey which contains
-   // the public components
-   StorageObject* object = session->_verification->GetObject();
-   PKCS11_ASSERT(object->_class == CKO_PUBLIC_KEY);
-   u1Array* modulus = ((RSAPublicKeyObject*)object)->_modulus;
-
-   PKCS11_ASSERT(modulus != NULL_PTR);
-
-   if(((mechanism == CKM_RSA_PKCS) && (ulDataLen > modulus->GetLength() - 11)) ||
-      ((mechanism == CKM_RSA_X_509) && (ulDataLen > modulus->GetLength())))
-   {
-      return CKR_DATA_LEN_RANGE;
-   }
-
-   u1Array* dataToVerify = NULL_PTR;
-
-   if(session->IsDigestRSAVerificationActive() == CK_TRUE){
-      // require hashing also
-      CK_BYTE_PTR hash   = NULL_PTR;
-      CDigest* digest = session->_digestRSAVerification;
-
-      hash = (CK_BYTE_PTR)malloc(digest->HashLength());
-
-      digest->HashCore(pData,0,ulDataLen);
-      digest->HashFinal(hash);
-
-      dataToVerify  = new u1Array(digest->HashLength());
-      dataToVerify->SetBuffer(hash);
-
-      free(hash);
-   }
-   // Sign Only
-   else {
-      dataToVerify = new u1Array(ulDataLen);
-      dataToVerify->SetBuffer(pData);
-   }
-
-   u1Array* signature = new u1Array(ulSignatureLen);
-   signature->SetBuffer(pSignature);
-
-   rv = pSlot->_token->Verify(session->_verification->GetObject(),dataToVerify,session->_verification->GetMechanism(),signature);
-
-   delete signature;
-
-   session->RemoveDigestRSAVerification();
-   session->RemoveVerificationOperation();
-
-   delete dataToVerify;
-
-   return rv;
-}
-
-
-/*
-*/
-CK_RV Slot::VerifyUpdate(CK_SESSION_HANDLE hSession,CK_BYTE_PTR pPart,CK_ULONG ulPartLen)
-{
-
-   // what we do here is to update the hash or
-   // if hashing is not getting used we just accumulate it
-
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-   checkConnection( pSlot );
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   Session* session = pSlot->_sessions[ hSessionId ];
-
-
-   if(session->IsVerificationActive() == CK_FALSE){
-      return CKR_OPERATION_NOT_INITIALIZED;
-   }
-
-   if(pPart == NULL_PTR || ulPartLen == 0){
-      return CKR_ARGUMENTS_BAD;
-   }
-
-   if(session->IsDigestRSAVerificationActive() == CK_TRUE){
-      CDigest* digest = session->_digestRSAVerification;
-      digest->HashCore(pPart,0,ulPartLen);
-   }
-   // Sign Only
-   else {
-
-      if(session->_accumulatedDataToVerify != NULL_PTR){
-         // just accumulate the data
-         u1Array* updatedData = new u1Array(session->_accumulatedDataToVerify->GetLength() + ulPartLen);
-         memcpy(updatedData->GetBuffer(),session->_accumulatedDataToVerify->GetBuffer(),session->_accumulatedDataToVerify->GetLength());
-
-         memcpy((u1*)&updatedData->GetBuffer()[session->_accumulatedDataToVerify->GetLength()],pPart,ulPartLen);
-
-         delete session->_accumulatedDataToVerify;
-
-         session->_accumulatedDataToVerify = updatedData;
-      }else{
-
-         session->_accumulatedDataToVerify = new u1Array(ulPartLen);
-         session->_accumulatedDataToVerify->SetBuffer(pPart);
-      }
-
-      CK_ULONG mech = session->_verification->GetMechanism();
-      u1Array* modulus = ((RSAPublicKeyObject*)session->_verification->GetObject())->_modulus;
-
-      if(((mech == CKM_RSA_PKCS) && (session->_accumulatedDataToVerify->GetLength() > modulus->GetLength() - 11)) ||
-         ((mech == CKM_RSA_X_509) && (session->_accumulatedDataToVerify->GetLength() > modulus->GetLength())))
-      {
-         return CKR_DATA_LEN_RANGE;
-      }
-   }
-
-   return rv;
-}
-
-
-/*
-*/
-CK_RV Slot::VerifyFinal(CK_SESSION_HANDLE hSession,CK_BYTE_PTR pSignature,CK_ULONG ulSignatureLen)
-{
-   CK_SESSION_HANDLE hSessionId = CK_INVALID_HANDLE;
-   Slot* pSlot = NULL_PTR;
-   CK_RV rv = GetSlotAndSessionIdFromSessionHandle( hSession, &pSlot, &hSessionId );
-   if(rv != CKR_OK)
-   {
-      return rv;
-   }
-   checkConnection( pSlot );
-
-   CHECK_IF_TOKEN_IS_PRESENT( pSlot );
-   CHECK_IF_NULL_SESSION( pSlot, hSessionId );
-   Transaction trans( pSlot );
-
-   Session* session = pSlot->_sessions[ hSessionId ];
-
-
-   if(session->IsVerificationActive() == CK_FALSE){
-      return CKR_OPERATION_NOT_INITIALIZED;
-   }
-
-   if((pSignature == NULL_PTR) || (ulSignatureLen == 0)){
-      return CKR_ARGUMENTS_BAD;
-   }
-
-   //StorageObject* object = session->_verification->GetObject();
-   //PKCS11_ASSERT(object->_class == CKO_PUBLIC_KEY);
-
-   u1Array* dataToVerify = NULL_PTR;
-
-   if(session->IsDigestRSAVerificationActive() == CK_TRUE){
-      // require hashing also
-      CK_BYTE_PTR hash   = NULL_PTR;
-      CDigest* digest = session->_digestRSAVerification;
-
-      hash = (CK_BYTE_PTR)malloc(digest->HashLength());
-
-      digest->HashFinal(hash);
-
-      dataToVerify  = new u1Array(digest->HashLength());
-      dataToVerify->SetBuffer(hash);
-
-      free(hash);
-   }
-   // Sign Only
-   else {
-      dataToVerify = session->_accumulatedDataToVerify;
-   }
-
-   u1Array* signature = new u1Array(ulSignatureLen);
-   signature->SetBuffer(pSignature);
-
-   rv = pSlot->_token->Verify(session->_verification->GetObject(),dataToVerify,session->_verification->GetMechanism(),signature);
-
-   session->RemoveDigestRSAVerification();
-   session->RemoveVerificationOperation();
-
-   delete dataToVerify;
-   delete signature;
-   session->_accumulatedDataToVerify = NULL_PTR;
-
-   return rv;
-}
-
-
-
-// --------------
-
-
-
-/* Return true if the connection is aware
-*/
-/*bool*/ void Slot::checkConnection( Slot* a_pSlot )
-{
-   //Log::begin( "Slot::checkConnection" );
-
-   //bool bRet = false;
-
-   if( NULL_PTR != a_pSlot )
-   {
-      char readers[ 1024 ];
-      memset( readers, 0, sizeof( readers ) );
-      memcpy( readers, a_pSlot->_readerName->c_str( ), a_pSlot->_readerName->length( ) );
-      DWORD dwLen = sizeof( readers );
-      DWORD dwState = 0;
-      DWORD dwProtocol = 0;
-      BYTE Atr[32];
-      memset( Atr, 0, sizeof( Atr ) );
-      DWORD dwLenAtr = sizeof( Atr );
-      if( NULL != a_pSlot->_token )
-      {
-         CardModuleService* pMSCM = a_pSlot->_token->GetMiniDriverService( );
-         if( NULL != pMSCM )
-         {
-            SCARDHANDLE hCard = pMSCM->GetPcscCardHandle( );
-            DWORD hResult = SCardStatus( hCard, readers, &dwLen, &dwState, &dwProtocol, &Atr[0], &dwLenAtr );
-            //Log::log( "Slot::checkConnection - SCardStatus <%#02x>", hResult );
-            //printf( "\n Slot::checkConnection - SCardStatus <%#02x> \n", hResult );
-            if( ( SCARD_W_RESET_CARD == hResult ) || ( SCARD_W_REMOVED_CARD == hResult ) )
-            {
-               Log::error( "Slot::checkConnection", "Connection is broken" );
-               //printf( "\n Slot::checkConnection - Connection is broken \n" );
-
-               // Close all session
-               a_pSlot->CloseAllSessions( );
-
-               // Rebuild the token to restablish the CardModule communication
-               delete a_pSlot->_token;
-               a_pSlot->_token = NULL_PTR;
-
-               //printf( "\n Slot::checkConnection - BuildToken \n" );
-               a_pSlot->BuildToken( );
-
-              // bRet = false;
+                throw PKCS11Exception( CKR_SESSION_READ_ONLY );
             }
-         }
-      }
-   }
 
-   //Log::end( "Slot::checkConnection" );
+            m_Token->deleteObject( a_hObject );
 
-   //return bRet;
-}
+        } else {
 
+            s->deleteObject( a_hObject );
+        }
 
-CK_LONG Slot::AddSession(Session* session)
-{
-   // 0 is an invalid session handle
-   for(size_t i=1;i<_sessions.size();i++){
-      if(this->_sessions[i] == NULL_PTR){
-         this->_sessions[i] = session;
-         session->UpdateState(this->_token->_roleLogged);
-         return (CK_LONG)i;
-      }
-   }
+    } catch( MiniDriverException& x ) {
 
-   // No free elements, add a new
-   _sessions.push_back(session);
-   return (CK_LONG)(_sessions.size()-1);
-}
+        throw PKCS11Exception( Token::checkException( x ) );
 
+    } catch( PKCS11Exception& x ) {
 
-/*
-*/
-void Slot::RemoveSession( CK_LONG sessionId )
-{
-   //this->_token->ManageGC( true );
+        checkAccessException( x );
 
-   delete this->_sessions[ sessionId ];
-   this->_sessions[sessionId] = NULL_PTR;
+        throw;
 
-   // If this was the upper element in the vector, reduce size
-   size_t maxId = 0;
-   for( size_t i = 1 ; i < _sessions.size( ) ; i++ )
-   {
-      if( _sessions[ i ] )
-      {
-         maxId = i;
-      }
-   }
-   if( maxId < _sessions.size( ) - 1 )
-   {
-      _sessions.resize( maxId + 1 );
-   }
+    } catch( ... ) {
 
-   // if this was the last session to be removed
-   // then the login state of token for application
-   // returns to public sessions
-   if( 0 == maxId )
-   {
-      // TBD : Should I call logout here or merely set the flag ?
-      // if I logged the user out from this application
-      // what happens to another application
-      // This is where on-card implementation helps
-
-      PKCS11_ASSERT(this->_token != NULL_PTR);
-
-      this->_token->_roleLogged = CKU_NONE;
-   }
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
 }
 
 
 /*
 */
-void Slot::UpdateSessionState( CK_ULONG ulRole )
-{
-   // update the state of all sessions
-   for(size_t i=1;i<_sessions.size();i++){
-      if(this->_sessions[i] != NULL_PTR){
-         this->_sessions[i]->UpdateState( ulRole );
-      }
-   }
+void Slot::getAttributeValue( const CK_SESSION_HANDLE& a_hSession, const CK_OBJECT_HANDLE& a_hObject, CK_ATTRIBUTE_PTR a_pTemplate, const CK_ULONG& a_ulCount ) {
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    try {
+
+        if( m_Token->isToken( a_hObject ) ) {
+
+            m_Token->getAttributeValue( a_hObject, a_pTemplate, a_ulCount );
+
+        } else {
+
+            m_Sessions.at( a_hSession ).getAttributeValue( a_hObject, a_pTemplate, a_ulCount );
+        }
+
+    } catch( MiniDriverException& x ) {
+
+        throw PKCS11Exception( Token::checkException( x ) );
+
+    } catch( PKCS11Exception& x ) {
+
+        checkAccessException( x );
+
+        throw;
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
 }
 
 
 /*
 */
-void Slot::UpdateSessionState( )
-{
-   // update the state of all sessions
-   for(size_t i=1;i<_sessions.size();i++){
-      if(this->_sessions[i] != NULL_PTR){
-         this->_sessions[i]->UpdateState(this->_token->_roleLogged);
-      }
-   }
+void Slot::setAttributeValue( const CK_SESSION_HANDLE& a_hSession, const CK_OBJECT_HANDLE& a_hObject, CK_ATTRIBUTE_PTR a_pTemplate, const CK_ULONG& a_ulCount ) {
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    Session* s = getSession( a_hSession );
+
+    try {
+
+        if( m_Token->isToken( a_hObject ) ) {
+
+            if( !s->isReadWrite( ) ) {
+
+                throw PKCS11Exception( CKR_SESSION_READ_ONLY );
+            }
+
+            m_Token->setAttributeValue( a_hObject, a_pTemplate, a_ulCount );
+
+        } else {
+
+            s->setAttributeValue( a_hObject, a_pTemplate, a_ulCount );
+        }
+
+    } catch( MiniDriverException& x ) {
+
+        throw PKCS11Exception( Token::checkException( x ) );
+
+    } catch( PKCS11Exception& x ) {
+
+        checkAccessException( x );
+
+        throw;
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
 }
 
 
-CK_BBOOL Slot::HasReadOnlySession()
-{
-   for(size_t i=1;i<_sessions.size();i++){
-      if(this->_sessions[i] != NULL_PTR){
-         if(this->_sessions[i]->_isReadWrite == CK_FALSE){
-            return CK_TRUE;
-         }
-      }
-   }
+/*
+*/
+void Slot::generateKeyPair( const CK_SESSION_HANDLE& a_hSession, CK_MECHANISM_PTR /*a_pMechanism*/, CK_ATTRIBUTE_PTR a_pPublicKeyTemplate, const CK_ULONG& a_ulPublicKeyAttributeCount, CK_ATTRIBUTE_PTR a_pPrivateKeyTemplate, const CK_ULONG& a_ulPrivateKeyAttributeCount, CK_OBJECT_HANDLE_PTR a_phPublicKey,CK_OBJECT_HANDLE_PTR a_phPrivateKey ) {
 
-   return CK_FALSE;
-}
+    if( !m_Token.get( ) ) {
 
-CK_RV Slot::GetSlotAndSessionIdFromSessionHandle(CK_SESSION_HANDLE hSession,
-                                                 Slot** slot,
-                                                 CK_ULONG_PTR sessionId)
-{
-   CK_SLOT_ID slotId  = GET_SLOTID(hSession);
-   *sessionId         = GET_SESSIONID(hSession);
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
 
-   if(((int)slotId < 0) || (slotId >= CONFIG_MAX_SLOT)){
-      // we return here invalid session handle as
-      // app does not have a notion of slot at this time
-      return CKR_SESSION_HANDLE_INVALID;
-   }
+    Session* s = getSession( a_hSession );
 
-   if (Application::_slotCache[slotId] != NULL_PTR){
-      *slot = Application::_slotCache[slotId];
+    // Check Public Template Consitency
+    Template t;
+    t.checkTemplate( a_pPublicKeyTemplate, a_ulPublicKeyAttributeCount, Template::MODE_GENERATE_PUB );
 
-      if((*sessionId < 1) || (*sessionId >= ((*slot)->_sessions.size()))){
-         return CKR_SESSION_HANDLE_INVALID;
-      }
-      if((*slot)->_sessions[*sessionId]) {
-         return CKR_OK;
-      }
-   }
+    // Check Private Template Consitency
+    t.checkTemplate( a_pPrivateKeyTemplate, a_ulPrivateKeyAttributeCount, Template::MODE_GENERATE_PRIV );
 
-   return CKR_SESSION_HANDLE_INVALID;
-}
+    // Create the PKCS11 public key
+    Pkcs11ObjectKeyPublicRSA* rsaPubKey = new Pkcs11ObjectKeyPublicRSA( );
 
-CK_RV Slot::BuildToken(void)
-{
-   Log::begin( "Slot::BuildToken" );
+    // Create the PKCS11 private key
+    RSAPrivateKeyObject* rsaPrivKey = new RSAPrivateKeyObject( );
 
-   if(this->_token == NULL_PTR)
-   {
-      SCARD_READERSTATE readerStates;
-      memset( &readerStates, 0, sizeof( SCARD_READERSTATE ) );
-      readerStates.dwCurrentState = SCARD_STATE_UNAWARE;
-      readerStates.szReader = this->_readerName->c_str( );
+    // Populate the PKCS11 public key
+    try {
 
-#ifndef _XCL_
+        for( unsigned long i = 0 ; i < a_ulPublicKeyAttributeCount ; ++i ) {
 
-      if( SCardGetStatusChange(Application::_hContext, 0, &readerStates, 1) == SCARD_S_SUCCESS)
-      {
-         if ((readerStates.dwEventState & SCARD_STATE_PRESENT) != SCARD_STATE_PRESENT)
-         {
-            // we not found a card in this reader
-            this->_slotInfo.flags &= ~CKF_TOKEN_PRESENT;
-            //Log::log( "Slot::BuildToken - ((readerStates.dwEventState & SCARD_STATE_PRESENT) != SCARD_STATE_PRESENT)" );
-            Log::logCK_RV( "Slot::BuildToken", CKR_TOKEN_NOT_PRESENT );
-            return CKR_TOKEN_NOT_PRESENT;
-         }
-         else
-         {
-            // we found a card in this reader
-            this->_slotInfo.flags |= CKF_TOKEN_PRESENT;
-         }
-      }
+            rsaPubKey->setAttribute( a_pPublicKeyTemplate[ i ], true );
+        }
 
-#else // _XCL_
+        // Populate the PKCS11 private key
+        for( unsigned long i = 0 ; i < a_ulPrivateKeyAttributeCount ; ++i ) {
 
-      if (xCL_IsTokenPresent())
-      {
-          // we found a card in this reader
-          this->_slotInfo.flags |= CKF_TOKEN_PRESENT;
-      }
-      else
-      {
-          // we not found a card in this reader
-          this->_slotInfo.flags &= ~CKF_TOKEN_PRESENT;
-          return CKR_TOKEN_NOT_PRESENT;
-      }
+            rsaPrivKey->setAttribute( a_pPrivateKeyTemplate[ i ], true );
+        }
 
-#endif // _XCL_
+        // Generate the key pair on cars
+        if( rsaPrivKey->isToken( ) ) {
 
-      // TBD: Check if token is a .net smart card
+            m_Token->generateKeyPair( rsaPubKey, rsaPrivKey, a_phPublicKey, a_phPrivateKey );
 
-      // token is present in the slot
-      //Log::log( "Slot::BuildToken - new Token..." );
-      this->_token = new Token( this->_readerName );
-      //Log::log( "Slot::BuildToken - new Token ok"  );
+        } else {
 
-      //Log::logCK_RV( "Slot::BuildToken", CKR_OK );
-      //Log::end( "Slot::BuildToken" );
-   }
+            // We do not support generation of key pair in the session
+            throw PKCS11Exception( CKR_ATTRIBUTE_VALUE_INVALID );
+        }
 
-   Log::end( "Slot::BuildToken" );
+        // Create the PKCS11 public key object on cache if it is not a token object
+        if( rsaPubKey && !rsaPubKey->isToken( ) ) {
 
-   return CKR_OK;
+            s->addObject( rsaPubKey, a_phPublicKey );
+        }
+
+    } catch( MiniDriverException& x ) {
+
+        // the generation failed
+        delete rsaPrivKey;
+        delete rsaPubKey;
+        throw PKCS11Exception( Token::checkException( x ) );
+
+    } catch( PKCS11Exception& x ) {
+
+        checkAccessException( x );
+
+        // We do not support generation of key pair in the session
+        delete rsaPrivKey;
+        delete rsaPubKey;
+        throw;
+
+    } catch( ... ) {
+
+        delete rsaPrivKey;
+        delete rsaPubKey;
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
 }
 
 
-CK_RV Slot::IsValidMechanism(CK_ULONG mechanism,CK_ULONG operation)
-{
-   size_t i = 0;
+/*
+*/
+void Slot::digestInit( const CK_SESSION_HANDLE& a_hSession, CK_MECHANISM_PTR a_pMechanism ) {
 
-   CK_BBOOL found = CK_FALSE;
+    if( !m_Token.get( ) ) {
 
-   for(;i<sizeof(MechanismList)/sizeof(CK_ULONG);i++){
-      if(MechanismList[i] == mechanism){
-         found = CK_TRUE;
-         break;
-      }
-   }
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
 
-   if(found == CK_FALSE){
-      return CKR_MECHANISM_INVALID;
-   }
+    Session* s = getSession( a_hSession );
 
-   if((MechanismInfo[i].flags & operation) != operation){
-      return CKR_MECHANISM_INVALID;
-   }
+    if( s->isDigestActive( ) ) {
 
-   return CKR_OK;
+        throw PKCS11Exception( CKR_OPERATION_ACTIVE );
+    }
+
+    switch( a_pMechanism->mechanism ) {
+
+    case CKM_SHA_1:
+        s->setDigest( new CSHA1( ) );
+        break;
+
+    case CKM_SHA256:
+        s->setDigest( new CSHA256( ) );
+        break;
+
+    case CKM_MD5:
+        s->setDigest( new CMD5( ) );
+        break;
+
+    default:
+        throw PKCS11Exception( CKR_MECHANISM_INVALID );
+    }
 }
 
-CK_RV Slot::IsValidCryptoOperation(StorageObject* object,CK_ULONG operation)
+
+/*
+*/
+void Slot::digest( const CK_SESSION_HANDLE& a_hSession, CK_BYTE_PTR a_pData, const CK_ULONG& a_ulDataLen, CK_BYTE_PTR a_pDigest, CK_ULONG_PTR a_pulDigestLen ) {
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    Session* s = getSession( a_hSession );
+
+    if( !s->isDigestActive( ) ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    CDigest* digest = s->getDigest( );
+    if( !digest ) {
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+
+    if((*a_pulDigestLen < (CK_ULONG)digest->hashLength( )) && a_pDigest ) {
+
+        *a_pulDigestLen = (CK_ULONG)digest->hashLength( );
+
+        throw PKCS11Exception( CKR_BUFFER_TOO_SMALL );
+
+    } else if(!a_pDigest) {
+
+        *a_pulDigestLen = digest->hashLength( );
+
+    } else {
+
+        digest->hashCore(a_pData, 0, a_ulDataLen);
+
+        *a_pulDigestLen = (CK_ULONG)digest->hashLength( );
+
+        if( a_pDigest ) {
+            digest->hashFinal(a_pDigest);
+
+            s->removeDigest( );
+        }
+    }
+}
+
+
+/*
+*/
+void Slot::digestUpdate( const CK_SESSION_HANDLE& a_hSession, CK_BYTE_PTR a_pPart, const CK_ULONG& a_ulPartLen ) {
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    Session* s = getSession( a_hSession );
+
+    if( !s->isDigestActive( ) ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    s->getDigest( )->hashCore( a_pPart, 0, a_ulPartLen );
+}
+
+
+/*
+*/
+void Slot::digestFinal( const CK_SESSION_HANDLE& a_hSession, CK_BYTE_PTR a_pDigest, CK_ULONG_PTR a_pulDigestLen ) {
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    Session* s = getSession( a_hSession );
+
+    if( !s->isDigestActive( ) ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    CDigest* digest = s->getDigest( );
+    if( !digest ) {
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    if((*a_pulDigestLen < (CK_ULONG)digest->hashLength( )) && a_pDigest ) {
+
+        *a_pulDigestLen = (CK_ULONG)digest->hashLength( );
+
+        throw PKCS11Exception( CKR_BUFFER_TOO_SMALL );
+
+    } else if( !a_pDigest ) {
+
+        *a_pulDigestLen = digest->hashLength( );
+
+    } else {
+
+        *a_pulDigestLen = (CK_ULONG)digest->hashLength( );
+
+        if ( a_pDigest ){
+
+            digest->hashFinal( a_pDigest );
+
+            s->removeDigest( );
+        }
+    }
+}
+
+
+/*
+*/
+void Slot::signInit( const CK_SESSION_HANDLE& a_hSession, CK_MECHANISM_PTR a_pMechanism, const CK_OBJECT_HANDLE& a_hKey ) {
+
+    Session* s = getSession( a_hSession );
+
+    if( s->isSignatureActive( ) ) {
+
+        throw PKCS11Exception( CKR_OPERATION_ACTIVE );
+    }
+
+    isValidMechanism( a_pMechanism->mechanism, CKF_SIGN );
+
+    if( !isAuthenticated( ) ) {
+
+        throw PKCS11Exception( CKR_USER_NOT_LOGGED_IN );
+    }
+
+    // get the corresponding object
+    StorageObject* o = 0;
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    try {
+
+        // from object handle we can determine
+        // if it is a token object or session object
+        if( m_Token->isToken( a_hKey ) ) {
+
+            o = m_Token->getObject( a_hKey );
+
+        } else {
+
+            o = s->getObject( a_hKey );
+        }
+
+    } catch( PKCS11Exception& ) {
+
+        throw PKCS11Exception( CKR_KEY_HANDLE_INVALID );
+
+    } catch( MiniDriverException& x ) {
+
+        throw PKCS11Exception( Token::checkException( x ) );
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    isValidCryptoOperation( o, CKF_SIGN );
+
+    // Initialize this crypto operation
+    boost::shared_ptr< CryptoOperation > co( new CryptoOperation( a_pMechanism->mechanism, a_hKey ) );
+
+    s->setSignatureOperation( co );
+
+    if( CKM_SHA1_RSA_PKCS == a_pMechanism->mechanism ){
+
+        s->setDigestRSA( new CSHA1( ) );
+
+    } else if( CKM_SHA256_RSA_PKCS == a_pMechanism->mechanism ){
+
+        s->setDigestRSA( new CSHA256( ) );
+
+    } else if( CKM_MD5_RSA_PKCS == a_pMechanism->mechanism ){
+
+        s->setDigestRSA( new CMD5( ) );
+    }
+}
+
+
+/*
+*/
+void Slot::sign( const CK_SESSION_HANDLE& a_hSession, CK_BYTE_PTR a_pData, const CK_ULONG& a_ulDataLen, CK_BYTE_PTR a_pSignature, CK_ULONG_PTR a_pulSignatureLen ) {
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    Session* s = getSession( a_hSession );
+
+    if( !s->isSignatureActive( ) ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    // Get the RSA private key object ot perform the signature
+    RSAPrivateKeyObject *o = (RSAPrivateKeyObject*) m_Token->getObject( s->getSignature( )->getObject( ) );
+    if( !o ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    // Get the PKCS11 mechanism to use
+    CK_ULONG m = s->getSignature( )->getMechanism( );
+
+    // TBD : Private key may not necessarily have the modulus or modulus bits
+    // if that is the case then we need to locate the corresponding public key
+    // or may be I should always put the modulus bits in private key attributes
+
+    Marshaller::u1Array* u = o->m_pModulus.get( );
+    if( !u ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    if( ( ( m == CKM_RSA_PKCS ) && ( a_ulDataLen > u->GetLength( ) - 11 ) ) || ( ( m == CKM_RSA_X_509 ) && ( a_ulDataLen > u->GetLength( ) ) ) ) {
+
+        throw PKCS11Exception( CKR_DATA_LEN_RANGE );
+    }
+
+    if( !a_pSignature ) {
+
+        *a_pulSignatureLen = u->GetLength();
+
+        return;
+
+    } else if( *a_pulSignatureLen < u->GetLength( ) ) {
+
+        *a_pulSignatureLen = u->GetLength();
+
+        throw PKCS11Exception( CKR_BUFFER_TOO_SMALL );
+    }
+
+    boost::shared_ptr< Marshaller::u1Array > dataToSign;
+
+    if( s->isDigestActiveRSA( ) ) {
+
+        if( !s->_digestRSA ) {
+
+            throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+        }
+
+        // require hashing also
+        CDigest* d = s->_digestRSA.get( );
+
+        if( !d ) {
+
+            throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+        }
+
+        CK_BYTE_PTR h = new CK_BYTE[ d->hashLength( ) ];
+        d->hashCore( a_pData, 0, a_ulDataLen );
+        d->hashFinal( h );
+
+        dataToSign.reset( new Marshaller::u1Array( d->hashLength( ) ) );
+        dataToSign->SetBuffer( h );
+
+        delete[ ] h;
+
+    } else {
+
+        // Sign Only
+        dataToSign.reset( new Marshaller::u1Array( a_ulDataLen ) );
+        dataToSign->SetBuffer( a_pData );
+    }
+
+    try {
+
+        m_Token->sign( o, dataToSign.get( ), m, a_pSignature );
+
+    } catch( MiniDriverException& x ) {
+
+        throw PKCS11Exception( Token::checkException( x ) );
+
+    } catch( PKCS11Exception& x ) {
+
+        checkAccessException( x );
+
+        throw;
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    *a_pulSignatureLen = u->GetLength( );
+
+    s->removeDigestRSA( );
+
+    s->removeSignatureOperation( );
+
+    // Check if the user is still logged in
+    // If the smart card is configured in "always PIN" mode
+    // the PIN is automatically invalidated after a sign operation
+    try {
+
+        if( m_Device.get( ) && !m_Device->isAuthenticated( ) ) {
+
+            // No user connected
+            m_ulUserType = CK_UNAVAILABLE_INFORMATION;
+
+            // Update the state of all sessions because write access is no more allowed
+            updateAllSessionsState( );
+        }
+
+    } catch( ... ) { }
+}
+
+
+/* update the hash or if hashing is not getting used we just accumulate it
+*/
+void Slot::signUpdate( const CK_SESSION_HANDLE& a_hSession, CK_BYTE_PTR a_pPart, const CK_ULONG& a_ulPartLen ) {
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    Session* s = getSession( a_hSession );
+
+    if( !s->isSignatureActive( ) ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    if( s->isDigestActiveRSA( ) ) {
+
+        if( !s->_digestRSA ) {
+
+            throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+        }
+
+        s->_digestRSA->hashCore( a_pPart, 0, a_ulPartLen );
+
+    } else { // Sign Only
+
+        if( s->m_AccumulatedDataToSign ) {
+
+            // just accumulate the data
+            Marshaller::u1Array* updatedData = new Marshaller::u1Array( s->m_AccumulatedDataToSign->GetLength() + a_ulPartLen);
+
+            memcpy(updatedData->GetBuffer(),s->m_AccumulatedDataToSign->GetBuffer(),s->m_AccumulatedDataToSign->GetLength());
+
+            memcpy((u1*)&updatedData->GetBuffer()[s->m_AccumulatedDataToSign->GetLength()], a_pPart, a_ulPartLen);
+
+            s->m_AccumulatedDataToSign.reset( updatedData );
+
+        } else {
+
+            s->m_AccumulatedDataToSign.reset( new Marshaller::u1Array( a_ulPartLen ) );
+
+            s->m_AccumulatedDataToSign->SetBuffer( a_pPart );
+        }
+
+        CK_ULONG m = s->getSignature( )->getMechanism( );
+
+        StorageObject* o = NULL;
+
+        try {
+
+            o = m_Token->getObject( s->getSignature( )->getObject( ) );
+
+        } catch( MiniDriverException& x ) {
+
+            throw PKCS11Exception( Token::checkException( x ) );
+
+        } catch( PKCS11Exception& x ) {
+
+            checkAccessException( x );
+
+            throw;
+
+        } catch( ... ) {
+
+            throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+        }
+
+        if( !o ) {
+
+            throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+        }
+
+        Marshaller::u1Array* u = ((RSAPrivateKeyObject*)o)->m_pModulus.get( );
+
+        if( !u ) {
+
+            throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+        }
+
+        if( ( ( m == CKM_RSA_PKCS ) && ( s->m_AccumulatedDataToSign->GetLength( ) > u->GetLength( ) - 11 ) ) ||
+            ( ( m == CKM_RSA_X_509 ) && ( s->m_AccumulatedDataToSign->GetLength( ) > u->GetLength( ) ) ) ) {
+
+                throw PKCS11Exception( CKR_DATA_LEN_RANGE );
+        }
+    }
+}
+
+
+/*
+*/
+void Slot::signFinal( const CK_SESSION_HANDLE& a_hSession, CK_BYTE_PTR a_pSignature, CK_ULONG_PTR a_pulSignatureLen ) {
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    Session* s = getSession( a_hSession );
+
+    if( !s->isSignatureActive( ) ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    RSAPrivateKeyObject* o = (RSAPrivateKeyObject*) m_Token->getObject( s->getSignature( )->getObject( ) );
+    if( !o ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    // TBD : Private key may not necessarily have the modulus or modulus bits
+    // if that is the case then we need to locate the corresponding public key
+    // or may be I should always put the modulus bits in private key attributes
+
+    Marshaller::u1Array* u = o->m_pModulus.get( );
+    if( !u ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    if( !a_pSignature ) {
+
+        *a_pulSignatureLen = u->GetLength( );
+
+        return;
+
+    } else if( *a_pulSignatureLen < u->GetLength( ) ) {
+
+        *a_pulSignatureLen = u->GetLength( );
+
+        throw PKCS11Exception( CKR_BUFFER_TOO_SMALL );
+    }
+
+    boost::shared_ptr< Marshaller::u1Array > dataToSign;
+
+    if( s->isDigestActiveRSA( ) ) {
+
+        if( !s->_digestRSA ) {
+
+            throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+        }
+
+        // require hashing also
+        CDigest* d = s->_digestRSA.get( );
+        if( !d ) {
+
+            throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+        }
+
+        CK_BYTE_PTR h = new CK_BYTE[ d->hashLength( ) ];
+
+        d->hashFinal( h );
+
+        dataToSign.reset( new Marshaller::u1Array( d->hashLength( ) ) );
+
+        dataToSign->SetBuffer( h );
+
+    } else {
+
+        // Sign Only
+        dataToSign = s->m_AccumulatedDataToSign;
+    }
+
+    if( !s->m_Signature ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    m_Token->sign( o, dataToSign.get( ), s->m_Signature->getMechanism( ), a_pSignature );
+
+    *a_pulSignatureLen = u->GetLength( );
+
+    s->removeDigestRSA( );
+
+    s->removeSignatureOperation( );
+
+    s->m_AccumulatedDataToSign.reset( );
+}
+
+
+/*
+*/
+void Slot::encryptInit( const CK_SESSION_HANDLE& a_hSession, CK_MECHANISM_PTR a_pMechanism, const CK_OBJECT_HANDLE& a_hKey ) {
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    Session* s = getSession( a_hSession );
+
+    if( s->isEncryptionActive( ) ) {
+
+        throw PKCS11Exception( CKR_OPERATION_ACTIVE );
+    }
+
+    isValidMechanism( a_pMechanism->mechanism, CKF_ENCRYPT );
+
+    if( !isAuthenticated( ) ) {
+
+        throw PKCS11Exception( CKR_USER_NOT_LOGGED_IN );
+    }
+
+    // get the corresponding object
+    StorageObject* o = 0;
+
+    try {
+
+        // from object handle we can determine
+        // if it is a token object or session object
+        if( m_Token->isToken( a_hKey ) ) {
+
+            o = m_Token->getObject( a_hKey );
+
+        } else {
+
+            o = s->getObject( a_hKey );
+        }
+
+    } catch( PKCS11Exception& ) {
+
+        throw PKCS11Exception( CKR_KEY_HANDLE_INVALID );
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    isValidCryptoOperation( o, CKF_ENCRYPT );
+
+    // let's initialize this crypto operation
+    s->setEncryptionOperation( new CryptoOperation( a_pMechanism->mechanism, a_hKey ) );
+}
+
+
+/*
+*/
+void Slot::encrypt( const CK_SESSION_HANDLE& a_hSession, CK_BYTE_PTR a_pData, const CK_ULONG& a_ulDataLen, CK_BYTE_PTR a_pEncryptedData, CK_ULONG_PTR a_pulEncryptedDataLen ) {
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    Session* s = getSession( a_hSession );
+
+    if( !s->isEncryptionActive( ) ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    StorageObject* o = NULL;
+
+    Marshaller::u1Array* u = NULL;
+
+    try {
+
+        if( !s->_encryption ) {
+
+            throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+        }
+
+        o = m_Token->getObject( s->_encryption->getObject( ) );
+        if( !o ) {
+
+            throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+        }
+
+        u = ((Pkcs11ObjectKeyPublicRSA*)o)->m_pModulus.get( );
+        if( !u ) {
+
+            throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+        }
+
+        if( !a_pEncryptedData ) {
+
+            *a_pulEncryptedDataLen = u->GetLength();
+
+            return;
+
+        } else {
+
+            if( *a_pulEncryptedDataLen < u->GetLength( ) ) {
+
+                *a_pulEncryptedDataLen = u->GetLength();
+
+                throw PKCS11Exception( CKR_BUFFER_TOO_SMALL );
+            }
+        }
+
+        boost::shared_ptr< Marshaller::u1Array > dataToEncrypt( new Marshaller::u1Array( a_ulDataLen ) );
+        dataToEncrypt->SetBuffer( a_pData );
+
+        if( !s->_encryption ) {
+
+            throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+        }
+
+        m_Token->encrypt( o, dataToEncrypt.get( ), s->_encryption->getMechanism( ), a_pEncryptedData );
+
+    } catch( MiniDriverException& x ) {
+
+        throw PKCS11Exception( Token::checkException( x ) );
+
+    } catch( PKCS11Exception& x ) {
+
+        checkAccessException( x );
+
+        throw;
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    *a_pulEncryptedDataLen = u->GetLength( );
+
+    s->removeEncryptionOperation( );
+}
+
+
+/*
+*/
+void Slot::decryptInit( const CK_SESSION_HANDLE& a_hSession, CK_MECHANISM_PTR a_pMechanism, const CK_OBJECT_HANDLE& a_hKey ) {
+
+    if( !m_Token.get( ) /*|| !m_Device.get( )*/ ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    Session* s = getSession( a_hSession );
+
+    if( s->isDecryptionActive( ) ) {
+
+        throw PKCS11Exception( CKR_OPERATION_ACTIVE );
+    }
+
+    isValidMechanism( a_pMechanism->mechanism, CKF_DECRYPT );
+
+    //try {
+
+    //    if( !m_Device->isAuthenticated( ) ) {
+
+    //        throw PKCS11Exception( CKR_USER_NOT_LOGGED_IN );
+    //    }
+
+    //} catch( MiniDriverException& x ) {
+
+    //    Log::error( "Slot::decryptInit", "MiniDriverException" );
+    //    throw PKCS11Exception( Token::checkException( x ) );
+    //}
+    if( !isAuthenticated( ) ) {
+
+        throw PKCS11Exception( CKR_USER_NOT_LOGGED_IN );
+    }
+
+    // get the corresponding object
+    StorageObject* o = 0;
+
+    // from object handle we can know if it is a token or session object
+    try {
+
+        if( m_Token->isToken( a_hKey ) ) {
+
+            o = m_Token->getObject( a_hKey );
+
+        } else {
+
+            o = s->getObject( a_hKey );
+        }
+
+    } catch( PKCS11Exception& ) {
+
+        throw PKCS11Exception( CKR_KEY_HANDLE_INVALID );
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    isValidCryptoOperation( o, CKF_DECRYPT );
+
+    // let's initialize this crypto operation
+    s->setDecryptionOperation( new CryptoOperation( a_pMechanism->mechanism, a_hKey ) );
+}
+
+
+/*
+*/
+void Slot::decrypt( const CK_SESSION_HANDLE& a_hSession, CK_BYTE_PTR a_pEncryptedData, const CK_ULONG& a_ulEncryptedDataLen, CK_BYTE_PTR a_pData, CK_ULONG_PTR a_pulDataLen ) {
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    Session* s = getSession( a_hSession );
+
+    if( !s->isDecryptionActive( ) ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    if( !s->_decryption ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    StorageObject* o = m_Token->getObject( s->_decryption->getObject( ) );
+    if( !o ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    CK_ULONG m = s->_decryption->getMechanism( );
+
+    Marshaller::u1Array* u = ( (RSAPrivateKeyObject*) o)->m_pModulus.get( );
+    if( !u ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    unsigned long l = (unsigned long)u->GetLength( );
+
+    if( m == CKM_RSA_PKCS ) {
+
+        // Can't know exact size of returned value before decryption has been done
+        if( !a_pData ) {
+
+            *a_pulDataLen = l - 11;
+
+            return;
+        }
+    } else if( m == CKM_RSA_X_509 ) {
+
+        if( !a_pData ) {
+
+            *a_pulDataLen = l;
+
+            return;
+
+        } else {
+
+            if( *a_pulDataLen < l ) {
+
+                *a_pulDataLen = l;
+
+                throw PKCS11Exception( CKR_BUFFER_TOO_SMALL );
+            }
+        }
+    } else {
+
+        throw PKCS11Exception( CKR_MECHANISM_INVALID );
+    }
+
+    if( a_ulEncryptedDataLen != l ) {
+
+        throw PKCS11Exception( CKR_ENCRYPTED_DATA_LEN_RANGE );
+    }
+
+    boost::shared_ptr< Marshaller::u1Array > dataToDecrypt( new Marshaller::u1Array( a_ulEncryptedDataLen ) );
+
+    dataToDecrypt->SetBuffer( a_pEncryptedData );
+
+    try {
+
+        m_Token->decrypt( o, dataToDecrypt.get( ), m, a_pData, a_pulDataLen );
+
+    } catch( MiniDriverException& x ) {
+
+        s->removeDecryptionOperation( );
+
+        throw PKCS11Exception( Token::checkException( x ) );
+
+    } catch( PKCS11Exception& x ) {
+
+        s->removeDecryptionOperation( );
+
+        checkAccessException( x );
+
+        throw;
+
+    } catch( ... ) {
+
+        s->removeDecryptionOperation( );
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    s->removeDecryptionOperation( );
+
+    // Check if the user is still logged in
+    // If the smart card is configured in "always PIN" mode
+    // the PIN is automatically invalidated after a sign operation
+    try {
+
+        if( m_Device.get( ) && !m_Device->isAuthenticated( ) ) {
+
+            // No user connected
+            m_ulUserType = CK_UNAVAILABLE_INFORMATION;
+
+            // Update the state of all sessions because write access is no more allowed
+            updateAllSessionsState( );
+        }
+
+    } catch( ... ) { }
+}
+
+
+/*
+*/
+void Slot::verifyInit( const CK_SESSION_HANDLE& a_hSession, CK_MECHANISM_PTR a_pMechanism, const CK_OBJECT_HANDLE& a_hKey ) {
+
+    if( !m_Token.get( )/* || !m_Device.get( )*/ ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    Session* s = getSession( a_hSession );
+
+    if( s->isVerificationActive( ) ) {
+
+        throw PKCS11Exception( CKR_OPERATION_ACTIVE );
+    }
+
+    isValidMechanism( a_pMechanism->mechanism, CKF_VERIFY );
+
+    /*   try {
+
+    if( !m_Device->isAuthenticated( ) ) {
+
+    throw PKCS11Exception( CKR_USER_NOT_LOGGED_IN );
+    }
+
+    } catch( MiniDriverException& x ) {
+
+    Log::error( "Slot::verifyInit", "MiniDriverException" );
+    throw PKCS11Exception( Token::checkException( x ) );
+    }*/
+    if( !isAuthenticated( ) ) {
+
+        throw PKCS11Exception( CKR_USER_NOT_LOGGED_IN );
+    }
+
+    // get the corresponding object
+    StorageObject* o = 0;
+
+    try {
+
+        // from object handle we can know if it is a token or session object
+        if( m_Token->isToken( a_hKey ) ) {
+
+            o = m_Token->getObject( a_hKey);
+
+        } else {
+
+            o = s->getObject( a_hKey );
+
+        }
+
+    } catch( PKCS11Exception& x ) {
+
+        checkAccessException( x );
+
+        throw PKCS11Exception( CKR_KEY_HANDLE_INVALID );
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    isValidCryptoOperation( o, CKF_VERIFY );
+
+    // Initialize this crypto operation
+    s->setVerificationOperation( new CryptoOperation( a_pMechanism->mechanism, a_hKey ) );
+
+    if( CKM_SHA1_RSA_PKCS == a_pMechanism->mechanism ) {
+
+        s->setDigestRSAVerification( new CSHA1( ) );
+
+    } else if( CKM_SHA256_RSA_PKCS == a_pMechanism->mechanism ) {
+
+        s->setDigestRSAVerification( new CSHA256( ) );
+
+    } else if(CKM_MD5_RSA_PKCS == a_pMechanism->mechanism ){
+
+        s->setDigestRSAVerification( new CMD5( ) );
+    }
+}
+
+
+/*
+*/
+void Slot::verify( const CK_SESSION_HANDLE& a_hSession, CK_BYTE_PTR a_pData, const CK_ULONG& a_ulDataLen, CK_BYTE_PTR a_pSignature, const CK_ULONG a_ulSignatureLen ) {
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    Session* s = getSession( a_hSession );
+
+    if( !s->isVerificationActive( ) ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    if( !s->_verification ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    CK_ULONG m = s->_verification->getMechanism( );
+
+    try {
+
+        StorageObject* o = m_Token->getObject( s->_verification->getObject( ) );
+        if( !o ) {
+
+            throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+        }
+
+        Marshaller::u1Array* u = ( (Pkcs11ObjectKeyPublicRSA*) o )->m_pModulus.get( );
+        if( !u ) {
+
+            throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+        }
+
+        if( ( ( m == CKM_RSA_PKCS ) && (a_ulDataLen > u->GetLength( ) - 11 ) ) || ( ( m == CKM_RSA_X_509 ) && ( a_ulDataLen > u->GetLength( ) ) ) ) {
+
+            throw PKCS11Exception( CKR_DATA_LEN_RANGE );
+        }
+
+        boost::shared_ptr< Marshaller::u1Array > dataToVerify;
+
+        if( s->isDigestVerificationActiveRSA( ) ) {
+
+            if( !s->_digestRSAVerification ) {
+
+                throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+            }
+
+            // require hashing also
+            CDigest* d = s->_digestRSAVerification.get( );
+            if( !d ) {
+
+                throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+            }
+
+            CK_BYTE_PTR h = new CK_BYTE[ d->hashLength( ) ];
+
+            d->hashCore( a_pData, 0, a_ulDataLen );
+
+            d->hashFinal( h );
+
+            dataToVerify.reset( new Marshaller::u1Array( d->hashLength( ) ) );
+
+            dataToVerify->SetBuffer( h );
+
+            delete[ ] h;
+
+        } else { // Sign Only
+
+            dataToVerify.reset( new Marshaller::u1Array( a_ulDataLen ) );
+
+            dataToVerify->SetBuffer( a_pData );
+        }
+
+        boost::shared_ptr< Marshaller::u1Array > signature( new Marshaller::u1Array( a_ulSignatureLen ) );
+
+        signature->SetBuffer( a_pSignature );
+
+        m_Token->verify( o, dataToVerify.get( ), m, signature.get( ) );
+
+        s->removeDigestRSAVerification( );
+
+        s->removeVerificationOperation( );
+
+    } catch( MiniDriverException& x ) {
+
+        s->removeDigestRSAVerification( );
+
+        s->removeVerificationOperation( );
+
+        throw PKCS11Exception( Token::checkException( x ) );
+
+    } catch( PKCS11Exception& x ) {
+
+        checkAccessException( x );
+
+        s->removeDigestRSAVerification( );
+
+        s->removeVerificationOperation( );
+
+        throw;
+
+    } catch( ... ) {
+
+        s->removeDigestRSAVerification( );
+
+        s->removeVerificationOperation( );
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+}
+
+
+/*	Update the hash or if hashing is not getting used we just accumulate it
+*/
+void Slot::verifyUpdate( const CK_SESSION_HANDLE& a_hSession, CK_BYTE_PTR a_pPart, const CK_ULONG& a_ulPartLen ) {
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    Session* s = getSession( a_hSession );
+
+    if( !s->isVerificationActive( ) ){
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    if( s->isDigestVerificationActiveRSA( ) ) {
+
+        if( !s->_digestRSAVerification ) {
+
+            throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+        }
+
+        CDigest* digest = s->_digestRSAVerification.get( );
+        if( !digest ) {
+
+            throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+        }
+
+        digest->hashCore( a_pPart, 0, a_ulPartLen );
+
+    } else { 
+
+        // Sign Only
+
+        if( s->m_AccumulatedDataToVerify.get( ) ) { 
+
+            // just accumulate the data
+            Marshaller::u1Array* pAccumulatedDataToVerify = s->m_AccumulatedDataToVerify.get( );
+
+            Marshaller::u1Array* updatedData = new Marshaller::u1Array( pAccumulatedDataToVerify->GetLength( ) + a_ulPartLen );
+
+            memcpy( updatedData->GetBuffer( ), pAccumulatedDataToVerify->GetBuffer( ), pAccumulatedDataToVerify->GetLength( ) );
+
+            memcpy( (u1*)&updatedData->GetBuffer()[ pAccumulatedDataToVerify->GetLength( )], a_pPart, a_ulPartLen );
+
+            s->m_AccumulatedDataToVerify.reset( updatedData );
+
+        } else {
+
+            s->m_AccumulatedDataToVerify.reset( new Marshaller::u1Array( a_ulPartLen ) );
+
+            s->m_AccumulatedDataToVerify->SetBuffer( a_pPart );
+        }
+
+        if( !s->_verification ) {
+
+            throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+        }
+
+        CK_ULONG m = s->_verification->getMechanism( );
+
+        StorageObject* o = NULL;
+
+        try {
+
+            o = m_Token->getObject( s->_verification->getObject( ) );
+
+        } catch( MiniDriverException& x ) {
+
+            throw PKCS11Exception( Token::checkException( x ) );
+
+        } catch( PKCS11Exception& x ) {
+
+            checkAccessException( x );
+
+            throw;
+
+        } catch( ... ) {
+
+            throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+        }
+
+        if( !o ) {
+
+            throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+        }
+
+        Marshaller::u1Array* u = ( (Pkcs11ObjectKeyPublicRSA*) o )->m_pModulus.get( );
+
+        if( !u ) {
+
+            throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+        }
+
+        if((( m == CKM_RSA_PKCS) && (s->m_AccumulatedDataToVerify->GetLength() > u->GetLength() - 11)) ||
+            (( m == CKM_RSA_X_509) && (s->m_AccumulatedDataToVerify->GetLength() > u->GetLength())))
+        {
+            throw PKCS11Exception( CKR_DATA_LEN_RANGE );
+        }
+    }
+}
+
+
+/*
+*/
+void Slot::verifyFinal( const CK_SESSION_HANDLE& a_hSession, CK_BYTE_PTR a_pSignature, const CK_ULONG& a_ulSignatureLen ) {
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    Session* s = getSession( a_hSession );
+
+    if( !s->isVerificationActive( ) ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    boost::shared_ptr< Marshaller::u1Array > dataToVerify;
+
+    if( s->isDigestVerificationActiveRSA( ) ) {
+
+        if( !s->_digestRSAVerification ) {
+
+            throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+        }
+
+        // require hashing also
+        CDigest* digest = s->_digestRSAVerification.get( );
+
+        if( !digest ) {
+
+            throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+        }
+
+        CK_BYTE_PTR hash = new CK_BYTE[ digest->hashLength( ) ];
+
+        digest->hashFinal( hash );
+
+        dataToVerify.reset( new Marshaller::u1Array( digest->hashLength( ) ) );
+
+        dataToVerify->SetBuffer( hash );
+
+        delete[ ] hash;
+
+    } else {
+
+        // Sign Only
+        dataToVerify = s->m_AccumulatedDataToVerify;
+    }
+
+    boost::shared_ptr< Marshaller::u1Array > signature( new Marshaller::u1Array( a_ulSignatureLen ) );
+
+    signature->SetBuffer( a_pSignature );
+
+    if( !s->_verification ) {
+
+        throw PKCS11Exception( CKR_OPERATION_NOT_INITIALIZED );
+    }
+
+    try {
+
+        StorageObject* o = m_Token->getObject( s->_verification->getObject( ) );
+
+        m_Token->verify( o, dataToVerify.get( ), s->_verification->getMechanism( ), signature.get( ) );
+
+    } catch( MiniDriverException& x ) {
+
+        s->removeDigestRSAVerification( );
+
+        s->removeVerificationOperation( );
+
+        s->m_AccumulatedDataToVerify.reset( );
+
+        throw PKCS11Exception( Token::checkException( x ) );
+
+    } catch( PKCS11Exception& x ) {
+
+        s->removeDigestRSAVerification( );
+
+        s->removeVerificationOperation( );
+
+        s->m_AccumulatedDataToVerify.reset( );
+
+        checkAccessException( x );
+
+        throw;
+
+    } catch( ... ) {
+
+        s->removeDigestRSAVerification( );
+
+        s->removeVerificationOperation( );
+
+        s->m_AccumulatedDataToVerify.reset( );
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    s->removeDigestRSAVerification( );
+
+    s->removeVerificationOperation( );
+
+    s->m_AccumulatedDataToVerify.reset( );
+}
+
+
+/*
+*/
+CK_SESSION_HANDLE Slot::addSession( const bool& a_bIsReadWrite ) {
+
+    // Prepare a unique session id
+    CK_SESSION_HANDLE h = computeSessionHandle( a_bIsReadWrite );
+
+    // Create & store the session instance
+    m_Sessions.insert( h, new Session( this, h, a_bIsReadWrite ) );
+
+    // Return the session handle
+    return h;
+}
+
+
+/*
+*/
+CK_SESSION_HANDLE Slot::computeSessionHandle( const bool& a_bIsReadWrite ) {
+
+    if( !m_Device.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    // A session handle is a 4 or more bytes long unsigned data.
+    CK_SESSION_HANDLE h = 0x00000000;
+
+    // He here the convention to compute the session handle:
+
+    // byte #1: session index. We do not accept to open more than 255 sessions.
+    h |= ++s_ucSessionIndex;
+
+    // byte #2: session properties has R/W or R/O
+    h |= ( a_bIsReadWrite << 8 );
+
+    // byte #3: slot index associated to this session
+    unsigned char ucDeviceID = 0xFF;
+
+    try {
+
+        ucDeviceID = m_Device->getDeviceID( );
+
+    } catch( MiniDriverException& x ) {
+
+        Log::error( "Slot::computeSessionHandle", "MiniDriverException" );
+        throw PKCS11Exception( Token::checkException( x ) );
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    h |= ( ucDeviceID << 16 );
+
+    // byte #4: RFU and set to 0x00
+
+    return h;
+}
+
+
+/*
+*/
+void Slot::removeSession( const CK_SESSION_HANDLE& a_ulSessionId ) {
+
+    if( !m_Token.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    m_Sessions.erase( a_ulSessionId );
+
+    try {
+
+        // if this was the last session to be removed then the login 
+        // state of token for application returns to public sessions
+        if( !m_Sessions.size( ) ) {
+
+            m_Token->setLoggedRole( CK_UNAVAILABLE_INFORMATION );
+        }
+
+    } catch( MiniDriverException& x ) {
+
+        throw PKCS11Exception( Token::checkException( x ) );
+
+    } catch( PKCS11Exception& ) {
+
+        throw;
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+}
+
+
+/*
+*/
+bool Slot::hasReadOnlySession( void ) {
+
+    BOOST_FOREACH( const MAP_SESSIONS::value_type& i, m_Sessions ) {
+
+        if( i.second && !i.second->isReadWrite( ) ) {
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+/*
+*/
+void Slot::isValidMechanism( const CK_ULONG& a_mechanism, const CK_ULONG& a_Operation )
 {
-   // Check if key is consistent
-   switch(operation)
-   {
-   case CKF_ENCRYPT:
-   case CKF_VERIFY:
-   case CKF_VERIFY_RECOVER:
-      if(object->_class != CKO_PUBLIC_KEY && object->_class != CKO_SECRET_KEY){
-         return CKR_KEY_TYPE_INCONSISTENT;
-      }
-      break;
+    bool bFound = false;
 
-   case CKF_DECRYPT:
-   case CKF_SIGN:
-   case CKF_SIGN_RECOVER:
-      if(object->_class != CKO_PRIVATE_KEY && object->_class != CKO_SECRET_KEY){
-         return CKR_KEY_TYPE_INCONSISTENT;
-      }
-      break;
-   }
+    size_t max = sizeof( g_mechanismList ) / sizeof( CK_ULONG );
 
-   // Check if key supports the operation
-   switch(operation)
-   {
-   case CKF_ENCRYPT:
-      if(((object->_class == CKO_PUBLIC_KEY)&&(!((RSAPublicKeyObject*)object)->_encrypt))
-#ifdef ENABLE_SYMMETRIC
-         ||((object->_class == CKO_SECRET_KEY)&&(!((SecretKeyObject*)object)->_encrypt))
-#endif
-         ){
-            return CKR_KEY_FUNCTION_NOT_PERMITTED;
-      }
-      break;
+    for( size_t i = 0; i < max ; ++i ) {
 
-   case CKF_DECRYPT:
-      if(((object->_class == CKO_PRIVATE_KEY)&&(!((RSAPrivateKeyObject*)object)->_decrypt))
-#ifdef ENABLE_SYMMETRIC
-         ||((object->_class == CKO_SECRET_KEY)&&(!((SecretKeyObject*)object)->_decrypt))
-#endif
-         ){
-            return CKR_KEY_FUNCTION_NOT_PERMITTED;
-      }
-      break;
+        if( g_mechanismList[ i ] == a_mechanism ){
 
-   case CKF_VERIFY:
-      if(((object->_class == CKO_PUBLIC_KEY)&&(!((RSAPublicKeyObject*)object)->_verify))
-#ifdef ENABLE_SYMMETRIC
-         ||((object->_class == CKO_SECRET_KEY)&&(!((SecretKeyObject*)object)->_verify))
-#endif
-         ){
-            return CKR_KEY_FUNCTION_NOT_PERMITTED;
-      }
-      break;
+            if( ( g_mechanismInfo[ i ].flags & a_Operation ) != a_Operation ) {
+
+                throw PKCS11Exception( CKR_MECHANISM_INVALID );
+            }
+
+            bFound = true;
+
+            break;
+        }
+    }
+
+    if( !bFound ) {
+
+        throw PKCS11Exception( CKR_MECHANISM_INVALID );
+    }
+}
 
 
-   case CKF_VERIFY_RECOVER:
-      if(((object->_class == CKO_PUBLIC_KEY)&&(!((RSAPublicKeyObject*)object)->_verifyRecover))){
-         return CKR_KEY_FUNCTION_NOT_PERMITTED;
-      }
-      break;
+/*
+*/
+void Slot::isValidCryptoOperation( StorageObject* a_pObject, const CK_ULONG& a_ulOperation ) {
+
+    if( !a_pObject ) {
+
+        throw PKCS11Exception( CKR_KEY_TYPE_INCONSISTENT );
+    }
+
+    CK_OBJECT_CLASS c = a_pObject->getClass( );
+
+    // Check if key is consistent
+    switch( a_ulOperation ) {
+    case CKF_ENCRYPT:
+    case CKF_VERIFY:
+    case CKF_VERIFY_RECOVER:
+        if(c != CKO_PUBLIC_KEY && c != CKO_SECRET_KEY){
+            throw PKCS11Exception(  CKR_KEY_TYPE_INCONSISTENT );
+        }
+        break;
+
+    case CKF_DECRYPT:
+    case CKF_SIGN:
+    case CKF_SIGN_RECOVER:
+        if( ( c != CKO_PRIVATE_KEY ) && ( c != CKO_SECRET_KEY ) ) {
+
+            throw PKCS11Exception( CKR_KEY_TYPE_INCONSISTENT );
+        }
+        break;
+    }
+
+    // Check if key supports the operation
+    switch( a_ulOperation )
+    {
+    case CKF_ENCRYPT:
+        if(((c == CKO_PUBLIC_KEY)&&(!((Pkcs11ObjectKeyPublicRSA*)a_pObject)->_encrypt)) ){
+            throw PKCS11Exception( CKR_KEY_FUNCTION_NOT_PERMITTED );
+        }
+        break;
+
+    case CKF_DECRYPT:
+        if(((c == CKO_PRIVATE_KEY)&&(!((RSAPrivateKeyObject*)a_pObject)->_decrypt))	){
+            throw PKCS11Exception(  CKR_KEY_FUNCTION_NOT_PERMITTED );
+        }
+        break;
+
+    case CKF_VERIFY:
+        if(((c == CKO_PUBLIC_KEY)&&(!((Pkcs11ObjectKeyPublicRSA*)a_pObject)->_verify)) ){
+            throw PKCS11Exception(  CKR_KEY_FUNCTION_NOT_PERMITTED );
+        }
+        break;
+
+    case CKF_VERIFY_RECOVER:
+        if(((c == CKO_PUBLIC_KEY)&&(!((Pkcs11ObjectKeyPublicRSA*)a_pObject)->_verifyRecover))){
+            throw PKCS11Exception(  CKR_KEY_FUNCTION_NOT_PERMITTED );
+        }
+        break;
+
+    case CKF_SIGN:
+        if(((c == CKO_PRIVATE_KEY)&&(!((RSAPrivateKeyObject*)a_pObject)->_sign)) ){
+            throw PKCS11Exception(  CKR_KEY_FUNCTION_NOT_PERMITTED );
+        }
+        break;
+
+    case CKF_SIGN_RECOVER:
+        if(((c == CKO_PRIVATE_KEY)&&(!((RSAPrivateKeyObject*)a_pObject)->_signRecover))){
+            throw PKCS11Exception(  CKR_KEY_FUNCTION_NOT_PERMITTED );
+        }
+        break;
+    }
+}
 
 
-   case CKF_SIGN:
-      if(((object->_class == CKO_PRIVATE_KEY)&&(!((RSAPrivateKeyObject*)object)->_sign))
-#ifdef ENABLE_SYMMETRIC
-         ||((object->_class == CKO_SECRET_KEY)&&(!((SecretKeyObject*)object)->_sign))
-#endif
-         ){
-            return CKR_KEY_FUNCTION_NOT_PERMITTED;
-      }
-      break;
+/*
+*/
+bool Slot::isSessionOwner( const CK_SESSION_HANDLE& a_hSession ) {
 
-   case CKF_SIGN_RECOVER:
-      if(((object->_class == CKO_PRIVATE_KEY)&&(!((RSAPrivateKeyObject*)object)->_signRecover))){
-         return CKR_KEY_FUNCTION_NOT_PERMITTED;
-      }
-      break;
+    MAP_SESSIONS::iterator i = m_Sessions.find( a_hSession );
 
-   }
+    if( m_Sessions.end( ) == i ) {
 
-   return CKR_OK;
+        return false;
+    }
+
+    return true;
+}
+
+
+/*
+*/
+Session* Slot::getSession( const CK_SESSION_HANDLE& a_hSession ) { 
+
+    MAP_SESSIONS::iterator i = m_Sessions.find( a_hSession );
+
+    if( i == m_Sessions.end( ) ) {
+
+        throw PKCS11Exception( CKR_SESSION_HANDLE_INVALID ); 
+    } 
+
+    return i->second; 
+}
+
+
+/*
+*/
+void Slot::getCardProperty( CK_BYTE a_ucProperty, CK_BYTE a_ucFlags, CK_BYTE_PTR a_pValue, CK_ULONG_PTR a_pValueLen ) {
+
+    if( !m_Device.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    try {
+
+        Marshaller::u1Array* pPropertyValue = m_Device->getCardProperty( a_ucProperty, a_ucFlags );
+
+        if( !pPropertyValue ) {
+
+            *a_pValueLen = 0;
+
+            return;
+        }
+
+        if( !a_pValue ) {
+
+            // If the incoming buffer pointer is null then only return the expected size
+            *a_pValueLen = pPropertyValue->GetLength( );
+
+            return;
+
+        } else {
+
+            // If the incoming buffer is too smal then throw an error
+            if( *a_pValueLen < pPropertyValue->GetLength( ) ) {
+
+                *a_pValueLen = pPropertyValue->GetLength( );
+
+                throw PKCS11Exception( CKR_BUFFER_TOO_SMALL );
+            }
+        }
+
+        memcpy( a_pValue, pPropertyValue->GetBuffer( ), pPropertyValue->GetLength( ) );
+
+        *a_pValueLen = pPropertyValue->GetLength( );
+
+    } catch( MiniDriverException& x ) {
+
+        throw PKCS11Exception( Token::checkException( x ) );
+
+    } catch( PKCS11Exception& x ) {
+
+        checkAccessException( x );
+
+        throw;
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+}
+
+
+/*
+*/
+void Slot::setCardProperty( CK_BYTE a_ucProperty, CK_BYTE a_ucFlags, CK_BYTE_PTR a_pValue, CK_ULONG a_ulValueLen ) {
+
+    if( !m_Device.get( ) ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
+
+    try {
+
+        Marshaller::u1Array prop( a_ulValueLen );
+
+        prop.SetBuffer( a_pValue );
+
+        m_Device->setCardProperty( a_ucProperty, &prop, a_ucFlags );
+
+    } catch( MiniDriverException& x ) {
+
+        throw PKCS11Exception( Token::checkException( x ) );
+
+    } catch( PKCS11Exception& x ) {
+
+        checkAccessException( x );
+
+        throw;
+
+    } catch( ... ) {
+
+        throw PKCS11Exception( CKR_TOKEN_NOT_PRESENT );
+    }
 }

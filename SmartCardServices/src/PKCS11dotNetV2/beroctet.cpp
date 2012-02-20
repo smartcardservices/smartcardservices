@@ -18,20 +18,17 @@
  *
  */
 
-// This implementation is based on X.690 specification. Access to this
-// specification is a pre-requisite to understand the logic. The spec
-// can be purchased from International Telecommunication Union (ITU)
-// at http://www.itu.int
 
-// This code is based on class in ACS baseline.
+// This implementation is based on X.690 specification. Access to this specification is a pre-requisite to understand the logic. 
+// The spec can be purchased from International Telecommunication Union (ITU) at http://www.itu.int
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
+
+#include <cstring>
+#include <cstdlib>
+#include <cstdio>
 
 #include "beroctet.h"
 
-using namespace std;
 
 BEROctet::BEROctet() : m_tcClass(tcUniversal),
                        m_fConstructed(fBerPcPrimitive),
@@ -59,21 +56,28 @@ BEROctet::BEROctet(TagClass tcClass, bool fConstructed, unsigned int dwTag, bool
                                                                        m_fModified(true)
 {
     if(!m_fDefinite && !m_fConstructed)
-        throw runtime_error("BERPrimitiveIndefiniteLength");
+        throw std::runtime_error("BERPrimitiveIndefiniteLength");
 }
 
 BEROctet::~BEROctet(void)
 {
-    for(std::vector<BEROctet const*>::size_type i=0; i<m_SubOctetList.size(); i++)
-        delete m_SubOctetList[i];
+    size_t l = m_SubOctetList.size( );
+    for( std::vector< BEROctet const* >::size_type i = 0 ; i < l ; ++i ) {
+        
+        delete m_SubOctetList[ i ];
+    }
 }
 
 BEROctet& BEROctet::operator=(BEROctet const &Oct)
 {
-
-    for(std::vector<BEROctet const*>::size_type i=0; i<m_SubOctetList.size(); i++)
+    size_t l = m_SubOctetList.size( );
+    for( std::vector< BEROctet const* >::size_type i = 0 ; i < l ; ++i ) {
+        
+        delete m_SubOctetList[ i ];
+    }
+    /*for(std::vector<BEROctet const*>::size_type i=0; i<m_SubOctetList.size(); i++)
         delete m_SubOctetList[i];
-
+*/
     m_SubOctetList.resize(0);
     m_blbData.resize(0);
 
@@ -88,8 +92,11 @@ BEROctet& BEROctet::operator=(BEROctet const &Oct)
 
     if(m_fConstructed)
     {
-        for(std::vector<BEROctet const*>::size_type i=0; i<Oct.m_SubOctetList.size(); i++)
+        size_t l = Oct.m_SubOctetList.size( );
+        for( std::vector< BEROctet const*>::size_type i = 0 ; i < l; ++i ) {
+
             m_SubOctetList.push_back(new BEROctet(*Oct.m_SubOctetList[i]));
+        }
     }
     else
         m_blbData = Oct.m_blbData;
@@ -109,8 +116,11 @@ BEROctet::Blob BEROctet::Data() const
 
         Blob data;
 
-        for(std::vector<BEROctet const*>::size_type i=0; i<m_SubOctetList.size(); i++)
-            data += m_SubOctetList[i]->Octet();
+        size_t l = m_SubOctetList.size( );
+        for( std::vector< BEROctet const* >::size_type i = 0 ; i < l; ++i ) {
+         
+            data += m_SubOctetList[ i ]->Octet( );
+        }
 
         return data;
     }
@@ -125,7 +135,7 @@ void BEROctet::Data(Blob const &blb)
 {
 
     if(m_fConstructed)
-        throw runtime_error("BERInconsistentOperation");
+        throw std::runtime_error("BERInconsistentOperation");
 
     m_blbData = blb;
     m_fModified = true;
@@ -134,10 +144,10 @@ void BEROctet::Data(Blob const &blb)
 
 // If the octet is a constructed type, this returns list of sub-octets
 
-vector<BEROctet*> BEROctet::SubOctetList() const
+std::vector<BEROctet*> BEROctet::SubOctetList() const
 {
     if(!m_fConstructed)
-        throw runtime_error("BERInconsistentOperation");
+        throw std::runtime_error("BERInconsistentOperation");
 
     return m_SubOctetList;
 }
@@ -147,7 +157,7 @@ vector<BEROctet*> BEROctet::SubOctetList() const
 void BEROctet::Insert(BEROctet const &oct)
 {
     if(!m_fConstructed)
-        throw runtime_error("BERInconsistentOperation");
+        throw std::runtime_error("BERInconsistentOperation");
 
     BEROctet *pOct = new BEROctet(oct);
     m_SubOctetList.push_back(pOct);
@@ -211,16 +221,16 @@ unsigned int BEROctet::Tag() const
 
 // Decode the contents of an OID
 
-string BEROctet::ObjectID() const
+std::string BEROctet::ObjectID() const
 {
 
     if(m_tcClass!=tcUniversal || m_dwTag!=dwBerUnivObjectIdent)
-        throw runtime_error("BERInconsistentOperation");
+        throw std::runtime_error("BERInconsistentOperation");
 
     if(!m_blbData.size())
-        throw runtime_error("BEREmptyOctet");
+        throw std::runtime_error("BEREmptyOctet");
 
-    string OID;
+    std::string OID;
 
     // The scratch buffer "text" below needs to be large enough to hold
     // the decimal encoding of two 32 bit integers, including a space
@@ -240,9 +250,9 @@ string BEROctet::ObjectID() const
         {
             c++;
             if(c>=Last)
-                throw runtime_error("BERUnexpectedEndOfOctet");
+                throw std::runtime_error("BERUnexpectedEndOfOctet");
             if(subid>0x01FFFFFF)
-                throw runtime_error("BEROIDSubIdentifierOverflow");
+                throw std::runtime_error("BEROIDSubIdentifierOverflow");
             subid = (subid<<7) | ((*c)&0x7F);
         }
         if(First)
@@ -272,17 +282,17 @@ string BEROctet::ObjectID() const
 
 // Encode an OID
 
-void BEROctet::ObjectID(string const &str)
+void BEROctet::ObjectID(std::string const &str)
 {
 
     if(m_tcClass!=tcUniversal)
-        throw runtime_error("BERInconsistentOperation");
+        throw std::runtime_error("BERInconsistentOperation");
 
     if(m_dwTag==dwBerUnivZero)
         m_dwTag = dwBerUnivObjectIdent;
 
     if(m_dwTag!=dwBerUnivObjectIdent)
-        throw runtime_error("BERInconsistentOperation");
+        throw std::runtime_error("BERInconsistentOperation");
 
     char *oid = 0;
 
@@ -296,28 +306,28 @@ void BEROctet::ObjectID(string const &str)
         char *s;
 
         if(0==(s = strtok(oid," ")))
-            throw runtime_error("BERIllegalObjectIdentifier");
+            throw std::runtime_error("BERIllegalObjectIdentifier");
 
         unsigned int X,Y,dwSubOID;
 
         if(sscanf(s,"%u",&X)!=1)
-            throw runtime_error("BERIllegalObjectIdentifier");
+            throw std::runtime_error("BERIllegalObjectIdentifier");
 
         if(X>2)
-            throw runtime_error("BERIllegalObjectIdentifier");
+            throw std::runtime_error("BERIllegalObjectIdentifier");
 
         if(0==(s = strtok(0," ")))
-            throw runtime_error("BERIllegalObjectIdentifier");
+            throw std::runtime_error("BERIllegalObjectIdentifier");
 
         if(sscanf(s,"%u",&Y)!=1)
-            throw runtime_error("BERIllegalObjectIdentifier");
+            throw std::runtime_error("BERIllegalObjectIdentifier");
 
         if(X<2 && Y>39)
-            throw runtime_error("BERIllegalObjectIdentifier");
+            throw std::runtime_error("BERIllegalObjectIdentifier");
 
         dwSubOID = X*40;
         if(Y>0xFFFFFFFF-dwSubOID)
-            throw runtime_error("BERDataOverflow");
+            throw std::runtime_error("BERDataOverflow");
 
         dwSubOID += Y;
 
@@ -370,47 +380,47 @@ void BEROctet::ObjectID(string const &str)
 // We here apply the convention from RFC 2459 that the 2 digit year
 // encoded in UTCTime is in the range 1950-2049.
 
-string BEROctet::Time() const
+std::string BEROctet::Time() const
 {
 
     static const Blob::size_type UnivUTCTimeSize = 13;
     static const Blob::size_type UnivGenTimeSize = 15;
 
     if(m_tcClass!=tcUniversal)
-        throw runtime_error("BERInconsistentOperation");
+        throw std::runtime_error("BERInconsistentOperation");
 
     if(m_dwTag==dwBerUnivUTCTime)
     {
         // UTCTime
 
         if(m_blbData.size()!=UnivUTCTimeSize)
-            throw runtime_error("BERInconsistentDataLength");
+            throw std::runtime_error("BERInconsistentDataLength");
 
-        string strCentury, strYear((char*)m_blbData.data(),2);
+        std::string strCentury, strYear((char*)m_blbData.data(),2);
         int iYear;
         if(sscanf(strYear.c_str(),"%d",&iYear)!=1)
-            throw runtime_error("FormatDecodingError");
+            throw std::runtime_error("FormatDecodingError");
 
         if(iYear>=50) strCentury = "19";
         else strCentury = "20";
 
         // Add century and strip off the 'Z'
 
-        return strCentury + string((char*)m_blbData.data(),UnivUTCTimeSize-1);
+        return strCentury + std::string((char*)m_blbData.data(),UnivUTCTimeSize-1);
     }
     else if(m_dwTag==dwBerUnivGenTime)
     {
         // GeneralizedTime
 
         if(m_blbData.size()!=UnivGenTimeSize)
-            throw runtime_error("BERInconsistentDataLength");
+            throw std::runtime_error("BERInconsistentDataLength");
 
         // Return the string as is, stripping off the 'Z'
 
-        return string((char*)m_blbData.data(),UnivGenTimeSize-1);
+        return std::string((char*)m_blbData.data(),UnivGenTimeSize-1);
     }
     else
-        throw runtime_error("BERInconsistentOperation");
+        throw std::runtime_error("BERInconsistentOperation");
 
 }
 
@@ -421,26 +431,26 @@ string BEROctet::Time() const
 // 1950-2049 are encoded as UTC Time and years later are encoded as
 // Generalized time. In this case, years < 1950 are not allowed.
 
-void BEROctet::Time(string const &str)
+void BEROctet::Time(std::string const &str)
 {
     static const Blob::size_type ExpectedSize = 14;
 
     if(m_tcClass!=tcUniversal)
-        throw runtime_error("BERInconsistentOperation");
+        throw std::runtime_error("BERInconsistentOperation");
 
     if(str.size()!=ExpectedSize)
-        throw runtime_error("IllegalParameter");
+        throw std::runtime_error("IllegalParameter");
 
     // If m_dwTag is zero, chose appropriate tag according to year
 
     int iYear;
     if(sscanf(str.substr(0,4).c_str(),"%d",&iYear)!=1)
-        throw runtime_error("IllegalParameter");
+        throw std::runtime_error("IllegalParameter");
 
     if(m_dwTag==dwBerUnivZero)
     {
         if(iYear<1950)
-            throw runtime_error("IllegalParameter");
+            throw std::runtime_error("IllegalParameter");
         else if(iYear<2050)
             m_dwTag = dwBerUnivUTCTime;
         else
@@ -456,7 +466,7 @@ void BEROctet::Time(string const &str)
         blbData.assign((unsigned char*)str.data(),str.size());
 
     else
-        throw runtime_error("BERInconsistentOperation");
+        throw std::runtime_error("BERInconsistentOperation");
 
     blbData += 'Z';
 
@@ -466,11 +476,10 @@ void BEROctet::Time(string const &str)
 
 // SearchOID returns all the constructed octets that contain a particular OID
 
-void BEROctet::SearchOID(string const &OID, vector<BEROctet const*> &result) const
+void BEROctet::SearchOID(std::string const &OID, std::vector<BEROctet const*> &result) const
 {
-
-    for(std::vector<BEROctet const*>::size_type i=0; i<m_SubOctetList.size(); i++)
-    {
+    size_t l = m_SubOctetList.size( );
+    for( std::vector< BEROctet const* >::size_type i = 0; i < l ; ++i ) {
 
         if(m_SubOctetList[i]->Class()==tcUniversal &&
            m_SubOctetList[i]->Tag()==dwBerUnivObjectIdent)
@@ -488,10 +497,11 @@ void BEROctet::SearchOID(string const &OID, vector<BEROctet const*> &result) con
 
 // SearchOIDNext returns all the octets following a particular OID
 
-void BEROctet::SearchOIDNext(string const &OID, vector<BEROctet const*> &result) const
+void BEROctet::SearchOIDNext(std::string const &OID, std::vector<BEROctet const*> &result) const
 {
-    for(std::vector<BEROctet const*>::size_type i=0; i<m_SubOctetList.size(); i++)
-    {
+    size_t l = m_SubOctetList.size( );
+    for( std::vector< BEROctet const* >::size_type i = 0; i < l ; ++i ) {
+
         if(m_SubOctetList[i]->Class()==tcUniversal &&
            m_SubOctetList[i]->Tag()==dwBerUnivObjectIdent)
         {
@@ -535,7 +545,7 @@ BEROctet::Blob BEROctet::IdentOctets(TagClass tcClass, bool fConstructed, unsign
         break;
 
     default:
-        throw runtime_error("BERIllegalClass");
+        throw std::runtime_error("BERIllegalClass");
     }
 
     if(fConstructed)
@@ -560,7 +570,7 @@ BEROctet::Blob BEROctet::IdentOctets(TagClass tcClass, bool fConstructed, unsign
 
     Blob IdentOcts(&bLeadingOct,1);
 
-    for(int i=0; i<n; i++)
+    for(int i=0; i<n; ++i)
         IdentOcts +=buf[n-i-1];
 
     return IdentOcts;
@@ -591,7 +601,7 @@ BEROctet::Blob BEROctet::LengthOctets(unsigned int dwLength)
     }
 
     Blob LengthOcts(&bLeadingOct,1);
-    for(int i=0; i<n; i++)
+    for(int i=0; i<n; ++i)
         LengthOcts +=buf[n-i-1];
 
     return LengthOcts;
@@ -604,7 +614,7 @@ void BEROctet::Decode(Blob const &blb)
 {
 
     if(!blb.size())
-        throw runtime_error("BEREmptyOctet");
+        throw std::runtime_error("BEREmptyOctet");
 
     size_t BufferSize = blb.size();
 
@@ -630,7 +640,7 @@ void BEROctet::Decode(Blob const &blb)
         break;
 
     default:
-        throw runtime_error("BERIllegalClass");
+        throw std::runtime_error("BERIllegalClass");
     }
 
     const unsigned char *c = blb.data();
@@ -643,18 +653,18 @@ void BEROctet::Decode(Blob const &blb)
 
         c++;
         if(c>Last)
-            throw runtime_error("BERUnexpectedEndOfOctet");
+            throw std::runtime_error("BERUnexpectedEndOfOctet");
 
         while (*c & 0x80)
         {
             m_dwTag = (m_dwTag << 7) | ((*c) & 0x7F);
             c++;
             if(c>Last)
-                throw runtime_error("BERUnexpectedEndOfOctet");
+                throw std::runtime_error("BERUnexpectedEndOfOctet");
         }
 
         if(m_dwTag > 0x01FFFFFF)
-            throw runtime_error("BERTagValueOverflow");
+            throw std::runtime_error("BERTagValueOverflow");
 
         m_dwTag = (m_dwTag << 7) | ((*c) & 0x7F);
 
@@ -662,7 +672,7 @@ void BEROctet::Decode(Blob const &blb)
 
     c++;
     if(c>Last)
-        throw runtime_error("BERUnexpectedEndOfOctet");
+        throw std::runtime_error("BERUnexpectedEndOfOctet");
 
     size_t DataSize;
 
@@ -672,17 +682,17 @@ void BEROctet::Decode(Blob const &blb)
         if(n)
         {
             DataSize = 0;
-            for(int i=0; i<n; i++)
+            for(int i=0; i<n; ++i)
             {
                 c++; if(c>Last)
-                    throw runtime_error("BERUnexpectedEndOfOctet");
+                    throw std::runtime_error("BERUnexpectedEndOfOctet");
                 if(DataSize>0x007FFFFF)
-                    throw runtime_error("BERDataOverflow");
+                    throw std::runtime_error("BERDataOverflow");
                 DataSize = (DataSize<<8) | (*c);
             }
         }
         else
-            throw runtime_error("BERUnexpectedIndefiniteLength");
+            throw std::runtime_error("BERUnexpectedIndefiniteLength");
     }
     else DataSize = *c;
 
@@ -696,10 +706,13 @@ void BEROctet::Decode(Blob const &blb)
     m_fModified = false;
 
     if(OctetSize>static_cast<unsigned int>(BufferSize))
-        throw runtime_error("BERInconsistentDataLength");
+        throw std::runtime_error("BERInconsistentDataLength");
 
-    for(std::vector<BEROctet const*>::size_type  i=0; i<m_SubOctetList.size(); i++)
+    size_t l = m_SubOctetList.size( );
+    for( std::vector< BEROctet const* >::size_type i = 0; i < l; ++i ) {
+     
         delete m_SubOctetList[i];
+    }
 
     m_SubOctetList.resize(0);
     m_blbData = Blob();
@@ -732,9 +745,16 @@ bool BEROctet::Modified() const
     if(m_fModified)
         return true;
 
-    if(m_fConstructed)
-        for(std::vector<BEROctet const*>::size_type i=0; i<m_SubOctetList.size(); i++)
-            if(m_SubOctetList[i]->Modified()) return true;
+    if(m_fConstructed) {
+        std::vector< BEROctet const* >::size_type l = m_SubOctetList.size( );
+        for( std::vector< BEROctet const* >::size_type i = 0; i < l; ++i ) {
+
+            if(m_SubOctetList[i]->Modified()) {
+                
+                return true;
+            }
+        }
+    }
 
     return false;
 

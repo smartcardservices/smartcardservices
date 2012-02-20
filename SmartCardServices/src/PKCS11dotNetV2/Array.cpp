@@ -18,22 +18,15 @@
  *
  */
 
+#include <cstring>
+#include <memory>
 #ifdef WIN32
 #include <Windows.h>
 #pragma warning(push)
 #pragma warning(disable:4201)
 #endif
 
-#include <string.h>
-#ifdef __APPLE__
-#include <PCSC/winscard.h>
-#else
-#include <winscard.h>
-#endif
-#include <stdexcept>
-#include "MarshallerCfg.h"
-#include "Except.h"
-#include "Array.h"
+#include "Array.hpp"
 
 // Determine Processor Endianess
 #include <limits.h>
@@ -53,54 +46,62 @@ _u4 _endian = 1;
 
 bool isLittleEndian = (*((unsigned char *)(&_endian))) ? true  : false;
 bool isBigEndian    = (*((unsigned char *)(&_endian))) ? false : true;
+
+
+const size_t g_sizeU1 = sizeof( u1 );
+const size_t g_sizeU2 = sizeof( u2 );
+const size_t g_sizeU4 = sizeof( u4 );
+const size_t g_sizeU8 = sizeof( u8 );
+
+
 MARSHALLER_NS_BEGIN
 
 
-static u4 ToBigEndian(u4 val)
+static u4 ToBigEndian(u4 v)
 {
     if (isBigEndian)
     {
-	    return val;
+	    return v;
     }
     else
     {
         u4 res;
-        res =  val << 24;
-        res |= (val << 8) & 0x00FF0000;
-        res |= (val >> 8) & 0x0000FF00;
-        res |= val >> 24;
+        res =  v << 24;
+        res |= (v << 8) & 0x00FF0000;
+        res |= (v >> 8) & 0x0000FF00;
+        res |= v >> 24;
 
         return res;
     }
 }
 
-static u2 ToBigEndian(u2 val)
+static u2 ToBigEndian(u2 v)
 {
     if (isBigEndian)
     {
-    	return val;
+    	return v;
     }
     else
     {
-        return (u2)((val << 8) | (val >> 8));
+        return (u2)((v << 8) | (v >> 8));
     }
 }
 
-static u8 ToBigEndian(u8 val)
+static u8 ToBigEndian(u8 v)
 {
     if (isBigEndian)
     {
-    	return val;
+    	return v;
     }
     else
     {
-	    u4 val1 = (u4)(val >> 32);
-	    u4 val2 = (u4)val;
+	    u4 v1 = (u4)(v >> 32);
+	    u4 v2 = (u4)v;
 
-        val1 = ToBigEndian(val1);
-        val2 = ToBigEndian(val2);
+        v1 = ToBigEndian(v1);
+        v2 = ToBigEndian(v2);
 
-	    return (u8)(((u8)val2 << 32) | val1);
+	    return (u8)(((u8)v2 << 32) | v1);
     }
 }
 
@@ -137,7 +138,7 @@ u2 ComputeUTF8Length(M_SAL_IN lpCharPtr str)
             goto error;
 		}
 
-        // Encode the character pair value.
+        // Encode the character pair vue.
 		if (pair < (u4)0x0080) {
             count++;
 		} else if (pair < (u4)0x0800) {
@@ -166,12 +167,12 @@ void UTF8Encode(M_SAL_IN lpCharPtr str, u1Array &utf8Data)
     u4 nCharProcessed = 0;
     u4 pair;
     u2 leftOver;
-    u1* bytes = utf8Data.GetBuffer();
+    u1* bytes = utf8Data.GetBuffer( );
     u4 byteCount;
     u4 byteIndex = 0;
     u4 charIndex = 0;
 
-    byteCount = utf8Data.GetLength();
+    byteCount = utf8Data.GetLength( );
 
     leftOver = 0;
 
@@ -196,7 +197,7 @@ void UTF8Encode(M_SAL_IN lpCharPtr str, u1Array &utf8Data)
             goto error;
 		}
 
-        // Encode the character pair value.
+        // Encode the character pair vue.
 		if (pair < (u4)0x0080) {
             if (byteIndex >= byteCount) {
                 goto end;
@@ -246,7 +247,7 @@ error:;
 
 u2 ComputeLPSTRLength(u1Array &array, u4 offset, u4 len)
 {
-	if ((u8)(offset + len) > (u8)array.GetLength()) {
+	if ((u8)(offset + len) > (u8)array.GetLength( ) ) {
 		throw ArgumentOutOfRangeException((lpCharPtr)"");
 	} else {
 		u2 charlen = 0;
@@ -274,7 +275,7 @@ u2 ComputeLPSTRLength(u1Array &array, u4 offset, u4 len)
 
 void UTF8Decode(u1Array &array, u4 offset, u4 len, M_SAL_INOUT lpCharPtr &charData)
 {
-	if ((u8)(offset + len) > (u8)array.GetLength()) {
+	if ((u8)(offset + len) > (u8)array.GetLength( )) {
 		throw ArgumentOutOfRangeException((lpCharPtr)"");
 	} else {
 		u4 i = 0;
@@ -302,368 +303,314 @@ void UTF8Decode(u1Array &array, u4 offset, u4 len, M_SAL_INOUT lpCharPtr &charDa
 	}
 }
 
-// *******************
-// String Array class
-// *******************
-StringArray::StringArray(s4 nelement)
-{
-    this->_length = nelement;
 
-	if (nelement < 0) {
-        nelement = 0;
-    }
 
-	this->buffer = new std::string*[nelement];
-
-	// we need to initialize the buffer to zeros
-	for(s4 i=0;i<nelement;i++)
-		this->buffer[i] = NULL;
-
-}
-
-StringArray::StringArray(const StringArray &rhs)
-{
-	s4 len = rhs._length;
-    this->_length = len;
-    if (len < 0) {
-        len = 0;
-    }
-
-	this->buffer = new std::string*[len];
-
-	for(s4 i=0;i<len;i++)
-		this->buffer[i] = rhs.buffer[i];
-
-}
-
-StringArray::~StringArray(void)
-{
-    // delete the strings in the StringArray
-    for(u4 i = 0; i < GetLength(); i++){
-        if (buffer[i] != NULL) {
-            delete buffer[i];
-            buffer[i] = NULL;
-        }
-    }
-
-	delete[] buffer;
-}
-
-u1 StringArray::IsNull(void)
-{
-    return (this->_length < 0);
-}
-
-u4 StringArray::GetLength(void)
-{
-    if (IsNull()) {
-        return (u4)0;
-    } else {
-        return (u4)this->_length;
-    }
-}
-
-std::string* StringArray::GetStringAt(u4 index)
-{
-	if (index >= GetLength()) {
-		throw ArgumentOutOfRangeException((lpCharPtr)"");
-	}
-    return this->buffer[index];
-}
-
-void StringArray::SetStringAt(u4 index, M_SAL_IN std::string* str)
-{
-	if (index >= GetLength()) {
-		throw ArgumentOutOfRangeException((lpCharPtr)"");
-	}
-	this->buffer[index] = str;
-}
 
 // *******************
 // Byte Array class
 // *******************
 
-u1Array::u1Array()
-{
-  this->_length = 0;
-// JCD
-  this->buffer = NULL;//new u1[0];
-// JCD
-}
 
-u1Array::u1Array(s4 nelement)
-{
-	this->_length = nelement;
-    if (nelement < 0) {
-        nelement = 0;
-    }
-    this->buffer = new u1[nelement];
-}
+/* 1 byte add
+*/
+u1Array& u1Array::operator +( const u1& v ) {
 
-u1Array::u1Array(const u1Array &rhs)
-{
-    s4 len = rhs._length;
-    this->_length = len;
-    if (len < 0) {
-        len = 0;
-    }
-    this->buffer = new u1[len];
-    memcpy(this->buffer, rhs.buffer, len);
-}
+    u1Array* newArray = new u1Array( _length + g_sizeU1 );
 
-u1Array::u1Array(u1Array &array, u4 offset, u4 len)
-{
-	if ((u8)(offset + len) > array.GetLength()) {
-		throw ArgumentOutOfRangeException((lpCharPtr)"");
-	} else {
-		this->_length = len;
-		this->buffer = new u1[len];
-		memcpy(this->buffer, array.buffer + offset, len);
-	}
-}
-
-u1Array::~u1Array(void)
-{
-    if (this->buffer != NULL) {
-        delete[] this->buffer;
-        this->buffer = NULL;
-    }
-}
-
-u1 u1Array::IsNull(void) const
-{
-    return (this->_length < 0);
-}
-
-void u1Array::SetU1At(u4 pos, u1 val)
-{
-	if (pos >= GetLength()) {
-		throw ArgumentOutOfRangeException((lpCharPtr)"");
-	}
-    this->buffer[pos] = val;
+    memcpy( newArray->buffer, buffer, _length );
+    
+    memcpy( &newArray->buffer[ _length ], &v, g_sizeU1 );
+    
+    return *newArray;
 }
 
 
-u1 u1Array::ReadU1At(u4 pos) const
-{
-	if (pos >= GetLength()) {
-		throw ArgumentOutOfRangeException((lpCharPtr)"");
-	}
-    return this->buffer[pos];
+/*
+*/
+u1Array& u1Array::operator +=( const u1& v ) {
+
+    u1* t = new u1[ _length + g_sizeU1 ];
+
+    memcpy( t, buffer, _length );
+    
+    memcpy(&t[ _length ], &v, g_sizeU1 );
+    
+    delete[ ] buffer;
+    
+    buffer = t;
+    
+    _length += g_sizeU1;
+    
+    return *this;
 }
 
-u4 u1Array::GetLength(void) const
-{
-    if (IsNull()) {
-        return (u4)0;
+
+/* 2 bytes add
+*/
+u1Array& u1Array::operator +( const u2& v ) {
+
+    u2 vbe = ToBigEndian( v );
+
+    u1Array* newArray = new u1Array( _length + g_sizeU2 );
+    
+    memcpy( newArray->buffer, buffer, _length );
+    
+    memcpy( &newArray->buffer[ _length ], &vbe, g_sizeU2 );
+    
+    return *newArray;
+}
+
+
+/*
+*/
+u1Array& u1Array::operator +=( const u2& v ) {
+
+    u2 vbe = ToBigEndian( v );
+    
+    u1* t = new u1[ _length + g_sizeU2 ];
+
+    memcpy( t, buffer, _length );
+
+    memcpy( &t[ _length ], &vbe, g_sizeU2 );
+    
+    delete[] buffer;
+    
+    buffer = t;
+    
+    _length += g_sizeU2;
+    
+    return *this;
+}
+
+
+/* 4 bytes add
+*/
+u1Array& u1Array::operator +( const u4& v ) {
+
+    u4 vbe = ToBigEndian( v );
+
+    u1Array* a = new u1Array( _length + g_sizeU4 );
+    
+    memcpy( a->buffer, buffer, _length );
+    
+    memcpy( &a->buffer[ _length ], &vbe, g_sizeU4 );
+    
+    return *a;
+}
+
+
+/*
+*/
+u1Array& u1Array::operator +=(const u4& v ) {
+
+    u4 vbe = ToBigEndian( v );
+
+    u1* t = new u1[ _length + g_sizeU4 ];
+    
+    memcpy( t, buffer, _length );
+
+    memcpy( &t[ _length ], &vbe, g_sizeU4);
+
+    delete[ ] buffer;
+
+    buffer = t;
+
+    _length += g_sizeU4;
+
+    return *this;
+}
+
+
+/* 8 bytes add
+*/
+u1Array& u1Array::operator +( const u8& v ) {
+
+	u8 vbe = ToBigEndian( v );
+
+    u1Array* n = new u1Array( _length + g_sizeU8 );
+    
+    memcpy( n->buffer, buffer, _length );
+
+    memcpy( &n->buffer[ _length ], &vbe, g_sizeU8 );
+
+    return *n;
+}
+
+
+/*
+*/
+u1Array& u1Array::operator +=(const u8& v ) {
+
+	u8 vbe = ToBigEndian( v );
+
+	u1* t = new u1[ _length + g_sizeU8 ];
+    
+    memcpy( t, buffer, _length);
+    
+    memcpy( &t[ _length ], &vbe, g_sizeU8 );
+    
+    delete[ ] buffer;
+    
+    buffer = t;
+    
+    _length += g_sizeU8;
+    
+    return *this;
+}
+
+
+/* bytes array add
+*/
+u1Array& u1Array::operator =( const u1Array& a ) {
+
+    delete[ ] buffer; 
+    
+    _length = a._length;
+    
+    buffer = new u1[ _length ];
+
+    memcpy( buffer, a.buffer, _length );
+
+    return *this;
+}
+
+
+/*
+*/
+u1Array& u1Array::operator +( const u1Array& a ) {
+    
+    u1Array* n = new u1Array( _length + a._length );
+    
+    memcpy( n->buffer, buffer, _length );
+    
+    memcpy( &n->buffer[ _length ], a.buffer, a._length );
+    
+    return *n;
+}
+
+
+/*
+*/
+u1Array& u1Array::operator +=( const u1Array& a ) {
+
+    u1* t = new u1[ _length + a._length ];
+
+    memcpy( t, buffer, _length );
+    
+    memcpy( &t[ _length ], a.buffer, a._length );
+
+    delete[ ] buffer;
+
+    buffer = t;
+	
+    _length += a._length;
+
+    return *this;
+}
+
+
+/*
+*/
+u1Array& u1Array::Append( std::string* s ) {
+
+	if( !s ) {
+
+        *this += (u2)0xFFFF; // ?????
+    
     } else {
-        return (u4)this->_length;
-    }
-}
-
-void u1Array::SetBuffer(const u1* buffer)
-{
-    memcpy(this->buffer, buffer, this->GetLength());
-}
-
-const u1* u1Array::GetBuffer(void) const
-{
-    return this->buffer;
-}
-
-u1* u1Array::GetBuffer(void)
-{
-    return this->buffer;
-}
-
-// 1 byte add
-u1Array& u1Array::operator +(u1 val)
-{
-    u1Array* newArray = new u1Array(this->GetLength() + sizeof(u1));
-    memcpy(newArray->buffer, this->buffer, this->GetLength());
-    memcpy(&newArray->buffer[this->GetLength()], &val, sizeof(u1));
-    return *newArray;
-}
-
-u1Array& u1Array::operator +=(u1 val)
-{
-    u1* tempBuffer = new u1[this->GetLength() + sizeof(u1)];
-    memcpy(tempBuffer, this->buffer, this->GetLength());
-    memcpy(&tempBuffer[this->GetLength()], &val, sizeof(u1));
-    delete[] this->buffer;
-    this->buffer = tempBuffer;
-    this->_length = this->GetLength() + sizeof(u1);
-    return *this;
-}
-
-// 2 bytes add
-u1Array& u1Array::operator +(u2 val)
-{
-    val = ToBigEndian(val);
-    u1Array* newArray = new u1Array(this->GetLength() + sizeof(u2));
-    memcpy(newArray->buffer, this->buffer, this->GetLength());
-    memcpy(&newArray->buffer[this->GetLength()], &val, sizeof(u2));
-    return *newArray;
-}
-
-u1Array& u1Array::operator +=(u2 val)
-{
-    val = ToBigEndian(val);
-    u1* tempBuffer = new u1[this->GetLength() + sizeof(u2)];
-    memcpy(tempBuffer, this->buffer, this->GetLength());
-    memcpy(&tempBuffer[this->GetLength()], &val, sizeof(u2));
-    delete[] this->buffer;
-    this->buffer = tempBuffer;
-    this->_length = this->GetLength() + sizeof(u2);
-    return *this;
-}
-
-// 4 bytes add
-u1Array& u1Array::operator +(u4 val)
-{
-    val = ToBigEndian(val);
-    u1Array* newArray = new u1Array(this->GetLength() + sizeof(u4));
-    memcpy(newArray->buffer, this->buffer, this->GetLength());
-    memcpy(&newArray->buffer[this->GetLength()], &val, sizeof(u4));
-    return *newArray;
-}
-
-u1Array& u1Array::operator +=(u4 val)
-{
-    val = ToBigEndian(val);
-    u1* tempBuffer = new u1[this->GetLength() + sizeof(u4)];
-    memcpy(tempBuffer, this->buffer, this->GetLength());
-    memcpy(&tempBuffer[this->GetLength()], &val, sizeof(u4));
-    delete[] this->buffer;
-    this->buffer = tempBuffer;
-    this->_length = this->GetLength() + sizeof(u4);
-    return *this;
-}
-
-// 8 bytes add
-u1Array& u1Array::operator +(u8 val)
-{
-	val = ToBigEndian(val);
-    u1Array* newArray = new u1Array(this->GetLength() + sizeof(u8));
-    memcpy(newArray->buffer, this->buffer, this->GetLength());
-    memcpy(&newArray->buffer[this->GetLength()], &val, sizeof(u8));
-    return *newArray;
-}
-
-u1Array& u1Array::operator +=(u8 val)
-{
-	val = ToBigEndian(val);
-	u1* tempBuffer = new u1[this->GetLength() + sizeof(u8)];
-    memcpy(tempBuffer, this->buffer, this->GetLength());
-    memcpy(&tempBuffer[this->GetLength()], &val, sizeof(u8));
-    delete[] this->buffer;
-    this->buffer = tempBuffer;
-    this->_length = this->GetLength() + sizeof(u8);
-    return *this;
-}
-
-
-// bytes array add
-u1Array& u1Array::operator =(const u1Array &bArray)
-{
-    delete[] buffer; buffer = 0;
-    _length = bArray._length;
-    buffer = new u1[_length > 0 ? _length : 0];
-    if(_length>0)
-        memcpy(buffer, bArray.buffer, _length);
-    return *this;
-}
-
-u1Array& u1Array::operator +(u1Array &bArray)
-{
-    s4 len;
-    if (IsNull() && bArray.IsNull()) {
-        len = -1;
-    } else {
-        len = this->GetLength() + bArray.GetLength();
-    }
-    u1Array* newArray = new u1Array(len);
-    memcpy(newArray->buffer, this->buffer, this->GetLength());
-    memcpy(&newArray->buffer[this->GetLength()], bArray.buffer, bArray.GetLength());
-    return *newArray;
-}
-
-u1Array& u1Array::operator +=(u1Array &bArray)
-{
-    u1* tempBuffer = new u1[this->GetLength() + bArray.GetLength()];
-    memcpy(tempBuffer, this->buffer, this->GetLength());
-    memcpy(&tempBuffer[this->GetLength()], bArray.buffer, bArray.GetLength());
-    delete[] this->buffer;
-    this->buffer = tempBuffer;
-	if (IsNull() && bArray.IsNull()) {
-        this->_length = -1;
-    } else {
-        this->_length = this->GetLength() + bArray.GetLength();
-    }
-    return *this;
-}
-
-u1Array& u1Array::Append(std::string* str)
-{
-	if (str == NULL) {
-        *this += (u2)0xFFFF;
-    } else {
-		u2 strLen = ComputeUTF8Length((lpCharPtr)str->c_str());
+	
+        u2 strLen = ComputeUTF8Length( (lpCharPtr)s->c_str( ) );
+        
         *this += strLen;
-        u1Array strArray(strLen);
-		UTF8Encode((lpCharPtr)str->c_str(), strArray);
+        
+        u1Array strArray( strLen );
+		
+        UTF8Encode( (lpCharPtr)s->c_str( ), strArray );
+        
         *this += strArray;
     }
+
     return *this;
 }
+
+
+
+/*
+*/
+u1Array& u1Array::Append( const char * s ) {
+
+	if( !s ) {
+
+        *this += (u2)0xFFFF; // ?????
+    
+    } else {
+	
+        u2 strLen = strlen(s);
+        
+        *this += strLen;
+        
+        u1Array strArray( strLen );
+		
+        UTF8Encode( (char *)s, strArray );
+        
+        *this += strArray;
+    }
+
+    return *this;
+}
+
+
+
+
+
 
 // *******************
 // UShort Array class
 // *******************
 u2Array::u2Array(s4 nelement)
 {
-	this->_length = nelement;
+	_length = nelement;
     if (nelement < 0) {
         nelement = 0;
     }
-    this->buffer = new u2[nelement];
+    buffer = new u2[nelement];
 }
 
 u2Array::u2Array(const u2Array &rhs)
 {
     s4 len = rhs._length;
-    this->_length = len;
+    _length = len;
     if (len < 0) {
         len = 0;
     }
-    this->buffer = new u2[len];
-    memcpy(this->buffer, rhs.buffer, len * sizeof(u2));
+    buffer = new u2[len];
+    memcpy(buffer, rhs.buffer, len * g_sizeU2);
 }
 
 u2Array::~u2Array(void)
 {
-    delete[] this->buffer;
+    delete[] buffer;
 }
 
 u1 u2Array::IsNull(void)
 {
-    return (this->_length < 0);
+    return (_length < 0);
 }
 
-void u2Array::SetU2At(u4 pos, u2 val)
+void u2Array::SetU2At(u4 pos, u2 v)
 {
-	if (pos >= GetLength()) {
+	if (pos >= (u4)_length) {
 		throw ArgumentOutOfRangeException((lpCharPtr)"");
 	}
-    this->buffer[pos] = val;
+    buffer[pos] = v;
 }
 
 u2 u2Array::ReadU2At(u4 pos)
 {
-	if (pos >= GetLength()) {
+	if (pos >= (u4)_length) {
 		throw ArgumentOutOfRangeException((lpCharPtr)"");
 	}
-    return this->buffer[pos];
+    return buffer[pos];
 }
 
 u4 u2Array::GetLength(void)
@@ -671,37 +618,37 @@ u4 u2Array::GetLength(void)
     if (IsNull()) {
         return (u4)0;
     } else {
-        return (u4)this->_length;
+        return (u4)_length;
     }
 }
 
-void u2Array::SetBuffer(u2* buffer)
+void u2Array::SetBuffer(u2* a_buffer)
 {
-    memcpy(this->buffer, buffer, this->GetLength() * sizeof(u2));
+    memcpy(buffer, a_buffer, _length * g_sizeU2);
 }
 
 u2* u2Array::GetBuffer(void)
 {
-    return this->buffer;
+    return buffer;
 }
 
 // 2 bytes add
-u2Array& u2Array::operator +(u2 val)
+u2Array& u2Array::operator +(u2 v)
 {
-    u2Array* newArray = new u2Array(this->GetLength() + 1);
-    memcpy(newArray->buffer, this->buffer, this->GetLength() * sizeof(u2));
-	newArray->buffer[this->GetLength()] = val;
+    u2Array* newArray = new u2Array(_length + 1);
+    memcpy(newArray->buffer, buffer, _length * g_sizeU2);
+	newArray->buffer[_length] = v;
     return *newArray;
 }
 
-u2Array& u2Array::operator +=(u2 val)
+u2Array& u2Array::operator +=(u2 v)
 {
-    u2* tempBuffer = new u2[this->GetLength() + 1];
-    memcpy(tempBuffer, this->buffer, this->GetLength() * sizeof(u2));
-	tempBuffer[this->GetLength()] = val;
-    delete[] this->buffer;
-    this->buffer = tempBuffer;
-    this->_length = this->GetLength() + 1;
+    u2* tempBuffer = new u2[_length + 1];
+    memcpy(tempBuffer, buffer, _length * g_sizeU2);
+	tempBuffer[_length] = v;
+    delete[] buffer;
+    buffer = tempBuffer;
+    _length = _length + 1;
     return *this;
 }
 
@@ -712,25 +659,25 @@ u2Array& u2Array::operator +(u2Array &cArray)
 	if (IsNull() && cArray.IsNull()) {
         len = -1;
     } else {
-        len = this->GetLength() + cArray.GetLength();
+        len = _length + cArray._length;
     }
     u2Array* newArray = new u2Array(len);
-    memcpy(newArray->buffer, this->buffer, this->GetLength() * sizeof(u2));
-    memcpy(&newArray->buffer[this->GetLength() * sizeof(u2)], cArray.buffer, cArray.GetLength() * sizeof(u2));
+    memcpy(newArray->buffer, buffer, _length * g_sizeU2);
+    memcpy(&newArray->buffer[_length * g_sizeU2], cArray.buffer, cArray._length * g_sizeU2);
     return *newArray;
 }
 
 u2Array& u2Array::operator +=(u2Array &cArray)
 {
-    u2* tempBuffer = new u2[this->GetLength() + cArray.GetLength()];
-    memcpy(tempBuffer, this->buffer, this->GetLength() * sizeof(u2));
-    memcpy(&tempBuffer[this->GetLength() * sizeof(u2)], cArray.buffer, cArray.GetLength() * sizeof(u2));
-    delete[] this->buffer;
-    this->buffer = tempBuffer;
+    u2* tempBuffer = new u2[_length + cArray._length];
+    memcpy(tempBuffer, buffer, _length * g_sizeU2);
+    memcpy(&tempBuffer[_length * g_sizeU2], cArray.buffer, cArray._length * g_sizeU2);
+    delete[] buffer;
+    buffer = tempBuffer;
 	if (IsNull() && cArray.IsNull()) {
-        this->_length = -1;
+        _length = -1;
     } else {
-        this->_length = this->GetLength() + cArray.GetLength();
+        _length = _length + cArray._length;
     }
     return *this;
 }
@@ -740,48 +687,48 @@ u2Array& u2Array::operator +=(u2Array &cArray)
 // *******************
 u4Array::u4Array(s4 nelement)
 {
-	this->_length = nelement;
+	_length = nelement;
     if (nelement < 0) {
         nelement = 0;
     }
-    this->buffer = new u4[nelement];
+    buffer = new u4[nelement];
 }
 
 u4Array::u4Array(const u4Array &rhs)
 {
     s4 len = rhs._length;
-    this->_length = len;
+    _length = len;
     if (len < 0) {
         len = 0;
     }
-    this->buffer = new u4[len];
-    memcpy(this->buffer, rhs.buffer, len * sizeof(u4));
+    buffer = new u4[len];
+    memcpy(buffer, rhs.buffer, len * g_sizeU4);
 }
 
 u4Array::~u4Array(void)
 {
-    delete[] this->buffer;
+    delete[] buffer;
 }
 
 u1 u4Array::IsNull(void)
 {
-    return (this->_length < 0);
+    return (_length < 0);
 }
 
-void u4Array::SetU4At(u4 pos, u4 val)
+void u4Array::SetU4At(u4 pos, u4 v)
 {
-	if (pos >= GetLength()) {
+	if (pos >= (u4)_length) {
 		throw ArgumentOutOfRangeException((lpCharPtr)"");
 	}
-    this->buffer[pos] = val;
+    buffer[pos] = v;
 }
 
 u4 u4Array::ReadU4At(u4 pos)
 {
-	if (pos >= GetLength()) {
+	if (pos >= (u4)_length) {
 		throw ArgumentOutOfRangeException((lpCharPtr)"");
 	}
-    return this->buffer[pos];
+    return buffer[pos];
 }
 
 u4 u4Array::GetLength(void)
@@ -789,37 +736,37 @@ u4 u4Array::GetLength(void)
     if (IsNull()) {
         return (u4)0;
     } else {
-        return (u4)this->_length;
+        return (u4)_length;
     }
 }
 
-void u4Array::SetBuffer(u4* buffer)
+void u4Array::SetBuffer(u4* a_buffer)
 {
-    memcpy(this->buffer, buffer, this->GetLength() * sizeof(u4));
+    memcpy(buffer, a_buffer, _length * g_sizeU4);
 }
 
 u4* u4Array::GetBuffer(void)
 {
-    return this->buffer;
+    return buffer;
 }
 
 // 4 bytes add
-u4Array& u4Array::operator +(u4 val)
+u4Array& u4Array::operator +(u4 v)
 {
-    u4Array* newArray = new u4Array(this->GetLength() + 1);
-    memcpy(newArray->buffer, this->buffer, this->GetLength() * sizeof(u4));
-	newArray->buffer[this->GetLength()] = val;
+    u4Array* newArray = new u4Array(_length + 1);
+    memcpy(newArray->buffer, buffer, _length * g_sizeU4);
+	newArray->buffer[_length] = v;
     return *newArray;
 }
 
-u4Array& u4Array::operator +=(u4 val)
+u4Array& u4Array::operator +=(u4 v)
 {
-    u4* tempBuffer = new u4[this->GetLength() + 1];
-    memcpy(tempBuffer, this->buffer, this->GetLength() * sizeof(u4));
-	tempBuffer[this->GetLength()] = val;
-    delete[] this->buffer;
-    this->buffer = tempBuffer;
-    this->_length = this->GetLength() + 1;
+    u4* tempBuffer = new u4[_length + 1];
+    memcpy(tempBuffer, buffer, _length * g_sizeU4);
+	tempBuffer[_length] = v;
+    delete[] buffer;
+    buffer = tempBuffer;
+    _length = _length + 1;
     return *this;
 }
 
@@ -830,25 +777,25 @@ u4Array& u4Array::operator +(u4Array &iArray)
 	if (IsNull() && iArray.IsNull()) {
         len = -1;
     } else {
-        len = this->GetLength() + iArray.GetLength();
+        len = _length + iArray._length;
     }
     u4Array* newArray = new u4Array(len);
-    memcpy(newArray->buffer, this->buffer, this->GetLength() * sizeof(u4));
-    memcpy(&newArray->buffer[this->GetLength() * sizeof(u4)], iArray.buffer, iArray.GetLength() * sizeof(u4));
+    memcpy(newArray->buffer, buffer, _length * g_sizeU4);
+    memcpy(&newArray->buffer[_length * g_sizeU4], iArray.buffer, iArray._length * g_sizeU4);
     return *newArray;
 }
 
 u4Array& u4Array::operator +=(u4Array &iArray)
 {
-    u4* tempBuffer = new u4[this->GetLength() + iArray.GetLength()];
-    memcpy(tempBuffer, this->buffer, this->GetLength() * sizeof(u4));
-    memcpy(&tempBuffer[this->GetLength() * sizeof(u4)], iArray.buffer, iArray.GetLength() * sizeof(u4));
-    delete[] this->buffer;
-    this->buffer = tempBuffer;
+    u4* tempBuffer = new u4[_length + iArray._length];
+    memcpy(tempBuffer, buffer, _length * g_sizeU4);
+    memcpy(&tempBuffer[_length * g_sizeU4], iArray.buffer, iArray._length * g_sizeU4);
+    delete[] buffer;
+    buffer = tempBuffer;
 	if (IsNull() && iArray.IsNull()) {
-        this->_length = -1;
+        _length = -1;
     } else {
-        this->_length = this->GetLength() + iArray.GetLength();
+        _length = _length + iArray._length;
     }
     return *this;
 }
@@ -859,48 +806,48 @@ u4Array& u4Array::operator +=(u4Array &iArray)
 // *******************
 u8Array::u8Array(s4 nelement)
 {
-	this->_length = nelement;
+	_length = nelement;
     if (nelement < 0) {
         nelement = 0;
     }
-    this->buffer = new u8[nelement];
+    buffer = new u8[nelement];
 }
 
 u8Array::u8Array(const u8Array &rhs)
 {
     s4 len = rhs._length;
-    this->_length = len;
+    _length = len;
     if (len < 0) {
         len = 0;
     }
-    this->buffer = new u8[len];
-    memcpy(this->buffer, rhs.buffer, len * sizeof(u8));
+    buffer = new u8[len];
+    memcpy(buffer, rhs.buffer, len * g_sizeU8);
 }
 
 u8Array::~u8Array(void)
 {
-    delete[] this->buffer;
+    delete[] buffer;
 }
 
 u1 u8Array::IsNull(void)
 {
-    return (this->_length < 0);
+    return (_length < 0);
 }
 
-void u8Array::SetU8At(u4 pos, u8 val)
+void u8Array::SetU8At(u4 pos, u8 v)
 {
-	if (pos >= GetLength()) {
+	if (pos >= (u4)_length) {
 		throw ArgumentOutOfRangeException((lpCharPtr)"");
 	}
-    this->buffer[pos] = val;
+    buffer[pos] = v;
 }
 
 u8 u8Array::ReadU8At(u4 pos)
 {
-	if (pos >= GetLength()) {
+	if (pos >= (u4)_length) {
 		throw ArgumentOutOfRangeException((lpCharPtr)"");
 	}
-    return this->buffer[pos];
+    return buffer[pos];
 }
 
 u4 u8Array::GetLength(void)
@@ -908,36 +855,36 @@ u4 u8Array::GetLength(void)
     if (IsNull()) {
         return (u4)0;
     } else {
-        return (u4)this->_length;
+        return (u4)_length;
     }
 }
 
-void u8Array::SetBuffer(u8* buffer)
+void u8Array::SetBuffer(u8* a_buffer)
 {
-    memcpy(this->buffer, buffer, this->GetLength() * sizeof(u8));
+    memcpy(buffer, a_buffer, _length * g_sizeU8);
 }
 
 u8* u8Array::GetBuffer(void)
 {
-    return this->buffer;
+    return buffer;
 }
 
-u8Array& u8Array::operator +(u8 val)
+u8Array& u8Array::operator +(u8 v)
 {
-    u8Array* newArray = new u8Array(this->GetLength() + 1);
-    memcpy(newArray->buffer, this->buffer, this->GetLength() * sizeof(u8));
-	newArray->buffer[this->GetLength()] = val;
+    u8Array* newArray = new u8Array(_length + 1);
+    memcpy(newArray->buffer, buffer, _length * g_sizeU8);
+	newArray->buffer[_length] = v;
     return *newArray;
 }
 
-u8Array& u8Array::operator +=(u8 val)
+u8Array& u8Array::operator +=(u8 v)
 {
-    u8* tempBuffer = new u8[this->GetLength() + 1];
-    memcpy(tempBuffer, this->buffer, this->GetLength() * sizeof(u8));
-	tempBuffer[this->GetLength()] = val;
-    delete[] this->buffer;
-    this->buffer = tempBuffer;
-    this->_length = this->GetLength() + 1;
+    u8* tempBuffer = new u8[_length + 1];
+    memcpy(tempBuffer, buffer, _length * g_sizeU8);
+	tempBuffer[_length] = v;
+    delete[] buffer;
+    buffer = tempBuffer;
+    _length = _length + 1;
     return *this;
 }
 
@@ -947,25 +894,25 @@ u8Array& u8Array::operator +(u8Array &iArray)
 	if (IsNull() && iArray.IsNull()) {
         len = -1;
     } else {
-        len = this->GetLength() + iArray.GetLength();
+        len = _length + iArray._length;
     }
     u8Array* newArray = new u8Array(len);
-    memcpy(newArray->buffer, this->buffer, this->GetLength() * sizeof(u8));
-    memcpy(&newArray->buffer[this->GetLength() * sizeof(u8)], iArray.buffer, iArray.GetLength() * sizeof(u8));
+    memcpy(newArray->buffer, buffer, _length * g_sizeU8);
+    memcpy(&newArray->buffer[_length * g_sizeU8], iArray.buffer, iArray._length * g_sizeU8);
     return *newArray;
 }
 
 u8Array& u8Array::operator +=(u8Array &iArray)
 {
-    u8* tempBuffer = new u8[this->GetLength() + iArray.GetLength()];
-    memcpy(tempBuffer, this->buffer, this->GetLength() * sizeof(u8));
-    memcpy(&tempBuffer[this->GetLength() * sizeof(u8)], iArray.buffer, iArray.GetLength() * sizeof(u8));
-    delete[] this->buffer;
-    this->buffer = tempBuffer;
+    u8* tempBuffer = new u8[_length + iArray._length];
+    memcpy(tempBuffer, buffer, _length * g_sizeU8);
+    memcpy(&tempBuffer[_length * g_sizeU8], iArray.buffer, iArray._length * g_sizeU8);
+    delete[] buffer;
+    buffer = tempBuffer;
 	if (IsNull() && iArray.IsNull()) {
-        this->_length = -1;
+        _length = -1;
     } else {
-        this->_length = this->GetLength() + iArray.GetLength();
+        _length = _length + iArray._length;
     }
     return *this;
 }

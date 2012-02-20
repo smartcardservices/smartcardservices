@@ -22,26 +22,20 @@
 
 //#pragma warning(disable : 4251)
 
-#include "stdafx.h"
-#include "platconfig.h"
-//#include "config.h"
-//#include "dbg.h"
-
-
-
+#include <cstdio>
+#include "cryptoki.h"
 #include <numeric>
 #include <functional>
 #include "attrcert.h"
 #include "digest.h"
 #include "sha1.h"
 
-using namespace std;
 
 namespace
 {
 
     class JoinWith
-        : public binary_function<string, string, string>
+        : public std::binary_function<std::string, std::string, std::string>
     {
     public:
 
@@ -52,8 +46,8 @@ namespace
 
 
         result_type
-        operator()(string const &rFirst,
-                   string const &rSecond) const
+        operator()(std::string const &rFirst,
+                   std::string const &rSecond) const
         {
             return rFirst + m_Glue + rSecond;
         }
@@ -63,17 +57,17 @@ namespace
         second_argument_type const m_Glue;
     };
 
-    string
-    Combine(vector<string> const &rvsNames)
+    std::string
+    Combine(std::vector<std::string> const &rvsNames)
     {
-        static string::value_type const cBlank = ' ';
-        static string const sBlank(1, cBlank);
+        static std::string::value_type const cBlank = ' ';
+        static std::string const sBlank(1, cBlank);
 
         if(!rvsNames.empty())
             return accumulate(rvsNames.begin() + 1, rvsNames.end(),
                               *rvsNames.begin(), JoinWith(sBlank));
         else
-            return string();
+            return std::string();
     }
 
 } // namespace
@@ -121,16 +115,16 @@ CAttributedCertificate::SerialNumber() const
     return m_x509cert.SerialNumber();
 }
 
-string
+std::string
 CAttributedCertificate::DerivedName() const
 {
-    string sDerivedName(Combine(m_x509cert.UTF8SubjectCommonName()));
+    std::string sDerivedName(Combine(m_x509cert.UTF8SubjectCommonName()));
     if(sDerivedName.empty())
         sDerivedName.assign("Smart Card User");
     return sDerivedName;
 }
 
-string
+std::string
 CAttributedCertificate::DerivedLabel() const
 {
     return Combine(m_x509cert.SubjectCommonName());
@@ -152,38 +146,38 @@ BEROctet::Blob
 CAttributedCertificate::DerivedId(unsigned char const * data, size_t length)
 {
     CSHA1 sha1;
-    u1 hash[20];
-    sha1.HashCore(const_cast<CK_BYTE_PTR>(data), 0, static_cast<CK_LONG>(length));
-    sha1.HashFinal(hash);
+    unsigned char hash[20];
+    sha1.hashCore(const_cast<CK_BYTE_PTR>(data), 0, static_cast<CK_LONG>(length));
+    sha1.hashFinal(hash);
 
     return BEROctet::Blob(hash, 20);
 }
 
-string
+std::string
 CAttributedCertificate::DerivedUniqueName() const
 {
     return DerivedUniqueName(m_x509cert.Modulus());
 }
 
-string
+std::string
 CAttributedCertificate::DerivedUniqueName(BEROctet::Blob const & data)
 {
     return DerivedUniqueName(data.c_str(), data.size());
 }
 
-string
+std::string
 CAttributedCertificate::DerivedUniqueName(unsigned char const * data, size_t length)
 {
     CSHA1 sha1;
-    u1 hash[20];
-    sha1.HashCore(const_cast<CK_BYTE_PTR>(data), 0, static_cast<CK_LONG>(length));
-    sha1.HashFinal(hash);
+    unsigned char hash[20];
+    sha1.hashCore(const_cast<CK_BYTE_PTR>(data), 0, static_cast<CK_LONG>(length));
+    sha1.hashFinal(hash);
 
     // Format as a GUID
 
     char name[40];
 
-    u1 *id = hash;
+    unsigned char *id = hash;
 
     int i, n = 0;
     char *c = name;
@@ -217,5 +211,5 @@ CAttributedCertificate::DerivedUniqueName(unsigned char const * data, size_t len
         n++; c+=2;
     }
 
-    return string(name);
+    return std::string(name);
 }

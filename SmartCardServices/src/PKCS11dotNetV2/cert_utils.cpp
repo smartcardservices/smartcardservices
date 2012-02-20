@@ -18,7 +18,9 @@
  *
  */
 
-#include "stdafx.h"
+#include <cstdio>
+#include <cstring>
+
 #include "cert_utils.h"
 
 
@@ -108,7 +110,7 @@ int CCertUtils::ExtractContent(ASN1 *pAsn1)
       pAsn1->Content.usLen = pData[1];
       pAsn1->Content.pData = &pData[2];
 
-      pAsn1->Asn1.usLen = pAsn1->Content.usLen + 2;
+      pAsn1->Asn1.usLen = ( USHORT )( pAsn1->Content.usLen + 2 );
    }
    else
    {
@@ -119,11 +121,11 @@ int CCertUtils::ExtractContent(ASN1 *pAsn1)
       pAsn1->Content.usLen = 0;
       for (i = 0; i < NbBytes; i++)
       {
-          pAsn1->Content.usLen = (pAsn1->Content.usLen << 8) + pData[2+i];
+          pAsn1->Content.usLen = ( USHORT )( ( pAsn1->Content.usLen << 8 ) + pData[ 2 + i ] );
       }
       pAsn1->Content.pData = &pData[2+NbBytes];
 
-      pAsn1->Asn1.usLen = pAsn1->Content.usLen + 2 + NbBytes;
+      pAsn1->Asn1.usLen = ( USHORT )( pAsn1->Content.usLen + 2 + NbBytes );
    }
 
    return(RV_SUCCESS);
@@ -154,8 +156,8 @@ void CCertUtils::ConvAscii (BYTE  *pIn,
 
    for(i=0; i < dwLen; i++)
    {
-      pOut[i*2] = tohex((pIn[i] >> 4) & 0xF);
-      pOut[i*2+1] =  tohex(pIn[i] & 0xF);
+      pOut[ i * 2 ] = ( BYTE )( tohex( ( pIn[ i ] >> 4)  & 0x0F ) );
+      pOut[ i * 2 + 1 ] =  ( BYTE )( tohex( pIn[ i ] & 0x0F ) );
    }
 }
 
@@ -172,7 +174,7 @@ void CCertUtils::ConvHex (BYTE  *pIn,
 
    for(i=0; i < dwLen; i+=2)
    {
-      pOut[i/2] = (fromhex(pIn[i]) << 4) + fromhex(pIn[i+1]);
+      pOut[ i / 2 ] = ( BYTE )( ( fromhex( pIn[ i ] ) << 4 ) + fromhex( pIn[ i + 1 ] ) );
    }
 }
 
@@ -194,12 +196,12 @@ BYTE* CCertUtils::GetDERLength(BYTE *content, DWORD *len)
       return &content[2];
    }
 
-   NBBytesForLength = content[1] & 0x7F;
+   NBBytesForLength = ( DWORD )( content[ 1 ] & 0x7F );
 
    usLen = 0;
    for (i = 0; i < NBBytesForLength; i++)
    {
-       usLen = (usLen << 8) + content[2+i];
+       usLen = ( unsigned short )( ( usLen << 8 ) + content[ 2 + i ] );
    }
 
    *len = usLen;
@@ -567,7 +569,7 @@ bool CCertUtils::MakeCertificateLabel(BYTE  *pCert,
                 3
                );
 
-           *pdwLabelLen = OrganizationName.usLen + CommonName.usLen + 6;
+           *pdwLabelLen = ( DWORD )( OrganizationName.usLen + CommonName.usLen + 6 );
         }
         else
         {
@@ -580,7 +582,7 @@ bool CCertUtils::MakeCertificateLabel(BYTE  *pCert,
                 3
                );
 
-           *pdwLabelLen = OrganizationName.usLen + 3;
+           *pdwLabelLen = ( DWORD )( OrganizationName.usLen + 3 );
         }
     }
     else
@@ -591,7 +593,7 @@ bool CCertUtils::MakeCertificateLabel(BYTE  *pCert,
         }
         else
         {
-           *pdwLabelLen = OrganizationName.usLen + 3;
+           *pdwLabelLen = ( DWORD )( OrganizationName.usLen + 3 );
         }
     }
 

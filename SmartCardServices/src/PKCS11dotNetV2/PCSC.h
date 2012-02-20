@@ -18,36 +18,64 @@
  *
  */
 
-#ifndef _include_marshaller_pcsc_h
-#define _include_marshaller_pcsc_h
+
+#ifndef __GEMALTO_PCSC__
+#define __GEMALTO_PCSC__
+
+
+#include "MarshallerUtil.h"
+#ifdef __APPLE__
+#include <PCSC/winscard.h>
+#include <PCSC/wintypes.h>
+#else
+#include <winscard.h>
+#endif
+
 
 MARSHALLER_NS_BEGIN
 
-class PCSC
-{
+
+class PCSC {
 
 private:
-    SCARDCONTEXT hContext;
-    SCARDHANDLE  hCard;
-    std::string*    readerName;
-    bool fDoTransact;
+
+    SCARDCONTEXT m_hContextPCSC;
+    
+	SCARDHANDLE m_hCardPCSC;
+    
+	std::string m_stReaderName;
+    
+	bool m_bDoTransact;
+
+	Marshaller::MarshallerUtil m_MarshallerUtil;
 
 public:
-    PCSC(SCARDHANDLE cardHandle);
-	PCSC(M_SAL_IN std::string* readerName);
-	PCSC(M_SAL_IN std::string* readerName, u2* portNumber, M_SAL_IN std::string* uri, u4 nameSpaceHivecode, u2 typeHivecode, u4 index);
-    SCARDHANDLE GetCardHandle(void);
-    void SetCardHandle(SCARDHANDLE hCard);
-    void DoTransact(bool flag);
-    std::string* GetReaderName(void);
-    void BeginTransaction(void);
-    void EndTransaction(void);
-    void ExchangeData(u1Array &dataIn, u1Array &dataout);
-    ~PCSC(void);
+    	
+	PCSC( std::string& );
+	
+	PCSC( std::string&, u2&, std::string&, u4&, u2&, u4& );
+    
+	inline SCARDHANDLE getCardHandle( void ) { return m_hCardPCSC; }
+    
+	inline void setCardHandle( SCARDHANDLE a_hCard ) { m_hCardPCSC = a_hCard; }
+    
+	inline void doTransact( bool& a_bDoTransact ) { m_bDoTransact = a_bDoTransact; }
+    
+	inline std::string& getReaderName( void ) { return m_stReaderName; }
+    
+	inline void beginTransaction( void ) { SCardBeginTransaction( m_hCardPCSC ); }
+    
+	inline void endTransaction( void ) { SCardEndTransaction( m_hCardPCSC, SCARD_LEAVE_CARD ); }
+    
+	void exchangeData( Marshaller::u1Array&, Marshaller::u1Array& );
+    
+	virtual ~PCSC( );
+
 
 };
 
 MARSHALLER_NS_END
 
-#endif
+
+#endif //__GEMALTO_PCSC__
 

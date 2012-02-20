@@ -3,14 +3,6 @@ lib_LTLIBRARIES = libgtop11dotnet.la
 libgtop11dotnet_la_LDFLAGS = -shared
 
 libgtop11dotnet_la_SOURCES = \
-	$(top_srcdir)/cppMarshaller/Array.cpp \
-	$(top_srcdir)/cppMarshaller/Array.h \
-	$(top_srcdir)/cppMarshaller/Except.h \
-	$(top_srcdir)/cppMarshaller/MarshallerCfg.h \
-	$(top_srcdir)/cppMarshaller/Marshaller.cpp \
-	$(top_srcdir)/cppMarshaller/Marshaller.h \
-	$(top_srcdir)/cppMarshaller/PCSC.cpp \
-	$(top_srcdir)/cppMarshaller/PCSC.h \
 	algo_des.cpp \
 	algo_des.h \
 	algo_md5.cpp \
@@ -21,113 +13,151 @@ libgtop11dotnet_la_SOURCES = \
 	algo_sha256.h \
 	algo_utils.cpp \
 	algo_utils.h \
-	application.cpp \
-	application.h \
+	Application.cpp \
+	Application.hpp \
+	Array.cpp \
+	Array.hpp \
 	attrcert.cpp \
 	attrcert.h \
+	autogen.sh \
 	beroctet.cpp \
 	beroctet.h \
-	cardcache.cpp \
-	cardcache.h \
-	cardmoduleservice.cpp \
-	cardmoduleservice.h \
-	certificateobject.cpp \
-	certificateobject.h \
+	cardmod.h \
+	CardModuleService.cpp \
+	CardModuleService.hpp \
 	cert_utils.cpp \
 	cert_utils.h \
-	config.h \
-	critsect.cpp \
-	critsect.h \
-	dataobject.cpp \
-	dataobject.h \
+	Configuration.cpp \
+	Configuration.hpp \
+	cr_digit.cpp \
+	cr_digit.h \
+	cr_global.h \
+	cr_nn.cpp \
+	cr_nn.h \
+	cr_random.cpp \
+	cr_random.h \
+	cr_rsa.cpp \
+	cr_rsa.h \
+	cryptoki.h \
 	des.cpp \
 	des.h \
-	digest.cpp \
+	Device.cpp \
+	Device.hpp \
+	DeviceMonitor.cpp \
+	DeviceMonitor.hpp \
+	Digest.cpp \
 	digest.h \
-	error.cpp \
-	error.h \
-	event.cpp \
-	event.h \
-	keyobject.cpp \
-	keyobject.h \
-	md5.cpp \
+	DigestMD5.cpp \
+	DigestSHA1.cpp \
+	DigestSHA256.cpp \
+	Except.h \
+	ha_config.h \
+	IDeviceMonitorListener.hpp \
+	Log.cpp \
+	Log.hpp \
+	MarshallerCfg.h \
+	Marshaller.cpp \
+	Marshaller.h \
+	MarshallerUtil.cpp \
+	MarshallerUtil.h \
 	md5.h \
-	mutex.cpp \
-	mutex.h \
-	pkcs11.cpp \
+	MiniDriverAuthentication.cpp \
+	MiniDriverAuthentication.hpp \
+	MiniDriverCardCacheFile.cpp \
+	MiniDriverCardCacheFile.hpp \
+	MiniDriverContainer.cpp \
+	MiniDriverContainer.hpp \
+	MiniDriverContainerMapFile.cpp \
+	MiniDriverContainerMapFile.hpp \
+	MiniDriver.cpp \
+	MiniDriverException.hpp \
+	MiniDriverFiles.cpp \
+	MiniDriverFiles.hpp \
+	MiniDriver.hpp \
+	MiniDriverPinPolicy.cpp \
+	MiniDriverPinPolicy.hpp \
+	Module.cpp \
+	pbbase.h \
+	PCSC.cpp \
+	PCSC.h \
+	PKCS11.cpp \
+	PKCS11Exception.hpp \
+	PCSCMissing.h \
 	pkcs11f.h \
 	pkcs11.h \
+	Pkcs11ObjectCertificate.cpp \
+	Pkcs11ObjectCertificate.hpp \
+	Pkcs11ObjectCertificateX509PublicKey.cpp \
+	Pkcs11ObjectCertificateX509PublicKey.hpp \
+	Pkcs11ObjectData.cpp \
+	Pkcs11ObjectData.hpp \
+	Pkcs11ObjectKey.cpp \
+	Pkcs11ObjectKey.hpp \
+	Pkcs11ObjectKeyPrivate.cpp \
+	Pkcs11ObjectKeyPrivate.hpp \
+	Pkcs11ObjectKeyPrivateRSA.cpp \
+	Pkcs11ObjectKeyPrivateRSA.hpp \
+	Pkcs11ObjectKeyPublic.cpp \
+	Pkcs11ObjectKeyPublic.hpp \
+	Pkcs11ObjectKeyPublicRSA.cpp \
+	Pkcs11ObjectKeyPublicRSA.hpp \
+	Pkcs11ObjectStorage.cpp \
+	Pkcs11ObjectStorage.hpp \
 	pkcs11t.h \
-	platconfig.h \
-	privatekeyobject.cpp \
-	privatekeyobject.h \
-	publickeyobject.cpp \
-	publickeyobject.h \
-	resource.h \
-	rsa/cr_digit.cpp \
-	rsa/cr_digit.h \
-	rsa/cr_global.h \
-	rsa/cr_nn.cpp \
-	rsa/cr_nn.h \
-	rsa/cr_random.cpp \
-	rsa/cr_random.h \
-	rsa/cr_rsa.cpp \
-	rsa/cr_rsa.h \
-	rsa/ha_config.h \
-	rsaprivatekeyobject.cpp \
-	rsaprivatekeyobject.h \
-	rsapublickeyobject.cpp \
-	rsapublickeyobject.h \
-	sctoken.cpp \
-	sctoken.h \
-	secretkeyobject.cpp \
-	secretkeyobject.h \
-	session.cpp \
-	session.h \
-	sha1.cpp \
+	pkcs-11v2-20a3.h \
+	Session.cpp \
+	Session.hpp \
 	sha1.h \
-	sha256.cpp \
 	sha256.h \
-	slot.cpp \
-	slot.h \
-	stdafx.cpp \
-	stdafx.h \
-	storageobject.cpp \
-	storageobject.h \
+	Slot.cpp \
+	Slot.hpp \
+	SmartCardReader.cpp \
+	SmartCardReaderException.hpp \
+	SmartCardReader.hpp \
 	symmalgo.cpp \
 	symmalgo.h \
 	tdes.cpp \
 	tdes.h \
-	template.cpp \
-	template.h \
-	thread.cpp \
-	thread.h \
-	timer.cpp \
-	timer.h \
-	transaction.cpp \
-	transaction.h \
+	Template.cpp \
+	Template.hpp \
+	Timer.cpp \
+	Timer.hpp \
+	Token.cpp \
+	Token.hpp \
 	util.cpp \
 	util.h \
+	version.hpp \
 	x509cert.cpp \
-	x509cert.h \
-	x509pubkeycertobject.cpp \
-	x509pubkeycertobject.h \
-	log.h \
-	log.cpp
+	x509cert.h
 
-AM_CPPFLAGS = -DINCLUDE_EVENTING=1 -DCRYPTOKI_EXPORTS=1 \
+AM_CPPFLAGS = -DCRYPTOKI_EXPORTS=1 \
 	-DUNIX $(PTHREAD_CFLAGS) \
 	-Wall \
 	-Wextra \
 	-pedantic
 
+if ENABLE_SYSTEM_BOOST
+else
+BOOST_INCLUDES = -I../boost_1_46_1
+BOOST_LIB = -L../boost_1_46_1/stage/lib
+endif
+
 INCLUDES = \
-	-I$(top_srcdir)/cppMarshaller \
-	-I$(top_srcdir)/PKCS11Module2 \
-	-I$(top_srcdir)/PKCS11Module2/rsa \
+	$(BOOST_INCLUDES) \
 	$(PCSC_CFLAGS)
 
-LIBS = $(PCSC_LIBS) $(PTHREAD_LIBS) -lz
+LIBS = \
+    $(PCSC_LIBS) \
+	-lz \
+	$(BOOST_LIB) \
+    -lboost_date_time \
+    -lboost_filesystem \
+    -lboost_serialization \
+    -lboost_system \
+    -lboost_thread \
+    -lpthread
+     
+EXTRA_DIST = autogen.sh c-mac.sh ./docs/LGPL-2.1 ./docs/Release_Notes_Linux.pdf ./docs/PKCS\#11_Libs_.NET_Linux_User_Guide.pdf ./config/Gemalto.NET.PKCS11.ini
 
 # see http://wiki.cacert.org/wiki/Pkcs11TaskForce
 install-exec-hook:

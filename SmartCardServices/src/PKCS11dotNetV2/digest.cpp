@@ -18,28 +18,33 @@
  *
  */
 
-#include "stdafx.h"
-#include "platconfig.h"
+#include <cstdlib>
+#include <cstring>
+#include "cryptoki.h"
 #include "digest.h"
+#include <memory>
 
 CDigest::CDigest(){
-    this->_counter       = 0;
-    this->_workingOffset = 0;
-    this->_workingLength = 0;
+    _counter       = 0;
+    _workingOffset = 0;
+    _workingLength = 0;
 }
 
 CDigest::~CDigest(){
-    free(this->_hashValue);
-    free(this->_workingBuffer);
+    free(_hashValue);
+    free(_workingBuffer);
 }
 
-void CDigest::HashCore(CK_BYTE_PTR data,CK_LONG offset,CK_LONG count)
+void CDigest::hashCore( CK_BYTE_PTR data, const CK_LONG& a_ulOffset, const CK_LONG& a_ulCount )
 {
+	CK_LONG count = a_ulCount;
+	CK_LONG offset = a_ulOffset;
+
     while (count > 0)
     {
         // prepare working buffer.
-        if ((_workingOffset + count) >= this->_blockLength){
-            _workingLength = this->_blockLength - _workingOffset;
+        if ((_workingOffset + count) >= _blockLength){
+            _workingLength = _blockLength - _workingOffset;
         }
         else{
             _workingLength = count;
@@ -51,24 +56,21 @@ void CDigest::HashCore(CK_BYTE_PTR data,CK_LONG offset,CK_LONG count)
         count -= _workingLength;
         offset += _workingLength;
 
-        if ((_workingOffset == this->_blockLength) && (count > 0)){
+        if ((_workingOffset == _blockLength) && (count > 0)){
 
             TransformBlock(_workingBuffer,_counter,_hashValue);
 
-            _counter += this->_blockLength;
+            _counter += _blockLength;
             _workingOffset = 0;
         }
     }
 }
 
-void CDigest::HashFinal(CK_BYTE_PTR hash)
+void CDigest::hashFinal(CK_BYTE_PTR hash)
 {
     TransformFinalBlock(_workingBuffer,_workingOffset,_counter,_hashValue);
-    memcpy(hash,_hashValue,this->_hashLength);
+    memcpy(hash,_hashValue,_hashLength);
 }
 
-CK_LONG CDigest::HashLength(void)
-{
-    return this->_hashLength;
-}
+
 

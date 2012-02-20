@@ -21,6 +21,15 @@
 #ifndef _CR_RSA_H_
 #define _CR_RSA_H_
 
+#ifdef WIN32
+#include <Windows.h>
+#else
+#ifdef __APPLE__
+#include <PCSC/wintypes.h>
+#else
+#include <wintypes.h>
+#endif
+#endif
 #include "cr_random.h"
 
 /**

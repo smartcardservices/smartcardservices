@@ -21,6 +21,8 @@
 #ifndef _include_algo_md5_h
 #define _include_algo_md5_h
 
+#include "MarshallerCfg.h"
+
 typedef struct algo_md5_context{
     u4 total[2];
     u4* digest;

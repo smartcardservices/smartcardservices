@@ -18,11 +18,12 @@
  *
  */
 
-#include "stdafx.h"
+#include <cstring>
 #include "cr_rsa.h"
 #include "cr_global.h"
 #include "cr_nn.h"
 #include "cr_digit.h"
+#include <memory>
 
 static NN_DIGIT NN_AddDigitMult(NN_DIGIT *, NN_DIGIT *, NN_DIGIT, NN_DIGIT *, unsigned int);
 static NN_DIGIT NN_SubDigitMult(NN_DIGIT *, NN_DIGIT *, NN_DIGIT, NN_DIGIT *, unsigned int);

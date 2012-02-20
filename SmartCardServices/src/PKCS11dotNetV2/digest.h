@@ -18,32 +18,40 @@
  *
  */
 
-#ifndef _include_digest_h
-#define _include_digest_h
 
-class CDigest
-{
+#ifndef __GEMALTO_DIGEST__
+#define __GEMALTO_DIGEST__
+
+#include <cstdlib>
+
+class CDigest {
+
 protected:
-    CK_BYTE_PTR  _workingBuffer;
-    CK_LONG      _workingOffset;
-    CK_LONG      _workingLength;
-    CK_LONG      _counter;
-    CK_BYTE_PTR  _hashValue;
-    CK_LONG      _hashLength;
-    CK_LONG      _blockLength;
+    
+	unsigned char*  _workingBuffer;
+    long      _workingOffset;
+    size_t      _workingLength;
+    long      _counter;
+    unsigned char*  _hashValue;
+    size_t      _hashLength;
+    long      _blockLength;
 
-    virtual void TransformBlock(CK_BYTE_PTR data,CK_LONG counter,CK_BYTE_PTR result) = 0;
-    virtual void TransformFinalBlock(CK_BYTE_PTR data,CK_LONG length,CK_LONG counter,CK_BYTE_PTR result) = 0;
+    virtual void TransformBlock(unsigned char* data, long counter, unsigned char* result) = 0;
+
+    virtual void TransformFinalBlock (unsigned char* data, long length, long counter, unsigned char* result) = 0;
 
 public:
-    CDigest();
-    virtual ~CDigest();
+    
+	CDigest( );
 
-    void HashCore(CK_BYTE_PTR data,CK_LONG offset,CK_LONG count);
-    void HashFinal(CK_BYTE_PTR hash);
-    CK_LONG HashLength(void);
+    virtual ~CDigest( );
+ 
+    void hashCore( unsigned char*, const long&, const long& );
+
+    void hashFinal( unsigned char* );
+
+	inline long hashLength( void ) { return _hashLength; }
+
 };
 
-
-#endif
-
+#endif // __GEMALTO_DIGEST__

@@ -24,12 +24,11 @@
 #include <string>
 #include <vector>
 
-#include <MarshallerCfg.h>
-#include <Array.h>
-#include <cr_random.h>
+#include "MarshallerCfg.h"
+#include "Array.hpp"
+#include "cr_random.h"
+#include "cryptoki.h"
 
-using namespace std;
-using namespace Marshaller;
 
 // Very simple class similar to auto_ptr, but for arrays.
 // It means that it calls delete[] instead of delete.
@@ -71,31 +70,56 @@ template<typename T> T LittleEndianToInt(const unsigned char * buf, size_t offse
 class Util{
 
 public:
-    static void SeedRandom(u1Array const & seed);
+    static void SeedRandom( Marshaller::u1Array const & seed);
+
     static R_RANDOM_STRUCT & RandomStruct();
 
-    static CK_ULONG MakeULong(CK_BYTE_PTR pValue,CK_ULONG offset);
-    static CK_BBOOL CompareByteArrays(CK_BYTE_PTR abuffer,CK_BYTE_PTR bbuffer,CK_ULONG len);
-    static void PushULongInVector(vector<u1>* to,CK_ULONG value);
-    static void PushULongLongInVector(vector<u1>* to,u8 value);
-    static void PushBBoolInVector(vector<u1>* to,CK_BBOOL value);
-    static void PushByteArrayInVector(vector<u1>* to,u1Array* value);
-    static void PushIntArrayInVector(vector<u1>* to,u4Array* value);
-    static void PushLengthInVector(vector<u1>* to,CK_USHORT len);
-    static CK_ULONG ReadLengthFromVector(vector<u1> from,CK_ULONG_PTR idx);
-    static CK_ULONG ReadULongFromVector(vector<u1> from,CK_ULONG_PTR idx);
-    static u8       ReadULongLongFromVector(vector<u1> from,CK_ULONG_PTR idx);
-    static CK_BBOOL ReadBBoolFromVector(vector<u1> from,CK_ULONG_PTR idx);
-    static u1Array* ReadByteArrayFromVector(vector<u1> from,CK_ULONG_PTR idx);
-    static u4Array* ReadIntArrayFromVector(vector<u1> from,CK_ULONG_PTR idx);
+    static CK_ULONG MakeULong( unsigned char* pValue, CK_ULONG offset);
 
-    static CK_BBOOL CompareU1Arrays(u1Array* abuffer,CK_VOID_PTR bbuffer,CK_ULONG len);
-    static CK_BBOOL CompareU4Arrays(u4Array* abuffer,CK_VOID_PTR bbuffer,CK_ULONG len);
-    static void ConvAscii(u1 *pIn, u4 dwLen,u1 *pOut);
-    static char* ItoA(s4 value, char* str, s4 radix);
-    static u8 MakeCheckValue(const unsigned char * pBuf, unsigned int length);
-    static u8 MakeUniqueId();
-    static std::string MakeIntString(unsigned int number, int width);
+    static bool compareByteArrays( unsigned char*, unsigned char*, const size_t& );
+ 
+	static bool compareU1Arrays( Marshaller::u1Array*, unsigned char*, const size_t& );
+    
+	static bool compareU4Arrays( Marshaller::u4Array*, unsigned char*, const size_t& );
+    
+	static void PushULongInVector( std::vector<u1>* to, CK_ULONG value);
+    
+	static void PushULongLongInVector( std::vector<u1>* to,u8 value);
+    
+	static void PushBBoolInVector( std::vector<u1>* to, CK_BBOOL value);
+    
+	static void PushByteArrayInVector( std::vector<u1>* to, Marshaller::u1Array* value);
+
+    static void PushIntArrayInVector( std::vector<u1>* to, Marshaller::u4Array* value);
+
+    static void PushLengthInVector( std::vector<u1>* to,/*CK_USHORT*/ CK_ULONG len);
+    
+	static CK_ULONG ReadLengthFromVector( std::vector<u1> from,CK_ULONG_PTR idx);
+    
+	static CK_ULONG ReadULongFromVector( std::vector<u1> from,CK_ULONG_PTR idx);
+    
+	static u8 ReadULongLongFromVector( std::vector<u1> from,CK_ULONG_PTR idx);
+    
+	static CK_BBOOL ReadBBoolFromVector( std::vector<u1> from,CK_ULONG_PTR idx);
+    
+	static  Marshaller::u1Array* ReadByteArrayFromVector( std::vector<u1> from,CK_ULONG_PTR idx);
+    
+	static  Marshaller::u4Array* ReadIntArrayFromVector( std::vector<u1> from,CK_ULONG_PTR idx);
+
+    static void ConvAscii( unsigned char* pIn, u4 dwLen, unsigned char* pOut );
+    
+	static char* ItoA(s4 value, char* str, s4 radix);
+    
+	static u8 MakeCheckValue(const unsigned char * pBuf, unsigned int length);
+    
+	static u8 MakeUniqueId();
+    
+	static std::string MakeIntString(unsigned int number, int width);
+
+	static bool ReadBoolFromVector(std::vector<u1> from, CK_ULONG_PTR idx);
+
+    static void toStringHex( const unsigned char& a_ucIn, std::string& a_stOut );
+
 
 private:
     static R_RANDOM_STRUCT _randomStruct;
