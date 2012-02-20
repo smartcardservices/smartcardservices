@@ -28,6 +28,9 @@ CONFIGURE_ARGS="--disable-dependency-tracking"
 # install in /usr
 CONFIGURE_ARGS="$CONFIGURE_ARGS --prefix=/usr"
 
+# use boost locally installed
+CONFIGURE_ARGS="$CONFIGURE_ARGS --enable-system-boost"
+
 set -x
 ./configure \
 	PKG_CONFIG="$PKG_CONFIG" \
