@@ -32,11 +32,11 @@ note() { [ $verbose = yes ] && echo "$*" 1>&2; }
 
 usage() {
 cat <<EOU
-Usage:	$(basename $0) accept [-v] [-u user] [-d domain] [-k keyname] # by key on inserted card(s)
-	$(basename $0) accept [-v] [-u user] [-d domain] -h hash # by known pubkey hash
-	$(basename $0) remove [-v] [-u user] [-d domain] # remove all public keys for this user
+Usage:	$(basename $0) accept [-v] [-a diradmin] [-P | -p password] [-u user] [-d domain] [-k keyname] # by key on inserted card(s)
+	$(basename $0) accept [-v] [-a diradmin] [-P | -p password] [-u user] [-d domain] -h hash # by known pubkey hash
+	$(basename $0) remove [-v] [-a diradmin] [-P | -p password] [-u user] [-d domain] # remove all public keys for this user
 	$(basename $0) hash [-k keyname] # print hashes for keys on inserted card(s)
-	$(basename $0) list [-v] [-u user] [-d domain] # list pubkey hashes that can authenticate this user
+	$(basename $0) list [-v] [-a diradmin] [-P | -p password] [-u user] [-d domain] # list pubkey hashes that can authenticate this user
 EOU
 exit 2
 }
@@ -51,17 +51,29 @@ keyname=
 hash=
 verbose=no
 domain="."
-while getopts d:h:k:u:v arg; do
+admin=
+password=
+readPassword=no
+authopts=
+while getopts d:h:k:u:va:p:P arg; do
   case $arg in
   d)	domain="$OPTARG";;
   h)	hash="$OPTARG";;
   k)	keyname="$OPTARG";;
   u)	user="$OPTARG";;
   v)	verbose=yes;;
+  a)	admin="$OPTARG";;
+  p)	password="$OPTARG";;
+  P)	readPassword=yes;;
   esac
 done
 shift $(($OPTIND - 1))
 
+#
+# To edit some domains (like OpenDirectory), dscl need credentials for a directory administrator account (-u and -P options).
+#
+[ "$readPassword" = yes ] && read -s -p "Password for $admin: " password && echo ""
+[[ "$admin" != "" && "$password" != "" ]] && authopts="-u $admin -P $password"
 
 #
 # Using "security dump-keychain", extract the public key hash for a key
@@ -108,16 +120,16 @@ get_hash() {
 accept_user() {
   local hash="$1"
   [ -n "$hash" ] || die "No hash specified"
-  dscl "$domain" -append "/Users/$user" AuthenticationAuthority ";pubkeyhash;$hash"
+  dscl $authopts "$domain" -append "/Users/$user" AuthenticationAuthority ";pubkeyhash;$hash"
 }
 
 remove_user() {
-  set -- $(dscl "$domain" -read "/Users/$user" AuthenticationAuthority)
+  set -- $(dscl $authopts "$domain" -read "/Users/$user" AuthenticationAuthority)
   shift		# skip authentication_authority: header
   while [ -n "$1" ]; do
 	case "$1" in
 	\;pubkeyhash\;*)
-	  dscl "$domain" -delete "/Users/$user" AuthenticationAuthority "$1"
+	  dscl $authopts "$domain" -delete "/Users/$user" AuthenticationAuthority "$1"
 	  [ $verbose = yes ] && note "Removed $1"
 	  ;;
 	esac
@@ -126,7 +138,7 @@ remove_user() {
 }
 
 list_hashes() {
-  set -- $(dscl "$domain" -read "/Users/$user" AuthenticationAuthority)
+  set -- $(dscl $authopts "$domain" -read "/Users/$user" AuthenticationAuthority)
   shift		# skip authentication_authority: header
   while [ -n "$1" ]; do
 	case "$1" in
