@@ -33,6 +33,9 @@
 #include "RecordHandle.h"
 #include "Schema.h"
 #include <memory>
+#include <sstream>
+#include <iomanip>
+#include <CommonCrypto/CommonDigest.h>
 #include <security_cdsa_utilities/cssmaclpod.h>
 #include <security_utilities/unix++.h>
 #include <security_utilities/logging.h>
@@ -799,10 +802,22 @@ void Token::cacheObject(CSSM_DB_RECORDTYPE relationId, const std::string &name,
 std::string Token::cachedObjectPath(CSSM_DB_RECORDTYPE relationId,
 	const std::string &name) const
 {
-	char buffer[9];
-	sprintf(buffer, "%X", relationId);
+    // The name is typically the friendlyname of the on-card objects
+    // like certificates.  To avoid attacks of calculated nasty filesystem
+    // paths, process the names with SHA1.
+    unsigned char md[CC_SHA1_DIGEST_LENGTH];
+    CC_SHA1_CTX ctx;
+    CC_SHA1_Init(&ctx);
+    CC_SHA1_Update(&ctx, &relationId, sizeof(relationId));
+    CC_SHA1_Update(&ctx, name.c_str(), name.length());
+    CC_SHA1_Final(md, &ctx);
 
-	return mCacheDirectory + "/" + buffer + "-" + name;
+    std::ostringstream out;
+    out << mCacheDirectory << "/" << std::hex << std::setfill('0');
+    for (std::size_t i=0; i < sizeof(md); i++)
+        out << std::setw(2) << unsigned(md[i]);
+
+    return out.str();
 }
 
 Cursor *Token::createCursor(const CSSM_QUERY *inQuery)
