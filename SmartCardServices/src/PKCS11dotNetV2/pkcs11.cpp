@@ -3383,6 +3383,14 @@ extern "C"
                         rv = CKR_OK;
                     }
                 }
+                else {
+                    // Was awoken by a concurrent thread with C_Finalize?
+                    // if yes, return CKR_CRYPTOKI_NOT_INITIALIZED
+                    // to be PKCS#11 compliant
+
+                    if (!g_isInitialized )
+                        rv = CKR_CRYPTOKI_NOT_INITIALIZED;
+                }
             }
         }
 
