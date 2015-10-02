@@ -60,6 +60,7 @@ CK_FUNCTION_LIST_PTR GemaltoToken::s_CK_pFunctionList = NULL;
 /* search PKCS#11 libs here.
  * See http://wiki.cacert.org/wiki/Pkcs11TaskForce */
 #define PKCS11LIB_PATH "/usr/lib/pkcs11/"
+#define PKCS11LIB_LOCAL_PATH "/usr/local/lib/pkcs11/"
 
 
 GemaltoToken::GemaltoToken() :
@@ -293,15 +294,25 @@ uint32 GemaltoToken::probe(SecTokendProbeFlags flags, char tokenUid[TOKEND_MAX_U
 			GemaltoToken::toStringHex(readerState.rgbAtr, readerState.cbAtr, s);
 			log("GemaltoToken::probe - ATR <%s>\n", s.c_str());
 
-			DIR *dirp = opendir(PKCS11LIB_PATH);
+			DIR *dirp;
+			/* if /usr/lib/pkcs11 does not exist then try
+			   /usr/local/lib/pkcs11 used on El Capitan 10.11 */
+			const char *lib_path = PKCS11LIB_PATH;
+			dirp = opendir(lib_path);
 			if (NULL == dirp)
-				CKError::throwMe(CKR_GENERAL_ERROR);
+			{
+				lib_path = PKCS11LIB_LOCAL_PATH;
+				dirp = opendir(lib_path);
+				if (NULL == dirp)
+					CKError::throwMe(CKR_GENERAL_ERROR);
+			}
+			log("Libraries directory: %s\n", lib_path);
 
 			bool found = false;
 			struct dirent *dir_entry;
 			while (!found && (dir_entry = readdir(dirp)) != NULL)
 			{
-				std::string lib_name = PKCS11LIB_PATH;
+				std::string lib_name = lib_path;
 				const char* dlPath;
 				CK_FUNCTION_LIST_PTR p;
 				CK_RV rv;
