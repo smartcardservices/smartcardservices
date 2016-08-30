@@ -1,0 +1,95 @@
+Process:         securityd [26]
+Path:            /usr/sbin/securityd
+Identifier:      securityd
+Version:         ??? (???)
+Code Type:       X86 (Native)
+Parent Process:  launchd [1]
+
+Date/Time:       2010-04-15 12:10:27.958 -0400
+OS Version:      Mac OS X 10.6.3 (10D573)
+Report Version:  6
+
+Exception Type:  EXC_BAD_ACCESS (SIGSEGV)
+Exception Codes: KERN_INVALID_ADDRESS at 0x0000000033343138
+Crashed Thread:  2
+
+Thread 0:  Dispatch queue: com.apple.main-thread
+0   libSystem.B.dylib             	0x97679306 mach_msg_overwrite_trap + 10
+1   libSystem.B.dylib             	0x976e51da mach_msg_overwrite + 82
+2   securityd                     	0x00007a37 0x1000 + 27191
+3   securityd                     	0x0000763f 0x1000 + 26175
+4   securityd                     	0x000075c0 0x1000 + 26048
+5   securityd                     	0x00002e8b 0x1000 + 7819
+6   securityd                     	0x000023fd 0x1000 + 5117
+
+Thread 1:
+0   libSystem.B.dylib             	0x9768386b malloc_good_size + 56
+1   com.apple.CoreFoundation      	0x972d52c2 __CFStringChangeSizeMultiple + 1874
+2   com.apple.CoreFoundation      	0x9731da11 CFStringReplaceAll + 241
+3   com.apple.CoreFoundation      	0x9731cef0 _CFBundleTryOnePreferredLprojNameInDirectory + 3856
+4   com.apple.CoreFoundation      	0x9731b7d5 _CFBundleAddPreferredLprojNamesInDirectory + 1285
+5   com.apple.CoreFoundation      	0x9731aec0 _CFBundleGetLanguageSearchList + 160
+6   com.apple.CoreFoundation      	0x9731ad0a CFBundleCopyResourceURL + 26
+7   com.apple.CoreFoundation      	0x973252a4 CFBundleGetLocalInfoDictionary + 84
+8   com.apple.CoreFoundation      	0x97325202 CFBundleGetValueForInfoDictionaryKey + 34
+9   securityd                     	0x0000d0d0 0x1000 + 49360
+10  securityd                     	0x0004ddcc 0x1000 + 314828
+11  securityd                     	0x0004ee19 0x1000 + 319001
+12  securityd                     	0x00047bf0 0x1000 + 289776
+13  securityd                     	0x0004873c 0x1000 + 292668
+14  securityd                     	0x00044ea2 0x1000 + 278178
+15  securityd                     	0x000453bf 0x1000 + 279487
+16  securityd                     	0x00015367 0x1000 + 82791
+17  securityd                     	0x00018730 0x1000 + 96048
+18  securityd                     	0x000185a0 0x1000 + 95648
+19  securityd                     	0x0001847e 0x1000 + 95358
+20  securityd                     	0x00009527 0x1000 + 34087
+21  securityd                     	0x00009492 0x1000 + 33938
+22  securityd                     	0x00007b03 0x1000 + 27395
+23  securityd                     	0x00008f79 0x1000 + 32633
+24  securityd                     	0x00008ed9 0x1000 + 32473
+25  libSystem.B.dylib             	0x976a6a19 _pthread_start + 345
+26  libSystem.B.dylib             	0x976a689e thread_start + 34
+
+Thread 2 Crashed:
+0   securityd                     	0x00060536 0x1000 + 390454
+1   securityd                     	0x000605f8 0x1000 + 390648
+2   securityd                     	0x0002bf96 0x1000 + 176022
+3   securityd                     	0x0002bd89 0x1000 + 175497
+4   securityd                     	0x0002b90d 0x1000 + 174349
+5   securityd                     	0x0002b817 0x1000 + 174103
+6   securityd                     	0x0002b767 0x1000 + 173927
+7   securityd                     	0x000094a7 0x1000 + 33959
+8   securityd                     	0x00007b03 0x1000 + 27395
+9   securityd                     	0x00008f79 0x1000 + 32633
+10  securityd                     	0x00008ed9 0x1000 + 32473
+11  libSystem.B.dylib             	0x976a6a19 _pthread_start + 345
+12  libSystem.B.dylib             	0x976a689e thread_start + 34
+
+Thread 2 crashed with X86 Thread State (32-bit):
+  eax: 0x00104500  ebx: 0x00060465  ecx: 0x33343138  edx: 0xa08ef4a0
+  edi: 0x00000001  esi: 0x0020b7b0  ebp: 0xb0184728  esp: 0xb01844e0
+   ss: 0x0000001f  efl: 0x00010202  eip: 0x00060536   cs: 0x00000017
+   ds: 0x0000001f   es: 0x0000001f   fs: 0x0000001f   gs: 0x00000037
+  cr2: 0x33343138
+
+Binary Images:
+    0x1000 -    0xd9feb +securityd ??? (???) <E2C50DB8-254D-8624-58F2-286EA010CF6C> /usr/sbin/securityd
+   0xea000 -    0xf8ff3  com.apple.pcsc 7.0 (36160) <406377FF-585E-639A-768F-41662788EC44> /System/Library/Frameworks/PCSC.framework/Versions/A/PCSC
+0x8fe00000 - 0x8fe4162b  dyld 132.1 (???) <211AF0DD-42D9-79C8-BB6A-1F4BEEF4B4AB> /usr/lib/dyld
+0x905c6000 - 0x905d4fe7  libz.1.dylib 1.2.3 (compatibility 1.0.0) <82B2C254-6F8D-7BEA-4C18-038E90CAE19B> /usr/lib/libz.1.dylib
+0x90c80000 - 0x90ceafe7  libstdc++.6.dylib 7.9.0 (compatibility 7.0.0) <411D87F4-B7E1-44EB-F201-F8B4F9227213> /usr/lib/libstdc++.6.dylib
+0x92444000 - 0x9249fff7  com.apple.framework.IOKit 2.0 (???) <69E4FE93-376C-565E-650F-04FAD213AA24> /System/Library/Frameworks/IOKit.framework/Versions/A/IOKit
+0x92e4a000 - 0x92e90ff7  libauto.dylib ??? (???) <85670A64-3B67-8162-D441-D8E0BE15CA94> /usr/lib/libauto.dylib
+0x93311000 - 0x93493fe7  libicucore.A.dylib 40.0.0 (compatibility 1.0.0) <96A45E03-2B29-83EB-0FC6-2C932E398722> /usr/lib/libicucore.A.dylib
+0x93dae000 - 0x93db1fe7  libmathCommon.A.dylib 315.0.0 (compatibility 1.0.0) <1622A54F-1A98-2CBE-B6A4-2122981A500E> /usr/lib/system/libmathCommon.A.dylib
+0x94890000 - 0x9489cff7  libkxld.dylib ??? (???) <13F26BB6-C2F7-9D74-933E-09AD8B509ECD> /usr/lib/system/libkxld.dylib
+0x949f4000 - 0x94c56ff3  com.apple.security 6.1.1 (37594) <1AC07F75-7E27-9662-21DA-B05DFF047B26> /System/Library/Frameworks/Security.framework/Versions/A/Security
+0x972c9000 - 0x97442ffb  com.apple.CoreFoundation 6.6.1 (550.19) <1E97FB1E-9E42-B8EB-E463-5C75315FDA31> /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
+0x975be000 - 0x97677fe7  libsqlite3.dylib 9.6.0 (compatibility 9.0.0) <16CEF8E8-8C9A-94CD-EF5D-05477844C005> /usr/lib/libsqlite3.dylib
+0x97678000 - 0x9781dfeb  libSystem.B.dylib 125.0.1 (compatibility 1.0.0) <06A5336A-A6F6-4E62-F55F-4909A64631C2> /usr/lib/libSystem.B.dylib
+0x97f51000 - 0x97ffefe7  libobjc.A.dylib 227.0.0 (compatibility 1.0.0) <DF8E4CFA-3719-3415-0BF1-E8C5E561C3B1> /usr/lib/libobjc.A.dylib
+0x986ae000 - 0x986c2fe7  libbsm.0.dylib ??? (???) <14CB053A-7C47-96DA-E415-0906BA1B78C9> /usr/lib/libbsm.0.dylib
+0xffff0000 - 0xffff1fff  libSystem.B.dylib ??? (???) <06A5336A-A6F6-4E62-F55F-4909A64631C2> /usr/lib/libSystem.B.dylib
+
+ 

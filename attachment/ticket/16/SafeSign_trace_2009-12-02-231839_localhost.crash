@@ -1,0 +1,65 @@
+Process:         SafeSign_trace [9025]
+Path:            /System/Library/Security/tokend/SafeSign.tokend/Contents/MacOS/SafeSign_trace
+Identifier:      SafeSign_trace
+Version:         ??? (???)
+Code Type:       X86 (Native)
+Parent Process:  securityd [23]
+
+Date/Time:       2009-12-02 23:18:39.225 +0100
+OS Version:      Mac OS X 10.6.2 (10C540)
+Report Version:  6
+
+Exception Type:  EXC_BAD_ACCESS (SIGSEGV)
+Exception Codes: KERN_INVALID_ADDRESS at 0x00000000fffffff4
+Crashed Thread:  0  Dispatch queue: com.apple.main-thread
+
+Thread 0 Crashed:  Dispatch queue: com.apple.main-thread
+0   libstdc++.6.dylib             	0x95efb30e std::string::assign(char const*, unsigned long) + 60
+1   libstdc++.6.dylib             	0x95efb3c9 std::string::assign(char const*) + 37
+2   com.apple.securitytokend      	0x0007dcb5 tokend_server_probe(unsigned int, unsigned int, int*, unsigned int*, char*) + 120
+3   com.apple.securitytokend      	0x0007ba39 _Xprobe(mach_msg_header_t*, mach_msg_header_t*) + 154
+4   com.apple.securitytokend      	0x00079b4c tokend_server(mach_msg_header_t*, mach_msg_header_t*) + 125
+5   com.apple.securitytokend      	0x00086166 Security::MachPlusPlus::MachServer::runServerThread(bool) + 1204
+6   com.apple.securitytokend      	0x00086393 Security::MachPlusPlus::MachServer::run(unsigned long, int) + 125
+7   com.apple.securitytokend      	0x000799a5 Security::Tokend::Server::operator()(int, char const**, unsigned int) + 663
+8   com.apple.securitytokend      	0x00079595 SecTokendMain + 494
+9   SafeSign_trace                	0x00002639 main + 201 (SafeSign.cpp:25)
+10  SafeSign_trace                	0x00002552 start + 54
+
+Thread 1:
+0   libSystem.B.dylib             	0x9910b806 __semwait_signal + 10
+1   libSystem.B.dylib             	0x99137441 nanosleep$UNIX2003 + 188
+2   com.apple.pcsc                	0x00068706 SYS_USleep + 68
+3   com.apple.pcsc                	0x0006cc02 SCardGetStatusChange + 1574
+4   libaetpkss.dylib              	0x0048b40b C_CancelFunction + 172941
+5   libaetpkss.dylib              	0x00477d33 C_CancelFunction + 93365
+6   libaetpkss.dylib              	0x00477fca C_CancelFunction + 94028
+7   libSystem.B.dylib             	0x9910afbd _pthread_start + 345
+8   libSystem.B.dylib             	0x9910ae42 thread_start + 34
+
+Thread 0 crashed with X86 Thread State (32-bit):
+  eax: 0x00000000  ebx: 0x95efb2e6  ecx: 0x01001234  edx: 0x00000000
+  edi: 0x00000019  esi: 0x0080b040  ebp: 0xbffff4d8  esp: 0xbffff4a0
+   ss: 0x0000001f  efl: 0x00010202  eip: 0x95efb30e   cs: 0x00000017
+   ds: 0x0000001f   es: 0x0000001f   fs: 0x00000000   gs: 0x00000037
+  cr2: 0xfffffff4
+
+Binary Images:
+    0x1000 -    0x29fe7  SafeSign_trace ??? (???) <8CD322FC-A99B-9A4F-5CAF-03CAE813C4A9> /System/Library/Security/tokend/SafeSign.tokend/Contents/MacOS/SafeSign_trace
+   0x62000 -    0x70ff3  com.apple.pcsc 7.0 (36160) <2441C9F0-FF5A-C0FD-51CB-E25ABC9DC7EF> /System/Library/Frameworks/PCSC.framework/Versions/A/PCSC
+   0x78000 -    0x90ff3  com.apple.securitytokend 3.0 (36808) <F0FAEB47-3201-1BC1-0BC2-79DAF92E067A> /System/Library/PrivateFrameworks/SecurityTokend.framework/Versions/A/SecurityTokend
+   0x9d000 -   0x152fe7  libcrypto.0.9.7.dylib ??? (???) <4917E4F2-817F-5AC4-3FBE-54BC96360448> /usr/lib/libcrypto.0.9.7.dylib
+  0x400000 -   0x54ffef +libaetpkss.dylib ??? (???) /usr/local/lib/libaetpkss.dylib
+0x8fe00000 - 0x8fe4162b  dyld 132.1 (???) <211AF0DD-42D9-79C8-BB6A-1F4BEEF4B4AB> /usr/lib/dyld
+0x92985000 - 0x92afcfef  com.apple.CoreFoundation 6.6.1 (550.13) <AE9FC6F7-F0B2-DE58-759E-7DB89C021A46> /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
+0x92c01000 - 0x92c04fe7  libmathCommon.A.dylib ??? (???) <1622A54F-1A98-2CBE-B6A4-2122981A500E> /usr/lib/system/libmathCommon.A.dylib
+0x944ff000 - 0x9450dfe7  libz.1.dylib ??? (???) <7B7A02AB-DA99-6180-880E-D28E4F9AA8EB> /usr/lib/libz.1.dylib
+0x945be000 - 0x94604ff7  libauto.dylib ??? (???) <85670A64-3B67-8162-D441-D8E0BE15CA94> /usr/lib/libauto.dylib
+0x95eca000 - 0x95f34fe7  libstdc++.6.dylib ??? (???) <411D87F4-B7E1-44EB-F201-F8B4F9227213> /usr/lib/libstdc++.6.dylib
+0x95fcc000 - 0x96085fe7  libsqlite3.dylib ??? (???) <16CEF8E8-8C9A-94CD-EF5D-05477844C005> /usr/lib/libsqlite3.dylib
+0x96f40000 - 0x971a2ff7  com.apple.security 6.0 (36910) <32B8FA26-CD73-4C45-C15A-EF8406D51FCC> /System/Library/Frameworks/Security.framework/Versions/A/Security
+0x98453000 - 0x985d5fe7  libicucore.A.dylib ??? (???) <2B0182F3-F459-B452-CC34-46FE73ADE348> /usr/lib/libicucore.A.dylib
+0x98b45000 - 0x98bf2fe7  libobjc.A.dylib ??? (???) <DF8E4CFA-3719-3415-0BF1-E8C5E561C3B1> /usr/lib/libobjc.A.dylib
+0x990dd000 - 0x99281feb  libSystem.B.dylib ??? (???) <D45B91B2-2B4C-AAC0-8096-1FC48B7E9672> /usr/lib/libSystem.B.dylib
+0xffff0000 - 0xffff1fff  libSystem.B.dylib ??? (???) <D45B91B2-2B4C-AAC0-8096-1FC48B7E9672> /usr/lib/libSystem.B.dylib
+

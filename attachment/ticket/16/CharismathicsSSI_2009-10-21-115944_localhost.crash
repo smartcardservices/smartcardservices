@@ -1,0 +1,123 @@
+Process:         CharismathicsSSI [176]
+Path:            /System/Library/Security/tokend/CharismathicsSSI.tokend/Contents/MacOS/CharismathicsSSI
+Identifier:      CharismathicsSSI
+Version:         ??? (???)
+Code Type:       X86 (Native)
+Parent Process:  securityd [23]
+
+Date/Time:       2009-10-21 11:59:44.297 +0200
+OS Version:      Mac OS X 10.6 (10A421)
+Report Version:  6
+
+Anonymous UUID:                      227ABA5C-1B42-4BC4-8BDA-6EFDFC66519B
+
+Exception Type:  EXC_BAD_ACCESS (SIGSEGV)
+Exception Codes: KERN_INVALID_ADDRESS at 0x00000000fffffff4
+Crashed Thread:  0  Dispatch queue: com.apple.main-thread
+
+Thread 0 Crashed:  Dispatch queue: com.apple.main-thread
+0   libstdc++.6.dylib             	0x957a030e std::string::assign(char const*, unsigned long) + 60
+1   libstdc++.6.dylib             	0x957a03c9 std::string::assign(char const*) + 37
+2   com.apple.securitytokend      	0x0004fcb5 tokend_server_probe(unsigned int, unsigned int, int*, unsigned int*, char*) + 120
+3   com.apple.securitytokend      	0x0004da39 _Xprobe(mach_msg_header_t*, mach_msg_header_t*) + 154
+4   com.apple.securitytokend      	0x0004bb4c tokend_server(mach_msg_header_t*, mach_msg_header_t*) + 125
+5   com.apple.securitytokend      	0x00058166 Security::MachPlusPlus::MachServer::runServerThread(bool) + 1204
+6   com.apple.securitytokend      	0x00058393 Security::MachPlusPlus::MachServer::run(unsigned long, int) + 125
+7   com.apple.securitytokend      	0x0004b9a5 Security::Tokend::Server::operator()(int, char const**, unsigned int) + 663
+8   com.apple.securitytokend      	0x0004b595 SecTokendMain + 494
+9   ...rismathics.CharismathicsSSI	0x00001c12 0x1000 + 3090
+10  ...rismathics.CharismathicsSSI	0x00001ad5 0x1000 + 2773
+
+Thread 1:  Dispatch queue: com.apple.libdispatch-manager
+0   libSystem.B.dylib             	0x9844c10a kevent + 10
+1   libSystem.B.dylib             	0x9844c824 _dispatch_mgr_invoke + 215
+2   libSystem.B.dylib             	0x9844bce1 _dispatch_queue_invoke + 163
+3   libSystem.B.dylib             	0x9844ba86 _dispatch_worker_thread2 + 234
+4   libSystem.B.dylib             	0x9844b511 _pthread_wqthread + 390
+5   libSystem.B.dylib             	0x9844b356 start_wqthread + 30
+
+Thread 2:
+0   libSystem.B.dylib             	0x9844b1a2 __workq_kernreturn + 10
+1   libSystem.B.dylib             	0x9844b738 _pthread_wqthread + 941
+2   libSystem.B.dylib             	0x9844b356 start_wqthread + 30
+
+Thread 3:
+0   libSystem.B.dylib             	0x9845382a __semwait_signal + 10
+1   libSystem.B.dylib             	0x9847f681 nanosleep$UNIX2003 + 188
+2   com.apple.pcsc                	0x0003a706 SYS_USleep + 68
+3   com.apple.pcsc                	0x0003ec02 SCardGetStatusChange + 1574
+4   libcmP11.dylib                	0x019e6de2 CMGetFunctionList + 1981370
+5   libcmP11.dylib                	0x019ba4d4 CMGetFunctionList + 1798828
+6   libcmP11.dylib                	0x019ba4f0 CMGetFunctionList + 1798856
+7   libSystem.B.dylib             	0x98452fe1 _pthread_start + 345
+8   libSystem.B.dylib             	0x98452e66 thread_start + 34
+
+Thread 4:
+0   libSystem.B.dylib             	0x9845382a __semwait_signal + 10
+1   libSystem.B.dylib             	0x9847f681 nanosleep$UNIX2003 + 188
+2   com.apple.pcsc                	0x0003a706 SYS_USleep + 68
+3   com.apple.pcsc                	0x0003ec02 SCardGetStatusChange + 1574
+4   libcmP11.dylib                	0x019e3e05 CMGetFunctionList + 1969117
+5   libcmP11.dylib                	0x019ba4d4 CMGetFunctionList + 1798828
+6   libcmP11.dylib                	0x019ba4f0 CMGetFunctionList + 1798856
+7   libSystem.B.dylib             	0x98452fe1 _pthread_start + 345
+8   libSystem.B.dylib             	0x98452e66 thread_start + 34
+
+Thread 0 crashed with X86 Thread State (32-bit):
+  eax: 0x00000000  ebx: 0x957a02e6  ecx: 0x00807e34  edx: 0x00000000
+  edi: 0x0000000f  esi: 0x0100ba40  ebp: 0xbffff398  esp: 0xbffff360
+   ss: 0x0000001f  efl: 0x00010202  eip: 0x957a030e   cs: 0x00000017
+   ds: 0x0000001f   es: 0x0000001f   fs: 0x00000000   gs: 0x00000037
+  cr2: 0xfffffff4
+
+Binary Images:
+    0x1000 -    0x2dfeb  com.charismathics.CharismathicsSSI 1.1.1 (30557 ) <DDE88DF5-5D75-3437-3CE5-91AB6C19116B> /System/Library/Security/tokend/CharismathicsSSI.tokend/Contents/MacOS/CharismathicsSSI
+   0x34000 -    0x42ff3  com.apple.pcsc 7.0 (36160) <2441C9F0-FF5A-C0FD-51CB-E25ABC9DC7EF> /System/Library/Frameworks/PCSC.framework/Versions/A/PCSC
+   0x4a000 -    0x62ff3  com.apple.securitytokend 3.0 (36808) <F0FAEB47-3201-1BC1-0BC2-79DAF92E067A> /System/Library/PrivateFrameworks/SecurityTokend.framework/Versions/A/SecurityTokend
+ 0x1800000 -  0x1b98fff  libcmP11.dylib ??? (???) <CF82D133-AE3B-542C-74AC-7E99F6ABBF9C> /System/Library/Security/tokend/CharismathicsSSI.tokend/Contents/Frameworks/libcmP11.dylib
+0x8fe00000 - 0x8fe4162b  dyld 132.1 (???) <EC5BF03B-8B9B-3087-E2F6-490AF19F807C> /usr/lib/dyld
+0x90248000 - 0x90301fe7  libsqlite3.dylib ??? (???) <16CEF8E8-8C9A-94CD-EF5D-05477844C005> /usr/lib/libsqlite3.dylib
+0x9041f000 - 0x90428ff7  com.apple.DiskArbitration 2.3 (2.3) <E9C40767-DA6A-6CCB-8B00-2D5706753000> /System/Library/Frameworks/DiskArbitration.framework/Versions/A/DiskArbitration
+0x90484000 - 0x90576ff7  libcrypto.0.9.8.dylib ??? (???) <792B8722-3091-5E9F-E25F-67499CFE0599> /usr/lib/libcrypto.0.9.8.dylib
+0x91982000 - 0x91a29fe7  com.apple.CFNetwork 454.4 (454.4) <7C563385-9893-3B48-8607-5BC81DA2C4CF> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CFNetwork.framework/Versions/A/CFNetwork
+0x91d9f000 - 0x91dadfe7  libz.1.dylib ??? (???) <7B7A02AB-DA99-6180-880E-D28E4F9AA8EB> /usr/lib/libz.1.dylib
+0x91ded000 - 0x91e9afe7  libobjc.A.dylib ??? (???) <410DD065-A18F-F054-0457-65525F4D1039> /usr/lib/libobjc.A.dylib
+0x91e9b000 - 0x920fdff3  com.apple.security 6.0 (36910) <F045B57C-054F-F06F-EF7E-EABEC2700274> /System/Library/Frameworks/Security.framework/Versions/A/Security
+0x92258000 - 0x92258ff7  com.apple.CoreServices 44 (44) <AC35D112-5FB9-9C8C-6189-5F5945072375> /System/Library/Frameworks/CoreServices.framework/Versions/A/CoreServices
+0x932c7000 - 0x9343efef  com.apple.CoreFoundation 6.6 (550) <193E33D6-2E92-3452-773B-60A1A9CCC573> /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
+0x9349b000 - 0x93538ff3  com.apple.LaunchServices 360.1 (360.1) <1DE1DFFD-BA59-E8B6-109A-64EC6B6787F2> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/LaunchServices
+0x9362e000 - 0x93688ff7  com.apple.framework.IOKit 2.0 (???) <7618DDEC-2E3B-9C6E-FDC9-15169E24B4FB> /System/Library/Frameworks/IOKit.framework/Versions/A/IOKit
+0x94084000 - 0x940acff7  libxslt.1.dylib ??? (???) <769EF4B2-C1AD-73D5-AAAD-1564DAEA77AF> /usr/lib/libxslt.1.dylib
+0x9419f000 - 0x941e3fe7  com.apple.Metadata 10.6.0 (507) <9A792907-D6DD-A745-08D5-3B630D701C7A> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Metadata
+0x94446000 - 0x944c6feb  com.apple.SearchKit 1.3.0 (1.3.0) <9E18AEA5-F4B4-8BE5-EEA9-818FC4F46FD9> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/SearchKit.framework/Versions/A/SearchKit
+0x94632000 - 0x946fcfef  com.apple.CoreServices.OSServices 352 (352) <D9F21CA4-EED0-705F-8F3C-F1322D114B52> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/OSServices.framework/Versions/A/OSServices
+0x946fd000 - 0x94709ff7  libkxld.dylib ??? (???) <45C360BE-CC2D-E8B9-74B9-8276A6F6F03B> /usr/lib/system/libkxld.dylib
+0x950c2000 - 0x950c5fe7  libmathCommon.A.dylib ??? (???) <1622A54F-1A98-2CBE-B6A4-2122981A500E> /usr/lib/system/libmathCommon.A.dylib
+0x951c6000 - 0x951c7ff7  com.apple.TrustEvaluationAgent 1.0 (1) <71E2DA16-83EC-6056-FFEE-862A04B5599F> /System/Library/PrivateFrameworks/TrustEvaluationAgent.framework/Versions/A/TrustEvaluationAgent
+0x951ed000 - 0x95220ff7  com.apple.AE 496 (496) <B638FDD4-7322-F0E4-ACEB-777D8A1399E1> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/AE
+0x9576f000 - 0x957d9fe7  libstdc++.6.dylib ??? (???) <411D87F4-B7E1-44EB-F201-F8B4F9227213> /usr/lib/libstdc++.6.dylib
+0x95cde000 - 0x95cf2fe7  libbsm.0.dylib ??? (???) <14CB053A-7C47-96DA-E415-0906BA1B78C9> /usr/lib/libbsm.0.dylib
+0x95fc0000 - 0x96142fe7  libicucore.A.dylib ??? (???) <FBB66376-CBA9-8149-A1AA-10AB8578C3B3> /usr/lib/libicucore.A.dylib
+0x977a4000 - 0x97ac3fe7  com.apple.CoreServices.CarbonCore 859.1 (859.1) <2E72AF56-4BE6-294A-7372-19C360688B8B> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/CarbonCore
+0x97ac4000 - 0x97bc5fe7  libxml2.2.dylib ??? (???) <C242A74D-280A-90C3-3F79-891624AA45D2> /usr/lib/libxml2.2.dylib
+0x982b6000 - 0x982dcfff  com.apple.DictionaryServices 1.1 (1.1) <07694B30-56A9-5C98-B8BC-DA0628715FA8> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/DictionaryServices.framework/Versions/A/DictionaryServices
+0x98425000 - 0x985c9feb  libSystem.B.dylib ??? (???) <60AA3BCD-04BB-A786-BC8B-3606C446BFB2> /usr/lib/libSystem.B.dylib
+0x98c0e000 - 0x98c54ff7  libauto.dylib ??? (???) <FAB17F30-A28B-E33D-6E21-C7119C9C83ED> /usr/lib/libauto.dylib
+0x9903f000 - 0x9904cff7  com.apple.NetFS 3.2 (3.2) <E6FD80B0-0238-0C42-A3EC-EBDEC107A1C3> /System/Library/Frameworks/NetFS.framework/Versions/A/NetFS
+0x993f1000 - 0x9942eff7  com.apple.SystemConfiguration 1.10 (1.10) <D5B69C06-5C63-33E8-C453-F317B0DFA24C> /System/Library/Frameworks/SystemConfiguration.framework/Versions/A/SystemConfiguration
+0xffff0000 - 0xffff1fff  libSystem.B.dylib ??? (???) <60AA3BCD-04BB-A786-BC8B-3606C446BFB2> /usr/lib/libSystem.B.dylib
+
+System Profile:
+Model: MacBookPro2,2, BootROM MBP22.00A5.B07, 2 processors, Intel Core 2 Duo, 2.16 GHz, 3 GB, SMC 1.12f5
+Graphics: ATI Radeon X1600, ATY,RadeonX1600, PCIe, 128 MB
+Memory Module: global_name
+AirPort: AirPort Extreme, Atheros 5416: 2.0.19.3
+Bluetooth: Version 2.2.0f16, 2 service, 1 devices, 1 incoming serial ports
+Network Service: Ethernet, Ethernet, en0
+Serial ATA Device: Hitachi HTS541612J9SA00, 111.79 GB
+Parallel ATA Device: MATSHITADVD-R   UJ-857D
+USB Device: Built-in iSight, 0x05ac  (Apple Inc.), 0x8501, 0xfd400000
+USB Device: Apple Internal Keyboard / Trackpad, 0x05ac  (Apple Inc.), 0x021b, 0x1d200000
+USB Device: Smart Card Reader USB, 0x076b  (OMNIKEY), 0x3021, 0x3d100000
+USB Device: IR Receiver, 0x05ac  (Apple Inc.), 0x8240, 0x5d200000
+USB Device: Bluetooth USB Host Controller, 0x05ac  (Apple Inc.), 0x8205, 0x7d100000

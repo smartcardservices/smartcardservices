@@ -1,0 +1,20 @@
+Index: trunk/SmartCardServices/src/PKCS11dotNetV2/PKCS11.cpp
+===================================================================
+--- trunk/SmartCardServices/src/PKCS11dotNetV2/PKCS11.cpp	(révision 159)
++++ trunk/SmartCardServices/src/PKCS11dotNetV2/PKCS11.cpp	(copie de travail)
+@@ -3383,6 +3383,15 @@
+                         rv = CKR_OK;
+                     }
+                 }
++		else {
++			// Was awoken by a concurrent thread with C_Finalize ?
++			// if yes, return CKR_CRYPTOKI_NOT_INITIALIZED to be p11 compliant
++			if( !g_isInitialized ) {
++
++			    rv = CKR_CRYPTOKI_NOT_INITIALIZED;
++
++			}
++		}
+             }
+         }
+ 

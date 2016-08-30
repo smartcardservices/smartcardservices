@@ -1,0 +1,559 @@
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/debuglog.c:222:DebugLogSetLevel() debug level=debug
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/pcscdaemon.c:585:main() pcsc-lite 1.4.0 daemon ready.
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/readerfactory.c:780:RFInitializeReader() Attempting startup of Feitian ePass2003 00 00 using /usr/libexec/SmartCardServices/drivers/ifd-ccid.bundle
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/readerfactory.c:506:RFBindFunctions() Binding driver functions
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/readerfactory.c:642:RFBindFunctions() Loading IFD Handler 3.0
+ifdhandler.c:1840:init_driver() Driver version: 1.4.9
+ifdhandler.c:1857:init_driver() LogLevel: 0x0003
+ifdhandler.c:1868:init_driver() DriverOptions: 0x0000
+ifdhandler.c:83:CreateChannelByNameOrChannel() Lun: 0, device: Feitian ePass2003
+ccid_usb.c:228:OpenUSBByName() Using: /usr/libexec/SmartCardServices/drivers/ifd-ccid.bundle/Contents/Info.plist
+ccid_usb.c:246:OpenUSBByName() ifdManufacturerString: Ludovic Rousseau (ludovic.rousseau@free.fr)
+ccid_usb.c:247:OpenUSBByName() ifdProductString: Generic CCID driver
+ccid_usb.c:248:OpenUSBByName() Copyright: This driver is protected by terms of the GNU Lesser General Public License version 2.1, or (at your option) any later
+ccid_usb.c:521:OpenUSBByName() Found Vendor/Product: 096E/0807 (Feitian ePass2003)
+ccid_usb.c:523:OpenUSBByName() Using USB bus/device: 20/5
+ccid_usb.c:1054:ControlUSB() control failed (20/5): -9 Operation timed out
+ccid_usb.c:985:get_data_rates() IFD does not support GET_DATA_RATES request: -9
+ifdhandler.c:358:IFDHGetCapabilities() tag: 0xFAE, Feitian ePass2003 (lun: 0)
+ifdhandler.c:446:IFDHGetCapabilities() Reader supports 1 slot(s)
+ifdhandler.c:1122:IFDHPowerICC() action: PowerUp, Feitian ePass2003 (lun: 0)
+Card ATR: 3B 9F 95 81 31 FE 9F 00 66 46 53 05 01 00 11 71 DF 00 00 03 90 00 80 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:217:SHMProcessEventsServer() Common channel packet arrival
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:226:SHMProcessEventsServer() SHMProcessCommonChannelRequest detects: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/pcscdaemon.c:256:SVCServiceRunLoop() A new context thread creation is requested: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:178:ContextThread() Thread is started: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 3C 00 00 00 F8 00 00 00 5B 00 00 00 5B 00 00 00 F8 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 12 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 12
+<== SHMMessageReceive:
+00 00 00 03 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:242:ContextThread() Client is protocol version 3:0
+==> SHMMessageSend:
+12 34 56 78 00 00 00 3C 00 00 00 F8 00 00 00 5B 00 00 00 5B 00 00 00 F8 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 3C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 01 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 12 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 12
+<== SHMMessageReceive:
+00 00 00 02 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:199:SCardEstablishContext() Establishing Context: 16998587 [0x010360BB]
+==> SHMMessageSend:
+12 34 56 78 00 00 00 3C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 01 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 01 03 60 BB 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 7C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 04 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 76 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 76
+<== SHMMessageReceive:
+01 03 60 BB 46 65 69 74 69 61 6E 20 65 50 61 73 73 32 30 30 33 20 30 30 20 30 30 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:376:MSGFunctionDemarshall() SCardConnect hContext: 0x010360BB, phCard: 0x00000000
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:253:SCardConnect() Attempting Connect to Feitian ePass2003 00 00 using protocol: 1
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/prothandler.c:137:PHSetProtocol() Protocol T=0 requested but unsupported by the card
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:380:MSGFunctionDemarshall() SCardConnect result: -2146435057 [0x8010000F]
+==> SHMMessageSend:
+12 34 56 78 00 00 00 7C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 04 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 03 60 BB 46 65 69 74 69 61 6E 20 65 50 61 73 73 32 30 30 33 20 30 30 20 30 30 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 01 00 00 00 00 00 00 00 00 80 10 00 0F 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:461:SHMMessageReceive() SHMMessageReceive: peer closed the socket
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0xFFFFFFFF, bytes read: 0
+<== SHMMessageReceive:
+
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0xFFFFFFFF [0xFFFFFFFF]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:282:SHMProcessEventsContext() Client has disappeared: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:199:ContextThread() Client die: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:210:SCardReleaseContext() Releasing Context: 16998587
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:217:SHMProcessEventsServer() Common channel packet arrival
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:226:SHMProcessEventsServer() SHMProcessCommonChannelRequest detects: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/pcscdaemon.c:256:SVCServiceRunLoop() A new context thread creation is requested: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:178:ContextThread() Thread is started: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 3C 00 00 00 F8 00 00 00 5B 00 00 00 5B 00 00 00 F8 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 12 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 12
+<== SHMMessageReceive:
+00 00 00 03 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:242:ContextThread() Client is protocol version 3:0
+==> SHMMessageSend:
+12 34 56 78 00 00 00 3C 00 00 00 F8 00 00 00 5B 00 00 00 5B 00 00 00 F8 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 3C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 01 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 12 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 12
+<== SHMMessageReceive:
+00 00 00 02 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:199:SCardEstablishContext() Establishing Context: 17002044 [0x01036E3C]
+==> SHMMessageSend:
+12 34 56 78 00 00 00 3C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 01 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 01 03 6E 3C 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 7C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 04 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 76 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 76
+<== SHMMessageReceive:
+01 03 6E 3C 46 65 69 74 69 61 6E 20 65 50 61 73 73 32 30 30 33 20 30 30 20 30 30 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 03 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:376:MSGFunctionDemarshall() SCardConnect hContext: 0x01036E3C, phCard: 0x00000000
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:253:SCardConnect() Attempting Connect to Feitian ePass2003 00 00 using protocol: 3
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/prothandler.c:158:PHSetProtocol() Attempting PTS to T=1
+ifdhandler.c:668:IFDHSetProtocolParameters() protocol T=1, Feitian ePass2003 (lun: 0)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:398:SCardConnect() Active Protocol: T=1
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:408:SCardConnect() hCard Identity: 16e6b
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:380:MSGFunctionDemarshall() SCardConnect result: 0 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:386:MSGFunctionDemarshall() MSGAddHandle result: 0 [0x00000000]
+==> SHMMessageSend:
+12 34 56 78 00 00 00 7C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 04 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 03 6E 3C 46 65 69 74 69 61 6E 20 65 50 61 73 73 32 30 30 33 20 30 30 20 30 30 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 03 00 01 6E 6B 00 00 00 02 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 02 60 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 09 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 560 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 560
+<== SHMMessageReceive:
+00 01 6E 6B 00 00 00 02 00 00 00 08 00 A4 04 00 07 A0 00 00 00 79 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 0C 00 00 00 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 08 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:472:MSGFunctionDemarshall() SCardTransmit cbSendLength: 12
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:1305:SCardTransmit() Send Protocol: T=1
+ifdhandler.c:1265:IFDHTransmitToICC() Feitian ePass2003 (lun: 0)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:1325:SCardTransmit() IFDControl_v2/IFDTransmit result: 0x00000000, received: 2
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:1326:SCardTransmit()  pbRecvBuffer: [0]: 0x69, [1]: 0x85
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:492:MSGFunctionDemarshall() SCardTransmit pcbRecvLength: 2
+==> SHMMessageSend:
+12 34 56 78 00 00 02 60 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 09 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 6E 6B 00 00 00 02 00 00 00 08 00 A4 04 00 07 A0 00 00 00 79 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 0C 00 BC 97 28 00 00 00 01 69 85 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 3C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 06 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 12 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 12
+<== SHMMessageReceive:
+00 01 6E 6B 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:720:SCardDisconnect() Active Contexts: 1
+==> SHMMessageSend:
+12 34 56 78 00 00 00 3C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 06 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 6E 6B 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:461:SHMMessageReceive() SHMMessageReceive: peer closed the socket
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0xFFFFFFFF, bytes read: 0
+<== SHMMessageReceive:
+
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0xFFFFFFFF [0xFFFFFFFF]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:282:SHMProcessEventsContext() Client has disappeared: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:199:ContextThread() Client die: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:210:SCardReleaseContext() Releasing Context: 17002044
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:217:SHMProcessEventsServer() Common channel packet arrival
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:226:SHMProcessEventsServer() SHMProcessCommonChannelRequest detects: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/pcscdaemon.c:256:SVCServiceRunLoop() A new context thread creation is requested: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:178:ContextThread() Thread is started: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 3C 00 00 00 F8 00 00 00 5B 00 00 00 5B 00 00 00 F8 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 12 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 12
+<== SHMMessageReceive:
+00 00 00 03 00 00 00 00 5F BF E7 B0 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:242:ContextThread() Client is protocol version 3:0
+==> SHMMessageSend:
+12 34 56 78 00 00 00 3C 00 00 00 F8 00 00 00 5B 00 00 00 5B 00 00 00 F8 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 3C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 01 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 12 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 12
+<== SHMMessageReceive:
+00 00 00 02 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:199:SCardEstablishContext() Establishing Context: 17014940 [0x0103A09C]
+==> SHMMessageSend:
+12 34 56 78 00 00 00 3C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 01 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 01 03 A0 9C 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 7C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 04 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 76 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 76
+<== SHMMessageReceive:
+01 03 A0 9C 46 65 69 74 69 61 6E 20 65 50 61 73 73 32 30 30 33 20 30 30 20 30 30 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 03 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:376:MSGFunctionDemarshall() SCardConnect hContext: 0x0103A09C, phCard: 0x00000000
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:253:SCardConnect() Attempting Connect to Feitian ePass2003 00 00 using protocol: 3
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:398:SCardConnect() Active Protocol: T=1
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:408:SCardConnect() hCard Identity: 1a04b
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:380:MSGFunctionDemarshall() SCardConnect result: 0 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:386:MSGFunctionDemarshall() MSGAddHandle result: 0 [0x00000000]
+==> SHMMessageSend:
+12 34 56 78 00 00 00 7C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 04 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 03 A0 9C 46 65 69 74 69 61 6E 20 65 50 61 73 73 32 30 30 33 20 30 30 20 30 30 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 03 00 01 A0 4B 00 00 00 02 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 6C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 11 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 60 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 60
+<== SHMMessageReceive:
+00 01 A0 4B 00 00 00 02 00 00 00 08 00 00 00 0C 00 00 00 03 00 00 00 00 00 00 04 00 00 00 00 00 00 00 00 00 00 00 00 3C 00 A4 04 00 07 A0 00 00 00 79 01 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:540:MSGFunctionDemarshall() SCardTransmitExt cbSendLength: 12
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:1305:SCardTransmit() Send Protocol: T=1
+ifdhandler.c:1265:IFDHTransmitToICC() Feitian ePass2003 (lun: 0)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:1325:SCardTransmit() IFDControl_v2/IFDTransmit result: 0x00000000, received: 2
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:1326:SCardTransmit()  pbRecvBuffer: [0]: 0x69, [1]: 0x85
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:582:MSGFunctionDemarshall() SCardTransmitExt pcbRecvLength: 2, size: 50
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:584:MSGFunctionDemarshall() SCardTransmitExt SCardTransmit result: 0 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:619:MSGFunctionDemarshall() SCardTransmitExt/SHMMessageSend one block: data: 2, total: 46
+==> SHMMessageSend:
+12 34 56 78 00 00 00 5E 00 00 00 F1 00 00 00 00 00 00 00 00 00 00 00 11 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 A0 4B 00 00 00 02 00 00 00 08 00 00 00 0C 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 32 69 85 04 00 07 A0 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 3C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 06 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 12 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 12
+<== SHMMessageReceive:
+00 01 A0 4B 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:720:SCardDisconnect() Active Contexts: 1
+==> SHMMessageSend:
+12 34 56 78 00 00 00 3C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 06 51 5A C2 1B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 A0 4B 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:461:SHMMessageReceive() SHMMessageReceive: peer closed the socket
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0xFFFFFFFF, bytes read: 0
+<== SHMMessageReceive:
+
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0xFFFFFFFF [0xFFFFFFFF]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:282:SHMProcessEventsContext() Client has disappeared: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:199:ContextThread() Client die: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:210:SCardReleaseContext() Releasing Context: 17014940
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:217:SHMProcessEventsServer() Common channel packet arrival
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:226:SHMProcessEventsServer() SHMProcessCommonChannelRequest detects: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/pcscdaemon.c:256:SVCServiceRunLoop() A new context thread creation is requested: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:178:ContextThread() Thread is started: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 3C 00 00 00 F8 00 00 00 5B 00 00 00 5B 00 00 00 F8 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 12 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 12
+<== SHMMessageReceive:
+00 00 00 03 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:242:ContextThread() Client is protocol version 3:0
+==> SHMMessageSend:
+12 34 56 78 00 00 00 3C 00 00 00 F8 00 00 00 5B 00 00 00 5B 00 00 00 F8 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 3C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 01 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 12 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 12
+<== SHMMessageReceive:
+00 00 00 02 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:199:SCardEstablishContext() Establishing Context: 16974122 [0x0103012A]
+==> SHMMessageSend:
+12 34 56 78 00 00 00 3C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 01 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 01 03 01 2A 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 7C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 04 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 76 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 76
+<== SHMMessageReceive:
+01 03 01 2A 46 65 69 74 69 61 6E 20 65 50 61 73 73 32 30 30 33 20 30 30 20 30 30 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 03 00 00 00 00 00 00 7F FF 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:376:MSGFunctionDemarshall() SCardConnect hContext: 0x0103012A, phCard: 0x00000000
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:253:SCardConnect() Attempting Connect to Feitian ePass2003 00 00 using protocol: 3
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:398:SCardConnect() Active Protocol: T=1
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:408:SCardConnect() hCard Identity: 102f5
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:380:MSGFunctionDemarshall() SCardConnect result: 0 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:386:MSGFunctionDemarshall() MSGAddHandle result: 0 [0x00000000]
+==> SHMMessageSend:
+12 34 56 78 00 00 00 7C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 04 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 03 01 2A 46 65 69 74 69 61 6E 20 65 50 61 73 73 32 30 30 33 20 30 30 20 30 30 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 03 00 01 02 F5 00 00 00 02 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 38 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 07 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 8 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 8
+<== SHMMessageReceive:
+00 01 02 F5 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:822:SCardBeginTransaction() SCardBeginTransaction ending status: 0x00000000
+==> SHMMessageSend:
+12 34 56 78 00 00 00 38 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 07 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 02 F5 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 02 60 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 09 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 560 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 560
+<== SHMMessageReceive:
+00 01 02 F5 00 00 00 02 00 00 00 08 00 A4 04 0C 0A D3 92 F0 00 26 01 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 0F 00 00 00 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:472:MSGFunctionDemarshall() SCardTransmit cbSendLength: 15
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:1305:SCardTransmit() Send Protocol: T=1
+ifdhandler.c:1265:IFDHTransmitToICC() Feitian ePass2003 (lun: 0)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:1325:SCardTransmit() IFDControl_v2/IFDTransmit result: 0x00000000, received: 2
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:1326:SCardTransmit()  pbRecvBuffer: [0]: 0x69, [1]: 0x85
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:492:MSGFunctionDemarshall() SCardTransmit pcbRecvLength: 2
+==> SHMMessageSend:
+12 34 56 78 00 00 02 60 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 09 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 02 F5 00 00 00 02 00 00 00 08 00 A4 04 0C 0A D3 92 F0 00 26 01 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 0F 00 00 00 00 00 00 00 00 69 85 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 3C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 08 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 12 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 12
+<== SHMMessageReceive:
+00 01 02 F5 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:881:SCardEndTransaction() Status: 0x00000000
+==> SHMMessageSend:
+12 34 56 78 00 00 00 3C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 08 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 02 F5 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 3C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 06 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 12 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 12
+<== SHMMessageReceive:
+00 01 02 F5 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:720:SCardDisconnect() Active Contexts: 1
+==> SHMMessageSend:
+12 34 56 78 00 00 00 3C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 06 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 02 F5 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:461:SHMMessageReceive() SHMMessageReceive: peer closed the socket
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0xFFFFFFFF, bytes read: 0
+<== SHMMessageReceive:
+
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0xFFFFFFFF [0xFFFFFFFF]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:282:SHMProcessEventsContext() Client has disappeared: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:199:ContextThread() Client die: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:210:SCardReleaseContext() Releasing Context: 16974122
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:217:SHMProcessEventsServer() Common channel packet arrival
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:226:SHMProcessEventsServer() SHMProcessCommonChannelRequest detects: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/pcscdaemon.c:256:SVCServiceRunLoop() A new context thread creation is requested: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:178:ContextThread() Thread is started: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 3C 00 00 00 F8 00 00 00 5B 00 00 00 5B 00 00 00 F8 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 12 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 12
+<== SHMMessageReceive:
+00 00 00 03 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:242:ContextThread() Client is protocol version 3:0
+==> SHMMessageSend:
+12 34 56 78 00 00 00 3C 00 00 00 F8 00 00 00 5B 00 00 00 5B 00 00 00 F8 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 3C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 01 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 12 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 12
+<== SHMMessageReceive:
+00 00 00 02 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:199:SCardEstablishContext() Establishing Context: 16987583 [0x010335BF]
+==> SHMMessageSend:
+12 34 56 78 00 00 00 3C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 01 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 01 03 35 BF 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 7C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 04 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 76 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x00000000: no error
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 76
+<== SHMMessageReceive:
+01 03 35 BF 46 65 69 74 69 61 6E 20 65 50 61 73 73 32 30 30 33 20 30 30 20 30 30 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 03 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:376:MSGFunctionDemarshall() SCardConnect hContext: 0x010335BF, phCard: 0x00000000
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:253:SCardConnect() Attempting Connect to Feitian ePass2003 00 00 using protocol: 3
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:398:SCardConnect() Active Protocol: T=1
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:408:SCardConnect() hCard Identity: 13636
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:380:MSGFunctionDemarshall() SCardConnect result: 0 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:386:MSGFunctionDemarshall() MSGAddHandle result: 0 [0x00000000]
+==> SHMMessageSend:
+12 34 56 78 00 00 00 7C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 04 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 03 35 BF 46 65 69 74 69 61 6E 20 65 50 61 73 73 32 30 30 33 20 30 30 20 30 30 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 03 00 01 36 36 00 00 00 02 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 70 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 11 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 64 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 64
+<== SHMMessageReceive:
+00 01 36 36 00 00 00 02 00 00 00 08 00 00 00 10 00 00 00 03 00 00 00 00 00 00 04 00 00 00 00 00 00 00 00 00 00 00 00 40 00 A4 04 00 0B A0 00 00 03 08 00 00 10 00 01 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:540:MSGFunctionDemarshall() SCardTransmitExt cbSendLength: 16
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:1305:SCardTransmit() Send Protocol: T=1
+ifdhandler.c:1265:IFDHTransmitToICC() Feitian ePass2003 (lun: 0)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:1325:SCardTransmit() IFDControl_v2/IFDTransmit result: 0x00000000, received: 2
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:1326:SCardTransmit()  pbRecvBuffer: [0]: 0x69, [1]: 0x85
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:582:MSGFunctionDemarshall() SCardTransmitExt pcbRecvLength: 2, size: 50
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:584:MSGFunctionDemarshall() SCardTransmitExt SCardTransmit result: 0 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:619:MSGFunctionDemarshall() SCardTransmitExt/SHMMessageSend one block: data: 2, total: 46
+==> SHMMessageSend:
+12 34 56 78 00 00 00 5E 00 00 00 F1 00 00 00 00 00 00 00 00 00 00 00 11 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 36 36 00 00 00 02 00 00 00 08 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 32 69 85 04 00 0B A0 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 48
+<== SHMMessageReceive:
+12 34 56 78 00 00 00 3C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 06 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:148:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 12 bytes
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0x00000000, bytes read: 12
+<== SHMMessageReceive:
+00 01 36 36 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:153:SHMClientReadMessage() SHMClientReadMessage: read message body error: 0x00000000 [0x00000000]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:293:SHMProcessEventsContext() correctly processed client: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:720:SCardDisconnect() Active Contexts: 1
+==> SHMMessageSend:
+12 34 56 78 00 00 00 3C 00 00 00 F1 00 00 00 5B 00 00 00 5B 00 00 00 06 51 5A C2 1C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 36 36 00 00 00 00 00 00 00 00 
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:119:SHMClientReadMessage() SHMClientReadMessage: Issuing read for 48 bytes (header)
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:461:SHMMessageReceive() SHMMessageReceive: peer closed the socket
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:500:SHMMessageReceive() SHMMessageReceive errno: 0x0000003C: Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:501:SHMMessageReceive() SHMMessageReceive retval: 0xFFFFFFFF, bytes read: 0
+<== SHMMessageReceive:
+
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg.cpp:122:SHMClientReadMessage() SHMClientReadMessage: read message header error: 0xFFFFFFFF [0xFFFFFFFF]
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_msg_srv.c:282:SHMProcessEventsContext() Client has disappeared: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard_svc.c:199:ContextThread() Client die: 10
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/winscard.c:210:SCardReleaseContext() Releasing Context: 16987583
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/eventhandler.cpp:177:EHDestroyEventHandler() Stomping thread.
+ccid_usb.c:660:WriteUSB() write failed (20/5): -4 Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/ifdwrapper.c:488:IFDStatusICC() Card not transacted: 612
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/eventhandler.cpp:362:EHStatusHandlerThread() Error communicating to: Feitian ePass2003 00 00
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/eventhandler.cpp:194:EHDestroyEventHandler() Thread stomped.
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/readerfactory.c:831:RFUnInitializeReader() Attempting shutdown of Feitian ePass2003 00 00.
+ifdhandler.c:249:IFDHCloseChannel() Feitian ePass2003 (lun: 0)
+ccid_usb.c:660:WriteUSB() write failed (20/5): -4 Operation timed out
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/readerfactory.c:674:RFUnBindFunctions() Unbinding driver functions
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/readerfactory.c:686:RFUnloadReader() Unloading reader driver.
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/readerfactory.c:689:RFUnloadReader() --- closing dynamic library
+
+
+
+
+^C/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/pcscdaemon.c:662:signal_trap() Preparing for suicide
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/pcscdaemon.c:294:SVCServiceRunLoop() Preparing to exit...
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/readerfactory.c:1047:RFCleanupReaders() entering cleaning function
+/SourceCache/SmartCardServices_Executables/SmartCardServices-55105/src/PCSC/pcscdaemon.c:611:at_exit() cleaning /var/run

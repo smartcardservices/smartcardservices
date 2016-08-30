@@ -1,0 +1,98 @@
+Process:         pcscd [345]
+Path:            /usr/sbin/pcscd
+Identifier:      pcscd
+Version:         ??? (???)
+Code Type:       X86 (Native)
+Parent Process:  bash [277]
+
+Date/Time:       2010-04-26 13:24:40.597 +0530
+OS Version:      Mac OS X 10.6 (10A432)
+Report Version:  6
+
+Exception Type:  EXC_BAD_ACCESS (SIGBUS)
+Exception Codes: KERN_PROTECTION_FAILURE at 0x0000000000000104
+Crashed Thread:  3
+
+Thread 0:  Dispatch queue: com.apple.main-thread
+0   libSystem.B.dylib             	0x96051876 select$DARWIN_EXTSN + 10
+1   pcscd                         	0x00025a12 SHMProcessEventsServer + 140
+2   pcscd                         	0x00007c15 SVCServiceRunLoop + 287
+3   pcscd                         	0x000085f1 main + 2061
+4   pcscd                         	0x00002381 start + 53
+
+Thread 1:
+0   libSystem.B.dylib             	0x960328fa mach_msg_trap + 10
+1   libSystem.B.dylib             	0x96033067 mach_msg + 68
+2   pcscd                         	0x0002edda ucsp_client_postNotification + 239
+3   pcscd                         	0x0003dc7c Security::SecurityServer::ClientSession::postNotification(unsigned int, unsigned int, Security::CssmData const&) + 520
+4   pcscd                         	0x0001f6a7 PCSCDMonitor::postNotification(unsigned int) + 133
+5   pcscd                         	0x000117b6 SYS_MMapSynchronize + 47
+6   pcscd                         	0x0000581c EHStatusHandlerThread(ReaderContext*) + 1320
+7   libSystem.B.dylib             	0x9605ffe1 _pthread_start + 345
+8   libSystem.B.dylib             	0x9605fe66 thread_start + 34
+
+Thread 2:
+0   libSystem.B.dylib             	0x960328fa mach_msg_trap + 10
+1   libSystem.B.dylib             	0x96033067 mach_msg + 68
+2   libSystem.B.dylib             	0x9605ee24 vproc_mig_check_in2 + 214
+3   libSystem.B.dylib             	0x9605ed4c bootstrap_check_in + 47
+4   pcscd                         	0x00055040 Security::MachPlusPlus::Bootstrap::checkInOptional(char const*) const + 50
+5   pcscd                         	0x000550b7 Security::MachPlusPlus::ReceivePort::ReceivePort(char const*, Security::MachPlusPlus::Bootstrap const&, bool) + 47
+6   pcscd                         	0x000598f6 Security::MachPlusPlus::MachServer::MachServer(char const*) + 84
+7   pcscd                         	0x0002420c PCSCD::Server::Server(char const*) + 32
+8   pcscd                         	0x00011c15 HPDeviceNotificationThread(void*) + 80
+9   libSystem.B.dylib             	0x9605ffe1 _pthread_start + 345
+10  libSystem.B.dylib             	0x9605fe66 thread_start + 34
+
+Thread 3 Crashed:
+0   libSystem.B.dylib             	0x96038234 pthread_mutex_lock + 24
+1   pcscd                         	0x0005f91f Security::Mutex::lock() + 17
+2   pcscd                         	0x000220c6 Security::StLock<Security::Mutex, &(Security::Mutex::lock()), &(Security::Mutex::unlock())>::StLock(Security::Mutex&) + 132
+3   pcscd                         	0x00020ed4 PCSCDMonitor::systemAwakeAndReadyCheck() + 70
+4   pcscd                         	0x00011bbf systemAwakeAndReadyCheck + 29
+5   pcscd                         	0x0000f077 ContextThread + 169
+6   libSystem.B.dylib             	0x9605ffe1 _pthread_start + 345
+7   libSystem.B.dylib             	0x9605fe66 thread_start + 34
+
+Thread 3 crashed with X86 Thread State (32-bit):
+  eax: 0x00000104  ebx: 0x96038230  ecx: 0x00000000  edx: 0x00000104
+  edi: 0x04000000  esi: 0x00000104  ebp: 0xb0183bf8  esp: 0xb0183bc0
+   ss: 0x0000001f  efl: 0x00010286  eip: 0x96038234   cs: 0x00000017
+   ds: 0x0000001f   es: 0x0000001f   fs: 0x0000001f   gs: 0x00000037
+  cr2: 0x00000104
+
+Binary Images:
+    0x1000 -    0x94fff +pcscd ??? (???) <52148E63-84CF-75E2-00AE-E70508522A8D> /usr/sbin/pcscd
+  0x1d8000 -   0x1d9ff7  com.aladdin.eTokenVR ??? (1.0) <B5C5BC5A-DC44-FCFE-30AB-381BD6254B25> /usr/libexec/SmartCardServices/drivers/eTokenVR.bundle/Contents/MacOS/eTokenVR
+  0x1dc000 -   0x1eaff3  com.apple.pcsc 7.0 (36160) <2441C9F0-FF5A-C0FD-51CB-E25ABC9DC7EF> /System/Library/Frameworks/PCSC.framework/Versions/A/PCSC
+  0x300000 -   0x3bbff7 +libeToken.dylib ??? (???) <34E0B40C-594E-AE77-389C-5B73993BD101> /Library/Frameworks/eToken.framework/Versions/Current/libeToken.dylib
+0x8fe00000 - 0x8fe4162b  dyld 132.1 (???) <211AF0DD-42D9-79C8-BB6A-1F4BEEF4B4AB> /usr/lib/dyld
+0x900a2000 - 0x90122feb  com.apple.SearchKit 1.3.0 (1.3.0) <9E18AEA5-F4B4-8BE5-EEA9-818FC4F46FD9> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/SearchKit.framework/Versions/A/SearchKit
+0x902aa000 - 0x902b7ff7  com.apple.NetFS 3.2 (3.2) <E6FD80B0-0238-0C42-A3EC-EBDEC107A1C3> /System/Library/Frameworks/NetFS.framework/Versions/A/NetFS
+0x905cb000 - 0x905f1fff  com.apple.DictionaryServices 1.1 (1.1) <07694B30-56A9-5C98-B8BC-DA0628715FA8> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/DictionaryServices.framework/Versions/A/DictionaryServices
+0x9061a000 - 0x906b7ff3  com.apple.LaunchServices 360.3 (360.3) <C8590D53-E46A-F58A-7CF2-03A8159D8569> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/LaunchServices
+0x906b8000 - 0x907b9fe7  libxml2.2.dylib ??? (???) <C242A74D-280A-90C3-3F79-891624AA45D2> /usr/lib/libxml2.2.dylib
+0x907ba000 - 0x90884fef  com.apple.CoreServices.OSServices 352 (352) <D9F21CA4-EED0-705F-8F3C-F1322D114B52> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/OSServices.framework/Versions/A/OSServices
+0x92a47000 - 0x92a5bfe7  libbsm.0.dylib ??? (???) <14CB053A-7C47-96DA-E415-0906BA1B78C9> /usr/lib/libbsm.0.dylib
+0x92b61000 - 0x92c1afe7  libsqlite3.dylib ??? (???) <16CEF8E8-8C9A-94CD-EF5D-05477844C005> /usr/lib/libsqlite3.dylib
+0x92e03000 - 0x92e11fe7  libz.1.dylib ??? (???) <7B7A02AB-DA99-6180-880E-D28E4F9AA8EB> /usr/lib/libz.1.dylib
+0x93033000 - 0x930dafe7  com.apple.CFNetwork 454.4 (454.4) <7C563385-9893-3B48-8607-5BC81DA2C4CF> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CFNetwork.framework/Versions/A/CFNetwork
+0x930db000 - 0x930e7ff7  libkxld.dylib ??? (???) <152C8DBB-0149-5827-3240-E57CA85CFE5F> /usr/lib/system/libkxld.dylib
+0x93358000 - 0x93361ff7  com.apple.DiskArbitration 2.3 (2.3) <E9C40767-DA6A-6CCB-8B00-2D5706753000> /System/Library/Frameworks/DiskArbitration.framework/Versions/A/DiskArbitration
+0x94550000 - 0x9486ffe7  com.apple.CoreServices.CarbonCore 859.1 (859.1) <2E72AF56-4BE6-294A-7372-19C360688B8B> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/CarbonCore
+0x94870000 - 0x948dafe7  libstdc++.6.dylib ??? (???) <411D87F4-B7E1-44EB-F201-F8B4F9227213> /usr/lib/libstdc++.6.dylib
+0x96032000 - 0x961d6feb  libSystem.B.dylib ??? (???) <068CC3F2-F867-A231-A16C-CC01C29A9816> /usr/lib/libSystem.B.dylib
+0x964a9000 - 0x964dcff7  com.apple.AE 496 (496) <B638FDD4-7322-F0E4-ACEB-777D8A1399E1> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/AE
+0x969a2000 - 0x96b19fef  com.apple.CoreFoundation 6.6 (550) <193E33D6-2E92-3452-773B-60A1A9CCC573> /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
+0x96fc0000 - 0x96fc0ff7  com.apple.CoreServices 44 (44) <AC35D112-5FB9-9C8C-6189-5F5945072375> /System/Library/Frameworks/CoreServices.framework/Versions/A/CoreServices
+0x972b4000 - 0x972f8fe7  com.apple.Metadata 10.6.0 (507.1) <CBD1B22B-5F10-C784-03A2-35106B97DF3F> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Metadata
+0x97d37000 - 0x97d91ff7  com.apple.framework.IOKit 2.0 (???) <7618DDEC-2E3B-9C6E-FDC9-15169E24B4FB> /System/Library/Frameworks/IOKit.framework/Versions/A/IOKit
+0x983a2000 - 0x98524fe7  libicucore.A.dylib ??? (???) <FBB66376-CBA9-8149-A1AA-10AB8578C3B3> /usr/lib/libicucore.A.dylib
+0x98d48000 - 0x98d8eff7  libauto.dylib ??? (???) <FAB17F30-A28B-E33D-6E21-C7119C9C83ED> /usr/lib/libauto.dylib
+0x98f3d000 - 0x98f40fe7  libmathCommon.A.dylib ??? (???) <1622A54F-1A98-2CBE-B6A4-2122981A500E> /usr/lib/system/libmathCommon.A.dylib
+0x98fdf000 - 0x99241ff3  com.apple.security 6.0 (36910) <F045B57C-054F-F06F-EF7E-EABEC2700274> /System/Library/Frameworks/Security.framework/Versions/A/Security
+0x99242000 - 0x992effe7  libobjc.A.dylib ??? (???) <410DD065-A18F-F054-0457-65525F4D1039> /usr/lib/libobjc.A.dylib
+0x9936a000 - 0x993a7ff7  com.apple.SystemConfiguration 1.10 (1.10) <897AEEAF-CF5D-2843-C33B-31A0A7C98A6A> /System/Library/Frameworks/SystemConfiguration.framework/Versions/A/SystemConfiguration
+0x993f9000 - 0x99421ff7  libxslt.1.dylib ??? (???) <769EF4B2-C1AD-73D5-AAAD-1564DAEA77AF> /usr/lib/libxslt.1.dylib
+0xffff0000 - 0xffff1fff  libSystem.B.dylib ??? (???) <068CC3F2-F867-A231-A16C-CC01C29A9816> /usr/lib/libSystem.B.dylib
+

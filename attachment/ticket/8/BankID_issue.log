@@ -1,0 +1,35 @@
+
+2009-08-13 18.05.43 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1977:SetParameters Card absent or mute 
+2009-08-13 18.05.43 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1977:SetParameters Card absent or mute 
+2009-08-13 18.06.08 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1236:CCID_Receive Procedure byte conflict 
+2009-08-13 18.06.09 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1236:CCID_Receive Card absent or mute 
+2009-08-13 18.06.10 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1236:CCID_Receive Card absent or mute 
+2009-08-13 18.06.10 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1236:CCID_Receive Card absent or mute 
+2009-08-13 18.06.10 com.apple.SecurityServer[19] authpriv Notice token in reader OmniKey CardMan 3121 00 00 cannot be used (error 229) 
+2009-08-13 18.06.10 com.apple.SecurityServer[19] authpriv Notice token in reader OmniKey CardMan 3121 00 00 cannot be used (error 229) 
+2009-08-13 18.06.12 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1977:SetParameters Card absent or mute 
+2009-08-13 18.06.12 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1977:SetParameters Card absent or mute 
+2009-08-13 18.06.32 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1236:CCID_Receive Card absent or mute 
+2009-08-13 18.06.33 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1236:CCID_Receive Card absent or mute 
+2009-08-13 18.06.34 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1236:CCID_Receive Card absent or mute 
+2009-08-13 18.06.34 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1236:CCID_Receive Card absent or mute 
+2009-08-13 18.06.34 com.apple.SecurityServer[19] authpriv Notice token in reader OmniKey CardMan 3121 00 00 cannot be used (error 229) 
+2009-08-13 18.06.34 com.apple.SecurityServer[19] authpriv Notice token in reader OmniKey CardMan 3121 00 00 cannot be used (error 229) 
+2009-08-13 18.06.55 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1977:SetParameters Card absent or mute 
+2009-08-13 18.06.55 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1977:SetParameters Card absent or mute 
+2009-08-13 18.07.21 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1236:CCID_Receive Procedure byte conflict 
+2009-08-13 18.07.22 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1977:SetParameters Card absent or mute 
+2009-08-13 18.07.22 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1977:SetParameters Card absent or mute 
+2009-08-13 18.07.47 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1236:CCID_Receive Procedure byte conflict 
+2009-08-13 18.07.48 com.apple.SecurityServer[19] authpriv Notice token in reader OmniKey CardMan 3121 00 00 cannot be used (error 229) 
+2009-08-13 18.07.49 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1977:SetParameters Card absent or mute 
+2009-08-13 18.07.49 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1977:SetParameters Card absent or mute 
+2009-08-13 18.07.56 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1236:CCID_Receive Card absent or mute 
+2009-08-13 18.07.57 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1236:CCID_Receive Card absent or mute 
+2009-08-13 18.07.58 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1236:CCID_Receive Card absent or mute 
+2009-08-13 18.07.58 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1236:CCID_Receive Card absent or mute 
+2009-08-13 18.07.58 com.apple.SecurityServer[19] authpriv Notice token in reader OmniKey CardMan 3121 00 00 cannot be used (error 229) 
+2009-08-13 18.07.58 com.apple.SecurityServer[19] authpriv Notice token in reader OmniKey CardMan 3121 00 00 cannot be used (error 229) 
+2009-08-13 18.08.05 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1977:SetParameters Card absent or mute 
+2009-08-13 18.08.05 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1977:SetParameters Card absent or mute 
+2009-08-13 18.08.07 com.apple.SecurityServer[19] com.apple.console Notice /SourceCache/SmartcardCCID/SmartcardCCID-35204/ccid/ccid/src/commands.c:1977:SetParameters Card absent or mute 
