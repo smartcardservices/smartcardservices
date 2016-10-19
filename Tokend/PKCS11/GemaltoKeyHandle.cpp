@@ -75,6 +75,39 @@ uint32 GemaltoKeyHandle::getOutputSize(const Context &/*context*/, uint32 inputS
 	return (mKey.sizeInBits() / 8);
 }
 
+static const unsigned char sha512sigheader[] =
+{
+	0x30, // SEQUENCE
+	0x51, // LENGTH
+	0x30, // SEQUENCE
+	0x0d, // LENGTH
+	0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x03, // SHA-512 OID (2 16 840 1 101 3 4 2 3)
+	0x05, 0x00, // OPTIONAL ANY algorithm params (NULL)
+	0x04, 0x40 // OCTECT STRING (64 bytes)
+};
+
+static const unsigned char sha384sigheader[] =
+{
+	0x30, // SEQUENCE
+	0x51, // LENGTH
+	0x30, // SEQUENCE
+	0x0d, // LENGTH
+	0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x02, // SHA-384 OID (2 16 840 1 101 3 4 2 2)
+	0x05, 0x00, // OPTIONAL ANY algorithm params (NULL)
+	0x04, 0x30 // OCTECT STRING (48 bytes)
+};
+
+static const unsigned char sha256sigheader[] =
+{
+	0x30, // SEQUENCE
+	0x31, // LENGTH
+	0x30, // SEQUENCE
+	0x0d, // LENGTH
+	0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01, // SHA-256 OID (2 16 840 1 101 3 4 2 1)
+	0x05, 0x00, // OPTIONAL ANY algorithm params (NULL)
+	0x04, 0x20 // OCTECT STRING (32 bytes)
+};
+
 
 static const unsigned char sha1sigheader[] =
 {
@@ -122,7 +155,46 @@ void GemaltoKeyHandle::generateSignature(const Context &context, CSSM_ALGORITHMS
 	const unsigned char *header;
 	size_t headerLength;
 	CK_ULONG mech = CKM_RSA_PKCS;
-	if (signOnly == CSSM_ALGID_SHA1)
+	if (signOnly == CSSM_ALGID_SHA512)
+	{
+		GemaltoToken::log("Case CSSM_ALGID_SHA512\n");
+		//secdebug("Gemalto.tokend", "GemaltoKeyHandle: CSSM_ALGID_SHA512 (%lu)", input.Length);
+
+		if (input.Length != 64)
+		{
+			GemaltoToken::log("## Error ## CSSMERR_CSP_BLOCK_SIZE_MISMATCH\n");
+			CssmError::throwMe(CSSMERR_CSP_BLOCK_SIZE_MISMATCH);
+		}
+		header = sha512sigheader;
+		headerLength = sizeof(sha512sigheader);
+	}
+	else if (signOnly == CSSM_ALGID_SHA384)
+	{
+		GemaltoToken::log("Case CSSM_ALGID_SHA384\n");
+		//secdebug("Gemalto.tokend", "GemaltoKeyHandle: CSSM_ALGID_SHA384 (%lu)", input.Length);
+
+		if (input.Length != 48)
+		{
+			GemaltoToken::log("## Error ## CSSMERR_CSP_BLOCK_SIZE_MISMATCH\n");
+			CssmError::throwMe(CSSMERR_CSP_BLOCK_SIZE_MISMATCH);
+		}
+		header = sha384sigheader;
+		headerLength = sizeof(sha384sigheader);
+	}
+	else if (signOnly == CSSM_ALGID_SHA256)
+	{
+		GemaltoToken::log("Case CSSM_ALGID_SHA256\n");
+		//secdebug("Gemalto.tokend", "GemaltoKeyHandle: CSSM_ALGID_SHA256 (%lu)", input.Length);
+
+		if (input.Length != 32)
+		{
+			GemaltoToken::log("## Error ## CSSMERR_CSP_BLOCK_SIZE_MISMATCH\n");
+			CssmError::throwMe(CSSMERR_CSP_BLOCK_SIZE_MISMATCH);
+		}
+		header = sha256sigheader;
+		headerLength = sizeof(sha256sigheader);
+	}
+	else if (signOnly == CSSM_ALGID_SHA1)
 	{
 		GemaltoToken::log("Case CSSM_ALGID_SHA1\n");
 		//secdebug("Gemalto.tokend", "GemaltoKeyHandle: CSSM_ALGID_SHA1 (%lu)", input.Length);
