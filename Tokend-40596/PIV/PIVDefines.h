@@ -134,6 +134,68 @@
 //	X.509 Certificate for Card Authentication 2.16.840.1.101.3.7.2.5.0 '5FC101' O
 #define PIV_OBJECT_ID_X509_CERTIFICATE_CARD_AUTHENTICATION	0x5F, 0xC1, 0x01
 
+//	NIST SP800-73-3 optional 20 retired key certificate objects
+
+//	X.509 Certificate for Key Management History 1 - 2.16.840.1.101.3.7.2.16.1 '5FC10D' O
+#define  PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H1	0x5F, 0xC1, 0x0D
+
+//	X.509 Certificate for Key Management History 2 - 2.16.840.1.101.3.7.2.16.2 '5FC10E' O
+#define  PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H2	0x5F, 0xC1, 0x0E
+
+//	X.509 Certificate for Key Management History 3 - 2.16.840.1.101.3.7.2.16.3 '5FC10F' O
+#define  PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H3	0x5F, 0xC1, 0x0F
+
+//	X.509 Certificate for Key Management History 4 - 2.16.840.1.101.3.7.2.16.4 '5FC110' O
+#define  PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H4	0x5F, 0xC1, 0x10
+
+//	X.509 Certificate for Key Management History 5 - 2.16.840.1.101.3.7.2.16.5 '5FC111' O
+#define  PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H5	0x5F, 0xC1, 0x11
+
+//	X.509 Certificate for Key Management History 6 - 2.16.840.1.101.3.7.2.16.6 '5FC112' O
+#define  PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H6	0x5F, 0xC1, 0x12
+
+//	X.509 Certificate for Key Management History 7 - 2.16.840.1.101.3.7.2.16.7 '5FC113' O
+#define  PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H7	0x5F, 0xC1, 0x13
+
+//	X.509 Certificate for Key Management History 8 - 2.16.840.1.101.3.7.2.16.8 '5FC114' O
+#define  PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H8	0x5F, 0xC1, 0x14
+
+//	X.509 Certificate for Key Management History 9 - 2.16.840.1.101.3.7.2.16.9 '5FC115' O
+#define  PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H9	0x5F, 0xC1, 0x15
+
+//	X.509 Certificate for Key Management History 10 - 2.16.840.1.101.3.7.2.16.10 '5FC116' O
+#define  PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H10	0x5F, 0xC1, 0x16
+
+//	X.509 Certificate for Key Management History 11 - 2.16.840.1.101.3.7.2.16.11 '5FC117' O
+#define  PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H11	0x5F, 0xC1, 0x17
+
+//	X.509 Certificate for Key Management History 12 - 2.16.840.1.101.3.7.2.16.12 '5FC118' O
+#define  PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H12	0x5F, 0xC1, 0x18
+
+//	X.509 Certificate for Key Management History 13 - 2.16.840.1.101.3.7.2.16.13 '5FC119' O
+#define  PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H13	0x5F, 0xC1, 0x19
+
+//	X.509 Certificate for Key Management History 14 - 2.16.840.1.101.3.7.2.16.14 '5FC11A' O
+#define  PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H14	0x5F, 0xC1, 0x1A
+
+//	X.509 Certificate for Key Management History 15 - 2.16.840.1.101.3.7.2.16.15 '5FC11B' O
+#define  PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H15	0x5F, 0xC1, 0x1B
+
+//	X.509 Certificate for Key Management History 16 - 2.16.840.1.101.3.7.2.16.16 '5FC11C' O
+#define  PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H16	0x5F, 0xC1, 0x1C
+
+//	X.509 Certificate for Key Management History 17 - 2.16.840.1.101.3.7.2.16.17 '5FC11D' O
+#define  PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H17	0x5F, 0xC1, 0x1D
+
+//	X.509 Certificate for Key Management History 18 - 2.16.840.1.101.3.7.2.16.18 '5FC11E' O
+#define  PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H18	0x5F, 0xC1, 0x1E
+
+//	X.509 Certificate for Key Management History 19 - 2.16.840.1.101.3.7.2.16.19 '5FC11F' O
+#define  PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H19	0x5F, 0xC1, 0x1F
+
+//	X.509 Certificate for Key Management History 20 - 2.16.840.1.101.3.7.2.16.20 '5FC120' O
+#define  PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H20	0x5F, 0xC1, 0x20
+
 // ----------------------------------------------------------------------------
 /*
 	Verify APDU	[NISTIR6887 5.1.2.4]
@@ -328,6 +390,68 @@ Status Tuples (STs) 0xFC Fixed 0
 #define PIV_KEYREF_PIV_DIGITAL_SIGNATURE   0x9C
 #define PIV_KEYREF_PIV_KEY_MANAGEMENT      0x9D
 #define PIV_KEYREF_PIV_CARD_AUTHENTICATION 0x9E
+
+//	NIST SP800-73-3 - 5 retired key references
+
+//	KM History key 1 - 2.16.840.1.101.3.7.2.9999.101
+#define PIV_KEYREF_PIV_KEY_MANAGEMENT_H1   0x82
+
+//	KM History key 2 - 2.16.840.1.101.3.7.2.9999.102
+#define PIV_KEYREF_PIV_KEY_MANAGEMENT_H2   0x83
+
+//	KM History key 3 - 2.16.840.1.101.3.7.2.9999.103
+#define PIV_KEYREF_PIV_KEY_MANAGEMENT_H3   0x84
+
+//	KM History key 4 - 2.16.840.1.101.3.7.2.9999.104
+#define PIV_KEYREF_PIV_KEY_MANAGEMENT_H4   0x85
+
+//	KM History key 5 - 2.16.840.1.101.3.7.2.9999.105
+#define PIV_KEYREF_PIV_KEY_MANAGEMENT_H5   0x86
+
+//	KM History key 6 - 2.16.840.1.101.3.7.2.9999.106
+#define PIV_KEYREF_PIV_KEY_MANAGEMENT_H6   0x87
+
+//	KM History key 7 - 2.16.840.1.101.3.7.2.9999.107
+#define PIV_KEYREF_PIV_KEY_MANAGEMENT_H7   0x88
+
+//	KM History key 8 - 2.16.840.1.101.3.7.2.9999.108
+#define PIV_KEYREF_PIV_KEY_MANAGEMENT_H8   0x89
+
+//	KM History key 9 - 2.16.840.1.101.3.7.2.9999.109
+#define PIV_KEYREF_PIV_KEY_MANAGEMENT_H9   0x8A
+
+//	KM History key 10 - 2.16.840.1.101.3.7.2.9999.110
+#define PIV_KEYREF_PIV_KEY_MANAGEMENT_H10   0x8B
+
+//	KM History key 11 - 2.16.840.1.101.3.7.2.9999.111
+#define PIV_KEYREF_PIV_KEY_MANAGEMENT_H11   0x8C
+
+//	KM History key 12 - 2.16.840.1.101.3.7.2.9999.112
+#define PIV_KEYREF_PIV_KEY_MANAGEMENT_H12   0x8D
+
+//	KM History key 13 - 2.16.840.1.101.3.7.2.9999.113
+#define PIV_KEYREF_PIV_KEY_MANAGEMENT_H13   0x8E
+
+//	KM History key 14 - 2.16.840.1.101.3.7.2.9999.114
+#define PIV_KEYREF_PIV_KEY_MANAGEMENT_H14   0x8F
+
+//	KM History key 15 - 2.16.840.1.101.3.7.2.9999.115
+#define PIV_KEYREF_PIV_KEY_MANAGEMENT_H15   0x90
+
+//	KM History key 16 - 2.16.840.1.101.3.7.2.9999.116
+#define PIV_KEYREF_PIV_KEY_MANAGEMENT_H16   0x91
+
+//	KM History key 17 - 2.16.840.1.101.3.7.2.9999.117
+#define PIV_KEYREF_PIV_KEY_MANAGEMENT_H17   0x92
+
+//	KM History key 18 - 2.16.840.1.101.3.7.2.9999.118
+#define PIV_KEYREF_PIV_KEY_MANAGEMENT_H18   0x93
+
+//	KM History key 19 - 2.16.840.1.101.3.7.2.9999.119
+#define PIV_KEYREF_PIV_KEY_MANAGEMENT_H19   0x94
+
+//	KM History key 20 - 2.16.840.1.101.3.7.2.9999.120
+#define PIV_KEYREF_PIV_KEY_MANAGEMENT_H20   0x95
 
 /*
 	Algorithm Identifiers:
