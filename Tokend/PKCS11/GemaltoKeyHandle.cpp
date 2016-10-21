@@ -81,6 +81,8 @@ static const unsigned char sha512sigheader[] =
 	0x51, // LENGTH
 	0x30, // SEQUENCE
 	0x0d, // LENGTH
+	0x06, // SEQUENCE
+	0x09, // LENGTH
 	0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x03, // SHA-512 OID (2 16 840 1 101 3 4 2 3)
 	0x05, 0x00, // OPTIONAL ANY algorithm params (NULL)
 	0x04, 0x40 // OCTECT STRING (64 bytes)
@@ -92,6 +94,8 @@ static const unsigned char sha384sigheader[] =
 	0x51, // LENGTH
 	0x30, // SEQUENCE
 	0x0d, // LENGTH
+	0x06, // SEQUENCE
+	0x09, // LENGTH
 	0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x02, // SHA-384 OID (2 16 840 1 101 3 4 2 2)
 	0x05, 0x00, // OPTIONAL ANY algorithm params (NULL)
 	0x04, 0x30 // OCTECT STRING (48 bytes)
@@ -103,11 +107,25 @@ static const unsigned char sha256sigheader[] =
 	0x31, // LENGTH
 	0x30, // SEQUENCE
 	0x0d, // LENGTH
+	0x06, // SEQUENCE
+	0x09, // LENGTH
 	0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01, // SHA-256 OID (2 16 840 1 101 3 4 2 1)
 	0x05, 0x00, // OPTIONAL ANY algorithm params (NULL)
 	0x04, 0x20 // OCTECT STRING (32 bytes)
 };
 
+static const unsigned char sha224sigheader[] =
+{
+	0x30, // SEQUENCE
+	0x2d, // LENGTH
+	0x30, // SEQUENCE
+	0x0d, // LENGTH
+	0x06, // SEQUENCE
+	0x09, // LENGTH
+	0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x04, // SHA-224 OID (2 16 840 1 101 3 4 2 4)
+	0x05, 0x00, // OPTIONAL ANY algorithm params (NULL)
+	0x04, 0x1c // OCTECT STRING (28 bytes)
+};
 
 static const unsigned char sha1sigheader[] =
 {
@@ -193,6 +211,19 @@ void GemaltoKeyHandle::generateSignature(const Context &context, CSSM_ALGORITHMS
 		}
 		header = sha256sigheader;
 		headerLength = sizeof(sha256sigheader);
+	}
+	else if (signOnly == CSSM_ALGID_SHA224)
+	{
+		GemaltoToken::log("Case CSSM_ALGID_SHA224\n");
+		//secdebug("Gemalto.tokend", "GemaltoKeyHandle: CSSM_ALGID_SHA224 (%lu)", input.Length);
+
+		if (input.Length != 28)
+		{
+			GemaltoToken::log("## Error ## CSSMERR_CSP_BLOCK_SIZE_MISMATCH\n");
+			CssmError::throwMe(CSSMERR_CSP_BLOCK_SIZE_MISMATCH);
+		}
+		header = sha224sigheader;
+		headerLength = sizeof(sha224sigheader);
 	}
 	else if (signOnly == CSSM_ALGID_SHA1)
 	{
