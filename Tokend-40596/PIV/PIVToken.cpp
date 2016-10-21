@@ -107,7 +107,27 @@ static const unsigned char oidX509CertificatePIVAuthentication[] = { PIV_OBJECT_
 static const unsigned char oidX509CertificateDigitalSignature[] = { PIV_OBJECT_ID_X509_CERTIFICATE_DIGITAL_SIGNATURE };
 static const unsigned char oidX509CertificateKeyManagement[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT };
 static const unsigned char oidX509CertificateCardAuthentication[] = { PIV_OBJECT_ID_X509_CERTIFICATE_CARD_AUTHENTICATION };
-
+//	NIST SP800-73-3 20 optional retired key certificates
+static const unsigned char oidX509CertificateKeyManagementHistory1[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H1 };
+static const unsigned char oidX509CertificateKeyManagementHistory2[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H2 };
+static const unsigned char oidX509CertificateKeyManagementHistory3[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H3 };
+static const unsigned char oidX509CertificateKeyManagementHistory4[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H4 };
+static const unsigned char oidX509CertificateKeyManagementHistory5[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H5 };
+static const unsigned char oidX509CertificateKeyManagementHistory6[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H6 };
+static const unsigned char oidX509CertificateKeyManagementHistory7[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H7 };
+static const unsigned char oidX509CertificateKeyManagementHistory8[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H8 };
+static const unsigned char oidX509CertificateKeyManagementHistory9[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H9 };
+static const unsigned char oidX509CertificateKeyManagementHistory10[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H10 };
+static const unsigned char oidX509CertificateKeyManagementHistory11[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H11 };
+static const unsigned char oidX509CertificateKeyManagementHistory12[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H12 };
+static const unsigned char oidX509CertificateKeyManagementHistory13[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H13 };
+static const unsigned char oidX509CertificateKeyManagementHistory14[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H14 };
+static const unsigned char oidX509CertificateKeyManagementHistory15[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H15 };
+static const unsigned char oidX509CertificateKeyManagementHistory16[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H16 };
+static const unsigned char oidX509CertificateKeyManagementHistory17[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H17 };
+static const unsigned char oidX509CertificateKeyManagementHistory18[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H18 };
+static const unsigned char oidX509CertificateKeyManagementHistory19[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H19 };
+static const unsigned char oidX509CertificateKeyManagementHistory20[] = { PIV_OBJECT_ID_X509_CERTIFICATE_KEY_MANAGEMENT_H20 };
 
 #pragma mark ---------- NO/MINOR MODIFICATION NEEDED ----------
 
@@ -392,7 +412,28 @@ void PIVToken::populate()
 		oidX509CertificatePIVAuthentication,	// 0x9A
 		oidX509CertificateDigitalSignature,		// 0x9C
 		oidX509CertificateKeyManagement,		// 0x9D
-		oidX509CertificateCardAuthentication	// 0x9E
+		oidX509CertificateCardAuthentication,	// 0x9E
+		// NIST SP800-73-3 - 20 optional retired key certificates
+		oidX509CertificateKeyManagementHistory1,	// 0x82
+		oidX509CertificateKeyManagementHistory2,	// 0x83
+		oidX509CertificateKeyManagementHistory3,	// 0x84
+		oidX509CertificateKeyManagementHistory4,	// 0x85
+		oidX509CertificateKeyManagementHistory5,	// 0x86		
+		oidX509CertificateKeyManagementHistory6,	// 0x87
+		oidX509CertificateKeyManagementHistory7,	// 0x88
+		oidX509CertificateKeyManagementHistory8,	// 0x89
+		oidX509CertificateKeyManagementHistory9,	// 0x8A
+		oidX509CertificateKeyManagementHistory10,	// 0x8B
+		oidX509CertificateKeyManagementHistory11,	// 0x8C	
+		oidX509CertificateKeyManagementHistory12,	// 0x8D	
+		oidX509CertificateKeyManagementHistory13,	// 0x8E	
+		oidX509CertificateKeyManagementHistory14,	// 0x8F	
+		oidX509CertificateKeyManagementHistory15,	// 0x90	
+		oidX509CertificateKeyManagementHistory16,	// 0x91	
+		oidX509CertificateKeyManagementHistory17,	// 0x92	
+		oidX509CertificateKeyManagementHistory18,	// 0x93	
+		oidX509CertificateKeyManagementHistory19,	// 0x94	
+		oidX509CertificateKeyManagementHistory20	// 0x95			
 	};
 
 	const char *certNames[] = 
@@ -400,7 +441,29 @@ void PIVToken::populate()
 		"PIV Authentication Certificate",
 		"Digital Signature Certificate",
 		"Key Management Certificate",
-		"Card Authentication Certificate"
+		"Card Authentication Certificate",
+		// NIST SP800-73-3 - 20 optional retired certificate names	
+		"Key Management History 1 Certificate",
+		"Key Management History 2 Certificate",
+		"Key Management History 3 Certificate",
+		"Key Management History 4 Certificate",
+		"Key Management History 5 Certificate",
+		"Key Management History 6 Certificate",
+		"Key Management History 7 Certificate",
+		"Key Management History 8 Certificate",
+		"Key Management History 9 Certificate",
+		"Key Management History 10 Certificate",
+		"Key Management History 11 Certificate",
+		"Key Management History 12 Certificate",
+		"Key Management History 13 Certificate",
+		"Key Management History 14 Certificate",
+		"Key Management History 15 Certificate",
+		"Key Management History 16 Certificate",
+		"Key Management History 17 Certificate",
+		"Key Management History 18 Certificate",
+		"Key Management History 19 Certificate",
+		"Key Management History 20 Certificate"
+		// ======================= key history support ================================		
 	};
 
 	const char *keyNames[] = 
@@ -408,7 +471,29 @@ void PIVToken::populate()
 		"PIV Authentication Private Key",	// Keyref 9A
 		"Digital Signature Private Key",	// Keyref 9C
 		"Key Management Private Key",		// Keyref 9D
-		"Card Authentication Private Key"	// Keyref 9E
+		"Card Authentication Private Key",	// Keyref 9E
+		// NIST SP800-73-3 - 20 optional retired key names
+		"Key Management History 1 Private Key",	// Keyref 82
+		"Key Management History 2 Private Key",	// Keyref 83
+		"Key Management History 3 Private Key",	// Keyref 84
+		"Key Management History 4 Private Key",	// Keyref 85
+		"Key Management History 5 Private Key",	// Keyref 86
+		"Key Management History 6 Private Key",	// Keyref 87
+		"Key Management History 7 Private Key",	// Keyref 88
+		"Key Management History 8 Private Key",	// Keyref 89
+		"Key Management History 9 Private Key",	// Keyref 8A
+		"Key Management History 10 Private Key",	// Keyref 8B
+		"Key Management History 11 Private Key",	// Keyref 8C
+		"Key Management History 12 Private Key",	// Keyref 8D
+		"Key Management History 13 Private Key",	// Keyref 8E
+		"Key Management History 14 Private Key",	// Keyref 8F
+		"Key Management History 15 Private Key",	// Keyref 90
+		"Key Management History 16 Private Key",	// Keyref 91
+		"Key Management History 17 Private Key",	// Keyref 92
+		"Key Management History 18 Private Key",	// Keyref 93
+		"Key Management History 19 Private Key",	// Keyref 94
+		"Key Management History 20 Private Key"	// Keyref 95
+		// ======================= key history support ================================
 	};
 
 	const unsigned char keyRefs[] =
@@ -416,7 +501,29 @@ void PIVToken::populate()
 		PIV_KEYREF_PIV_AUTHENTICATION,
 		PIV_KEYREF_PIV_DIGITAL_SIGNATURE,
 		PIV_KEYREF_PIV_KEY_MANAGEMENT,
-		PIV_KEYREF_PIV_CARD_AUTHENTICATION
+		PIV_KEYREF_PIV_CARD_AUTHENTICATION,
+		// NIST SP800-73-3 - 20 optional retired key references
+		PIV_KEYREF_PIV_KEY_MANAGEMENT_H1,
+		PIV_KEYREF_PIV_KEY_MANAGEMENT_H2,
+		PIV_KEYREF_PIV_KEY_MANAGEMENT_H3,
+		PIV_KEYREF_PIV_KEY_MANAGEMENT_H4,
+		PIV_KEYREF_PIV_KEY_MANAGEMENT_H5,
+		PIV_KEYREF_PIV_KEY_MANAGEMENT_H6,
+		PIV_KEYREF_PIV_KEY_MANAGEMENT_H7,
+		PIV_KEYREF_PIV_KEY_MANAGEMENT_H8,
+		PIV_KEYREF_PIV_KEY_MANAGEMENT_H9,
+		PIV_KEYREF_PIV_KEY_MANAGEMENT_H10,
+		PIV_KEYREF_PIV_KEY_MANAGEMENT_H11,
+		PIV_KEYREF_PIV_KEY_MANAGEMENT_H12,
+		PIV_KEYREF_PIV_KEY_MANAGEMENT_H13,
+		PIV_KEYREF_PIV_KEY_MANAGEMENT_H14,
+		PIV_KEYREF_PIV_KEY_MANAGEMENT_H15,
+		PIV_KEYREF_PIV_KEY_MANAGEMENT_H16,
+		PIV_KEYREF_PIV_KEY_MANAGEMENT_H17,
+		PIV_KEYREF_PIV_KEY_MANAGEMENT_H18,
+		PIV_KEYREF_PIV_KEY_MANAGEMENT_H19,
+		PIV_KEYREF_PIV_KEY_MANAGEMENT_H20
+		// ======================= key history support ================================
 	};
 
 	for (unsigned int ix=0;ix<sizeof(certids)/sizeof(certids[0]);++ix)
