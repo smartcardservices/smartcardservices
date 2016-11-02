@@ -141,6 +141,7 @@ void KeyHandle::unwrapKey(const Context &context,
 	/* We are assuming a CSSM_KEYBLOB_WRAPPED_FORMAT_PKCS7 from here on. */
 	hdr.blobFormat(CSSM_KEYBLOB_RAW_FORMAT_OCTET_STRING);
 	hdr.LogicalKeySizeInBits = unwrappedKey.length() * 8;
+    hUnwrappedKey = CSSM_HANDLE(static_cast<CSSM_HANDLE_PTR>(unwrappedKey.data()));
 }
 
 
