@@ -13,4 +13,4 @@ copyright notice (including the year and the copyright owner's name) and the
 Smart Card Services' licensing terms.
 
 Before submitting the request, please make sure that your request follows
-the [Smart Card Services' guidelines for contributing code](Dev_Guide).
+the [Smart Card Services' guidelines for contributing code](Dev_Guide.md).
