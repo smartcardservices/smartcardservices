@@ -15,8 +15,8 @@ PCSC_CFLAGS="-I/System/Library/Frameworks/PCSC.framework/Versions/A/Headers"
 PCSC_LIBS="-framework PCSC"
 
 # Build a Universal Binary
-CFLAGS="$CFLAGS -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch i386 -arch x86_64"
-LDFLAGS="-arch i386 -arch x86_64"
+# CFLAGS="$CFLAGS -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch i386 -arch x86_64"
+# LDFLAGS="-arch i386 -arch x86_64"
 CONFIGURE_ARGS="--disable-dependency-tracking"
 
 # boost
