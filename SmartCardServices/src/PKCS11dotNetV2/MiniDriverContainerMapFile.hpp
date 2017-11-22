@@ -29,9 +29,10 @@
 #include <boost/array.hpp>
 #include <boost/shared_ptr.hpp>
 #include <string>
-#include "MiniDriverContainer.hpp"
+#include "Log.hpp"
 #include "Array.hpp"
 #include "CardModuleService.hpp"
+#include "MiniDriverContainer.hpp"
 
 
 const int g_MaxContainer = 15;

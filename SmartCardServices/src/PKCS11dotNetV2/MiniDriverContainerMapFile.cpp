@@ -22,10 +22,8 @@
 #include <cstdio>
 #include <boost/foreach.hpp>
 #include <memory>
-#include "cardmod.h"
 #include "MiniDriverContainerMapFile.hpp"
 #include "MiniDriverFiles.hpp"
-#include "Log.hpp"
 #include "Timer.hpp"
 #include "MiniDriverException.hpp"
 #include "sha1.h"

@@ -29,8 +29,8 @@
 #include <boost/serialization/version.hpp>
 #include <boost/shared_ptr.hpp>
 #include "Array.hpp"
-#include "cardmod.h"
 #include "Log.hpp"
+#include "cardmod.h"
 #include "MiniDriverAuthentication.hpp"
 
 
