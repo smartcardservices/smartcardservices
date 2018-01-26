@@ -258,11 +258,11 @@ CACTBRecord::getSize(CACToken &cacToken, size_t &tbsize, size_t &vbsize)
 #endif
 
 /*
-	See NIST IR 6887 – 2003 EDITION, GSC-IS VERSION 2.1
+	See NIST IR 6887 √ê 2003 EDITION, GSC-IS VERSION 2.1
 	5.3.4 Generic Container Provider Virtual Machine Card Edge Interface
 	for a description of how this command works
 	
-	READ BUFFER 0x80 0x52 Off/H Off/L 0x02 <buffer & number bytes to read> – 
+	READ BUFFER 0x80 0x52 Off/H Off/L 0x02 <buffer & number bytes to read> √ê 
 */
 
 Tokend::Attribute *CACTBRecord::getDataAttribute(CACToken &cacToken,
