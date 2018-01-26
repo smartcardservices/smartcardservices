@@ -689,7 +689,7 @@ void GemaltoToken::toStringHex(const unsigned char* buffer, const std::size_t& s
     // Afficher en hexadecimal et en majuscule
     oss << std::hex << std::uppercase;
 
-    // Remplir les blancs avec des zŽros
+    // Remplir les blancs avec des zÃ©ros
     oss << std::setfill('0');
 
     for(std::size_t i = 0; i < size; ++i)
@@ -698,8 +698,8 @@ void GemaltoToken::toStringHex(const unsigned char* buffer, const std::size_t& s
         /*if (i != 0)
             oss << ' ';*/
 
-        // Afficher sa valeur hexadécimale précédée de "0x"
-        // setw(2) permet de forcer l'affichage à 2 caractères
+        // Afficher sa valeur hexadÃ©cimale prÃ©cÃ©dÃ©e de "0x"
+        // setw(2) permet de forcer l'affichage Ã  2 caractÃ¨res
         oss << /*"0x" <<*/ std::setw(2) << static_cast<int>(buffer[i]);
     }
 
