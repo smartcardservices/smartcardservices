@@ -25,12 +25,12 @@
 
 #include <string>
 #include <boost/ptr_container/ptr_map.hpp>
+#include "Log.hpp"
 #include "MarshallerCfg.h"
 #include "Array.hpp"
 #include "Marshaller.h"
 #include "Except.h"
 #include "Timer.hpp"
-#include "Log.hpp"
 
 
 const unsigned char CARD_FREE_SPACE  = 0x00; //Returns a byte array blob of 12 bytes
