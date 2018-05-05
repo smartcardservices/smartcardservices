@@ -26,8 +26,8 @@
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/array.hpp>
-#include <boost/array.hpp>
 #include <boost/foreach.hpp>
+#include <array>
 #include <memory>
 #include "CardModuleService.hpp"
 
@@ -112,7 +112,7 @@ public:
 
 protected:
 
-    inline void reset( void ) { memset( m_ucaPinPolicy.c_array( ), 0, sizeof( m_ucaPinPolicy ) ); }
+    inline void reset( void ) { memset( &m_ucaPinPolicy[0], 0, sizeof( m_ucaPinPolicy ) ); }
 
     inline void set( unsigned char const & a_ucParameterIndex, unsigned char const & a_ucParameterValue ) { m_ucaPinPolicy[ a_ucParameterIndex ] = a_ucParameterValue; }
 
@@ -122,7 +122,7 @@ protected:
 
     CardModuleService* m_CardModule;
 
-    boost::array< unsigned char, g_PolicyLenght > m_ucaPinPolicy;
+    std::array< unsigned char, g_PolicyLenght > m_ucaPinPolicy;
 
     unsigned char m_ucRole;
 

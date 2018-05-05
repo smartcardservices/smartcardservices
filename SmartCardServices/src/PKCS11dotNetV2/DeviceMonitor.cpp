@@ -702,7 +702,7 @@ void DeviceMonitor::printDeviceList( void ) {
 
 /*
 */
-void DeviceMonitor::printReaderStateList( boost::array< SCARD_READERSTATE, g_iMaxReader + 1 >& l ) {
+void DeviceMonitor::printReaderStateList( std::array< SCARD_READERSTATE, g_iMaxReader + 1 >& l ) {
 
     int i = 0;
 
