@@ -574,7 +574,12 @@ void GemaltoPrivateKeyRecord::computeDecrypt(GemaltoToken &gemaltoToken, CK_ULON
 	char* str = strData;
 	for (size_t i=0; i<dataLength; i++)
 	{
-		str += sprintf(str, "%02x ", data[i]);
+		int charsWritten = snprintf(str, sizeof(strData) - (str - strData), "%02x ", data[i]);
+		if (charsWritten <= 0 || charsWritten > sizeof(strData) - (str - strData))
+		{
+			break;
+		}
+		str += charsWritten;
 	}
 	GemaltoToken::log("GemaltoPrivateKeyRecord::computeDecrypt - dataLength <%lu> - data <%s>\n", dataLength, strData);
 	GemaltoToken::log("GemaltoPrivateKeyRecord::computeDecrypt - output <%p>\n", output);

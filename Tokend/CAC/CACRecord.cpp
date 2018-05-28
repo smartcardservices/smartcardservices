@@ -91,6 +91,9 @@ Tokend::Attribute *CACCertificateRecord::getDataAttribute(Tokend::TokenContext *
 			if (resultLength != requested + 2)
                 PCSC::Error::throwMe(SCARD_E_PROTO_MISMATCH);
 
+			if (certificateLength + (resultLength - 2) > CAC_MAXSIZE_CERT)
+				PCSC::Error::throwMe(SCARD_E_PROTO_MISMATCH);
+
 			memcpy(certificate + certificateLength, result, resultLength - 2);
 			certificateLength += resultLength - 2;
 			// Number of bytes to fetch next time around is in the last byte
