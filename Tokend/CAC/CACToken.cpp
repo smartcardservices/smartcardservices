@@ -7,7 +7,7 @@
  *  as defined in and that are subject to the Apple Public Source License
  *  Version 2.0 (the 'License'). You may not use this file except in
  *  compliance with the License. Please obtain a copy of the License at
- *  http://www.opensource.apple.com/apsl/ and read it before using this
+ *  http://opensource.apple.com/apsl and read it before using this
  *  file.
  *  
  *  The Original Code and all software distributed under the License are
@@ -305,11 +305,11 @@ uint32_t CACToken::getData(unsigned char *result, size_t &resultLength)
 }
 
 /*
-	See NIST IR 6887 – 2003 EDITION, GSC-IS VERSION 2.1
+	See NIST IR 6887 √ê 2003 EDITION, GSC-IS VERSION 2.1
 	5.3.4 Generic Container Provider Virtual Machine Card Edge Interface
 	for a description of how this command works
 	
-	READ BUFFER 0x80 0x52 Off/H Off/L 0x02 <buffer & number bytes to read> – 
+	READ BUFFER 0x80 0x52 Off/H Off/L 0x02 <buffer & number bytes to read> √ê 
 
 */
 

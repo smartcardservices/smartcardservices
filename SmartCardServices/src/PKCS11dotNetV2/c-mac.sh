@@ -10,8 +10,9 @@ fi
 # and PCSC_LIBS are used instead
 PKG_CONFIG="foobar"
 
-# find pcsc-lite header files in MacOSXCCID/
-PCSC_CFLAGS="-I/System/Library/Frameworks/PCSC.framework/Versions/A/Headers"
+# find pcsc-lite header files
+XCODE=`xcode-select --print-path`
+PCSC_CFLAGS="-I$XCODE/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/PCSC.framework/Versions/A/Headers/"
 PCSC_LIBS="-framework PCSC"
 
 # Build a Universal Binary
