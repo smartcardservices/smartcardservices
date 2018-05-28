@@ -26,8 +26,8 @@
 #include <vector>
 #include <string>
 #include <list>
+#include <array>
 #include <boost/shared_ptr.hpp>
-#include <boost/array.hpp>
 #include <boost/thread.hpp>
 
 
@@ -59,7 +59,7 @@ public:
 
     virtual ~DeviceMonitor( ) { }
 
-    typedef boost::array< boost::shared_ptr< Device >, g_iMaxReader > DEVICES;
+    typedef std::array< boost::shared_ptr< Device >, g_iMaxReader > DEVICES;
 
 	inline DEVICES& getDeviceList( void ) { return m_aDevices; };
 
@@ -125,7 +125,7 @@ private:
 	
 	void printReaderState( const SCARD_READERSTATE& scrs, const int& iIndex );
 	void printDeviceList( void );
-	void printReaderStateList( boost::array< SCARD_READERSTATE, g_iMaxReader + 1 >& );
+	void printReaderStateList( std::array< SCARD_READERSTATE, g_iMaxReader + 1 >& );
 	void getState( const DWORD& dwState, std::string& stState );
 
 };

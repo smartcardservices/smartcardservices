@@ -26,8 +26,8 @@
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/array.hpp>
-#include <boost/array.hpp>
 #include <boost/shared_ptr.hpp>
+#include <array>
 #include <string>
 #include "Log.hpp"
 #include "Array.hpp"
@@ -49,7 +49,7 @@ public:
 
     static unsigned char CONTAINER_INDEX_INVALID;
 
-    typedef boost::array< MiniDriverContainer, g_MaxContainer > ARRAY_CONTAINERS;
+    typedef std::array< MiniDriverContainer, g_MaxContainer > ARRAY_CONTAINERS;
 
     MiniDriverContainerMapFile( ) { }
 

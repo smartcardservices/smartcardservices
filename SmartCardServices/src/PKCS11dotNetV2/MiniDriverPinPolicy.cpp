@@ -34,7 +34,7 @@ void MiniDriverPinPolicy::write( void ) {
     
     Marshaller::u1Array b( g_PolicyLenght );
 
-    b.SetBuffer( m_ucaPinPolicy.c_array( ) );
+    b.SetBuffer( &m_ucaPinPolicy[0] );
 
     try {
 
@@ -62,7 +62,7 @@ void MiniDriverPinPolicy::read( void ) {
     
         if( b.get( ) ) {
 
-            memcpy( m_ucaPinPolicy.c_array( ), b->GetBuffer( ), m_ucaPinPolicy.size( ) );
+            memcpy( &m_ucaPinPolicy[0], b->GetBuffer( ), m_ucaPinPolicy.size( ) );
         }
 
     } catch( MiniDriverException& ) {

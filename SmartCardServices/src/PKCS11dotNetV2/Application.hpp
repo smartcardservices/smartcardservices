@@ -28,7 +28,7 @@
 #include "DeviceMonitor.hpp"
 #include "IDeviceMonitorListener.hpp"
 #include "Slot.hpp"
-#include <boost/array.hpp>
+#include <array>
 
 
 const int g_iMaxSlot = 5;
@@ -44,7 +44,7 @@ class Application : public IDeviceMonitorListener {
 
 public:
 
-	typedef boost::array< boost::shared_ptr< Slot >, g_iMaxSlot > ARRAY_SLOTS;
+	typedef std::array< boost::shared_ptr< Slot >, g_iMaxSlot > ARRAY_SLOTS;
 
 	Application( );
 
