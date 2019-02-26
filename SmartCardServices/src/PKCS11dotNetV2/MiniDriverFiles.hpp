@@ -26,6 +26,8 @@
 #include <boost/ptr_container/serialize_ptr_map.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <boost/serialization/string.hpp>
+#include <boost/serialization/singleton.hpp>
+#include <boost/serialization/extended_type_info.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/set.hpp>
 #include <boost/serialization/shared_ptr.hpp>
