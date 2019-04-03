@@ -150,7 +150,7 @@ bool SmartCardReader::isVerifyPinSecured( void ) {
         }
     }
 
-    return m_bIsSecuredVerifyPIN;
+    return bool(m_bIsSecuredVerifyPIN);
 }
 
 

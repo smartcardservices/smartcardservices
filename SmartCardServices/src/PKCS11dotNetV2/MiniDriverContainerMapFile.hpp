@@ -23,10 +23,17 @@
 #define __GEMALTO_MINIDRIVER_CONTAINER_MAP_FILE__
 
 
+#include <boost/serialization/singleton.hpp>
+#include <boost/serialization/extended_type_info.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/shared_ptr.hpp>
+#include <boost/version.hpp>
+#if BOOST_VERSION >= 106400
+#include <boost/serialization/boost_array.hpp>
+#else
 #include <boost/serialization/array.hpp>
 #include <boost/array.hpp>
+#endif
 #include <boost/shared_ptr.hpp>
 #include <string>
 #include "Log.hpp"
